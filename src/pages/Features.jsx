@@ -19,7 +19,7 @@ export default function Features() {
     <main>
       <PageHeader
         title="Platform Features"
-        description="Discover the powerful features that make Farm AI the leading AI-powered agriculture platform."
+        description="Discover the powerful features that make Farmlyt AI the leading AI-powered agriculture platform."
       />
 
       <section className="py-10 lg:py-16">
@@ -42,7 +42,7 @@ export default function Features() {
               transition={{ duration: 0.5 }}
             >
               <SectionTitle
-                subtitle="Why Farm AI"
+                subtitle="Why Farmlyt AI"
                 title="The Complete Agriculture AI Platform"
                 description="Everything you need to manage, monitor, and optimize your agricultural operations in one place."
                 align="left"

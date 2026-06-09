@@ -24,7 +24,7 @@ export default function Footer() {
               <div className="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center transition-transform duration-300 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-emerald-500/30">
                 <Sprout className="w-5 h-5 text-white" />
               </div>
-              <span className="text-xl font-bold text-white">Farm AI</span>
+              <span className="text-xl font-bold text-white">Farmlyt AI</span>
             </Link>
             <p className="text-gray-400 leading-relaxed mb-5 text-xs">
               {footer.description}
@@ -101,7 +101,7 @@ export default function Footer() {
 
         <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-xs text-gray-500">
-            &copy; {year} Farm AI. All rights reserved.
+            &copy; {year} Farmlyt AI. All rights reserved.
           </p>
           <div className="flex gap-5 text-xs text-gray-500">
             <a href="#" className="hover:text-emerald-400 transition-colors duration-200 hover:underline">

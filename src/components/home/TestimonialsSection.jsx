@@ -9,7 +9,7 @@ export default function TestimonialsSection() {
         <SectionTitle
           subtitle="Testimonials"
           title="What Our Users Say"
-          description="Join thousands of farmers and agricultural professionals who trust Farm AI for their farming needs."
+          description="Join thousands of farmers and agricultural professionals who trust Farmlyt AI for their farming needs."
         />
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
