@@ -21,7 +21,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6 mb-10">
           <div className="lg:col-span-1">
             <Link to="/" className="flex items-center gap-2.5 mb-4 group">
-              <img src="/logo.png" alt="Farmlyt AI" className="h-9 w-auto brightness-0 invert" />
+              <img src="/logo.png" alt="Farmlyt AI" className="h-9 w-auto" />
               <span className="text-xl font-bold text-white">Farmlyt AI</span>
             </Link>
             <p className="text-gray-400 leading-relaxed mb-5 text-xs">
