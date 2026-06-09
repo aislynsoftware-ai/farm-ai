@@ -6,25 +6,25 @@ export default function PageHeader({
   gradient = 'from-emerald-500 via-green-500 to-blue-500',
 }) {
   return (
-    <section className="relative pt-28 pb-12 lg:pt-36 lg:pb-16 overflow-hidden">
+    <section className="relative pt-28 pb-10 lg:pt-36 lg:pb-14 overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(16,185,129,0.08),transparent_60%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_rgba(59,130,246,0.05),transparent_50%)]" />
 
       <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <motion.h1
-          className={`text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r ${gradient} bg-clip-text text-transparent mb-4`}
+          className={`text-3xl md:text-4xl lg:text-5xl font-bold bg-gradient-to-r ${gradient} bg-clip-text text-transparent mb-3`}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.5 }}
         >
           {title}
         </motion.h1>
         {description && (
           <motion.p
-            className="text-base md:text-lg text-gray-600 dark:text-gray-400 leading-relaxed max-w-2xl mx-auto"
+            className="text-sm md:text-base text-gray-600 dark:text-gray-300 leading-relaxed max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
           >
             {description}
           </motion.p>

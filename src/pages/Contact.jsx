@@ -47,7 +47,7 @@ export default function Contact() {
 
   const inputClass = (field) =>
     `w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-gray-800 border ${
-      errors[field] ? 'border-red-400 focus:ring-red-400' : 'border-gray-200 dark:border-gray-700 focus:border-emerald-500'
+      errors[field] ? 'border-red-400 focus:ring-red-400' : 'border-gray-200 dark:border-gray-600 focus:border-emerald-500'
     } focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-400 text-sm`;
 
   return (
@@ -57,39 +57,39 @@ export default function Contact() {
         description="Have a question, suggestion, or want to learn more? We'd love to hear from you."
       />
 
-      <section className="py-12 lg:py-20">
+      <section className="py-10 lg:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-5 gap-10 lg:gap-12">
+          <div className="grid lg:grid-cols-5 gap-8 lg:gap-10">
             <motion.div
-              className="lg:col-span-2 space-y-6"
+              className="lg:col-span-2 space-y-5"
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6 }}
+              transition={{ duration: 0.5 }}
             >
               <div>
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
                   Get in Touch
                 </h2>
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
                   We are here to help and answer any questions you might have. We look forward to hearing from you.
                 </p>
               </div>
 
-              <div className="space-y-5">
+              <div className="space-y-4">
                 {contactInfo.map((item, index) => {
                   const Icon = item.icon;
                   return (
                     <a
                       key={index}
                       href={item.href}
-                      className="flex items-start gap-4 group"
+                      className="flex items-start gap-3.5 group"
                     >
-                      <div className="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-950 transition-colors duration-300">
-                        <Icon className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
+                      <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 flex items-center justify-center flex-shrink-0 group-hover:bg-emerald-100 dark:group-hover:bg-emerald-950 transition-colors duration-300">
+                        <Icon className="w-4.5 h-4.5 text-emerald-600 dark:text-emerald-400" />
                       </div>
                       <div>
-                        <p className="text-sm text-gray-500 dark:text-gray-500">{item.label}</p>
-                        <p className="font-medium text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
+                        <p className="text-xs text-gray-500 dark:text-gray-500">{item.label}</p>
+                        <p className="text-sm font-medium text-gray-900 dark:text-white group-hover:text-emerald-600 dark:group-hover:text-emerald-400 transition-colors">
                           {item.value}
                         </p>
                       </div>
@@ -103,31 +103,31 @@ export default function Contact() {
               className="lg:col-span-3"
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              transition={{ duration: 0.5, delay: 0.15 }}
             >
               {submitted ? (
                 <motion.div
-                  className="glass rounded-2xl p-12 text-center"
+                  className="glass rounded-2xl p-8 text-center"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ type: 'spring', stiffness: 300, damping: 25 }}
                 >
-                  <div className="w-16 h-16 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 flex items-center justify-center mx-auto mb-4">
-                    <CheckCircle className="w-8 h-8 text-emerald-500" />
+                  <div className="w-14 h-14 rounded-2xl bg-emerald-50 dark:bg-emerald-950/50 flex items-center justify-center mx-auto mb-3">
+                    <CheckCircle className="w-7 h-7 text-emerald-500" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
                     Message Sent!
                   </h3>
-                  <p className="text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
                     Thank you for reaching out. We will get back to you within 24 hours.
                   </p>
                 </motion.div>
               ) : (
-                <form onSubmit={handleSubmit} className="glass rounded-2xl p-6 lg:p-8 space-y-5">
-                  <div className="grid sm:grid-cols-2 gap-5">
+                <form onSubmit={handleSubmit} className="glass rounded-2xl p-6 lg:p-8 space-y-4">
+                  <div className="grid sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                        Name *
+                        Name <span className="text-red-400">*</span>
                       </label>
                       <input
                         type="text"
@@ -146,7 +146,7 @@ export default function Contact() {
                     </div>
                     <div>
                       <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                        Email *
+                        Email <span className="text-red-400">*</span>
                       </label>
                       <input
                         type="email"
@@ -167,7 +167,7 @@ export default function Contact() {
 
                   <div>
                     <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                      Subject *
+                      Subject <span className="text-red-400">*</span>
                     </label>
                     <input
                       type="text"
@@ -178,8 +178,8 @@ export default function Contact() {
                       className={inputClass('subject')}
                     />
                     {errors.subject && (
-                        <p className="flex items-center gap-1 mt-1 text-xs text-red-500">
-                          <AlertCircle size={12} />
+                      <p className="flex items-center gap-1 mt-1 text-xs text-red-500">
+                        <AlertCircle size={12} />
                         {errors.subject}
                       </p>
                     )}
@@ -187,27 +187,29 @@ export default function Contact() {
 
                   <div>
                     <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                      Message *
+                      Message <span className="text-red-400">*</span>
                     </label>
                     <textarea
                       name="message"
                       value={form.message}
                       onChange={handleChange}
-                      rows={5}
+                      rows={4}
                       placeholder="Tell us more about your inquiry..."
                       className={`${inputClass('message')} resize-none`}
                     />
                     {errors.message && (
-                        <p className="flex items-center gap-1 mt-1 text-xs text-red-500">
-                          <AlertCircle size={12} />
+                      <p className="flex items-center gap-1 mt-1 text-xs text-red-500">
+                        <AlertCircle size={12} />
                         {errors.message}
                       </p>
                     )}
                   </div>
 
-                  <Button type="submit" size="lg" icon={Send} className="w-full sm:w-auto">
-                    Send Message
-                  </Button>
+                  <div className="pt-1">
+                    <Button type="submit" icon={Send} className="w-full sm:w-auto">
+                      Send Message
+                    </Button>
+                  </div>
                 </form>
               )}
             </motion.div>

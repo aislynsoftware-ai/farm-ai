@@ -9,6 +9,8 @@ export const ROUTES = {
   FEATURES: '/features',
   CONTACT: '/contact',
   DASHBOARD: '/dashboard',
+  LOGIN: '/login',
+  REGISTER: '/register',
 };
 
 export const NAV_LINKS = [
@@ -17,6 +19,15 @@ export const NAV_LINKS = [
   { label: 'Services', path: ROUTES.SERVICES },
   { label: 'Features', path: ROUTES.FEATURES },
   { label: 'Contact', path: ROUTES.CONTACT },
+];
+
+export const DASHBOARD_SIDEBAR = [
+  { label: 'Dashboard', path: '/dashboard', icon: 'LayoutDashboard' },
+  { label: 'Disease Detection', path: '/dashboard/disease', icon: 'Bug' },
+  { label: 'Plant Identification', path: '/dashboard/plant', icon: 'Leaf' },
+  { label: 'Food Identification', path: '/dashboard/food', icon: 'Apple' },
+  { label: 'Reports', path: '/dashboard/reports', icon: 'FileText' },
+  { label: 'Settings', path: '/dashboard/settings', icon: 'Settings' },
 ];
 
 export const HERO = {
