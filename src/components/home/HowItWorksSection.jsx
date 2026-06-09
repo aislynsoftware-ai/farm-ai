@@ -32,7 +32,7 @@ export default function HowItWorksSection() {
         <SectionTitle
           subtitle="How It Works"
           title="Three Simple Steps"
-          description="Getting started with Farm AI is easy. Follow these simple steps to transform your agricultural practices."
+          description="Getting started with Farmlyt AI is easy. Follow these simple steps to transform your agricultural practices."
         />
 
         <div className="grid md:grid-cols-3 gap-5 lg:gap-6 relative">

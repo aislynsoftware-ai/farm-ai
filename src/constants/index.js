@@ -1,4 +1,4 @@
-export const APP_NAME = 'Farm AI';
+export const APP_NAME = 'Farmlyt AI';
 
 export const APP_DESCRIPTION = 'AI-Powered Smart Agriculture Platform';
 

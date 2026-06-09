@@ -30,7 +30,7 @@ export default function Sidebar({ mobileOpen, onClose }) {
           <div className="w-8 h-8 rounded-lg gradient-bg flex items-center justify-center flex-shrink-0">
             <Sprout className="w-4 h-4 text-white" />
           </div>
-          {!collapsed && <span className="text-sm font-bold text-gray-900 dark:text-white">Farm AI</span>}
+          {!collapsed && <span className="text-sm font-bold text-gray-900 dark:text-white">Farmlyt AI</span>}
         </Link>
         {mobileOpen && (
           <button onClick={onClose} className="lg:hidden p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer">

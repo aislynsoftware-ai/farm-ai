@@ -30,7 +30,7 @@ export default function AboutSection() {
     <section id="about" className="relative py-12 lg:py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionTitle
-          subtitle="About Farm AI"
+          subtitle="About Farmlyt AI"
           title="Revolutionizing Agriculture with Artificial Intelligence"
           description="We combine cutting-edge AI technology with agricultural expertise to provide farmers, researchers, and agribusinesses with powerful tools for smarter farming."
         />

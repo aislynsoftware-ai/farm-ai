@@ -28,7 +28,7 @@ const benefits = [
 ];
 
 const timeline = [
-  { year: '2023', event: 'Farm AI founded with a vision to transform agriculture' },
+  { year: '2023', event: 'Farmlyt AI founded with a vision to transform agriculture' },
   { year: '2024', event: 'Launched AI disease detection with 95% accuracy' },
   { year: '2025', event: 'Expanded to 100+ crop categories and plant identification' },
   { year: '2026', event: 'Global reach serving farmers in 50+ countries' },
@@ -38,7 +38,7 @@ export default function About() {
   return (
     <main>
       <PageHeader
-        title="About Farm AI"
+        title="About Farmlyt AI"
         description="Empowering farmers worldwide with artificial intelligence for smarter, more sustainable agriculture."
       />
 
@@ -76,8 +76,8 @@ export default function About() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionTitle
             subtitle="Why Choose Us"
-            title="Benefits of Farm AI"
-            description="Discover how Farm AI can transform your agricultural practices and help you achieve better results."
+            title="Benefits of Farmlyt AI"
+            description="Discover how Farmlyt AI can transform your agricultural practices and help you achieve better results."
           />
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -113,7 +113,7 @@ export default function About() {
           <SectionTitle
             subtitle="Our Journey"
             title="Company Timeline"
-            description="The story of Farm AI and our mission to revolutionize agriculture."
+            description="The story of Farmlyt AI and our mission to revolutionize agriculture."
           />
 
           <div className="relative max-w-3xl mx-auto">
