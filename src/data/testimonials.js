@@ -5,7 +5,7 @@ const testimonialsData = [
     role: 'Maize Farmer',
     avatar: 'JK',
     content:
-      'Farm AI has revolutionized how I manage my farm. The disease detection feature saved my entire maize crop from a fungal infection. Highly recommended!',
+      'Farmlyt AI has revolutionized how I manage my farm. The disease detection feature saved my entire maize crop from a fungal infection. Highly recommended!',
     rating: 5,
   },
   {
@@ -14,7 +14,7 @@ const testimonialsData = [
     role: 'Agricultural Officer',
     avatar: 'SW',
     content:
-      'As an agricultural officer, I recommend Farm AI to all farmers in my region. The accuracy of plant identification and disease detection is remarkable.',
+      'As an agricultural officer, I recommend Farmlyt AI to all farmers in my region. The accuracy of plant identification and disease detection is remarkable.',
     rating: 5,
   },
   {
@@ -32,7 +32,7 @@ const testimonialsData = [
     role: 'Agri-Tech Entrepreneur',
     avatar: 'GA',
     content:
-      'Farm AI analytics provide invaluable insights into market trends and yield predictions. It has helped me make data-driven business decisions.',
+      'Farmlyt AI analytics provide invaluable insights into market trends and yield predictions. It has helped me make data-driven business decisions.',
     rating: 5,
   },
 ];
