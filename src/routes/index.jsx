@@ -6,6 +6,8 @@ import Services from '../pages/Services';
 import Features from '../pages/Features';
 import Contact from '../pages/Contact';
 import Dashboard from '../pages/Dashboard';
+import Login from '../pages/Login';
+import Register from '../pages/Register';
 
 export default function createAppRouter(isDark, toggleTheme) {
   return createBrowserRouter([
@@ -20,6 +22,14 @@ export default function createAppRouter(isDark, toggleTheme) {
         { path: 'contact', element: <Contact /> },
         { path: 'dashboard', element: <Dashboard /> },
       ],
+    },
+    {
+      path: '/login',
+      element: <Login />,
+    },
+    {
+      path: '/register',
+      element: <Register />,
     },
   ]);
 }

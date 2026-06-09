@@ -2,7 +2,6 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-
 @theme {
   --color-primary-50: #ecfdf5;
   --color-primary-100: #d1fae5;
@@ -49,23 +48,27 @@
   --text-tertiary: #9ca3af;
   --border-color: #e5e7eb;
   --card-bg: #ffffff;
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: rgba(255, 255, 255, 0.2);
-  --nav-bg: rgba(255, 255, 255, 0.8);
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: rgba(16, 185, 129, 0.15);
+  --nav-bg: rgba(255, 255, 255, 0.85);
+  --sidebar-bg: #ffffff;
+  --sidebar-hover: #f0fdf4;
 }
 
 .dark {
   --bg-primary: #030712;
-  --bg-secondary: #111827;
-  --bg-tertiary: #1f2937;
-  --text-primary: #f9fafb;
-  --text-secondary: #d1d5db;
-  --text-tertiary: #6b7280;
-  --border-color: #374151;
-  --card-bg: #1f2937;
-  --glass-bg: rgba(17, 24, 39, 0.7);
-  --glass-border: rgba(55, 65, 81, 0.3);
-  --nav-bg: rgba(3, 7, 18, 0.8);
+  --bg-secondary: #0f172a;
+  --bg-tertiary: #1e293b;
+  --text-primary: #f1f5f9;
+  --text-secondary: #cbd5e1;
+  --text-tertiary: #64748b;
+  --border-color: #334155;
+  --card-bg: #1e293b;
+  --glass-bg: rgba(15, 23, 42, 0.75);
+  --glass-border: rgba(16, 185, 129, 0.2);
+  --nav-bg: rgba(3, 7, 18, 0.85);
+  --sidebar-bg: #0f172a;
+  --sidebar-hover: rgba(16, 185, 129, 0.08);
 }
 
 body {
@@ -81,8 +84,8 @@ html {
 
 .glass {
   background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--glass-border);
 }
 
@@ -128,18 +131,52 @@ html {
 }
 
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--bg-secondary);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
   background: var(--text-tertiary);
-  border-radius: 4px;
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-secondary);
+}
+
+.card-base {
+  @apply bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 
+         hover:border-emerald-300 dark:hover:border-emerald-600 
+         transition-all duration-300 
+         hover:shadow-xl hover:shadow-emerald-500/5 hover:-translate-y-1;
+}
+
+.card-base-static {
+  @apply bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700;
+}
+
+.input-base {
+  @apply w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-gray-800 border
+         focus:ring-2 focus:ring-emerald-500/20 outline-none 
+         transition-all duration-200
+         text-gray-900 dark:text-white placeholder-gray-400 text-sm;
+}
+
+.input-base:not(.error) {
+  @apply border-gray-200 dark:border-gray-600 focus:border-emerald-500;
+}
+
+.input-base.error {
+  @apply border-red-400 focus:ring-red-400;
+}
+
+.input-label {
+  @apply block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5;
+}
+
+.input-error {
+  @apply flex items-center gap-1 mt-1 text-xs text-red-500;
 }

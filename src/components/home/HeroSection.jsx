@@ -16,38 +16,38 @@ export default function HeroSection() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="mb-6"
+          transition={{ duration: 0.5 }}
+          className="mb-5"
         >
-          <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-sm font-medium text-emerald-600 dark:text-emerald-400">
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-xs font-medium text-emerald-600 dark:text-emerald-400">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             AI-Powered Agriculture
           </span>
         </motion.div>
 
         <motion.h1
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-6"
+          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold leading-tight mb-5"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.1 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
         >
           <span className="gradient-text">{HERO.title}</span>
         </motion.h1>
 
         <motion.p
-          className="text-base md:text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-8 leading-relaxed"
+          className="text-sm md:text-base text-gray-600 dark:text-gray-300 max-w-3xl mx-auto mb-7 leading-relaxed"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          transition={{ duration: 0.5, delay: 0.15 }}
         >
           {HERO.description}
         </motion.p>
 
         <motion.div
-          className="flex flex-col sm:flex-row items-center justify-center gap-4"
+          className="flex flex-col sm:flex-row items-center justify-center gap-3"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
         >
           <Link to={ROUTES.DASHBOARD}>
             <Button size="lg" icon={ArrowRight} iconPosition="right">
@@ -62,16 +62,16 @@ export default function HeroSection() {
         </motion.div>
 
         <motion.div
-          className="mt-12 flex items-center justify-center gap-6 flex-wrap"
+          className="mt-10 flex items-center justify-center gap-5 flex-wrap"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.5 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
         >
           {['AI Powered', '95% Accuracy', 'Real-Time', 'Free to Start'].map(
             (tag) => (
               <div
                 key={tag}
-                className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400"
+                className="flex items-center gap-1.5 text-[11px] text-gray-500 dark:text-gray-400"
               >
                 <span className="w-1 h-1 rounded-full bg-emerald-500" />
                 {tag}
@@ -81,7 +81,7 @@ export default function HeroSection() {
         </motion.div>
       </div>
 
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white dark:from-gray-900 to-transparent" />
+      <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white dark:from-gray-900 to-transparent" />
     </section>
   );
 }
