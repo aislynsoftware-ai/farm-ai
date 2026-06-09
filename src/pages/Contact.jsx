@@ -46,9 +46,9 @@ export default function Contact() {
   };
 
   const inputClass = (field) =>
-    `w-full px-4 py-3.5 rounded-xl bg-white dark:bg-gray-800 border ${
+    `w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-gray-800 border ${
       errors[field] ? 'border-red-400 focus:ring-red-400' : 'border-gray-200 dark:border-gray-700 focus:border-emerald-500'
-    } focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-400`;
+    } focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-400 text-sm`;
 
   return (
     <main>
@@ -57,11 +57,11 @@ export default function Contact() {
         description="Have a question, suggestion, or want to learn more? We'd love to hear from you."
       />
 
-      <section className="py-16 lg:py-24">
+      <section className="py-12 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-5 gap-12 lg:gap-16">
+          <div className="grid lg:grid-cols-5 gap-10 lg:gap-12">
             <motion.div
-              className="lg:col-span-2 space-y-8"
+              className="lg:col-span-2 space-y-6"
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
@@ -75,7 +75,7 @@ export default function Contact() {
                 </p>
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-5">
                 {contactInfo.map((item, index) => {
                   const Icon = item.icon;
                   return (
@@ -123,10 +123,10 @@ export default function Contact() {
                   </p>
                 </motion.div>
               ) : (
-                <form onSubmit={handleSubmit} className="glass rounded-2xl p-8 lg:p-10 space-y-6">
-                  <div className="grid sm:grid-cols-2 gap-6">
+                <form onSubmit={handleSubmit} className="glass rounded-2xl p-6 lg:p-8 space-y-5">
+                  <div className="grid sm:grid-cols-2 gap-5">
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                         Name *
                       </label>
                       <input
@@ -138,14 +138,14 @@ export default function Contact() {
                         className={inputClass('name')}
                       />
                       {errors.name && (
-                        <p className="flex items-center gap-1 mt-1.5 text-sm text-red-500">
-                          <AlertCircle size={14} />
+                        <p className="flex items-center gap-1 mt-1 text-xs text-red-500">
+                          <AlertCircle size={12} />
                           {errors.name}
                         </p>
                       )}
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                         Email *
                       </label>
                       <input
@@ -157,8 +157,8 @@ export default function Contact() {
                         className={inputClass('email')}
                       />
                       {errors.email && (
-                        <p className="flex items-center gap-1 mt-1.5 text-sm text-red-500">
-                          <AlertCircle size={14} />
+                        <p className="flex items-center gap-1 mt-1 text-xs text-red-500">
+                          <AlertCircle size={12} />
                           {errors.email}
                         </p>
                       )}
@@ -166,7 +166,7 @@ export default function Contact() {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                       Subject *
                     </label>
                     <input
@@ -178,15 +178,15 @@ export default function Contact() {
                       className={inputClass('subject')}
                     />
                     {errors.subject && (
-                      <p className="flex items-center gap-1 mt-1.5 text-sm text-red-500">
-                        <AlertCircle size={14} />
+                        <p className="flex items-center gap-1 mt-1 text-xs text-red-500">
+                          <AlertCircle size={12} />
                         {errors.subject}
                       </p>
                     )}
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">
                       Message *
                     </label>
                     <textarea
@@ -198,8 +198,8 @@ export default function Contact() {
                       className={`${inputClass('message')} resize-none`}
                     />
                     {errors.message && (
-                      <p className="flex items-center gap-1 mt-1.5 text-sm text-red-500">
-                        <AlertCircle size={14} />
+                        <p className="flex items-center gap-1 mt-1 text-xs text-red-500">
+                          <AlertCircle size={12} />
                         {errors.message}
                       </p>
                     )}

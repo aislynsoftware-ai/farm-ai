@@ -35,7 +35,7 @@ export default function HeroSection() {
         </motion.h1>
 
         <motion.p
-          className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-10 leading-relaxed"
+          className="text-base md:text-lg text-gray-600 dark:text-gray-400 max-w-3xl mx-auto mb-8 leading-relaxed"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
@@ -62,7 +62,7 @@ export default function HeroSection() {
         </motion.div>
 
         <motion.div
-          className="mt-16 flex items-center justify-center gap-8 flex-wrap"
+          className="mt-12 flex items-center justify-center gap-6 flex-wrap"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.5 }}
@@ -71,9 +71,9 @@ export default function HeroSection() {
             (tag) => (
               <div
                 key={tag}
-                className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
+                className="flex items-center gap-1.5 text-xs text-gray-500 dark:text-gray-400"
               >
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                <span className="w-1 h-1 rounded-full bg-emerald-500" />
                 {tag}
               </div>
             )

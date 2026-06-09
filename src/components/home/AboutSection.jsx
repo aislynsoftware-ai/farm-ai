@@ -27,7 +27,7 @@ const highlights = [
 
 export default function AboutSection() {
   return (
-    <section id="about" className="relative py-20 lg:py-28">
+    <section id="about" className="relative py-14 lg:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionTitle
           subtitle="About Farm AI"
@@ -35,7 +35,7 @@ export default function AboutSection() {
           description="We combine cutting-edge AI technology with agricultural expertise to provide farmers, researchers, and agribusinesses with powerful tools for smarter farming."
         />
 
-        <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div className="grid md:grid-cols-2 gap-10 lg:gap-12 items-center">
           <motion.div
             className="relative"
             initial={{ opacity: 0, x: -30 }}
@@ -69,15 +69,15 @@ export default function AboutSection() {
             {highlights.map((item, i) => {
               const Icon = item.icon;
               return (
-                <div key={i} className="flex gap-4 p-4 rounded-2xl hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors duration-300">
-                  <div className="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 flex items-center justify-center flex-shrink-0">
-                    <Icon className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+                <div key={i} className="flex gap-4 p-3.5 rounded-2xl border border-transparent hover:border-gray-100 dark:hover:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all duration-300 hover:shadow-sm">
+                  <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 flex items-center justify-center flex-shrink-0">
+                    <Icon className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
+                    <h3 className="font-semibold text-gray-900 dark:text-white mb-0.5 text-sm">
                       {item.title}
                     </h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-xs text-gray-600 dark:text-gray-400">
                       {item.description}
                     </p>
                   </div>

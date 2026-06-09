@@ -10,8 +10,8 @@ export default function Footer() {
     <footer className="relative bg-gray-900 dark:bg-black text-gray-300 overflow-hidden">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_rgba(16,185,129,0.08),transparent_50%)]" />
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-8">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-16">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-8 mb-12">
           <div className="lg:col-span-1">
             <Link to="/" className="flex items-center gap-2.5 mb-4">
               <div className="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center">
@@ -19,7 +19,7 @@ export default function Footer() {
               </div>
               <span className="text-xl font-bold text-white">Farm AI</span>
             </Link>
-            <p className="text-gray-400 leading-relaxed mb-6 text-sm">
+            <p className="text-gray-400 leading-relaxed mb-5 text-xs">
               {footer.description}
             </p>
             <div className="flex gap-3">
@@ -35,8 +35,8 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-white font-semibold mb-6">Quick Links</h3>
-            <ul className="space-y-3">
+            <h3 className="text-white font-semibold mb-5 text-sm">Quick Links</h3>
+            <ul className="space-y-2.5">
               {footer.quickLinks.map((link) => (
                 <li key={link.label}>
                   <Link
@@ -52,8 +52,8 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-white font-semibold mb-6">Services</h3>
-            <ul className="space-y-3">
+            <h3 className="text-white font-semibold mb-5 text-sm">Services</h3>
+            <ul className="space-y-2.5">
               {footer.services.map((link) => (
                 <li key={link.label}>
                   <Link
@@ -69,8 +69,8 @@ export default function Footer() {
           </div>
 
           <div>
-            <h3 className="text-white font-semibold mb-6">Contact</h3>
-            <ul className="space-y-4">
+            <h3 className="text-white font-semibold mb-5 text-sm">Contact</h3>
+            <ul className="space-y-3">
               <li className="flex items-start gap-3 text-sm text-gray-400">
                 <Mail size={16} className="mt-0.5 text-emerald-500 flex-shrink-0" />
                 <span>{footer.contact.email}</span>
@@ -87,8 +87,8 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-sm text-gray-500">
+        <div className="border-t border-gray-800 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="text-xs text-gray-500">
             &copy; {year} Farm AI. All rights reserved.
           </p>
           <div className="flex gap-6 text-sm text-gray-500">

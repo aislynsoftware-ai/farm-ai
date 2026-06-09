@@ -44,10 +44,10 @@ export default function Dashboard() {
         description="Our intelligent dashboard is under development. Get ready for a powerful suite of AI tools."
       />
 
-      <section className="py-16 lg:py-24">
+      <section className="py-12 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
-            className="glass rounded-3xl p-8 lg:p-12 mb-16 text-center"
+            className="glass rounded-3xl p-6 lg:p-10 mb-10 text-center"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
@@ -64,7 +64,7 @@ export default function Dashboard() {
             </p>
           </motion.div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 lg:gap-6">
             {dashboardItems.map((item, index) => (
               <DashboardCard key={item.id} item={item} index={index} />
             ))}
