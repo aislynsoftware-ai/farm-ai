@@ -20,7 +20,7 @@ export default function HeroSection() {
           className="mb-5"
         >
           <span className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 text-xs font-medium text-emerald-600 dark:text-emerald-400">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="w-1.5 h-1.5 rounded-full bg-black dark:bg-white animate-pulse" />
             AI-Powered Agriculture
           </span>
         </motion.div>
@@ -73,7 +73,7 @@ export default function HeroSection() {
                 key={tag}
                 className="flex items-center gap-1.5 text-[11px] text-gray-500 dark:text-gray-400"
               >
-                <span className="w-1 h-1 rounded-full bg-emerald-500" />
+                <span className="w-1 h-1 rounded-full bg-black dark:bg-white" />
                 {tag}
               </div>
             )
