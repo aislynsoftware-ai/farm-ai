@@ -29,7 +29,7 @@ export default function Navbar({ isDark, toggleTheme }) {
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
         scrolled
-          ? 'glass shadow-lg shadow-black/5 dark:shadow-black/20 border-b border-gray-200/50 dark:border-gray-800/50'
+          ? 'glass-solid shadow-lg shadow-black/5 dark:shadow-black/20'
           : 'bg-transparent'
       )}
     >

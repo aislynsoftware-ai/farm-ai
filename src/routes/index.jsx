@@ -21,15 +21,9 @@ export default function createAppRouter(isDark, toggleTheme) {
         { path: 'features', element: <Features /> },
         { path: 'contact', element: <Contact /> },
         { path: 'dashboard', element: <Dashboard /> },
+        { path: 'login', element: <Login /> },
+        { path: 'register', element: <Register /> },
       ],
-    },
-    {
-      path: '/login',
-      element: <Login />,
-    },
-    {
-      path: '/register',
-      element: <Register />,
     },
   ]);
 }
