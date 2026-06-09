@@ -6,7 +6,7 @@ import { ROUTES } from '../../constants';
 
 export default function CTASection() {
   return (
-    <section className="relative py-20 lg:py-28 overflow-hidden">
+    <section className="relative py-14 lg:py-20 overflow-hidden">
       <div className="absolute inset-0 gradient-bg opacity-5" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-emerald-500/20 rounded-full blur-3xl" />
 
@@ -17,7 +17,7 @@ export default function CTASection() {
         viewport={{ once: true, margin: '-100px' }}
         transition={{ duration: 0.6 }}
       >
-        <div className="relative glass rounded-3xl p-8 md:p-12 lg:p-16">
+        <div className="relative glass rounded-3xl p-6 md:p-10 lg:p-12">
           <div className="w-16 h-16 rounded-2xl gradient-bg flex items-center justify-center mx-auto mb-6">
             <Sparkles className="w-8 h-8 text-white" />
           </div>
@@ -26,7 +26,7 @@ export default function CTASection() {
             Ready to Transform Your Farming?
           </h2>
 
-          <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-8 leading-relaxed">
+          <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-6 leading-relaxed">
             Join thousands of farmers using AI to increase crop yields, reduce losses, and farm smarter.
           </p>
 

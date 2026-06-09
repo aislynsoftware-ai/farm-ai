@@ -66,24 +66,24 @@ export default function About() {
         description="Empowering farmers worldwide with artificial intelligence for smarter, more sustainable agriculture."
       />
 
-      <section className="py-16 lg:py-24">
+      <section className="py-12 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid md:grid-cols-2 gap-12 lg:gap-16">
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-10">
             {missionPoints.map((item, index) => {
               const Icon = item.icon;
               return (
                 <motion.div
                   key={index}
-                  className="relative glass rounded-2xl p-8 lg:p-10"
+                  className="relative glass rounded-2xl p-6 lg:p-8 hover:shadow-xl transition-shadow duration-300"
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-100px' }}
                   transition={{ duration: 0.5, delay: index * 0.2 }}
                 >
-                  <div className="w-14 h-14 rounded-2xl gradient-bg flex items-center justify-center mb-6">
-                    <Icon className="w-7 h-7 text-white" />
+                  <div className="w-12 h-12 rounded-xl gradient-bg flex items-center justify-center mb-4">
+                    <Icon className="w-6 h-6 text-white" />
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
                     {item.title}
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
@@ -96,7 +96,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="py-16 lg:py-24 bg-gray-50/50 dark:bg-gray-900/50">
+      <section className="py-12 lg:py-20 bg-gray-50/50 dark:bg-gray-900/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionTitle
             subtitle="Why Choose Us"
@@ -104,22 +104,22 @@ export default function About() {
             description="Discover how Farm AI can transform your agricultural practices and help you achieve better results."
           />
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {benefits.map((benefit, index) => {
               const Icon = benefit.icon;
               return (
                 <motion.div
                   key={index}
-                  className="bg-white dark:bg-gray-800 rounded-2xl p-6 lg:p-8 border border-gray-100 dark:border-gray-700 hover:border-emerald-200 dark:hover:border-emerald-700 transition-all duration-300"
+                  className="bg-white dark:bg-gray-800 rounded-2xl p-5 lg:p-6 border border-gray-100 dark:border-gray-700 hover:border-emerald-300 dark:hover:border-emerald-600 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/5 hover:-translate-y-0.5"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-50px' }}
                   transition={{ duration: 0.4, delay: index * 0.1 }}
                 >
-                  <div className="w-12 h-12 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 flex items-center justify-center mb-4">
-                    <Icon className="w-6 h-6 text-emerald-600 dark:text-emerald-400" />
+                  <div className="w-10 h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 flex items-center justify-center mb-3">
+                    <Icon className="w-5 h-5 text-emerald-600 dark:text-emerald-400" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                  <h3 className="text-base font-semibold text-gray-900 dark:text-white mb-1.5">
                     {benefit.title}
                   </h3>
                   <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
@@ -132,7 +132,7 @@ export default function About() {
         </div>
       </section>
 
-      <section className="py-16 lg:py-24">
+      <section className="py-12 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionTitle
             subtitle="Our Journey"
@@ -141,9 +141,9 @@ export default function About() {
           />
 
           <div className="relative max-w-3xl mx-auto">
-            <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-gradient-to-b from-emerald-500 to-blue-500" />
+            <div className="absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-emerald-500 to-blue-500" />
 
-            <div className="space-y-12">
+            <div className="space-y-8">
               {timeline.map((item, index) => (
                 <motion.div
                   key={index}
@@ -153,11 +153,11 @@ export default function About() {
                   viewport={{ once: true, margin: '-50px' }}
                   transition={{ duration: 0.4, delay: index * 0.15 }}
                 >
-                  <div className="relative z-10 w-16 h-16 rounded-2xl gradient-bg flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/20">
-                    <span className="text-white font-bold text-sm">{item.year}</span>
+                  <div className="relative z-10 w-14 h-14 rounded-xl gradient-bg flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/20 hover:scale-110 transition-transform duration-300">
+                    <span className="text-white font-bold text-xs">{item.year}</span>
                   </div>
-                  <div className="pt-3">
-                    <p className="text-gray-600 dark:text-gray-400 leading-relaxed">
+                  <div className="pt-2 border border-gray-100 dark:border-gray-700/50 rounded-xl p-3.5 hover:border-emerald-200 dark:hover:border-emerald-700/50 transition-colors duration-300">
+                    <p className="text-gray-600 dark:text-gray-400 leading-relaxed text-sm">
                       {item.event}
                     </p>
                   </div>

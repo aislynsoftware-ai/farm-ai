@@ -14,22 +14,22 @@ export default function SectionTitle({
 
   return (
     <motion.div
-      className={`max-w-3xl mx-auto mb-16 ${alignments[align]}`}
+      className={`max-w-3xl mx-auto mb-10 ${alignments[align]}`}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-100px' }}
       transition={{ duration: 0.6 }}
     >
       {subtitle && (
-        <span className="inline-block px-4 py-1.5 mb-4 text-sm font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 rounded-full border border-emerald-200 dark:border-emerald-800">
+        <span className="inline-block px-3 py-1 mb-4 text-xs font-semibold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/50 rounded-full border border-emerald-200 dark:border-emerald-800/60">
           {subtitle}
         </span>
       )}
-      <h2 className={`text-3xl md:text-4xl lg:text-5xl font-bold mb-4 ${light ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
+      <h2 className={`text-2xl md:text-3xl lg:text-4xl font-bold mb-3 ${light ? 'text-white' : 'text-gray-900 dark:text-white'}`}>
         {title}
       </h2>
       {description && (
-        <p className={`text-lg md:text-xl leading-relaxed ${light ? 'text-gray-300' : 'text-gray-600 dark:text-gray-400'}`}>
+        <p className={`text-base md:text-lg leading-relaxed ${light ? 'text-gray-300' : 'text-gray-600 dark:text-gray-400'}`}>
           {description}
         </p>
       )}

@@ -4,7 +4,7 @@ import { Star } from 'lucide-react';
 export default function TestimonialCard({ testimonial, index = 0 }) {
   return (
     <motion.div
-      className="relative bg-white dark:bg-gray-800 rounded-2xl p-6 lg:p-8 border border-gray-100 dark:border-gray-700"
+      className="relative bg-white dark:bg-gray-800 rounded-2xl p-5 lg:p-6 border border-gray-100 dark:border-gray-700 hover:border-emerald-200 dark:hover:border-emerald-700 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/5"
       initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
@@ -20,7 +20,7 @@ export default function TestimonialCard({ testimonial, index = 0 }) {
         ))}
       </div>
 
-      <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-6 text-sm italic">
+      <p className="text-gray-600 dark:text-gray-400 leading-relaxed mb-5 text-sm italic">
         &ldquo;{testimonial.content}&rdquo;
       </p>
 

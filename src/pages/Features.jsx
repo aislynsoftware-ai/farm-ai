@@ -22,9 +22,9 @@ export default function Features() {
         description="Discover the powerful features that make Farm AI the leading AI-powered agriculture platform."
       />
 
-      <section className="py-16 lg:py-24">
+      <section className="py-12 lg:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {featuresData.map((feature, index) => (
               <FeatureCard key={feature.id} feature={feature} index={index} />
             ))}
@@ -32,9 +32,9 @@ export default function Features() {
         </div>
       </section>
 
-      <section className="py-16 lg:py-24 bg-gray-50/50 dark:bg-gray-900/50">
+      <section className="py-12 lg:py-20 bg-gray-50/50 dark:bg-gray-900/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div className="grid lg:grid-cols-2 gap-10 lg:gap-12 items-center">
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -52,14 +52,14 @@ export default function Features() {
                 {highlights.map((item, index) => (
                   <motion.div
                     key={index}
-                    className="flex items-center gap-3"
+                    className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-white dark:hover:bg-gray-800/50 transition-colors duration-200 border border-transparent hover:border-gray-100 dark:hover:border-gray-700"
                     initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.4, delay: index * 0.1 }}
                   >
                     <CheckCircle className="w-5 h-5 text-emerald-500 flex-shrink-0" />
-                    <span className="text-gray-700 dark:text-gray-300">{item}</span>
+                    <span className="text-gray-700 dark:text-gray-300 text-sm">{item}</span>
                   </motion.div>
                 ))}
               </div>
@@ -72,7 +72,7 @@ export default function Features() {
               viewport={{ once: true, margin: '-100px' }}
               transition={{ duration: 0.6 }}
             >
-              <div className="aspect-square rounded-3xl bg-gradient-to-br from-emerald-100 to-blue-100 dark:from-emerald-950 dark:to-blue-950 flex items-center justify-center p-12">
+              <div className="aspect-square rounded-3xl bg-gradient-to-br from-emerald-100 to-blue-100 dark:from-emerald-950 dark:to-blue-950 flex items-center justify-center p-12 border border-emerald-200/50 dark:border-emerald-800/30">
                 <div className="text-center">
                   <div className="text-6xl font-bold gradient-text mb-4">AI</div>
                   <p className="text-gray-600 dark:text-gray-400">
