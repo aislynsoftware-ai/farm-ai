@@ -50,7 +50,7 @@ export default function About() {
               return (
                 <motion.div
                   key={index}
-                  className="relative glass rounded-2xl p-6 lg:p-8 hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
+                  className="relative glass rounded-2xl p-6 lg:p-8 hover:shadow-xl hover:bg-emerald-50/40 dark:hover:bg-emerald-950/20 transition-all duration-300 hover:-translate-y-0.5"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-80px' }}
@@ -86,7 +86,7 @@ export default function About() {
               return (
                 <motion.div
                   key={index}
-                  className="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-gray-100 dark:border-gray-700 hover:border-emerald-300 dark:hover:border-emerald-600 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/5 hover:-translate-y-0.5"
+                  className="bg-white dark:bg-gray-800 rounded-2xl p-5 border-2 border-gray-200 dark:border-gray-600 hover:border-emerald-300 dark:hover:border-emerald-500 hover:bg-emerald-50/60 dark:hover:bg-emerald-950/30 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-500/5 hover:-translate-y-0.5"
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: '-50px' }}
@@ -132,7 +132,7 @@ export default function About() {
                   <div className="relative z-10 w-[50px] h-[50px] rounded-xl gradient-bg flex items-center justify-center flex-shrink-0 shadow-lg shadow-emerald-500/20 hover:scale-110 transition-transform duration-300">
                     <span className="text-white font-bold text-[11px]">{item.year}</span>
                   </div>
-                  <div className="pt-1.5 border border-gray-100 dark:border-gray-700/50 rounded-xl p-3.5 hover:border-emerald-200 dark:hover:border-emerald-700/50 transition-colors duration-300 flex-1">
+                  <div className="pt-1.5 border-2 border-gray-200 dark:border-gray-600 rounded-xl p-3.5 hover:border-emerald-300 dark:hover:border-emerald-500 hover:bg-emerald-50/60 dark:hover:bg-emerald-950/30 transition-all duration-300 flex-1">
                     <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-sm">
                       {item.event}
                     </p>
