@@ -36,9 +36,7 @@ export default function Navbar({ isDark, toggleTheme }) {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           <Link to={ROUTES.HOME} className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-emerald-500/30">
-              <Sprout className="w-5 h-5 text-white" />
-            </div>
+            <img src="/logo.png" alt={APP_NAME} className="h-9 w-auto brightness-0 dark:brightness-0 dark:invert" />
             <span className="text-xl font-bold text-gray-900 dark:text-white">
               {APP_NAME}
             </span>
