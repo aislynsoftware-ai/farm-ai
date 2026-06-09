@@ -36,7 +36,7 @@ export default function Navbar({ isDark, toggleTheme }) {
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 lg:h-20">
           <Link to={ROUTES.HOME} className="flex items-center gap-2.5 group">
-            <img src="/logo.png" alt={APP_NAME} className="h-9 w-auto brightness-0 dark:brightness-0 dark:invert" />
+            <img src="/logo.png" alt={APP_NAME} className="h-9 w-auto" />
             <span className="text-xl font-bold text-gray-900 dark:text-white">
               {APP_NAME}
             </span>
