@@ -1,15 +1,19 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { Sprout, Mail, Lock, User, Phone, Eye, EyeOff, UserPlus, AlertCircle } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Sprout, Mail, Lock, User, Phone, Eye, EyeOff, UserPlus, AlertCircle, Loader } from 'lucide-react';
 import Button from '../components/common/Button';
 import { ROUTES, APP_NAME } from '../constants';
+import api from '../services/api';
 
 export default function Register() {
+  const navigate = useNavigate();
   const [form, setForm] = useState({ name: '', email: '', phone: '', password: '', confirmPassword: '', terms: false });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState('');
 
   const validate = () => {
     const errs = {};
@@ -25,9 +29,22 @@ export default function Register() {
     return errs;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors(validate());
+    setApiError('');
+    const errs = validate();
+    setErrors(errs);
+    if (Object.keys(errs).length > 0) return;
+
+    setLoading(true);
+    try {
+      await api.auth.register(form.name, form.email, form.phone, form.password);
+      navigate(`${ROUTES.VERIFY}?email=${encodeURIComponent(form.email)}`);
+    } catch (err) {
+      setApiError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -51,16 +68,23 @@ export default function Register() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-       
+        
 
-        <div className="glass rounded-2xl p-6 lg:p-8">
-           <div className="text-center mb-8">
+        <div className="glass rounded-2xl p-6 mt-10 lg:p-8">
+          <div className="text-center mb-8">
           <div className="w-14 h-14 rounded-2xl gradient-bg flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-500/20">
             <Sprout className="w-7 h-7 text-white" />
           </div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{APP_NAME}</h2>
           <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">Start your AI-powered farming journey</p>
         </div>
+          {apiError && (
+            <div className="flex items-center gap-2 p-3 mb-4 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800">
+              <AlertCircle size={14} className="text-red-500 flex-shrink-0" />
+              <p className="text-xs text-red-600 dark:text-red-400">{apiError}</p>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">Full Name</label>
@@ -129,8 +153,9 @@ export default function Register() {
             </label>
             {errors.terms && <p className="input-error"><AlertCircle size={12} />{errors.terms}</p>}
 
-            <Button type="submit" icon={UserPlus} className="w-full justify-center">
-              Create Account
+            <Button type="submit" icon={loading ? null : UserPlus} disabled={loading} className="w-full justify-center">
+              {loading ? <Loader size={16} className="animate-spin" /> : null}
+              {loading ? 'Creating account...' : 'Create Account'}
             </Button>
           </form>
 

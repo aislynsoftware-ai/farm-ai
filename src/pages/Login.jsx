@@ -1,14 +1,18 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-import { Mail, Lock, Eye, EyeOff, LogIn, Globe, AlertCircle, Sprout } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Mail, Lock, Eye, EyeOff, LogIn, Globe, AlertCircle, Sprout, Loader } from 'lucide-react';
 import Button from '../components/common/Button';
 import { ROUTES, APP_NAME } from '../constants';
+import api from '../services/api';
 
 export default function Login() {
+  const navigate = useNavigate();
   const [form, setForm] = useState({ email: '', password: '', remember: false });
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState('');
 
   const validate = () => {
     const errs = {};
@@ -19,9 +23,29 @@ export default function Login() {
     return errs;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors(validate());
+    setApiError('');
+    const errs = validate();
+    setErrors(errs);
+    if (Object.keys(errs).length > 0) return;
+
+    setLoading(true);
+    try {
+      const res = await api.auth.login(form.email, form.password);
+      if (res.otp) sessionStorage.setItem('pending_otp', res.otp);
+      if (res.token) localStorage.setItem('token', res.token);
+      if (res.user) localStorage.setItem('user', JSON.stringify(res.user));
+      if (res.otp) {
+        navigate(`${ROUTES.VERIFY}?email=${encodeURIComponent(form.email)}`);
+      } else {
+        navigate(ROUTES.DASHBOARD);
+      }
+    } catch (err) {
+      setApiError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e) => {
@@ -43,15 +67,23 @@ export default function Login() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="text-center mb-8">
+       
+
+        <div className="glass rounded-2xl p-6 mt-10 lg:p-8">
+           <div className="text-center mb-8">
           <div className="w-14 h-14 rounded-2xl gradient-bg flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-500/20">
             <Sprout className="w-7 h-7 text-white" />
           </div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{APP_NAME}</h2>
           <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">Sign in to your account</p>
         </div>
+          {apiError && (
+            <div className="flex items-center gap-2 p-3 mb-4 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800">
+              <AlertCircle size={14} className="text-red-500 flex-shrink-0" />
+              <p className="text-xs text-red-600 dark:text-red-400">{apiError}</p>
+            </div>
+          )}
 
-        <div className="glass rounded-2xl p-6 lg:p-8">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">
@@ -96,24 +128,13 @@ export default function Login() {
               {errors.password && <p className="input-error mt-1"><AlertCircle size={12} />{errors.password}</p>}
             </div>
 
-            <div className="flex items-center justify-between">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  name="remember"
-                  checked={form.remember}
-                  onChange={handleChange}
-                  className="w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-emerald-600 focus:ring-emerald-500"
-                />
-                <span className="text-xs text-gray-600 dark:text-gray-400">Remember me</span>
-              </label>
-              <a href="#" className="text-xs text-emerald-600 dark:text-emerald-400 hover:underline">
-                Forgot password?
-              </a>
-            </div>
+            
+             
+            
 
-            <Button type="submit" icon={LogIn} className="w-full justify-center">
-              Sign In
+            <Button type="submit" icon={loading ? null : LogIn} disabled={loading} className="w-full justify-center">
+              {loading ? <Loader size={16} className="animate-spin" /> : null}
+              {loading ? 'Signing in...' : 'Sign In'}
             </Button>
           </form>
 
