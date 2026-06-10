@@ -177,7 +177,6 @@ def register():
         return jsonify({
             "message": "OTP resent",
             "user_id": existing_user_id,
-            "otp": otp,
             "resend": True
         })
 
@@ -218,10 +217,8 @@ def register():
     print("New OTP:", otp)
 
     return jsonify({
-        "message": "User created, OTP sent",
+        "message": "User created, OTP sent to email",
         "user_id": user_id,
-        "otp": otp,
-
     })
 
 @app.route('/auth/login', methods=['POST'])
@@ -287,11 +284,10 @@ def login():
         send_email_otp(email, otp)
 
     return jsonify({
-        "message": "OTP sent for login",
+        "message": "OTP sent to email",
         "user_id": user_id,
         "email": email,
         "name": name,
-        "otp": otp,
         "profile_image": profile_image,
         "login": True
     })
