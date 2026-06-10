@@ -1,14 +1,28 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Bug, Leaf, Apple, Clock } from 'lucide-react';
+import api from '../../services/api';
 
-const predictions = [
-  { id: 1, type: 'Disease', icon: Bug, name: 'Tomato Late Blight', status: 'Detected', time: '2 min ago', color: 'text-red-500 bg-red-50 dark:bg-red-950/30' },
-  { id: 2, type: 'Plant', icon: Leaf, name: 'Maize (Zea mays)', status: 'Identified', time: '15 min ago', color: 'text-emerald-500 bg-emerald-50 dark:bg-emerald-950/30' },
-  { id: 3, type: 'Food', icon: Apple, name: 'Granny Smith Apple', status: 'Analyzed', time: '1 hour ago', color: 'text-amber-500 bg-amber-50 dark:bg-amber-950/30' },
-  { id: 4, type: 'Disease', icon: Bug, name: 'Wheat Rust', status: 'Healthy', time: '3 hours ago', color: 'text-blue-500 bg-blue-50 dark:bg-blue-950/30' },
-];
+const iconMap = { tomato: Bug, potato: Bug, brinjal: Bug, chilli: Bug, lady_finger: Bug, brinjal_veg: Leaf, cauliflower: Leaf, cucumber: Leaf, ridge: Leaf, bitter_gourd: Leaf, custard_apple: Apple, guava: Apple, pomegranate: Apple, lemon_fruit: Apple, tomato_fruit: Apple, jasmine: Leaf, rose: Leaf, marigold: Leaf, chrysanthemum: Leaf };
+
+const colorMap = {
+  detected: 'text-red-500 bg-red-50 dark:bg-red-950/30',
+  healthy: 'text-emerald-500 bg-emerald-50 dark:bg-emerald-950/30',
+  identified: 'text-blue-500 bg-blue-50 dark:bg-blue-950/30',
+  default: 'text-gray-500 bg-gray-50 dark:bg-gray-800',
+};
 
 export default function RecentPredictions() {
+  const [predictions, setPredictions] = useState([]);
+
+  useEffect(() => {
+    api.farming.getLeafPredictions().then((data) => {
+      if (Array.isArray(data)) setPredictions(data.slice(0, 5));
+    }).catch(() => {});
+  }, []);
+
+  if (predictions.length === 0) return null;
+
   return (
     <div className="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-gray-100 dark:border-gray-700">
       <div className="flex items-center justify-between mb-4">
@@ -17,7 +31,9 @@ export default function RecentPredictions() {
       </div>
       <div className="space-y-3">
         {predictions.map((item, index) => {
-          const Icon = item.icon;
+          const Icon = iconMap[item.crop] || Bug;
+          const status = item.disease && item.disease.toLowerCase() !== 'healthy' ? 'Detected' : item.disease === 'healthy' ? 'Healthy' : 'Analyzed';
+          const color = item.disease && item.disease.toLowerCase() !== 'healthy' ? colorMap.detected : item.disease === 'healthy' ? colorMap.healthy : colorMap.default;
           return (
             <motion.div
               key={item.id}
@@ -30,16 +46,17 @@ export default function RecentPredictions() {
                 <Icon size={16} className="text-gray-600 dark:text-gray-300" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-medium text-gray-900 dark:text-white truncate">{item.name}</p>
+                <p className="text-xs font-medium text-gray-900 dark:text-white truncate">{item.disease || item.prediction || item.crop}</p>
                 <div className="flex items-center gap-2 mt-0.5">
                   <span className="flex items-center gap-1 text-[10px] text-gray-500 dark:text-gray-400">
                     <Clock size={10} />
-                    {item.time}
+                    {item.created_at ? new Date(item.created_at).toLocaleString() : ''}
                   </span>
+                  <span className="text-[10px] text-gray-400">{item.crop}</span>
                 </div>
               </div>
-              <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${item.color}`}>
-                {item.status}
+              <span className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${color}`}>
+                {status}
               </span>
             </motion.div>
           );

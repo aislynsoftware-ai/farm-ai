@@ -51,8 +51,9 @@ export default function VerifyOtp() {
         setLoading(true);
         try {
           const res = await api.auth.verifyOtp(uid, pendingOtp);
+          const pendingUser = sessionStorage.getItem('pending_user');
+          if (pendingUser) localStorage.setItem('user', pendingUser);
           if (res.token) localStorage.setItem('token', res.token);
-          if (res.user) localStorage.setItem('user', JSON.stringify(res.user));
           setSuccess(true);
           setTimeout(() => navigate(ROUTES.DASHBOARD), 1000);
         } catch (err) {
@@ -61,6 +62,7 @@ export default function VerifyOtp() {
           setLoading(false);
           sessionStorage.removeItem('pending_otp');
           sessionStorage.removeItem('pending_user_id');
+          sessionStorage.removeItem('pending_user');
         }
       }, digits.length * 100 + 300);
     }, 3000);
@@ -98,8 +100,9 @@ export default function VerifyOtp() {
       const uid = sessionStorage.getItem('pending_user_id');
       if (!uid) { setError('Session expired, please login again'); setLoading(false); return; }
       const res = await api.auth.verifyOtp(uid, code);
+      const pendingUser = sessionStorage.getItem('pending_user');
+      if (pendingUser) localStorage.setItem('user', pendingUser);
       if (res.token) localStorage.setItem('token', res.token);
-      if (res.user) localStorage.setItem('user', JSON.stringify(res.user));
       setSuccess(true);
       setTimeout(() => navigate(ROUTES.DASHBOARD), 1000);
     } catch (err) {
@@ -115,6 +118,15 @@ export default function VerifyOtp() {
     try {
       const res = await api.auth.login(email);
       if (res?.otp) sessionStorage.setItem('pending_otp', res.otp);
+      if (res?.user_id) sessionStorage.setItem('pending_user_id', res.user_id);
+      if (res?.name || res?.email) {
+        sessionStorage.setItem('pending_user', JSON.stringify({
+          user_id: res.user_id,
+          name: res.name || '',
+          email: res.email || '',
+          profile_image: res.profile_image || '',
+        }));
+      }
       setTimer(30);
     } catch {} finally {
       setResending(false);

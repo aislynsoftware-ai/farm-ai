@@ -35,7 +35,15 @@ export default function Register() {
     try {
       const res = await api.auth.register(form.name, form.email, form.phone);
       if (res.otp) sessionStorage.setItem('pending_otp', res.otp);
-      if (res.user_id_saved) sessionStorage.setItem('pending_user_id', res.user_id_saved);
+      if (res.user_id) sessionStorage.setItem('pending_user_id', res.user_id);
+      if (form.name || form.email) {
+        sessionStorage.setItem('pending_user', JSON.stringify({
+          user_id: res.user_id,
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+        }));
+      }
       navigate(`${ROUTES.VERIFY}?email=${encodeURIComponent(form.email)}`);
     } catch (err) {
       setApiError(err.message);
@@ -65,15 +73,16 @@ export default function Register() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="text-center mb-8">
+       
+
+        <div className="glass rounded-2xl p-6 mt-10 lg:p-8">
+           <div className="text-center mb-8">
           <div className="w-14 h-14 rounded-2xl gradient-bg flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-500/20">
             <Sprout className="w-7 h-7 text-white" />
           </div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{APP_NAME}</h2>
           <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">Start your AI-powered farming journey</p>
         </div>
-
-        <div className="glass rounded-2xl p-6 lg:p-8">
           {apiError && (
             <div className="flex items-center gap-2 p-3 mb-4 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800">
               <AlertCircle size={14} className="text-red-500 flex-shrink-0" />
