@@ -15,6 +15,7 @@ import TermsOfService from '../pages/TermsOfService';
 import CookiePolicy from '../pages/CookiePolicy';
 import Predict from '../pages/Predict';
 import AgricultureDetail from '../pages/AgricultureDetail';
+import CropDetail from '../pages/CropDetail';
 import SubCropDetail from '../pages/SubCropDetail';
 
 function ErrorPage() {
@@ -48,6 +49,7 @@ export default function createAppRouter(isDark, toggleTheme) {
         { path: 'terms', element: <TermsOfService /> },
         { path: 'cookies', element: <CookiePolicy /> },
         { path: 'agriculture/:id', element: <AgricultureDetail /> },
+        { path: 'agriculture/:agriId/crop/:cropId', element: <CropDetail /> },
         { path: 'crop/:id', element: <SubCropDetail /> },
       ],
     },
