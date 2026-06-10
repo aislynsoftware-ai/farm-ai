@@ -1,63 +1,36 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { Mail, Lock, Eye, EyeOff, LogIn, Globe, AlertCircle, Sprout, Loader } from 'lucide-react';
+import { Mail, LogIn, Globe, AlertCircle, Sprout, Loader } from 'lucide-react';
 import Button from '../components/common/Button';
 import { ROUTES, APP_NAME } from '../constants';
 import api from '../services/api';
 
 export default function Login() {
   const navigate = useNavigate();
-  const [form, setForm] = useState({ email: '', password: '', remember: false });
-  const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState('');
 
-  const validate = () => {
-    const errs = {};
-    if (!form.email.trim()) errs.email = 'Email is required';
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) errs.email = 'Invalid email';
-    if (!form.password.trim()) errs.password = 'Password is required';
-    else if (form.password.length < 6) errs.password = 'Min 6 characters';
-    return errs;
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setApiError('');
-    const errs = validate();
-    setErrors(errs);
-    if (Object.keys(errs).length > 0) return;
+    if (!email.trim()) { setApiError('Email is required'); return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setApiError('Invalid email'); return; }
 
     setLoading(true);
+    setApiError('');
     try {
-      const res = await api.auth.login(form.email, form.password);
+      const res = await api.auth.login(email);
       if (res.otp) sessionStorage.setItem('pending_otp', res.otp);
-      if (res.token) localStorage.setItem('token', res.token);
+      if (res.user_id_saved) sessionStorage.setItem('pending_user_id', res.user_id_saved);
       if (res.user) localStorage.setItem('user', JSON.stringify(res.user));
-      if (res.otp) {
-        navigate(`${ROUTES.VERIFY}?email=${encodeURIComponent(form.email)}`);
-      } else {
-        navigate(ROUTES.DASHBOARD);
-      }
+      navigate(`${ROUTES.VERIFY}?email=${encodeURIComponent(email)}`);
     } catch (err) {
       setApiError(err.message);
     } finally {
       setLoading(false);
     }
   };
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setForm((prev) => ({ ...prev, [name]: type === 'checkbox' ? checked : value }));
-    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' }));
-  };
-
-  const inputClass = (field) =>
-    `w-full px-3.5 py-2.5 rounded-xl bg-white dark:bg-gray-800 border text-sm transition-all duration-200 outline-none ${
-      errors[field] ? 'border-red-400 focus:ring-red-400' : 'border-gray-200 dark:border-gray-600 focus:border-emerald-500'
-    } focus:ring-2 focus:ring-emerald-500/20 text-gray-900 dark:text-white placeholder-gray-400`;
 
   return (
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-12">
@@ -67,16 +40,15 @@ export default function Login() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-       
-
-        <div className="glass rounded-2xl p-6 mt-10 lg:p-8">
-           <div className="text-center mb-8">
+        <div className="text-center mb-8">
           <div className="w-14 h-14 rounded-2xl gradient-bg flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-500/20">
             <Sprout className="w-7 h-7 text-white" />
           </div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{APP_NAME}</h2>
           <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">Sign in to your account</p>
         </div>
+
+        <div className="glass rounded-2xl p-6 lg:p-8">
           {apiError && (
             <div className="flex items-center gap-2 p-3 mb-4 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800">
               <AlertCircle size={14} className="text-red-500 flex-shrink-0" />
@@ -93,48 +65,17 @@ export default function Login() {
                 <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                 <input
                   type="email"
-                  name="email"
-                  value={form.email}
-                  onChange={handleChange}
+                  value={email}
+                  onChange={(e) => { setEmail(e.target.value); setApiError(''); }}
                   placeholder="you@example.com"
-                  className={`${inputClass('email')} pl-10`}
+                  className="w-full px-3.5 py-2.5 pl-10 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-400 text-sm"
                 />
               </div>
-              {errors.email && <p className="input-error mt-1"><AlertCircle size={12} />{errors.email}</p>}
             </div>
-
-            <div>
-              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">
-                Password
-              </label>
-              <div className="relative">
-                <Lock size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  value={form.password}
-                  onChange={handleChange}
-                  placeholder="Enter your password"
-                  className={`${inputClass('password')} pl-10 pr-10`}
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer"
-                >
-                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                </button>
-              </div>
-              {errors.password && <p className="input-error mt-1"><AlertCircle size={12} />{errors.password}</p>}
-            </div>
-
-            
-             
-            
 
             <Button type="submit" icon={loading ? null : LogIn} disabled={loading} className="w-full justify-center">
               {loading ? <Loader size={16} className="animate-spin" /> : null}
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? 'Sending OTP...' : 'Send OTP'}
             </Button>
           </form>
 

@@ -29,7 +29,10 @@ export default function Profile() {
     setSaved(false);
     setLoading(true);
     try {
-      const res = await api.auth.updateProfile(form);
+      const stored = localStorage.getItem('user');
+      let userId = '';
+      try { const u = stored ? JSON.parse(stored) : {}; userId = u.user_id || u.id || ''; } catch {}
+      const res = await api.auth.updateProfile(userId, form.name);
       if (res.user) localStorage.setItem('user', JSON.stringify(res.user));
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
