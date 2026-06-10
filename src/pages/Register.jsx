@@ -34,7 +34,6 @@ export default function Register() {
     setLoading(true);
     try {
       const res = await api.auth.register(form.name, form.email, form.phone);
-      if (res.otp) sessionStorage.setItem('pending_otp', res.otp);
       if (res.user_id) sessionStorage.setItem('pending_user_id', res.user_id);
       if (form.name || form.email) {
         sessionStorage.setItem('pending_user', JSON.stringify({
