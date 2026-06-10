@@ -70,7 +70,7 @@ export default function SubCropDetail() {
     fetch();
   }, [id]);
 
-  if (!profile?.user_id) return <Navigate to="/login" replace />;
+  if (!localStorage.getItem('token')) return <Navigate to="/login" replace />;
 
   const getEndpoint = () => {
     if (!sub) return null;

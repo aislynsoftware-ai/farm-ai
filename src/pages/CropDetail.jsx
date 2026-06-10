@@ -33,7 +33,7 @@ export default function CropDetail() {
   const [subs, setSubs] = useState([]);
 
   const isLoggedIn = () => {
-    try { return !!JSON.parse(localStorage.getItem('user') || '{}').user_id; } catch { return false; }
+    try { return !!localStorage.getItem('token'); } catch { return false; }
   };
 
   const authLink = (path) => {
