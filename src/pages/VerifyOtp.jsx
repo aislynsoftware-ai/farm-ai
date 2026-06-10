@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Shield, ArrowLeft, AlertCircle, CheckCircle, Sprout, Loader } from 'lucide-react';
@@ -10,13 +10,14 @@ export default function VerifyOtp() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const emailFromParams = searchParams.get('email') || '';
-  const [email, setEmail] = useState(emailFromParams);
+  const [email] = useState(emailFromParams);
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
   const [resending, setResending] = useState(false);
   const [timer, setTimer] = useState(30);
+  const otpRef = useRef('');
 
   useEffect(() => {
     if (timer > 0) {
@@ -25,12 +26,13 @@ export default function VerifyOtp() {
     }
   }, [timer]);
 
-  // Auto-fill OTP from sessionStorage after 3 seconds
+  // Auto-fill & auto-verify OTP from sessionStorage after 3 seconds
   useEffect(() => {
     const pendingOtp = sessionStorage.getItem('pending_otp');
     if (!pendingOtp || pendingOtp.length !== 6) return;
 
-    const timer = setTimeout(() => {
+    const timer = setTimeout(async () => {
+      otpRef.current = pendingOtp;
       const digits = pendingOtp.split('');
       digits.forEach((digit, i) => {
         setTimeout(() => {
@@ -41,13 +43,26 @@ export default function VerifyOtp() {
           });
         }, i * 100);
       });
-      // Auto-submit after all digits filled
-      setTimeout(() => {
-        document.getElementById('verify-form')?.dispatchEvent(
-          new Event('submit', { cancelable: true, bubbles: true })
-        );
-      }, digits.length * 100 + 200);
-      sessionStorage.removeItem('pending_otp');
+
+      // Auto-verify after all digits are shown
+      setTimeout(async () => {
+        const uid = sessionStorage.getItem('pending_user_id');
+        if (!uid) { setError('Session expired, please login again'); setLoading(false); return; }
+        setLoading(true);
+        try {
+          const res = await api.auth.verifyOtp(uid, pendingOtp);
+          if (res.token) localStorage.setItem('token', res.token);
+          if (res.user) localStorage.setItem('user', JSON.stringify(res.user));
+          setSuccess(true);
+          setTimeout(() => navigate(ROUTES.DASHBOARD), 1000);
+        } catch (err) {
+          setError(err.message);
+        } finally {
+          setLoading(false);
+          sessionStorage.removeItem('pending_otp');
+          sessionStorage.removeItem('pending_user_id');
+        }
+      }, digits.length * 100 + 300);
     }, 3000);
 
     return () => clearTimeout(timer);
@@ -58,30 +73,31 @@ export default function VerifyOtp() {
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
+    otpRef.current = newOtp.join('');
     setError('');
     if (value && index < 5) {
-      const next = document.getElementById(`otp-${index + 1}`);
-      next?.focus();
+      document.getElementById(`otp-${index + 1}`)?.focus();
     }
   };
 
   const handleKeyDown = (index, e) => {
     if (e.key === 'Backspace' && !otp[index] && index > 0) {
-      const prev = document.getElementById(`otp-${index - 1}`);
-      prev?.focus();
+      document.getElementById(`otp-${index - 1}`)?.focus();
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const code = otp.join('');
+    const code = otpRef.current || otp.join('');
     if (code.length !== 6) { setError('Please enter all 6 digits'); return; }
     if (!email.trim()) { setError('Email is required'); return; }
 
     setLoading(true);
     setError('');
     try {
-      const res = await api.auth.verifyOtp(email, code);
+      const uid = sessionStorage.getItem('pending_user_id');
+      if (!uid) { setError('Session expired, please login again'); setLoading(false); return; }
+      const res = await api.auth.verifyOtp(uid, code);
       if (res.token) localStorage.setItem('token', res.token);
       if (res.user) localStorage.setItem('user', JSON.stringify(res.user));
       setSuccess(true);
@@ -97,11 +113,10 @@ export default function VerifyOtp() {
     if (timer > 0 || resending) return;
     setResending(true);
     try {
-      await api.auth.login(email, '');
+      const res = await api.auth.login(email);
+      if (res?.otp) sessionStorage.setItem('pending_otp', res.otp);
       setTimer(30);
-    } catch {
-      // ignore
-    } finally {
+    } catch {} finally {
       setResending(false);
     }
   };
@@ -114,7 +129,9 @@ export default function VerifyOtp() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <div className="text-center mb-8">
+      
+        <div className="glass rounded-2xl mt-10 p-6 lg:p-8">
+            <div className="text-center mb-8">
           <div className="w-14 h-14 rounded-2xl gradient-bg flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-500/20">
             <Sprout className="w-7 h-7 text-white" />
           </div>
@@ -122,7 +139,6 @@ export default function VerifyOtp() {
           <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">Verify your email address</p>
         </div>
 
-        <div className="glass rounded-2xl p-6 lg:p-8">
           {success ? (
             <div className="text-center py-4">
               <CheckCircle className="w-12 h-12 text-emerald-500 mx-auto mb-3" />
@@ -130,7 +146,7 @@ export default function VerifyOtp() {
               <p className="text-xs text-gray-500 mt-1">Redirecting to dashboard...</p>
             </div>
           ) : (
-            <form id="verify-form" onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div className="text-center">
                 <Shield className="w-10 h-10 text-emerald-500 mx-auto mb-2" />
                 <p className="text-sm text-gray-600 dark:text-gray-300">
