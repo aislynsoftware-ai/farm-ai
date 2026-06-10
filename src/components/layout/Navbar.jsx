@@ -69,7 +69,7 @@ export default function Navbar({ isDark, toggleTheme }) {
                     'relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 group',
                     active
                       ? 'text-emerald-600 dark:text-emerald-400'
-                      : 'text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white'
+                      : 'text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300'
                   )}
                 >
                   <span className="relative z-10">{link.label}</span>
@@ -98,7 +98,7 @@ export default function Navbar({ isDark, toggleTheme }) {
                   </Link>
                   <button
                     onClick={handleLogout}
-                    className="text-xs text-gray-600 dark:text-gray-400 hover:text-red-500 dark:hover:text-red-400 transition-colors cursor-pointer"
+                    className="text-xs text-emerald-700 dark:text-emerald-400 hover:text-red-500 dark:hover:text-red-400 transition-colors cursor-pointer"
                   >
                     Logout
                   </button>
@@ -119,7 +119,7 @@ export default function Navbar({ isDark, toggleTheme }) {
             </div>
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="lg:hidden p-2 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors cursor-pointer"
+              className="lg:hidden p-2 rounded-lg text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900 transition-colors cursor-pointer"
               aria-label="Toggle menu"
             >
               {isOpen ? <X size={22} /> : <Menu size={22} />}
@@ -135,7 +135,7 @@ export default function Navbar({ isDark, toggleTheme }) {
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-            className="lg:hidden border-t border-gray-100 dark:border-gray-800 bg-white/95 dark:bg-gray-900/95 backdrop-blur-xl shadow-xl"
+            className="lg:hidden border-t border-emerald-100 dark:border-emerald-800 bg-white/95 dark:bg-emerald-950/95 backdrop-blur-xl shadow-xl"
           >
             <div className="px-4 py-4 space-y-1">
               {NAV_LINKS.map((link) => {
@@ -148,14 +148,14 @@ export default function Navbar({ isDark, toggleTheme }) {
                       'block px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200',
                       active
                         ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60'
-                        : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white'
+                        : 'text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900 hover:text-emerald-600 dark:hover:text-emerald-300'
                     )}
                   >
                     {link.label}
                   </Link>
                 );
               })}
-              <div className="pt-3 border-t border-gray-100 dark:border-gray-800 space-y-2 px-4">
+              <div className="pt-3 border-t border-emerald-100 dark:border-emerald-800 space-y-2 px-4">
                 {user ? (
                   <>
                     <div className="px-4 py-2 text-xs text-emerald-600 dark:text-emerald-400 font-medium bg-emerald-50 dark:bg-emerald-950/50 rounded-xl border border-emerald-200 dark:border-emerald-800/60">
@@ -166,7 +166,7 @@ export default function Navbar({ isDark, toggleTheme }) {
                     </Link>
                     <button
                       onClick={handleLogout}
-                      className="w-full px-4 py-3 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-400 hover:bg-red-50 dark:hover:bg-red-950/20 hover:text-red-600 dark:hover:text-red-400 transition-all duration-200 cursor-pointer"
+                      className="w-full px-4 py-3 rounded-xl text-sm font-medium text-emerald-700 dark:text-emerald-400 hover:bg-red-50 dark:hover:bg-red-950/20 hover:text-red-600 dark:hover:text-red-400 transition-all duration-200 cursor-pointer"
                     >
                       Logout
                     </button>

@@ -5,7 +5,7 @@ import ServicesSection from '../components/home/ServicesSection';
 import HowItWorksSection from '../components/home/HowItWorksSection';
 import FeaturesSection from '../components/home/FeaturesSection';
 import TestimonialsSection from '../components/home/TestimonialsSection';
-import CTASection from '../components/home/CTASection';
+import ContactSection from '../components/home/ContactSection';
 
 export default function Home() {
   return (
@@ -17,7 +17,8 @@ export default function Home() {
       <HowItWorksSection />
       <FeaturesSection />
       <TestimonialsSection />
-      <CTASection />
+      
+      <ContactSection />
     </main>
   );
 }
