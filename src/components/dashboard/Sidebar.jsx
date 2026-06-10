@@ -9,6 +9,7 @@ import { cn } from '../../utils/cn';
 import { ROUTES } from '../../constants';
 
 const menuItems = [
+  { label: 'Home', path: '/', icon: Sprout },
   { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
   { label: 'Disease Detection', path: '/predict', icon: Bug },
   { label: 'Plant Identification', path: '/predict?type=plant', icon: Leaf },

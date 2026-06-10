@@ -120,7 +120,13 @@ export default function AgricultureDetail() {
         {crops.length === 0 && (
           <div className="text-center py-16">
             <Sprout size={48} className="text-gray-300 mx-auto mb-3" />
-            <p className="text-sm text-gray-400">No crops found in this category</p>
+            <p className="text-sm text-gray-400 mb-4">No sub-crops listed yet</p>
+            <Link
+              to={authLink('/predict')}
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition-colors"
+            >
+              <Search size={16} /> Upload & Detect
+            </Link>
           </div>
         )}
       </div>

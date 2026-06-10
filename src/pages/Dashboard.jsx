@@ -47,12 +47,7 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
-  const quickActions = [
-    { label: 'Disease Detection', path: '/predict', icon: Bug, color: 'from-emerald-500 to-green-600' },
-    { label: 'Plant Identification', path: '/predict?type=plant', icon: Leaf, color: 'from-blue-500 to-indigo-600' },
-    { label: 'Food Identification', path: '/predict?type=food', icon: Apple, color: 'from-orange-500 to-red-600' },
-  ];
-
+ 
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
       <Sidebar mobileOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -91,26 +86,7 @@ export default function Dashboard() {
             </div>
           </motion.div>
 
-          {/* Quick Actions */}
-          <div className="grid sm:grid-cols-3 gap-3">
-            {quickActions.map((action, i) => (
-              <Link
-                key={i}
-                to={action.path}
-                className={`flex items-center gap-3 p-4 rounded-xl bg-gradient-to-br ${action.color} text-white hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300`}
-              >
-                <div className="w-10 h-10 rounded-lg bg-white/15 flex items-center justify-center">
-                  <action.icon size={20} />
-                </div>
-                <div>
-                  <p className="text-xs font-semibold">{action.label}</p>
-                  <p className="text-[10px] text-white/70">Upload & Detect</p>
-                </div>
-                <ChevronRight size={14} className="ml-auto opacity-50" />
-              </Link>
-            ))}
-          </div>
-
+       
           {/* Agricultural Resources with sub-crop links */}
           {resources.length > 0 && (
             <motion.div
@@ -137,7 +113,7 @@ export default function Dashboard() {
                       </div>
                     </Link>
                     <div className="px-3 pb-3 space-y-0.5">
-                      {agri.crops.map((crop) => (
+                      {agri.crops.length > 0 ? agri.crops.map((crop) => (
                         <div key={crop.id}>
                           {crop.subs.length > 0 ? (
                             crop.subs.map((sub) => (
@@ -161,7 +137,11 @@ export default function Dashboard() {
                             </Link>
                           )}
                         </div>
-                      ))}
+                      )) : (
+                        <Link to="/predict" className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 text-xs font-medium hover:bg-emerald-100 dark:hover:bg-emerald-950/50 transition-colors">
+                          <Search size={12} /> Upload & Detect
+                        </Link>
+                      )}
                     </div>
                   </div>
                 ))}
