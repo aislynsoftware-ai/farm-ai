@@ -21,7 +21,6 @@ export default function Login() {
     setApiError('');
     try {
       const res = await api.auth.login(email);
-      if (res.otp) sessionStorage.setItem('pending_otp', res.otp);
       if (res.user_id) sessionStorage.setItem('pending_user_id', res.user_id);
       if (res.name || res.email) {
         sessionStorage.setItem('pending_user', JSON.stringify({

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Shield, ArrowLeft, AlertCircle, CheckCircle, Sprout, Loader } from 'lucide-react';
@@ -26,52 +26,7 @@ export default function VerifyOtp() {
     }
   }, [timer]);
 
-  // Auto-fill & auto-verify OTP from sessionStorage after 3 seconds
-  useEffect(() => {
-    const pendingOtp = sessionStorage.getItem('pending_otp');
-    if (!pendingOtp || pendingOtp.length !== 6) return;
 
-    const timer = setTimeout(async () => {
-      otpRef.current = pendingOtp;
-      const digits = pendingOtp.split('');
-      digits.forEach((digit, i) => {
-        setTimeout(() => {
-          setOtp((prev) => {
-            const next = [...prev];
-            next[i] = digit;
-            return next;
-          });
-        }, i * 100);
-      });
-
-      // Auto-verify after all digits are shown
-      setTimeout(async () => {
-        const uid = sessionStorage.getItem('pending_user_id');
-        if (!uid) { setError('Session expired, please login again'); setLoading(false); return; }
-        setLoading(true);
-        try {
-          const res = await api.auth.verifyOtp(uid, pendingOtp);
-          const pendingUser = sessionStorage.getItem('pending_user');
-          let userData = pendingUser ? JSON.parse(pendingUser) : {};
-          if (!userData.user_id) userData.user_id = uid;
-          if (res.user_id) userData.user_id = res.user_id;
-          localStorage.setItem('user', JSON.stringify(userData));
-          if (res.token) localStorage.setItem('token', res.token);
-          setSuccess(true);
-          setTimeout(() => navigate(ROUTES.DASHBOARD), 1000);
-        } catch (err) {
-          setError(err.message);
-        } finally {
-          setLoading(false);
-          sessionStorage.removeItem('pending_otp');
-          sessionStorage.removeItem('pending_user_id');
-          sessionStorage.removeItem('pending_user');
-        }
-      }, digits.length * 100 + 300);
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, []);
 
   const handleOtpChange = (index, value) => {
     if (value && !/^\d$/.test(value)) return;
@@ -123,7 +78,6 @@ export default function VerifyOtp() {
     setResending(true);
     try {
       const res = await api.auth.login(email);
-      if (res?.otp) sessionStorage.setItem('pending_otp', res.otp);
       if (res?.user_id) sessionStorage.setItem('pending_user_id', res.user_id);
       if (res?.name || res?.email) {
         sessionStorage.setItem('pending_user', JSON.stringify({
