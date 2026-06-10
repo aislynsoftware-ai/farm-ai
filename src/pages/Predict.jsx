@@ -55,7 +55,7 @@ export default function Predict() {
   const toggleSection = (key) => setExpandedSections((prev) => ({ ...prev, [key]: !prev[key] }));
 
   const profile = (() => { try { return JSON.parse(localStorage.getItem('user') || '{}'); } catch { return {}; } })();
-  if (!profile.user_id) return <Navigate to="/login" replace />;
+  if (!localStorage.getItem('token')) return <Navigate to="/login" replace />;
 
   useEffect(() => {
     async function loadCats() {
