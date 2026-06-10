@@ -67,7 +67,7 @@ export default function CropDetail() {
   );
 
   return (
-    <div className="min-h-screen bg-emerald-50/30 dark:bg-emerald-950">
+    <div className="min-h-screen bg-emerald-50/30 dark:bg-emerald-950 mt-10">
       <div className="max-w-7xl mx-auto px-4 py-8">
         <Link to={`/agriculture/${agriId}`} className="inline-flex items-center gap-1 text-xs text-emerald-600 hover:text-emerald-700 dark:hover:text-emerald-300 mb-4">
           <ArrowLeft size={14} /> Back to {agri?.title || 'Category'}
