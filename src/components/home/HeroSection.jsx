@@ -61,24 +61,7 @@ export default function HeroSection() {
           </Link>
         </motion.div>
 
-        <motion.div
-          className="mt-10 flex items-center justify-center gap-5 flex-wrap"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-        >
-          {['AI Powered', '95% Accuracy', 'Real-Time', 'Free to Start'].map(
-            (tag) => (
-              <div
-                key={tag}
-                className="flex items-center gap-1.5 text-[11px] text-gray-500 dark:text-gray-400"
-              >
-                <span className="w-1 h-1 rounded-full bg-black dark:bg-white" />
-                {tag}
-              </div>
-            )
-          )}
-        </motion.div>
+       
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white dark:from-gray-900 to-transparent" />

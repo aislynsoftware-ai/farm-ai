@@ -8,9 +8,14 @@ export const ROUTES = {
   SERVICES: '/services',
   FEATURES: '/features',
   CONTACT: '/contact',
+  PRIVACY: '/privacy',
+  TERMS: '/terms',
+  COOKIES: '/cookies',
   DASHBOARD: '/dashboard',
+  PROFILE: '/profile',
   LOGIN: '/login',
   REGISTER: '/register',
+  VERIFY: '/verify-otp',
 };
 
 export const NAV_LINKS = [

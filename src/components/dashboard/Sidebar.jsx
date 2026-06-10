@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  LayoutDashboard, Bug, Leaf, Apple, FileText, Settings, LogOut,
+  LayoutDashboard, Bug, Leaf, Apple, FileText, User, LogOut,
   ChevronLeft, ChevronRight, Sprout, X
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
@@ -14,14 +14,21 @@ const menuItems = [
   { label: 'Plant Identification', path: '#', icon: Leaf },
   { label: 'Food Identification', path: '#', icon: Apple },
   { label: 'Reports', path: '#', icon: FileText },
-  { label: 'Settings', path: '#', icon: Settings },
+  { label: 'Profile', path: '/profile', icon: User },
 ];
 
 export default function Sidebar({ mobileOpen, onClose }) {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
 
   const isActive = (path) => location.pathname === path;
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/');
+  };
 
   const sidebarContent = (
     <div className="flex flex-col h-full">
@@ -47,7 +54,7 @@ export default function Sidebar({ mobileOpen, onClose }) {
         )}
       </div>
 
-      <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
+      <nav className="flex-1 p-3 space-y-1 overflow-y-auto mt-5">
         {menuItems.map((item) => {
           const Icon = item.icon;
           const active = isActive(item.path);
@@ -70,15 +77,15 @@ export default function Sidebar({ mobileOpen, onClose }) {
         })}
       </nav>
 
-      <div className="p-3 border-t border-gray-100 dark:border-gray-700/50">
-        <Link
-          to={ROUTES.HOME}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-gray-600 dark:text-gray-400 hover:bg-red-50 dark:hover:bg-red-950/20 hover:text-red-600 dark:hover:text-red-400 transition-all duration-200"
-        >
-          <LogOut size={18} />
-          {!collapsed && <span>Logout</span>}
-        </Link>
-      </div>
+        <div className="p-3 border-t border-gray-100 dark:border-gray-700/50">
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-medium text-gray-600 dark:text-gray-400 hover:bg-red-50 dark:hover:bg-red-950/20 hover:text-red-600 dark:hover:text-red-400 transition-all duration-200 cursor-pointer"
+          >
+            <LogOut size={18} />
+            {!collapsed && <span>Logout</span>}
+          </button>
+        </div>
     </div>
   );
 

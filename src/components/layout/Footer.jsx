@@ -51,9 +51,9 @@ export default function Footer() {
                 <li key={link.label}>
                   <Link
                     to={link.path}
-                    className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-emerald-400 transition-all duration-200 group"
+                    className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-emerald-400 hover:underline transition-all duration-200"
                   >
-                    <span className="group-hover:underline">{link.label}</span>
+                    <span>{link.label}</span>
                     <ArrowUpRight size={10} className="opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200" />
                   </Link>
                 </li>
@@ -68,9 +68,9 @@ export default function Footer() {
                 <li key={link.label}>
                   <Link
                     to={link.path}
-                    className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-emerald-400 transition-all duration-200 group"
+                    className="inline-flex items-center gap-1 text-xs text-gray-400 hover:text-emerald-400 hover:underline transition-all duration-200"
                   >
-                    <span className="group-hover:underline">{link.label}</span>
+                    <span>{link.label}</span>
                     <ArrowUpRight size={10} className="opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-200" />
                   </Link>
                 </li>
@@ -81,17 +81,17 @@ export default function Footer() {
           <div>
             <h3 className="text-white font-semibold mb-4 text-sm tracking-wide">Contact</h3>
             <ul className="space-y-3">
-              <li className="flex items-start gap-3 text-xs text-gray-400 group hover:text-emerald-400 transition-colors duration-200">
+              <li className="flex items-start gap-3 text-xs text-gray-400 hover:text-emerald-400 hover:underline transition-colors duration-200">
                 <Mail size={14} className="mt-0.5 text-emerald-500 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
-                <span className="group-hover:underline">{footer.contact.email}</span>
+                <span>{footer.contact.email}</span>
               </li>
-              <li className="flex items-start gap-3 text-xs text-gray-400 group hover:text-emerald-400 transition-colors duration-200">
+              <li className="flex items-start gap-3 text-xs text-gray-400 hover:text-emerald-400 hover:underline transition-colors duration-200">
                 <Phone size={14} className="mt-0.5 text-emerald-500 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
-                <span className="group-hover:underline">{footer.contact.phone}</span>
+                <span>{footer.contact.phone}</span>
               </li>
-              <li className="flex items-start gap-3 text-xs text-gray-400 group hover:text-emerald-400 transition-colors duration-200">
+              <li className="flex items-start gap-3 text-xs text-gray-400 hover:text-emerald-400 hover:underline transition-colors duration-200">
                 <MapPin size={14} className="mt-0.5 text-emerald-500 flex-shrink-0 group-hover:scale-110 transition-transform duration-200" />
-                <span className="group-hover:underline">{footer.contact.address}</span>
+                <span>{footer.contact.address}</span>
               </li>
             </ul>
           </div>
@@ -102,15 +102,15 @@ export default function Footer() {
             &copy; {year} Farmlyt AI. All rights reserved.
           </p>
           <div className="flex gap-5 text-xs text-gray-500">
-            <a href="#" className="hover:text-emerald-400 transition-colors duration-200 hover:underline">
+            <Link to="/privacy" className="hover:text-emerald-400 transition-colors duration-200 hover:underline">
               Privacy Policy
-            </a>
-            <a href="#" className="hover:text-emerald-400 transition-colors duration-200 hover:underline">
+            </Link>
+            <Link to="/terms" className="hover:text-emerald-400 transition-colors duration-200 hover:underline">
               Terms of Service
-            </a>
-            <a href="#" className="hover:text-emerald-400 transition-colors duration-200 hover:underline">
+            </Link>
+            <Link to="/cookies" className="hover:text-emerald-400 transition-colors duration-200 hover:underline">
               Cookie Policy
-            </a>
+            </Link>
           </div>
         </div>
       </div>
