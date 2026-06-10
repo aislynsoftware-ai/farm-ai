@@ -52,7 +52,7 @@ export default function AgricultureDetail() {
   );
 
   return (
-    <div className="min-h-screen bg-emerald-50/30 dark:bg-emerald-950 mt-10">
+    <div className="min-h-screen bg-emerald-50/30 dark:bg-emerald-950 mt-12">
       <div className="max-w-7xl mx-auto px-4 py-8">
         <Link to="/services" className="inline-flex items-center gap-1 text-xs text-emerald-600 hover:text-emerald-700 dark:hover:text-emerald-300 mb-4">
           <ArrowLeft size={14} /> Back to Services
@@ -123,7 +123,7 @@ export default function AgricultureDetail() {
                     >
                       <div className="relative">
                         {crop.image_url ? (
-                          <img src={crop.image_url} alt={crop.title} className="w-full h-40 object-contain bg-emerald-50/30 dark:bg-emerald-950 transition-transform duration-500 group-hover:scale-105" />
+                          <img src={crop.image_url} alt={crop.title} className="w-full h-40 object-contain mt-2 mb-2 rounded-[10px] bg-emerald-50/30 dark:bg-emerald-950 transition-transform duration-500 group-hover:scale-105" />
                         ) : (
                           <div className="w-full h-40 flex items-center justify-center bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-950/30 dark:to-green-950/30">
                             <Sprout size={40} className="text-emerald-400" />

@@ -67,7 +67,7 @@ export default function CropDetail() {
   );
 
   return (
-    <div className="min-h-screen bg-emerald-50/30 dark:bg-emerald-950 mt-10">
+    <div className="min-h-screen bg-emerald-50/30 dark:bg-emerald-950 mt-12">
       <div className="max-w-7xl mx-auto px-4 py-8">
         <Link to={`/agriculture/${agriId}`} className="inline-flex items-center gap-1 text-xs text-emerald-600 hover:text-emerald-700 dark:hover:text-emerald-300 mb-4">
           <ArrowLeft size={14} /> Back to {agri?.title || 'Category'}
@@ -116,7 +116,7 @@ export default function CropDetail() {
                 >
                   <div className="relative">
                     {sub.image_url ? (
-                      <img src={sub.image_url} alt={sub.title} className="w-full h-36 object-contain bg-emerald-50/30 dark:bg-emerald-950 transition-transform duration-500 group-hover:scale-105" />
+                      <img src={sub.image_url} alt={sub.title} className="w-full h-36 object-contain mt-2 mb-2 rounded-[10px] bg-emerald-50/30 dark:bg-emerald-950 transition-transform duration-500 group-hover:scale-105" />
                     ) : (
                       <div className="w-full h-36 flex items-center justify-center bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-950/30 dark:to-green-950/30">
                         <Sprout size={36} className="text-emerald-400" />
@@ -128,13 +128,16 @@ export default function CropDetail() {
                       </span>
                     </div>
                   </div>
-                  <div className="p-4">
-                    <div className="flex items-center justify-between">
-                      <h3 className="text-sm font-bold text-gray-900 dark:text-white">{sub.title}</h3>
-                      <ArrowRight size={16} className="text-emerald-500 dark:text-emerald-400 group-hover:text-emerald-600 transition-colors flex-shrink-0" />
-                    </div>
-                    <p className="text-xs text-emerald-700 dark:text-emerald-300 mt-1.5">Click to upload and detect diseases</p>
-                  </div>
+                  <div className="p-4 relative">
+  <h3 className="text-sm font-bold text-center text-gray-900 dark:text-white">
+    {sub.title}
+  </h3>
+
+  <ArrowRight
+    size={16}
+    className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-500 dark:text-emerald-400 group-hover:text-emerald-600 transition-colors"
+  />
+</div>
                 </Link>
               </motion.div>
             ))}
