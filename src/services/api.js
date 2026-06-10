@@ -1,5 +1,32 @@
 const BASE_URL = 'https://aislynajay-product-development.hf.space';
 
+const cache = new Map();
+const CACHE_TTL = 5 * 60 * 1000;
+
+function getCached(key) {
+  const entry = cache.get(key);
+  if (entry && Date.now() - entry.timestamp < CACHE_TTL) return entry.data;
+  cache.delete(key);
+  return null;
+}
+
+function setCached(key, data) {
+  cache.set(key, { data, timestamp: Date.now() });
+}
+
+function cachedRequest(endpoint, options = {}) {
+  if (options.method && options.method !== 'GET') {
+    cache.clear();
+    return request(endpoint, options);
+  }
+  const cached = getCached(endpoint);
+  if (cached) return Promise.resolve(cached);
+  return request(endpoint, options).then((data) => {
+    setCached(endpoint, data);
+    return data;
+  });
+}
+
 async function request(endpoint, options = {}) {
   const token = localStorage.getItem('token');
   const isFormData = options.body instanceof FormData;
@@ -144,13 +171,13 @@ const api = {
     foodId: (file) => { const fd = new FormData(); fd.append('image', file); return request('/food_identification', { method: 'POST', body: fd, headers: {} }); },
   },
   farming: {
-    tips: () => request('/get_farming_tips'),
-    crops: () => request('/get_crop_sub'),
-    agriTitles: () => request('/get_agri_titles'),
-    allCrops: () => request('/get_crops'),
-    getLeafPredictions: () => request('/get_leaf_predictions'),
-    cropWithProducts: () => request('/get_crop_with_products'),
-    wallet: (userId) => request(`/user/wallet/${userId}`),
+    tips: () => cachedRequest('/get_farming_tips'),
+    crops: () => cachedRequest('/get_crop_sub'),
+    agriTitles: () => cachedRequest('/get_agri_titles'),
+    allCrops: () => cachedRequest('/get_crops'),
+    getLeafPredictions: () => cachedRequest('/get_leaf_predictions'),
+    cropWithProducts: () => cachedRequest('/get_crop_with_products'),
+    wallet: (userId) => cachedRequest(`/user/wallet/${userId}`),
   },
   payment: {
     createOrder: (userId, amount) =>
