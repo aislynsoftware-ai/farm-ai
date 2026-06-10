@@ -14,61 +14,51 @@ async function request(endpoint, options = {}) {
   });
 
   const data = await res.json();
-  if (!res.ok) throw new Error(data.message || data.detail || 'Request failed');
+  if (!res.ok) throw new Error(data.message || data.detail || data.error || 'Request failed');
   return data;
 }
 
+function extractOtp(res) {
+  return res?.otp || res?.data?.otp || res?.otp_code || res?.data?.otp_code || res?.code || null;
+}
+
+function extractUserId(res) {
+  return res?.user_id || res?.data?.user_id || res?.user?.user_id || null;
+}
+
 export const auth = {
-  login: (email, password) =>
-    request('/auth/login', {
+  login: async (email) => {
+    const res = await request('/auth/login', {
       method: 'POST',
-      body: JSON.stringify({ email, password }),
-    }),
-  register: (name, email, phone, password) =>
-    request('/auth/register', {
+      body: JSON.stringify({ email }),
+    });
+    const otp = extractOtp(res);
+    if (otp) res.otp = otp;
+    const userId = extractUserId(res);
+    if (userId) res.user_id_saved = userId;
+    return res;
+  },
+  register: async (name, email, phone, password) => {
+    const res = await request('/auth/register', {
       method: 'POST',
       body: JSON.stringify({ name, email, phone, password }),
-    }),
-  verifyOtp: (email, otp) =>
-    request('/auth/verify-otp', {
+    });
+    const otp = extractOtp(res);
+    if (otp) res.otp = otp;
+    const userId = extractUserId(res);
+    if (userId) res.user_id_saved = userId;
+    return res;
+  },
+  verifyOtp: async (userId, otp) => {
+    const res = await request('/auth/verify-otp', {
       method: 'POST',
-      body: JSON.stringify({ email, otp }),
-    }),
-  updateProfile: (data) =>
+      body: JSON.stringify({ user_id: userId, otp }),
+    });
+    return res;
+  },
+  updateProfile: (userId, name) =>
     request('/auth/update-profile', {
       method: 'POST',
-      body: JSON.stringify(data),
+      body: JSON.stringify({ user_id: userId, name }),
     }),
 };
-
-export const user = {
-  wallet: (userId) => request(`/user/wallet/${userId}`),
-};
-
-export const payment = {
-  createOrder: (data) =>
-    request('/create-order', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    }),
-  verifyPayment: (data) =>
-    request('/verify-payment', {
-      method: 'POST',
-      body: JSON.stringify(data),
-    }),
-};
-
-export const farming = {
-  tips: () => request('/get_farming_tips'),
-  crops: () => request('/get_crops'),
-  cropSub: () => request('/get_crop_sub'),
-  cropWithProducts: () => request('/get_crop_with_products'),
-  tipsDetail: () => request('/get_tips'),
-  agriTitles: () => request('/get_agri_titles'),
-  leafs: (crop) => request(`/leafs/${crop}`),
-  vegetables: (veg) => request(`/vegtables/${veg}`),
-  fruits: (fruit) => request(`/fruits/${fruit}`),
-  flowers: (flower) => request(`/flowers/${flower}`),
-};
-
-export default { auth, user, payment, farming };
