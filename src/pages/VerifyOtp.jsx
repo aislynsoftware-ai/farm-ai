@@ -52,7 +52,10 @@ export default function VerifyOtp() {
         try {
           const res = await api.auth.verifyOtp(uid, pendingOtp);
           const pendingUser = sessionStorage.getItem('pending_user');
-          if (pendingUser) localStorage.setItem('user', pendingUser);
+          let userData = pendingUser ? JSON.parse(pendingUser) : {};
+          if (!userData.user_id) userData.user_id = uid;
+          if (res.user_id) userData.user_id = res.user_id;
+          localStorage.setItem('user', JSON.stringify(userData));
           if (res.token) localStorage.setItem('token', res.token);
           setSuccess(true);
           setTimeout(() => navigate(ROUTES.DASHBOARD), 1000);
@@ -101,7 +104,10 @@ export default function VerifyOtp() {
       if (!uid) { setError('Session expired, please login again'); setLoading(false); return; }
       const res = await api.auth.verifyOtp(uid, code);
       const pendingUser = sessionStorage.getItem('pending_user');
-      if (pendingUser) localStorage.setItem('user', pendingUser);
+      let userData = pendingUser ? JSON.parse(pendingUser) : {};
+      if (!userData.user_id) userData.user_id = uid;
+      if (res.user_id) userData.user_id = res.user_id;
+      localStorage.setItem('user', JSON.stringify(userData));
       if (res.token) localStorage.setItem('token', res.token);
       setSuccess(true);
       setTimeout(() => navigate(ROUTES.DASHBOARD), 1000);
