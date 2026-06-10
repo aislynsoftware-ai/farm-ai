@@ -49,7 +49,7 @@ export default function AboutSection() {
                   <div className="w-16 h-16 rounded-2xl gradient-bg flex items-center justify-center mx-auto mb-3 shadow-lg shadow-emerald-500/20">
                     <Leaf className="w-8 h-8 text-white" />
                   </div>
-                  <p className="text-base font-semibold text-gray-700 dark:text-gray-300">
+                  <p className="text-base font-semibold text-emerald-700 dark:text-emerald-300">
                     Smart Agriculture
                     <br />
                     for a Better Future
@@ -69,7 +69,7 @@ export default function AboutSection() {
             {highlights.map((item, i) => {
               const Icon = item.icon;
               return (
-                <div key={i} className="flex gap-3.5 p-3 rounded-xl border border-transparent hover:border-gray-100 dark:hover:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-all duration-300 hover:shadow-sm cursor-default">
+                <div key={i} className="flex gap-3.5 p-3 rounded-xl border border-transparent hover:border-emerald-200 dark:hover:border-emerald-700 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-all duration-300 hover:shadow-sm cursor-default">
                   <div className="w-9 h-9 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 flex items-center justify-center flex-shrink-0">
                     <Icon className="w-[18px] h-[18px] text-emerald-600 dark:text-emerald-400" />
                   </div>
@@ -77,7 +77,7 @@ export default function AboutSection() {
                     <h3 className="font-semibold text-gray-900 dark:text-white mb-0.5 text-sm">
                       {item.title}
                     </h3>
-                    <p className="text-xs text-gray-600 dark:text-gray-300">
+                    <p className="text-xs text-emerald-700 dark:text-emerald-300">
                       {item.description}
                     </p>
                   </div>

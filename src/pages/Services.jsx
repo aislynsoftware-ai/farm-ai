@@ -1,10 +1,29 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { Sprout, ChevronRight, Search, ArrowRight } from 'lucide-react';
 import PageHeader from '../components/layout/PageHeader';
 import ServiceCard from '../components/ui/ServiceCard';
 import servicesData from '../data/services';
 import SectionTitle from '../components/common/SectionTitle';
+import api from '../services/api';
 
 export default function Services() {
+  const [resources, setResources] = useState([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      const [agriRes] = await Promise.allSettled([
+        api.farming.agriTitles(),
+      ]);
+
+      const agri = agriRes.status === 'fulfilled' && Array.isArray(agriRes.value) ? agriRes.value : [];
+
+      setResources(agri);
+    }
+    fetchData();
+  }, []);
+
   return (
     <main>
       <PageHeader
@@ -12,7 +31,60 @@ export default function Services() {
         description="Comprehensive AI-powered solutions designed to address every aspect of modern agriculture and farming."
       />
 
-      <section className="py-10 lg:py-16">
+    
+
+      {resources.length > 0 && (
+        <section className="py-1lg:py-16 bg-emerald-50/30 dark:bg-emerald-950/30">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <SectionTitle
+              subtitle="Resources"
+              title="Agricultural Resources"
+              description="Browse our collection of agricultural knowledge and guides."
+            />
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {resources.map((agri, index) => (
+                <motion.div
+                  key={agri.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.35, delay: index * 0.06 }}
+                >
+                  <Link
+                    to={`/agriculture/${agri.id}`}
+                    className="group block rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden hover:shadow-xl hover:border-emerald-400 dark:hover:border-emerald-400 hover:-translate-y-1 hover:bg-emerald-50/80 dark:hover:bg-emerald-950/40 transition-all duration-300"
+                  >
+                    <div className="relative overflow-hidden mt-2 mb-2 rounded-[10px]">
+                      {agri.image_url ? (
+                        <img src={agri.image_url} alt={agri.title} className="w-full h-44 object-contain bg-emerald-50/30 dark:bg-emerald-950 transition-transform duration-500 group-hover:scale-105 b" />
+                      ) : (
+                        <div className="w-full h-44 flex items-center justify-center bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-950/30 dark:to-green-950/30">
+                          <Sprout size={48} className="text-emerald-400" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="p-2">
+                   <div className="relative flex items-center justify-center">
+  <h3 className="text-sm font-bold text-gray-900 dark:text-white text-center">
+    {agri.title}
+  </h3>
+
+  <ArrowRight
+    size={16}
+    className="absolute right-0 text-emerald-500 dark:text-emerald-400 group-hover:text-emerald-600 transition-colors"
+  />
+</div>
+                     
+                    </div>
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+  <section className="py-10 lg:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5">
             {servicesData.map((service, index) => (
@@ -22,7 +94,7 @@ export default function Services() {
         </div>
       </section>
 
-      <section className="py-10 lg:py-16 bg-gray-50/50 dark:bg-gray-900/50">
+      <section className="py-10 lg:py-16">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionTitle
             subtitle="Why Our Services"
@@ -33,19 +105,19 @@ export default function Services() {
           <div className="grid md:grid-cols-3 gap-4">
             {[
               { title: '95% Accuracy', desc: 'Industry-leading AI model accuracy for reliable results you can trust.' },
-              { title: 'Under 2 Seconds', desc: 'Lightning-fast inference delivers results in milliseconds, not minutes.' },
+              { title: 'Under 5 Seconds', desc: 'Lightning-fast inference delivers results in milliseconds, not minutes.' },
               { title: '24/7 Availability', desc: 'Our cloud platform ensures your tools are always available when you need them.' },
             ].map((item, index) => (
               <motion.div
                 key={index}
-                className="text-center p-5 bg-white dark:bg-gray-800 rounded-2xl border-2 border-gray-200 dark:border-gray-600 hover:border-emerald-300 dark:hover:border-emerald-500 hover:bg-emerald-50/60 dark:hover:bg-emerald-950/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
+                className="text-center p-5 bg-white dark:bg-gray-800 rounded-2xl border-2 border-emerald-200 dark:border-emerald-700 hover:border-emerald-400 dark:hover:border-emerald-400 hover:bg-emerald-50/60 dark:hover:bg-emerald-950/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-50px' }}
                 transition={{ duration: 0.35, delay: index * 0.08 }}
               >
                 <div className="text-2xl md:text-3xl font-bold gradient-text mb-1">{item.title}</div>
-                <p className="text-gray-600 dark:text-gray-300 text-xs">{item.desc}</p>
+                <p className="text-emerald-700 dark:text-emerald-300 text-xs">{item.desc}</p>
               </motion.div>
             ))}
           </div>
