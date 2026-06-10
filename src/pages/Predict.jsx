@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Navigate } from 'react-router-dom';
 import { Upload, Leaf, Apple, Sprout, Flower2, Bug, AlertCircle, Loader, Search, Menu, ChevronDown, ChevronRight, ShoppingCart, Droplets, AlertTriangle } from 'lucide-react';
 import Sidebar from '../components/dashboard/Sidebar';
 import api from '../services/api';
@@ -50,6 +50,9 @@ export default function Predict() {
   const [expanded, setExpanded] = useState(null);
   const [categories, setCategories] = useState([]);
   const [loadingCats, setLoadingCats] = useState(true);
+
+  const profile = (() => { try { return JSON.parse(localStorage.getItem('user') || '{}'); } catch { return {}; } })();
+  if (!profile.user_id) return <Navigate to="/login" replace />;
 
   useEffect(() => {
     async function loadCats() {
