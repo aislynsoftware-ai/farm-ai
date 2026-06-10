@@ -283,7 +283,9 @@ def login():
     cursor.close()
     conn.close()
 
-  
+    if email:
+        send_email_otp(email, otp)
+
     return jsonify({
         "message": "OTP sent for login",
         "user_id": user_id,
