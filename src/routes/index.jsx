@@ -13,12 +13,28 @@ import VerifyOtp from '../pages/VerifyOtp';
 import PrivacyPolicy from '../pages/PrivacyPolicy';
 import TermsOfService from '../pages/TermsOfService';
 import CookiePolicy from '../pages/CookiePolicy';
+import Predict from '../pages/Predict';
+import AgricultureDetail from '../pages/AgricultureDetail';
+import SubCropDetail from '../pages/SubCropDetail';
+
+function ErrorPage() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+      <div className="text-center p-8">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Something went wrong</h1>
+        <p className="text-sm text-gray-500 mb-4">Please try refreshing the page</p>
+        <a href="/" className="text-xs text-emerald-600 hover:underline">Go Home</a>
+      </div>
+    </div>
+  );
+}
 
 export default function createAppRouter(isDark, toggleTheme) {
   return createBrowserRouter([
     {
       path: '/',
       element: <RootLayout isDark={isDark} toggleTheme={toggleTheme} />,
+      errorElement: <ErrorPage />,
       children: [
         { index: true, element: <Home /> },
         { path: 'about', element: <About /> },
@@ -31,6 +47,8 @@ export default function createAppRouter(isDark, toggleTheme) {
         { path: 'privacy', element: <PrivacyPolicy /> },
         { path: 'terms', element: <TermsOfService /> },
         { path: 'cookies', element: <CookiePolicy /> },
+        { path: 'agriculture/:id', element: <AgricultureDetail /> },
+        { path: 'crop/:id', element: <SubCropDetail /> },
       ],
     },
     {
@@ -40,6 +58,10 @@ export default function createAppRouter(isDark, toggleTheme) {
     {
       path: '/profile',
       element: <Profile />,
+    },
+    {
+      path: '/predict',
+      element: <Predict />,
     },
   ]);
 }

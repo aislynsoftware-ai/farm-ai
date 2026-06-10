@@ -3,17 +3,16 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Bug, Leaf, Apple, FileText, User, LogOut,
-  ChevronLeft, ChevronRight, Sprout, X
+  ChevronLeft, ChevronRight, Sprout, X, Camera, History
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { ROUTES } from '../../constants';
 
 const menuItems = [
   { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-  { label: 'Disease Detection', path: '#', icon: Bug },
-  { label: 'Plant Identification', path: '#', icon: Leaf },
-  { label: 'Food Identification', path: '#', icon: Apple },
-  { label: 'Reports', path: '#', icon: FileText },
+  { label: 'Disease Detection', path: '/predict', icon: Bug },
+  { label: 'Plant Identification', path: '/predict?type=plant', icon: Leaf },
+  { label: 'Food Identification', path: '/predict?type=food', icon: Apple },
   { label: 'Profile', path: '/profile', icon: User },
 ];
 

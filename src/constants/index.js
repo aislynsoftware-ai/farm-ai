@@ -16,6 +16,7 @@ export const ROUTES = {
   LOGIN: '/login',
   REGISTER: '/register',
   VERIFY: '/verify-otp',
+  PREDICT: '/predict',
 };
 
 export const NAV_LINKS = [
