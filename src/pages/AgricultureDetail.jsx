@@ -44,6 +44,7 @@ export default function AgricultureDetail() {
   const fileRef = useRef(null);
   const [expandedSections, setExpandedSections] = useState({});
   const [lightboxImg, setLightboxImg] = useState(null);
+  const [selectedCrop, setSelectedCrop] = useState('');
 
   const toggleSection = (key) => setExpandedSections((prev) => ({ ...prev, [key]: !prev[key] }));
 
@@ -97,6 +98,9 @@ export default function AgricultureDetail() {
 
   const handlePredict = async () => {
     if (!file) { setError('Please upload an image'); return; }
+    if (!selectedCrop) { setError('Please select a crop from the dropdown'); return; }
+    const cropKey = selectedCrop.toLowerCase().trim();
+    const endpoint = titleEndpoint[cropKey] || '/food_identification';
     setLoading(true);
     setPredictStartTime(Date.now());
     setError('');
@@ -107,7 +111,7 @@ export default function AgricultureDetail() {
       if (userId) fd.append('user_id', userId);
       fd.append('image', file);
       const token = localStorage.getItem('token');
-      const res = await fetch(`${BASE_URL}/plant_idetification`, {
+      const res = await fetch(`${BASE_URL}${endpoint}`, {
         method: 'POST',
         body: fd,
         headers: token ? { Authorization: `Bearer ${token}` } : {},
@@ -239,18 +243,11 @@ export default function AgricultureDetail() {
         )}
 
         {crops.length === 0 && (
-          <div className="text-center py-16">
+          <div className="text-center py-12">
             <div className="w-20 h-20 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 flex items-center justify-center mx-auto mb-4">
               <Sprout size={40} className="text-emerald-400" />
             </div>
-           
-         
-            <Link
-              to={authLink('/predict')}
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition-colors shadow-lg shadow-emerald-200/50 dark:shadow-none"
-            >
-              <Search size={16} /> Upload & Detect
-            </Link>
+            <p className="text-xs text-emerald-600 dark:text-emerald-400">No crops listed. Use the detection panel below.</p>
           </div>
         )}
 
@@ -258,6 +255,16 @@ export default function AgricultureDetail() {
           <p className="text-xs font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
             <Upload size={14} className="text-emerald-500" /> Quick Detection
           </p>
+
+          {crops.length > 0 && (
+            <div className="mb-4">
+              <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1.5">Select Crop</label>
+              <select value={selectedCrop} onChange={(e) => setSelectedCrop(e.target.value)} className="w-full px-3 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none text-xs text-gray-900 dark:text-white">
+                <option value="">-- Select a crop --</option>
+                {crops.map((c) => <option key={c.id} value={c.title}>{c.title}</option>)}
+              </select>
+            </div>
+          )}
 
           <div
             onClick={() => fileRef.current?.click()}
@@ -293,7 +300,7 @@ export default function AgricultureDetail() {
             </div>
           )}
 
-          <button onClick={handlePredict} disabled={loading || !file} className="w-full flex items-center justify-center gap-2 px-4 py-3 mt-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-300 dark:disabled:bg-emerald-800 text-white text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed">
+          <button onClick={handlePredict} disabled={loading || !file || !selectedCrop} className="w-full flex items-center justify-center gap-2 px-4 py-3 mt-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-300 dark:disabled:bg-emerald-800 text-white text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed">
             {loading ? <Loader size={16} className="animate-spin" /> : <Search size={16} />}
             {loading ? 'Analyzing...' : 'Detect'}
           </button>
@@ -327,7 +334,7 @@ export default function AgricultureDetail() {
                       {result.confidence && (
                         <div className="flex items-center gap-1.5 mt-0.5">
                           <Target size={11} className="text-emerald-500" />
-                          <span className="text-xs text-emerald-600 dark:text-emerald-400">Confidence: <strong>{result.confidence}%</strong></span>
+                          <span className="text-xs text-emerald-600 dark:text-emerald-400">Confidence: <strong>{result.confidence ? (result.confidence < 1 ? (result.confidence * 100).toFixed(1) : Number(result.confidence).toFixed(1)) : ''}%</strong></span>
                         </div>
                       )}
                     </div>
