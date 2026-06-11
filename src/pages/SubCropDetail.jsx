@@ -6,6 +6,9 @@ import api from '../services/api';
 import Skeleton from '../components/common/Skeleton';
 import PredictionProgress from '../components/common/PredictionProgress';
 
+
+// {hllo}
+
 function SubCropTipCard({ tip }) {
   const [open, setOpen] = useState(false);
   return (
