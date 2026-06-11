@@ -3,6 +3,8 @@ import { useParams, Link, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Sprout, ArrowLeft, Search, Upload, AlertCircle, Loader, Bug, Droplets, AlertTriangle, ShoppingCart, Lightbulb, CheckCircle, XCircle, Shield, Zap, ImageIcon, Target, FlaskConical, Sparkles, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 import api from '../services/api';
+import Skeleton from '../components/common/Skeleton';
+import PredictionProgress from '../components/common/PredictionProgress';
 
 const BASE_URL = 'https://aislynajay-product-development.hf.space';
 
@@ -35,6 +37,7 @@ export default function SubCropDetail() {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [predictLoading, setPredictLoading] = useState(false);
+  const [predictStartTime, setPredictStartTime] = useState(null);
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
   const fileRef = useRef(null);
@@ -94,6 +97,7 @@ export default function SubCropDetail() {
     if (!profile?.user_id) { setError('Please log in to use detection'); return; }
 
     setPredictLoading(true);
+    setPredictStartTime(Date.now());
     setError('');
     setResult(null);
     try {
@@ -117,8 +121,22 @@ export default function SubCropDetail() {
   };
 
   if (loading) return (
-    <div className="min-h-screen bg-emerald-50/30 dark:bg-emerald-950 flex items-center justify-center">
-      <p className="text-sm text-emerald-600">Loading...</p>
+    <div className="min-h-screen bg-emerald-50/30 dark:bg-emerald-950">
+      <div className="max-w-5xl mx-auto px-4 py-8 space-y-6">
+        <Skeleton className="w-20 h-4" />
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600/20 via-green-700/20 to-blue-800/20 p-6 lg:p-8">
+          <div className="flex items-center gap-5">
+            <Skeleton variant="icon" />
+            <div className="space-y-2 flex-1">
+              <Skeleton className="w-16 h-3" />
+              <Skeleton variant="title" className="w-1/2" />
+              <Skeleton className="w-2/3" />
+            </div>
+          </div>
+        </div>
+        <Skeleton variant="card" />
+        <Skeleton className="h-12 w-full rounded-xl" />
+      </div>
     </div>
   );
 
@@ -205,6 +223,10 @@ export default function SubCropDetail() {
             {predictLoading ? <Loader size={16} className="animate-spin" /> : <Search size={16} />}
             {predictLoading ? 'Analyzing...' : 'Detect Disease'}
           </button>
+
+          {predictLoading && predictStartTime && (
+            <PredictionProgress startTime={predictStartTime} />
+          )}
 
           {result && (
             <div className="mt-6 space-y-5">
@@ -297,7 +319,7 @@ export default function SubCropDetail() {
               )}
 
               {/* Section 3: Disease Information */}
-              {result.disease && (
+              {result.disease && !isHealthy && (
                 <motion.div
                   className="rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden"
                   initial={{ opacity: 0, y: 20 }}
@@ -485,6 +507,7 @@ export default function SubCropDetail() {
               )}
 
               {/* Section 8: AI Recommendations */}
+              {!isHealthy && (
               <motion.div
                 className="rounded-2xl bg-gradient-to-br from-emerald-600 via-green-700 to-blue-800 p-5 relative overflow-hidden"
                 initial={{ opacity: 0, y: 20 }}
@@ -536,6 +559,7 @@ export default function SubCropDetail() {
                   </div>
                 </div>
               </motion.div>
+              )}
             </div>
           )}
         </div>

@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Sprout, ArrowLeft, Search, Upload, ArrowRight } from 'lucide-react';
 import api from '../services/api';
+import Skeleton, { GridCardSkeleton } from '../components/common/Skeleton';
 
 const titleEndpoint = {
   'tomato': '/leafs/tomato',
@@ -61,8 +62,23 @@ export default function CropDetail() {
   }, [agriId, cropId]);
 
   if (!crop) return (
-    <div className="min-h-screen bg-emerald-50/30 dark:bg-emerald-950 flex items-center justify-center">
-      <p className="text-sm text-emerald-600">Loading...</p>
+    <div className="min-h-screen bg-emerald-50/30 dark:bg-emerald-950 mt-12">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <Skeleton className="w-32 h-4 mb-4" />
+        <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600/20 via-green-700/20 to-blue-800/20 p-6 lg:p-8 mb-8">
+          <div className="flex items-center gap-5">
+            <Skeleton variant="icon" />
+            <div className="space-y-2 flex-1">
+              <Skeleton className="w-16 h-3" />
+              <Skeleton variant="title" className="w-1/2" />
+              <Skeleton className="w-2/3" />
+            </div>
+          </div>
+        </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {[1, 2, 3, 4, 5, 6].map((i) => <GridCardSkeleton key={i} />)}
+        </div>
+      </div>
     </div>
   );
 
@@ -116,7 +132,7 @@ export default function CropDetail() {
                 >
                   <div className="relative">
                     {sub.image_url ? (
-                      <img src={sub.image_url} alt={sub.title} className="w-full h-36 object-contain mt-2 mb-2 rounded-[10px] bg-emerald-50/30 dark:bg-emerald-950 transition-transform duration-500 group-hover:scale-105" />
+                      <img src={sub.image_url} alt={sub.title} className="w-full h-36 object-contain mt-2 mb-2 rounded-[20px] bg-emerald-50/30 dark:bg-emerald-950 transition-transform duration-500 group-hover:scale-105" />
                     ) : (
                       <div className="w-full h-36 flex items-center justify-center bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-950/30 dark:to-green-950/30">
                         <Sprout size={36} className="text-emerald-400" />

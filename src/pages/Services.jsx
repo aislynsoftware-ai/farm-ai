@@ -7,8 +7,10 @@ import ServiceCard from '../components/ui/ServiceCard';
 import servicesData from '../data/services';
 import SectionTitle from '../components/common/SectionTitle';
 import api from '../services/api';
+import Skeleton from '../components/common/Skeleton';
 
 export default function Services() {
+  const [loadingResources, setLoadingResources] = useState(true);
   const [resources, setResources] = useState([]);
 
   useEffect(() => {
@@ -20,6 +22,7 @@ export default function Services() {
       const agri = agriRes.status === 'fulfilled' && Array.isArray(agriRes.value) ? agriRes.value : [];
 
       setResources(agri);
+      setLoadingResources(false);
     }
     fetchData();
   }, []);
@@ -33,7 +36,27 @@ export default function Services() {
 
     
 
-      {resources.length > 0 && (
+      {loadingResources ? (
+        <section className="py-1lg:py-16 bg-emerald-50/30 dark:bg-emerald-950/30">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-8">
+              <Skeleton className="w-24 h-4 mx-auto mb-2" />
+              <Skeleton variant="title" className="mx-auto w-1/2" />
+              <Skeleton className="w-2/3 mx-auto mt-2" />
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div key={i} className="rounded-2xl bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 overflow-hidden">
+                  <Skeleton variant="image" className="h-44 rounded-none" />
+                  <div className="p-2">
+                    <Skeleton className="w-1/2 h-4 mx-auto" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : resources.length > 0 && (
         <section className="py-1lg:py-16 bg-emerald-50/30 dark:bg-emerald-950/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <SectionTitle
@@ -54,9 +77,9 @@ export default function Services() {
                     to={`/agriculture/${agri.id}`}
                     className="group block rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden hover:shadow-xl hover:border-emerald-400 dark:hover:border-emerald-400 hover:-translate-y-1 hover:bg-emerald-50/80 dark:hover:bg-emerald-950/40 transition-all duration-300"
                   >
-                    <div className="relative overflow-hidden mt-2 mb-2 rounded-[10px]">
+                    <div className="relative overflow-hidden mt-2 mb-2 rounded-[20px]">
                       {agri.image_url ? (
-                        <img src={agri.image_url} alt={agri.title} className="w-full h-44 object-contain bg-emerald-50/30 dark:bg-emerald-950 transition-transform duration-500 group-hover:scale-105 b" />
+                        <img src={agri.image_url} alt={agri.title} className="w-full h-44 object-contain rounded-[20px] bg-emerald-50/30 dark:bg-emerald-950 transition-transform duration-500 group-hover:scale-105" />
                       ) : (
                         <div className="w-full h-44 flex items-center justify-center bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-950/30 dark:to-green-950/30">
                           <Sprout size={48} className="text-emerald-400" />

@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Sprout, ArrowLeft, ChevronRight, Search, ArrowRight } from 'lucide-react';
 import api from '../services/api';
+import Skeleton, { DetailHeaderSkeleton, GridCardSkeleton } from '../components/common/Skeleton';
 
 export default function AgricultureDetail() {
   const { id } = useParams();
@@ -46,8 +47,14 @@ export default function AgricultureDetail() {
   }, [id]);
 
   if (!agri) return (
-    <div className="min-h-screen bg-emerald-50/30 dark:bg-emerald-950 flex items-center justify-center">
-      <p className="text-sm text-emerald-600">Loading...</p>
+    <div className="min-h-screen bg-emerald-50/30 dark:bg-emerald-950">
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <Skeleton className="w-32 h-4 mb-4" />
+        <DetailHeaderSkeleton />
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {[1, 2, 3, 4, 5, 6].map((i) => <GridCardSkeleton key={i} />)}
+        </div>
+      </div>
     </div>
   );
 
@@ -94,9 +101,9 @@ export default function AgricultureDetail() {
                       to={`/agriculture/${id}/crop/${crop.id}`}
                       className="group block h-full rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden hover:shadow-xl hover:border-emerald-400 dark:hover:border-emerald-400 hover:-translate-y-1 hover:bg-emerald-50/80 dark:hover:bg-emerald-950/40 transition-all duration-300"
                     >
-                      <div className="relative">
+                      <div className="relative mt-2 mb-2 rounded-[20px] mb-4">
                         {crop.image_url ? (
-                          <img src={crop.image_url} alt={crop.title} className="w-full h-40 object-contain bg-emerald-50/30 dark:bg-emerald-950 transition-transform duration-500 group-hover:scale-105" />
+                          <img src={crop.image_url} alt={crop.title} className="w-full h-40 object-contain rounded-[20px] bg-emerald-50/30 dark:bg-emerald-950 transition-transform duration-500 group-hover:scale-105" />
                         ) : (
                           <div className="w-full h-40 flex items-center justify-center bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-950/30 dark:to-green-950/30">
                             <Sprout size={40} className="text-emerald-400" />
@@ -108,13 +115,17 @@ export default function AgricultureDetail() {
                           </span>
                         </div>
                       </div>
-                      <div className="p-4">
-                        <div className="flex items-center justify-between">
-                          <h3 className="text-sm font-bold text-gray-900 dark:text-white">{crop.title}</h3>
-                          <ArrowRight size={16} className="text-emerald-500 dark:text-emerald-400 group-hover:text-emerald-600 transition-colors flex-shrink-0" />
-                        </div>
-                        <p className="text-xs text-emerald-700 dark:text-emerald-300 mt-1.5">Click to view sub-categories and detect</p>
-                      </div>
+                     <div className="p-4">
+  <div className="relative flex items-center justify-center">
+    <h3 className="text-sm font-bold text-gray-900 dark:text-white text-center">
+      {crop.title}
+    </h3>
+    <ArrowRight
+      size={16}
+      className="absolute right-0 text-emerald-500 dark:text-emerald-400 group-hover:text-emerald-600 transition-colors flex-shrink-0"
+    />
+  </div>
+</div>
                     </Link>
                   ) : (
                     <Link
@@ -123,7 +134,7 @@ export default function AgricultureDetail() {
                     >
                       <div className="relative">
                         {crop.image_url ? (
-                          <img src={crop.image_url} alt={crop.title} className="w-full h-40 object-contain mt-2 mb-2 rounded-[10px] bg-emerald-50/30 dark:bg-emerald-950 transition-transform duration-500 group-hover:scale-105" />
+                          <img src={crop.image_url} alt={crop.title} className="w-full h-40 object-contain mt-2 mb-2 rounded-[20px] bg-emerald-50/30 dark:bg-emerald-950 transition-transform duration-500 group-hover:scale-105" />
                         ) : (
                           <div className="w-full h-40 flex items-center justify-center bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-950/30 dark:to-green-950/30">
                             <Sprout size={40} className="text-emerald-400" />
@@ -137,7 +148,7 @@ export default function AgricultureDetail() {
                       </div>
                       <div className="p-4">
                         <h3 className="text-sm font-bold text-gray-900 dark:text-white">{crop.title}</h3>
-                        <p className="text-xs text-emerald-600 mt-1">No sub-categories — upload directly</p>
+                     
                       </div>
                     </Link>
                   )}
@@ -152,8 +163,8 @@ export default function AgricultureDetail() {
             <div className="w-20 h-20 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 flex items-center justify-center mx-auto mb-4">
               <Sprout size={40} className="text-emerald-400" />
             </div>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mb-2">No crop types available</p>
-            <p className="text-xs text-gray-400 dark:text-gray-500 mb-6">This category has no crop types yet. Upload an image for direct detection.</p>
+           
+         
             <Link
               to={authLink('/predict')}
               className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-medium transition-colors shadow-lg shadow-emerald-200/50 dark:shadow-none"

@@ -4,6 +4,8 @@ import { useSearchParams, Navigate } from 'react-router-dom';
 import { Upload, Leaf, Apple, Sprout, Flower2, Bug, AlertCircle, Loader, Search, Menu, ChevronDown, ChevronRight, ShoppingCart, Droplets, AlertTriangle, CheckCircle, Shield, Target, ImageIcon, FlaskConical, Sparkles, ChevronUp, ExternalLink } from 'lucide-react';
 import Sidebar from '../components/dashboard/Sidebar';
 import api from '../services/api';
+import Skeleton from '../components/common/Skeleton';
+import PredictionProgress from '../components/common/PredictionProgress';
 
 const BASE_URL = 'https://aislynajay-product-development.hf.space';
 
@@ -45,6 +47,7 @@ export default function Predict() {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [predictStartTime, setPredictStartTime] = useState(null);
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
   const [expanded, setExpanded] = useState(null);
@@ -145,6 +148,7 @@ export default function Predict() {
     const item = selectedCat !== null && selectedItem !== null ? categories[selectedCat]?.items[selectedItem] : null;
 
     setLoading(true);
+    setPredictStartTime(Date.now());
     setError('');
     setResult(null);
     try {
@@ -169,8 +173,31 @@ export default function Predict() {
   };
 
   if (loadingCats) return (
-    <div className="flex min-h-screen bg-emerald-50/30 dark:bg-emerald-950 items-center justify-center">
-      <p className="text-sm text-emerald-600">Loading...</p>
+    <div className="flex min-h-screen bg-emerald-50/30 dark:bg-emerald-950">
+      <div className="flex-1 overflow-x-hidden">
+        <div className="p-4 lg:p-6 max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-3 gap-5">
+            <div className="lg:col-span-1 space-y-2">
+              <Skeleton className="w-24 h-5 mb-3" />
+              {[1, 2, 3, 4].map((i) => (
+                <div key={i} className="rounded-xl bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 p-3">
+                  <div className="flex items-center gap-2">
+                    <Skeleton variant="icon" className="h-8 w-8" />
+                    <Skeleton className="flex-1 h-4" />
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="lg:col-span-2">
+              <div className="rounded-2xl bg-white dark:bg-gray-800 border-2 border-gray-100 dark:border-gray-700 p-5">
+                <Skeleton className="w-48 h-4 mb-4" />
+                <Skeleton variant="card" className="h-48" />
+                <Skeleton className="h-12 w-full rounded-xl mt-4" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 
@@ -278,6 +305,10 @@ export default function Predict() {
                     {loading ? 'Analyzing...' : 'Detect'}
                   </button>
 
+                  {loading && predictStartTime && (
+                    <PredictionProgress startTime={predictStartTime} />
+                  )}
+
                   {result && (
                     <div className="mt-6 space-y-5">
                       <div className="flex items-center gap-2 mb-2">
@@ -368,7 +399,7 @@ export default function Predict() {
                       )}
 
                       {/* Section 3: Disease Information */}
-                      {result.disease && (
+                      {result.disease && !isHealthy && (
                         <motion.div
                           className="rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden"
                           initial={{ opacity: 0, y: 20 }}
@@ -556,6 +587,7 @@ export default function Predict() {
                       )}
 
                       {/* Section 8: AI Recommendations */}
+                      {!isHealthy && (
                       <motion.div
                         className="rounded-2xl bg-gradient-to-br from-emerald-600 via-green-700 to-blue-800 p-5 relative overflow-hidden"
                         initial={{ opacity: 0, y: 20 }}
@@ -607,6 +639,7 @@ export default function Predict() {
                           </div>
                         </div>
                       </motion.div>
+                      )}
                     </div>
                   )}
                 </motion.div>
