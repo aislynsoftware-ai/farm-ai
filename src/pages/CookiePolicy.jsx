@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import PageHeader from '../components/layout/PageHeader';
 import { APP_NAME } from '../constants';
 
@@ -52,22 +53,23 @@ export default function CookiePolicy() {
         description={`How ${APP_NAME} uses cookies and similar tracking technologies.`}
       />
 
-      <section className="py-10 lg:py-16">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="space-y-8">
-            {sections.map((section, index) => (
-              <div key={index}>
-                <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-2">{section.title}</h2>
-                <p className="text-sm text-emerald-700 dark:text-emerald-300 leading-relaxed">{section.content}</p>
-              </div>
-            ))}
-          </div>
+      <section className="py-0 lg:py-4">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
+          {sections.map((section, index) => (
+            <motion.div
+              key={index}
+              className="rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 p-5 hover:border-emerald-400 dark:hover:border-emerald-400 hover:shadow-lg hover:-translate-y-0.5 hover:bg-emerald-50/60 dark:hover:bg-emerald-950/30 transition-all duration-300"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-50px' }}
+              transition={{ duration: 0.35, delay: index * 0.06 }}
+            >
+              <h2 className="text-sm font-bold text-gray-900 dark:text-white mb-2">{section.title}</h2>
+              <p className="text-xs text-emerald-700 dark:text-emerald-300 leading-relaxed">{section.content}</p>
+            </motion.div>
+          ))}
 
-          <div className="mt-10 pt-6 border-t border-emerald-200 dark:border-emerald-700">
-            <p className="text-xs text-emerald-600 dark:text-emerald-400">
-              Last updated: June 2026. Questions? Contact hello@farmai.agriculture.
-            </p>
-          </div>
+          
         </div>
       </section>
     </main>

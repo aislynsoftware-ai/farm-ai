@@ -14,6 +14,7 @@ import PrivacyPolicy from '../pages/PrivacyPolicy';
 import TermsOfService from '../pages/TermsOfService';
 import CookiePolicy from '../pages/CookiePolicy';
 import Predict from '../pages/Predict';
+import Wallet from '../pages/Wallet';
 import AgricultureDetail from '../pages/AgricultureDetail';
 import CropDetail from '../pages/CropDetail';
 import SubCropDetail from '../pages/SubCropDetail';
@@ -64,6 +65,10 @@ export default function createAppRouter(isDark, toggleTheme) {
     {
       path: '/predict',
       element: <Predict />,
+    },
+    {
+      path: '/wallet',
+      element: <Wallet />,
     },
   ]);
 }

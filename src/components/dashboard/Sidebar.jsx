@@ -11,10 +11,7 @@ import { ROUTES } from '../../constants';
 const menuItems = [
   { label: 'Home', path: '/', icon: Sprout },
   { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-  { label: 'Disease Detection', path: '/predict', icon: Bug },
-  { label: 'Plant Identification', path: '/predict?type=plant', icon: Leaf },
-  { label: 'Food Identification', path: '/predict?type=food', icon: Apple },
-  { label: 'Wallet', path: '/profile', icon: Coins },
+  { label: 'Wallet', path: '/wallet', icon: Coins },
   { label: 'Profile', path: '/profile', icon: User },
 ];
 
@@ -23,7 +20,11 @@ export default function Sidebar({ mobileOpen, onClose }) {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const isActive = (path) => location.pathname === path;
+  const isActive = (path) => {
+    const [p, qs] = path.split('?');
+    if (qs) return location.pathname === p && location.search === `?${qs}`;
+    return location.pathname === path;
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -48,9 +49,9 @@ export default function Sidebar({ mobileOpen, onClose }) {
         {!mobileOpen && (
           <button
             onClick={() => setCollapsed(!collapsed)}
-            className="hidden lg:flex p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer"
+            className="hidden lg:flex items-center justify-center w-7 h-7 rounded-full bg-emerald-100 dark:bg-emerald-800/60 text-emerald-600 dark:text-emerald-300 hover:bg-emerald-700 dark:hover:bg-emerald-200 hover:text-white dark:hover:text-emerald-700 transition-all duration-200 cursor-pointer"
           >
-            {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+            {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
           </button>
         )}
       </div>
@@ -94,7 +95,7 @@ export default function Sidebar({ mobileOpen, onClose }) {
     <>
       <aside
         className={cn(
-          'hidden lg:flex flex-col bg-white dark:bg-gray-900 border-r border-gray-100 dark:border-gray-700/50 transition-all duration-300',
+          'hidden lg:flex flex-col bg-white dark:bg-gray-900 border-r border-gray-100 dark:border-gray-700/50 transition-all duration-300 h-screen overflow-y-auto shrink-0 sticky top-0',
           collapsed ? 'w-16' : 'w-60'
         )}
       >

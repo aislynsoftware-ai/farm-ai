@@ -1,20 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useSearchParams, Navigate } from 'react-router-dom';
-import { Upload, Leaf, Apple, Sprout, Flower2, Bug, AlertCircle, Loader, Search, Menu, ChevronDown, ChevronRight, ShoppingCart, Droplets, AlertTriangle, CheckCircle, Shield, Target, ImageIcon, FlaskConical, Sparkles, ChevronUp, ExternalLink } from 'lucide-react';
+import { Navigate, useLocation } from 'react-router-dom';
+import { Upload, Leaf, Apple, Sprout, Bug, AlertCircle, Loader, Search, Menu, ChevronDown, ShoppingCart, Droplets, AlertTriangle, CheckCircle, Shield, Target, ImageIcon, FlaskConical, Sparkles, ChevronUp, ExternalLink } from 'lucide-react';
 import Sidebar from '../components/dashboard/Sidebar';
 import api from '../services/api';
 import Skeleton from '../components/common/Skeleton';
 import PredictionProgress from '../components/common/PredictionProgress';
 
 const BASE_URL = 'https://aislynajay-product-development.hf.space';
-
-const catIcons = {
-  'Leaf Detection': Leaf,
-  'Fruit Detection': Apple,
-  'Vegetable Detection': Sprout,
-  'Flower Detection': Flower2,
-};
 
 const titleEndpoint = {
   'tomato': '/leafs/tomato',
@@ -39,10 +32,10 @@ const titleEndpoint = {
 };
 
 export default function Predict() {
-  const [searchParams] = useSearchParams();
   const fileRef = useRef(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedCat, setSelectedCat] = useState(null);
+  const [selectedSub, setSelectedSub] = useState(null);
   const [selectedItem, setSelectedItem] = useState(null);
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
@@ -73,9 +66,18 @@ export default function Predict() {
         const allCrops = cropsRes.status === 'fulfilled' && Array.isArray(cropsRes.value) ? cropsRes.value : [];
         const allSubs = subsRes.status === 'fulfilled' && Array.isArray(subsRes.value) ? subsRes.value : [];
 
+        const deriveSubLabel = (seg) => {
+          let s = seg;
+          if (s.endsWith('s')) s = s.slice(0, -1);
+          return s
+            .split('_')
+            .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+            .join(' ');
+        };
+
         const groups = {};
         agriTitles.forEach((a) => {
-          groups[a.id] = { label: a.title, icon: catIcons[a.title] || Sprout, items: [] };
+          groups[a.id] = { label: a.title, icon: Sprout, subs: {} };
         });
 
         allCrops.forEach((crop) => {
@@ -84,52 +86,73 @@ export default function Predict() {
           allSubs.filter((s) => Number(s.crop_id) === Number(crop.id)).forEach((sub) => {
             const key = sub.title.toLowerCase().trim();
             const endpoint = titleEndpoint[key];
-            if (endpoint) g.items.push({ label: sub.title, endpoint });
+            if (!endpoint) return;
+            const seg = endpoint.split('/')[1];
+            const subLabel = deriveSubLabel(seg);
+            if (!g.subs[subLabel]) {
+              g.subs[subLabel] = { label: subLabel, icon: Sprout, items: [] };
+            }
+            g.subs[subLabel].items.push({ label: sub.title, endpoint });
           });
         });
 
-        const built = Object.values(groups).filter((g) => g.items.length > 0);
+        const built = Object.values(groups).filter((g) => Object.keys(g.subs).length > 0);
         built.push(
-          { label: 'Potted Plant', icon: Bug, items: [{ label: 'Potted Plant', endpoint: '/potted_plant' }] },
-          { label: 'Plant Identification', icon: Leaf, items: [{ label: 'Plant Identification', endpoint: '/plant_idetification' }] },
-          { label: 'Food Identification', icon: Apple, items: [{ label: 'Food Identification', endpoint: '/food_identification' }] },
+          { label: 'Potted Plant', icon: Bug, subs: { 'Potted Plant': { label: 'Potted Plant', icon: Bug, items: [{ label: 'Potted Plant', endpoint: '/potted_plant' }] } } },
+          { label: 'Plant Identification', icon: Leaf, subs: { 'Plant Identification': { label: 'Plant Identification', icon: Leaf, items: [{ label: 'Plant Identification', endpoint: '/plant_idetification' }] } } },
+          { label: 'Food Identification', icon: Apple, subs: { 'Food Identification': { label: 'Food Identification', icon: Apple, items: [{ label: 'Food Identification', endpoint: '/food_identification' }] } } },
         );
         setCategories(built);
-
-        const type = searchParams.get('type');
-        const sub = searchParams.get('sub');
-        let found = false;
-
-        if (sub) {
-          const sl = sub.toLowerCase().trim();
-          for (let ci = 0; ci < built.length && !found; ci++) {
-            for (let ii = 0; ii < built[ci].items.length; ii++) {
-              if (built[ci].items[ii].label.toLowerCase().trim() === sl) {
-                setSelectedCat(ci); setSelectedItem(ii); setExpanded(ci);
-                found = true; break;
-              }
-            }
-          }
-        }
-        if (!found && type) {
-          const typeMap = { 'plant': 'Plant Identification', 'food': 'Food Identification' };
-          const target = typeMap[type];
-          if (target) {
-            for (let ci = 0; ci < built.length; ci++) {
-              if (built[ci].label === target) {
-                setSelectedCat(ci); setSelectedItem(0); setExpanded(ci);
-                break;
-              }
-            }
-          }
-        }
       } finally { setLoadingCats(false); }
     }
     loadCats();
   }, []);
 
+  // URL-based auto-selection when categories load or URL changes
+  const location = useLocation();
+  useEffect(() => {
+    if (categories.length === 0) return;
+    const params = new URLSearchParams(location.search);
+    const type = params.get('type');
+    const sub = params.get('sub');
+    let found = false;
+
+    if (sub) {
+      const sl = sub.toLowerCase().trim();
+      for (let ci = 0; ci < categories.length && !found; ci++) {
+        const subGroups = Object.values(categories[ci].subs);
+        for (let si = 0; si < subGroups.length && !found; si++) {
+          for (let ii = 0; ii < subGroups[si].items.length && !found; ii++) {
+            if (subGroups[si].items[ii].label.toLowerCase().trim() === sl) {
+              setSelectedCat(ci); setSelectedSub(si); setSelectedItem(ii); setExpanded(ci);
+              found = true;
+            }
+          }
+        }
+      }
+    }
+    if (!found && type) {
+      const typeMap = { 'plant': 'Plant Identification', 'food': 'Food Identification' };
+      const target = typeMap[type];
+      if (target) {
+        for (let ci = 0; ci < categories.length; ci++) {
+          if (categories[ci].label === target) {
+            setSelectedCat(ci); setSelectedSub(0); setSelectedItem(0); setExpanded(ci);
+            break;
+          }
+        }
+      }
+    }
+  }, [location, categories]);
+
   const getUserId = () => {
     try { return JSON.parse(localStorage.getItem('user') || '{}').user_id || ''; } catch { return ''; }
+  };
+
+  const getSelectedItem = () => {
+    if (selectedCat === null || selectedSub === null || selectedItem === null) return null;
+    const subGroups = Object.values(categories[selectedCat]?.subs || {});
+    return subGroups[selectedSub]?.items[selectedItem] || null;
   };
 
   const handleFileChange = (e) => {
@@ -145,7 +168,7 @@ export default function Predict() {
     if (!file) { setError('Please upload an image'); return; }
 
     const userId = getUserId();
-    const item = selectedCat !== null && selectedItem !== null ? categories[selectedCat]?.items[selectedItem] : null;
+    const item = getSelectedItem();
 
     setLoading(true);
     setPredictStartTime(Date.now());
@@ -220,7 +243,9 @@ export default function Predict() {
           <div className="grid lg:grid-cols-3 gap-5">
             <div className="lg:col-span-1 space-y-2">
               <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">Select Type</h3>
-              {categories.map((cat, ci) => (
+              {categories.map((cat, ci) => {
+                const subGroups = Object.values(cat.subs);
+                return (
                 <div key={ci} className="rounded-xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden">
                   <button
                     onClick={() => setExpanded(expanded === ci ? null : ci)}
@@ -228,38 +253,49 @@ export default function Predict() {
                   >
                     <cat.icon size={16} className="text-emerald-500 flex-shrink-0" />
                     <span className="text-xs font-medium text-emerald-700 dark:text-emerald-300 flex-1">{cat.label}</span>
-                    {expanded === ci ? <ChevronDown size={14} className="text-emerald-500" /> : <ChevronRight size={14} className="text-emerald-500" />}
+                    <ChevronDown size={14} className={`text-emerald-500 transition-transform duration-200 ${expanded === ci ? 'rotate-0' : '-rotate-90'}`} />
                   </button>
                   {expanded === ci && (
-                    <div className="px-3 pb-2 flex flex-wrap gap-1.5">
-                      {cat.items.map((item, ii) => (
-                        <button
-                          key={ii}
-                          onClick={() => { setSelectedCat(ci); setSelectedItem(ii); setResult(null); setError(''); }}
-                          className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors cursor-pointer ${
-                            selectedCat === ci && selectedItem === ii
-                              ? 'bg-emerald-500 text-white border-emerald-500'
-                              : 'bg-emerald-50 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-700 hover:border-emerald-400'
-                          }`}
-                        >
-                          {item.label}
-                        </button>
+                    <div className="px-3 pb-3 space-y-3">
+                      {subGroups.map((sg, si) => (
+                        <div key={si}>
+                          <div className="flex items-center gap-1.5 mb-1.5 mt-1">
+                            <sg.icon size={12} className="text-emerald-500" />
+                            <span className="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider">{sg.label}</span>
+                          </div>
+                          <div className="flex flex-wrap gap-1.5">
+                            {sg.items.map((item, ii) => (
+                              <button
+                                key={ii}
+                                onClick={() => { setSelectedCat(ci); setSelectedSub(si); setSelectedItem(ii); setResult(null); setError(''); }}
+                                className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors cursor-pointer ${
+                                  selectedCat === ci && selectedSub === si && selectedItem === ii
+                                    ? 'bg-emerald-500 text-white border-emerald-500'
+                                    : 'bg-emerald-50 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 border-emerald-200 dark:border-emerald-700 hover:border-emerald-400'
+                                }`}
+                              >
+                                {item.label}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
                       ))}
                     </div>
                   )}
                 </div>
-              ))}
+                );
+              })}
             </div>
 
             <div className="lg:col-span-2 space-y-4">
-              {selectedCat !== null && selectedItem !== null && (
+              {selectedCat !== null && selectedSub !== null && selectedItem !== null && (
                 <motion.div
                   className="rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 p-5"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                 >
                   <p className="text-xs font-medium text-emerald-600 dark:text-emerald-400 mb-3">
-                    Selected: {categories[selectedCat]?.label} &gt; {categories[selectedCat]?.items[selectedItem]?.label}
+                    Selected: {categories[selectedCat]?.label} &gt; {Object.values(categories[selectedCat]?.subs || {})[selectedSub]?.label} &gt; {getSelectedItem()?.label}
                   </p>
 
                   <div
