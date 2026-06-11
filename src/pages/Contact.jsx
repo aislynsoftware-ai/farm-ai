@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, MessageCircle, Send, CheckCircle, AlertCircle } from 'lucide-react';
 import PageHeader from '../components/layout/PageHeader';
 import Button from '../components/common/Button';
 
 const contactInfo = [
-  { icon: Mail, label: 'Email', value: 'hello@farmai.agriculture', href: 'mailto:hello@farmai.agriculture' },
-  { icon: Phone, label: 'Phone', value: '+1 (555) 123-4567', href: 'tel:+15551234567' },
-  { icon: MapPin, label: 'Address', value: '123 Agri-Tech Park, Nairobi, Kenya' },
+  { icon: Mail, label: 'Email', value: 'venkatesh@aislyntech.com', href: 'mailto:venkatesh@aislyntech.com' },
+  { icon: Phone, label: 'Phone', value: '+91 8892209021', href: 'tel:+918892209021' },
+  { icon: MessageCircle, label: 'WhatsApp', value: '+91 8892209021', href: 'https://wa.me/918892209021' },
+  { icon: MapPin, label: 'Address', value: 'Bengaluru, India' },
 ];
 
 const initialForm = { name: '', email: '', subject: '', message: '' };

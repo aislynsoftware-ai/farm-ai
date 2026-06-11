@@ -5,9 +5,10 @@ import Button from '../common/Button';
 import SectionTitle from '../common/SectionTitle';
 
 const contactInfo = [
-  { icon: Mail, label: 'Email', value: 'hello@farmai.agriculture' },
-  { icon: Phone, label: 'Phone', value: '+1 (555) 123-4567' },
-  { icon: MapPin, label: 'Address', value: '123 Agri-Tech Park, Nairobi, Kenya' },
+  { icon: Mail, label: 'Email', value: 'venkatesh@aislyntech.com' },
+  { icon: Phone, label: 'Phone', value: '+91 8892209021' },
+  { icon: MessageCircle, label: 'WhatsApp', value: '+91 8892209021' },
+  { icon: MapPin, label: 'Address', value: 'Bengaluru, India' },
 ];
 
 const initialForm = { name: '', email: '', subject: '', message: '' };

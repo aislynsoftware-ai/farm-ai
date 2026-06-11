@@ -17,10 +17,10 @@ const navigationData = {
       { label: 'AI Recommendations', path: '/services' },
     ],
     contact: {
-      email: 'hello@farmai.agriculture',
-      phone: '+1 (555) 123-4567',
-      whatsapp: '+1 (555) 123-4567',
-      address: '123 Agri-Tech Park, Bangalore, India',
+      email: 'venkatesh@aislyntech.com',
+      phone: '+91 8892209021',
+      whatsapp: '+91 8892209021',
+      address: 'Bengaluru, India',
     },
   },
 };
