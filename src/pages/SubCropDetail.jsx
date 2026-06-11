@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Sprout, ArrowLeft, Search, Upload, AlertCircle, Loader, Bug, Droplets, AlertTriangle, ShoppingCart, Lightbulb, CheckCircle, XCircle, Shield, Zap, ImageIcon, Target, FlaskConical, Sparkles, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
+import { Sprout, ArrowLeft, Search, Upload, AlertCircle, Loader, Bug, Droplets, AlertTriangle, ShoppingCart, Lightbulb, CheckCircle, X, Shield, Zap, ImageIcon, Target, FlaskConical, Sparkles, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 import api from '../services/api';
 import Skeleton from '../components/common/Skeleton';
 import PredictionProgress from '../components/common/PredictionProgress';
@@ -44,6 +44,8 @@ export default function SubCropDetail() {
   const [profile, setProfile] = useState(null);
   const [tips, setTips] = useState([]);
   const [expandedSections, setExpandedSections] = useState({});
+  const [tipExpanded, setTipExpanded] = useState({});
+  const [lightbox, setLightbox] = useState(null);
 
   const toggleSection = (key) => setExpandedSections((prev) => ({ ...prev, [key]: !prev[key] }));
 
@@ -149,6 +151,13 @@ export default function SubCropDetail() {
   const resultLabel = result?.food_name || result?.identified_plant || result?.disease || result?.prediction || result?.prediction_result;
   const isHealthy = !result?.disease || result?.disease?.toLowerCase().includes('healthy');
   const diseaseFound = result?.disease && !result?.disease?.toLowerCase().includes('healthy');
+  const parseConfidence = (str) => {
+    if (!str) return null;
+    const m = str.match(/\((\d+\.\d+)\)/);
+    if (m) return Math.round(parseFloat(m[1]) * 100);
+    return result?.confidence ? Math.round(result.confidence) : null;
+  };
+  const yoloConf = parseConfidence(result?.prediction || result?.prediction_result);
 
   return (
     <div className="min-h-screen bg-emerald-50/30 dark:bg-emerald-950">
@@ -258,10 +267,10 @@ export default function SubCropDetail() {
                     </div>
                     <div className="flex-1">
                       <p className="text-lg font-bold text-gray-900 dark:text-white">{resultLabel || 'Analysis Complete'}</p>
-                      {result.confidence && (
+                      {(yoloConf || result.confidence) && (
                         <div className="flex items-center gap-1.5 mt-1">
                           <Target size={12} className="text-emerald-500" />
-                          <span className="text-xs text-emerald-600 dark:text-emerald-400">Confidence: <strong>{result.confidence}%</strong></span>
+                          <span className="text-xs text-emerald-600 dark:text-emerald-400">AI Accuracy: <strong>{yoloConf || Math.round(Number(result.confidence))}%</strong></span>
                         </div>
                       )}
                     </div>
@@ -297,9 +306,7 @@ export default function SubCropDetail() {
                             <div className="px-3 py-2 border-b border-emerald-200 dark:border-emerald-700">
                               <p className="text-[10px] font-medium text-emerald-600">Original Image</p>
                             </div>
-                            <a href={result.original_image} target="_blank" rel="noopener noreferrer" className="block cursor-zoom-in">
-                              <img src={result.original_image} alt="Original" className="w-full h-48 object-contain" />
-                            </a>
+                            <img src={result.original_image} alt="Original" className="w-full h-48 object-contain cursor-zoom-in" onClick={() => setLightbox(result.original_image)} />
                           </div>
                         )}
                         {result.predicted_image && (
@@ -307,9 +314,7 @@ export default function SubCropDetail() {
                             <div className="px-3 py-2 border-b border-emerald-200 dark:border-emerald-700">
                               <p className="text-[10px] font-medium text-emerald-600">Detection Output</p>
                             </div>
-                            <a href={result.predicted_image} target="_blank" rel="noopener noreferrer" className="block cursor-zoom-in">
-                              <img src={result.predicted_image} alt="Predicted" className="w-full h-48 object-contain" />
-                            </a>
+                            <img src={result.predicted_image} alt="Predicted" className="w-full h-48 object-contain cursor-zoom-in" onClick={() => setLightbox(result.predicted_image)} />
                           </div>
                         )}
                       </div>
@@ -346,6 +351,12 @@ export default function SubCropDetail() {
                         </div>
                         <p className="text-sm font-bold text-gray-900 dark:text-white">{result.disease}</p>
                       </div>
+                      {yoloConf !== null && (
+                        <div className="mt-2 flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400">
+                          <Target size={12} />
+                          YOLO Confidence: <strong>{yoloConf}%</strong>
+                        </div>
+                      )}
                     </div>
                   )}
                 </motion.div>
@@ -569,16 +580,39 @@ export default function SubCropDetail() {
             <h3 className="text-xs font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-1.5">
               <Lightbulb size={14} className="text-emerald-500" /> Farming Tips for {sub.title}
             </h3>
-            <div className="space-y-3">
-              {tips.map((tip) => (
-                <div key={tip.id} className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800">
-                  <p className="text-xs font-bold text-amber-800 dark:text-amber-300 mb-1">{tip.tip_title}</p>
-                  <p className="text-xs text-amber-700 dark:text-amber-400/80">{tip.tip_description}</p>
+            <div className="space-y-2">
+              {tips.map((tip) => {
+                const open = tipExpanded[tip.id];
+                return (
+                <div key={tip.id} className="rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 overflow-hidden">
+                  <button
+                    onClick={() => setTipExpanded((prev) => ({ ...prev, [tip.id]: !prev[tip.id] }))}
+                    className="w-full flex items-center justify-between p-3 text-left hover:bg-amber-100/50 dark:hover:bg-amber-950/40 transition-colors cursor-pointer"
+                  >
+                    <p className="text-xs font-bold text-amber-800 dark:text-amber-300">{tip.tip_title}</p>
+                    {open ? <ChevronUp size={14} className="text-amber-500 flex-shrink-0" /> : <ChevronDown size={14} className="text-amber-500 flex-shrink-0" />}
+                  </button>
+                  {open && (
+                    <div className="px-3 pb-3">
+                      <p className="text-xs text-amber-700 dark:text-amber-400/80 leading-relaxed">{tip.tip_description}</p>
+                    </div>
+                  )}
                 </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
+
+      {/* Lightbox */}
+      {lightbox && (
+        <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4" onClick={() => setLightbox(null)}>
+          <button onClick={() => setLightbox(null)} className="absolute top-4 right-4 p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer z-10">
+            <X size={20} />
+          </button>
+          <img src={lightbox} alt="Full size" className="max-w-full max-h-full object-contain rounded-xl" onClick={(e) => e.stopPropagation()} />
+        </div>
+      )}
       </div>
     </div>
   );

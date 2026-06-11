@@ -17,6 +17,7 @@ export const ROUTES = {
   REGISTER: '/register',
   VERIFY: '/verify-otp',
   PREDICT: '/predict',
+  WALLET: '/wallet',
 };
 
 export const NAV_LINKS = [
