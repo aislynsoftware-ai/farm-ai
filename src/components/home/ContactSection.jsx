@@ -8,7 +8,7 @@ const contactInfo = [
   { icon: Mail, label: 'Email', value: 'venkatesh@aislyntech.com' },
   { icon: Phone, label: 'Phone', value: '+91 8892209021' },
   { icon: MessageCircle, label: 'WhatsApp', value: '+91 8892209021' },
-  { icon: MapPin, label: 'Address', value: 'Bengaluru, India' },
+  { icon: MapPin, label: 'Address', value: 'No:1688, 1st floor, 18th Cross, 21st Main Rd, MC Layout, Vijayanagar, Bengaluru, Karnataka 560040' },
 ];
 
 const initialForm = { name: '', email: '', subject: '', message: '' };

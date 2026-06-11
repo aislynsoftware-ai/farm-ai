@@ -20,7 +20,7 @@ const navigationData = {
       email: 'venkatesh@aislyntech.com',
       phone: '+91 8892209021',
       whatsapp: '+91 8892209021',
-      address: 'Bengaluru, India',
+      address: 'No:1688, 1st floor, 18th Cross, 21st Main Rd, MC Layout, Vijayanagar, Bengaluru, Karnataka 560040',
     },
   },
 };
