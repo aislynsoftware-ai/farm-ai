@@ -106,8 +106,8 @@ export default function CropDetail() {
   return (
     <div className="min-h-screen bg-emerald-50/30 dark:bg-emerald-950 mt-14">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <Link to={`/agriculture/${agriId}`} className="inline-flex items-center gap-1 text-xs text-emerald-600 hover:text-emerald-700 dark:hover:text-emerald-300 mb-4">
-          <ArrowLeft size={14} /> Back to {agri?.title || 'Category'}
+        <Link to={`/agriculture/${agriId}`} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 border-emerald-200 dark:border-emerald-700 bg-white dark:bg-gray-800 text-[11px] font-medium text-emerald-700 dark:text-emerald-300 hover:bg-emerald-700 dark:hover:bg-emerald-200 hover:text-white dark:hover:text-emerald-700 hover:border-emerald-700 dark:hover:border-emerald-200 transition-all duration-200 mb-4 shadow-sm">
+          <ArrowLeft size={13} /> Back{agri?.title ? ` to ${agri.title}` : ''}
         </Link>
 
         <motion.div
