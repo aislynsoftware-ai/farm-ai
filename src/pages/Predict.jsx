@@ -1,20 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useSearchParams, Navigate } from 'react-router-dom';
-import { Upload, Leaf, Apple, Sprout, Flower2, Bug, AlertCircle, Loader, Search, Menu, ChevronDown, ShoppingCart, Droplets, AlertTriangle, CheckCircle, Shield, Target, ImageIcon, FlaskConical, Sparkles, ChevronUp, ExternalLink } from 'lucide-react';
+import { Upload, Leaf, Apple, Sprout, Bug, AlertCircle, Loader, Search, Menu, ChevronDown, ShoppingCart, Droplets, AlertTriangle, CheckCircle, Shield, Target, ImageIcon, FlaskConical, Sparkles, ChevronUp, ExternalLink } from 'lucide-react';
 import Sidebar from '../components/dashboard/Sidebar';
 import api from '../services/api';
 import Skeleton from '../components/common/Skeleton';
 import PredictionProgress from '../components/common/PredictionProgress';
 
 const BASE_URL = 'https://aislynajay-product-development.hf.space';
-
-const catIcons = {
-  'Leaf Detection': Leaf,
-  'Fruit Detection': Apple,
-  'Vegetable Detection': Sprout,
-  'Flower Detection': Flower2,
-};
 
 const titleEndpoint = {
   'tomato': '/leafs/tomato',
@@ -74,22 +67,18 @@ export default function Predict() {
         const allCrops = cropsRes.status === 'fulfilled' && Array.isArray(cropsRes.value) ? cropsRes.value : [];
         const allSubs = subsRes.status === 'fulfilled' && Array.isArray(subsRes.value) ? subsRes.value : [];
 
-        const endpointCat = {
-          'leafs': 'Leaf Detection',
-          'vegtables': 'Vegetable Detection',
-          'fruits': 'Fruit Detection',
-          'flowers': 'Flower Detection',
-        };
-        const subCatIcons = {
-          'Leaf Detection': Leaf,
-          'Fruit Detection': Apple,
-          'Vegetable Detection': Sprout,
-          'Flower Detection': Flower2,
+        const deriveSubLabel = (seg) => {
+          let s = seg;
+          if (s.endsWith('s')) s = s.slice(0, -1);
+          return s
+            .split('_')
+            .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+            .join(' ');
         };
 
         const groups = {};
         agriTitles.forEach((a) => {
-          groups[a.id] = { label: a.title, icon: catIcons[a.title] || Sprout, subs: {} };
+          groups[a.id] = { label: a.title, icon: Sprout, subs: {} };
         });
 
         allCrops.forEach((crop) => {
@@ -99,20 +88,20 @@ export default function Predict() {
             const key = sub.title.toLowerCase().trim();
             const endpoint = titleEndpoint[key];
             if (!endpoint) return;
-            const catKey = endpoint.split('/')[1];
-            const subCatLabel = endpointCat[catKey] || 'Other';
-            if (!g.subs[subCatLabel]) {
-              g.subs[subCatLabel] = { label: subCatLabel, icon: subCatIcons[subCatLabel] || Sprout, items: [] };
+            const seg = endpoint.split('/')[1];
+            const subLabel = deriveSubLabel(seg);
+            if (!g.subs[subLabel]) {
+              g.subs[subLabel] = { label: subLabel, icon: Sprout, items: [] };
             }
-            g.subs[subCatLabel].items.push({ label: sub.title, endpoint });
+            g.subs[subLabel].items.push({ label: sub.title, endpoint });
           });
         });
 
         const built = Object.values(groups).filter((g) => Object.keys(g.subs).length > 0);
         built.push(
-          { label: 'Potted Plant', icon: Bug, subs: { 'Other': { label: 'Potted Plant', icon: Bug, items: [{ label: 'Potted Plant', endpoint: '/potted_plant' }] } } },
-          { label: 'Plant Identification', icon: Leaf, subs: { 'Other': { label: 'Plant Identification', icon: Leaf, items: [{ label: 'Plant Identification', endpoint: '/plant_idetification' }] } } },
-          { label: 'Food Identification', icon: Apple, subs: { 'Other': { label: 'Food Identification', icon: Apple, items: [{ label: 'Food Identification', endpoint: '/food_identification' }] } } },
+          { label: 'Potted Plant', icon: Bug, subs: { 'Potted Plant': { label: 'Potted Plant', icon: Bug, items: [{ label: 'Potted Plant', endpoint: '/potted_plant' }] } } },
+          { label: 'Plant Identification', icon: Leaf, subs: { 'Plant Identification': { label: 'Plant Identification', icon: Leaf, items: [{ label: 'Plant Identification', endpoint: '/plant_idetification' }] } } },
+          { label: 'Food Identification', icon: Apple, subs: { 'Food Identification': { label: 'Food Identification', icon: Apple, items: [{ label: 'Food Identification', endpoint: '/food_identification' }] } } },
         );
         setCategories(built);
 
