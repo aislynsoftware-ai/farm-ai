@@ -385,7 +385,7 @@ export default function SubCropDetail() {
                       {yoloConf !== null && (
                         <div className="mt-2 flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400">
                           <Target size={12} />
-                          YOLO Confidence: <strong>{yoloConf}%</strong>
+                          AI Confidence score: <strong>{yoloConf}%</strong>
                         </div>
                       )}
                     </div>
