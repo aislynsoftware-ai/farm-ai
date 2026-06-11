@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { useSearchParams, Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { Upload, Leaf, Apple, Sprout, Bug, AlertCircle, Loader, Search, Menu, ChevronDown, ShoppingCart, Droplets, AlertTriangle, CheckCircle, Shield, Target, ImageIcon, FlaskConical, Sparkles, ChevronUp, ExternalLink } from 'lucide-react';
 import Sidebar from '../components/dashboard/Sidebar';
 import api from '../services/api';
@@ -32,7 +32,6 @@ const titleEndpoint = {
 };
 
 export default function Predict() {
-  const [searchParams] = useSearchParams();
   const fileRef = useRef(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedCat, setSelectedCat] = useState(null);
@@ -104,41 +103,47 @@ export default function Predict() {
           { label: 'Food Identification', icon: Apple, subs: { 'Food Identification': { label: 'Food Identification', icon: Apple, items: [{ label: 'Food Identification', endpoint: '/food_identification' }] } } },
         );
         setCategories(built);
-
-        const type = searchParams.get('type');
-        const sub = searchParams.get('sub');
-        let found = false;
-
-        if (sub) {
-          const sl = sub.toLowerCase().trim();
-          for (let ci = 0; ci < built.length && !found; ci++) {
-            const subGroups = Object.values(built[ci].subs);
-            for (let si = 0; si < subGroups.length && !found; si++) {
-              for (let ii = 0; ii < subGroups[si].items.length && !found; ii++) {
-                if (subGroups[si].items[ii].label.toLowerCase().trim() === sl) {
-                  setSelectedCat(ci); setSelectedSub(si); setSelectedItem(ii); setExpanded(ci);
-                  found = true;
-                }
-              }
-            }
-          }
-        }
-        if (!found && type) {
-          const typeMap = { 'plant': 'Plant Identification', 'food': 'Food Identification' };
-          const target = typeMap[type];
-          if (target) {
-            for (let ci = 0; ci < built.length; ci++) {
-              if (built[ci].label === target) {
-                setSelectedCat(ci); setSelectedSub(0); setSelectedItem(0); setExpanded(ci);
-                break;
-              }
-            }
-          }
-        }
       } finally { setLoadingCats(false); }
     }
     loadCats();
   }, []);
+
+  // URL-based auto-selection when categories load or URL changes
+  const location = useLocation();
+  useEffect(() => {
+    if (categories.length === 0) return;
+    const params = new URLSearchParams(location.search);
+    const type = params.get('type');
+    const sub = params.get('sub');
+    let found = false;
+
+    if (sub) {
+      const sl = sub.toLowerCase().trim();
+      for (let ci = 0; ci < categories.length && !found; ci++) {
+        const subGroups = Object.values(categories[ci].subs);
+        for (let si = 0; si < subGroups.length && !found; si++) {
+          for (let ii = 0; ii < subGroups[si].items.length && !found; ii++) {
+            if (subGroups[si].items[ii].label.toLowerCase().trim() === sl) {
+              setSelectedCat(ci); setSelectedSub(si); setSelectedItem(ii); setExpanded(ci);
+              found = true;
+            }
+          }
+        }
+      }
+    }
+    if (!found && type) {
+      const typeMap = { 'plant': 'Plant Identification', 'food': 'Food Identification' };
+      const target = typeMap[type];
+      if (target) {
+        for (let ci = 0; ci < categories.length; ci++) {
+          if (categories[ci].label === target) {
+            setSelectedCat(ci); setSelectedSub(0); setSelectedItem(0); setExpanded(ci);
+            break;
+          }
+        }
+      }
+    }
+  }, [location, categories]);
 
   const getUserId = () => {
     try { return JSON.parse(localStorage.getItem('user') || '{}').user_id || ''; } catch { return ''; }

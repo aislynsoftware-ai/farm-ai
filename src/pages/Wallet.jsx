@@ -118,12 +118,7 @@ export default function Wallet() {
         </div>
 
         <div className="p-4 lg:p-6 space-y-5 max-w-4xl mx-auto">
-          <button
-            onClick={() => navigate(ROUTES.DASHBOARD)}
-            className="inline-flex items-center gap-1 text-xs text-emerald-600 hover:text-emerald-700 dark:hover:text-emerald-300 cursor-pointer"
-          >
-            <ArrowLeft size={14} /> Back to Dashboard
-          </button>
+      
 
           {/* Balance Card */}
           <motion.div

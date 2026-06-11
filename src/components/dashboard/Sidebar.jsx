@@ -11,9 +11,6 @@ import { ROUTES } from '../../constants';
 const menuItems = [
   { label: 'Home', path: '/', icon: Sprout },
   { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
-  { label: 'Disease Detection', path: '/predict', icon: Bug },
-  { label: 'Plant Identification', path: '/predict?type=plant', icon: Leaf },
-  { label: 'Food Identification', path: '/predict?type=food', icon: Apple },
   { label: 'Wallet', path: '/wallet', icon: Coins },
   { label: 'Profile', path: '/profile', icon: User },
 ];
@@ -23,7 +20,11 @@ export default function Sidebar({ mobileOpen, onClose }) {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const isActive = (path) => location.pathname === path;
+  const isActive = (path) => {
+    const [p, qs] = path.split('?');
+    if (qs) return location.pathname === p && location.search === `?${qs}`;
+    return location.pathname === path;
+  };
 
   const handleLogout = () => {
     localStorage.removeItem('token');

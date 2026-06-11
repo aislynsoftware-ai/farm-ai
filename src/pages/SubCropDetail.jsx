@@ -44,6 +44,7 @@ export default function SubCropDetail() {
   const [profile, setProfile] = useState(null);
   const [tips, setTips] = useState([]);
   const [expandedSections, setExpandedSections] = useState({});
+  const [tipExpanded, setTipExpanded] = useState({});
   const [lightbox, setLightbox] = useState(null);
 
   const toggleSection = (key) => setExpandedSections((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -579,13 +580,26 @@ export default function SubCropDetail() {
             <h3 className="text-xs font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-1.5">
               <Lightbulb size={14} className="text-emerald-500" /> Farming Tips for {sub.title}
             </h3>
-            <div className="space-y-3">
-              {tips.map((tip) => (
-                <div key={tip.id} className="p-3 rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800">
-                  <p className="text-xs font-bold text-amber-800 dark:text-amber-300 mb-1">{tip.tip_title}</p>
-                  <p className="text-xs text-amber-700 dark:text-amber-400/80">{tip.tip_description}</p>
+            <div className="space-y-2">
+              {tips.map((tip) => {
+                const open = tipExpanded[tip.id];
+                return (
+                <div key={tip.id} className="rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 overflow-hidden">
+                  <button
+                    onClick={() => setTipExpanded((prev) => ({ ...prev, [tip.id]: !prev[tip.id] }))}
+                    className="w-full flex items-center justify-between p-3 text-left hover:bg-amber-100/50 dark:hover:bg-amber-950/40 transition-colors cursor-pointer"
+                  >
+                    <p className="text-xs font-bold text-amber-800 dark:text-amber-300">{tip.tip_title}</p>
+                    {open ? <ChevronUp size={14} className="text-amber-500 flex-shrink-0" /> : <ChevronDown size={14} className="text-amber-500 flex-shrink-0" />}
+                  </button>
+                  {open && (
+                    <div className="px-3 pb-3">
+                      <p className="text-xs text-amber-700 dark:text-amber-400/80 leading-relaxed">{tip.tip_description}</p>
+                    </div>
+                  )}
                 </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
