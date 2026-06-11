@@ -266,10 +266,10 @@ export default function SubCropDetail() {
                     </div>
                     <div className="flex-1">
                       <p className="text-lg font-bold text-gray-900 dark:text-white">{resultLabel || 'Analysis Complete'}</p>
-                      {result.confidence && (
+                      {(yoloConf || result.confidence) && (
                         <div className="flex items-center gap-1.5 mt-1">
                           <Target size={12} className="text-emerald-500" />
-                          <span className="text-xs text-emerald-600 dark:text-emerald-400">Confidence: <strong>{result.confidence}%</strong></span>
+                          <span className="text-xs text-emerald-600 dark:text-emerald-400">AI Accuracy: <strong>{yoloConf || Math.round(Number(result.confidence))}%</strong></span>
                         </div>
                       )}
                     </div>
