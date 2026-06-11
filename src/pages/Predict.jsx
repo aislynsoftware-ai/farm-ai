@@ -47,6 +47,7 @@ export default function Predict() {
   const [categories, setCategories] = useState([]);
   const [loadingCats, setLoadingCats] = useState(true);
   const [expandedSections, setExpandedSections] = useState({});
+  const [lightboxImg, setLightboxImg] = useState(null);
 
   const toggleSection = (key) => setExpandedSections((prev) => ({ ...prev, [key]: !prev[key] }));
 
@@ -98,9 +99,9 @@ export default function Predict() {
 
         const built = Object.values(groups).filter((g) => Object.keys(g.subs).length > 0);
         built.push(
-          { label: 'Potted Plant', icon: Bug, subs: { 'Potted Plant': { label: 'Potted Plant', icon: Bug, items: [{ label: 'Potted Plant', endpoint: '/potted_plant' }] } } },
-          { label: 'Plant Identification', icon: Leaf, subs: { 'Plant Identification': { label: 'Plant Identification', icon: Leaf, items: [{ label: 'Plant Identification', endpoint: '/plant_idetification' }] } } },
-          { label: 'Food Identification', icon: Apple, subs: { 'Food Identification': { label: 'Food Identification', icon: Apple, items: [{ label: 'Food Identification', endpoint: '/food_identification' }] } } },
+          { label: 'Potted Plant', icon: Bug, subs: { 'General': { label: 'General', icon: Bug, items: [{ label: 'Potted Plant', endpoint: '/potted_plant' }] } } },
+          { label: 'Plant Identification', icon: Leaf, subs: { 'General': { label: 'General', icon: Leaf, items: [{ label: 'Identify Plant', endpoint: '/plant_idetification' }] } } },
+          { label: 'Food Identification', icon: Apple, subs: { 'General': { label: 'General', icon: Apple, items: [{ label: 'Identify Food', endpoint: '/food_identification' }] } } },
         );
         setCategories(built);
       } finally { setLoadingCats(false); }
@@ -382,9 +383,7 @@ export default function Predict() {
                               )}
                             </div>
                           </div>
-                          {result.prediction_result && (
-                            <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-2">{result.prediction_result}</p>
-                          )}
+                        
                         </div>
                       </motion.div>
 
@@ -413,9 +412,7 @@ export default function Predict() {
                                     <div className="px-3 py-2 border-b border-emerald-200 dark:border-emerald-700">
                                       <p className="text-[10px] font-medium text-emerald-600">Original Image</p>
                                     </div>
-                                    <a href={result.original_image} target="_blank" rel="noopener noreferrer" className="block cursor-zoom-in">
-                                      <img src={result.original_image} alt="Original" className="w-full h-48 object-contain" />
-                                    </a>
+                                    <img src={result.original_image} alt="Original" onClick={() => setLightboxImg(result.original_image)} className="w-full h-48 object-contain cursor-zoom-in" />
                                   </div>
                                 )}
                                 {result.predicted_image && (
@@ -423,9 +420,7 @@ export default function Predict() {
                                     <div className="px-3 py-2 border-b border-emerald-200 dark:border-emerald-700">
                                       <p className="text-[10px] font-medium text-emerald-600">Detection Output</p>
                                     </div>
-                                    <a href={result.predicted_image} target="_blank" rel="noopener noreferrer" className="block cursor-zoom-in">
-                                      <img src={result.predicted_image} alt="Predicted" className="w-full h-48 object-contain" />
-                                    </a>
+                                    <img src={result.predicted_image} alt="Predicted" onClick={() => setLightboxImg(result.predicted_image)} className="w-full h-48 object-contain cursor-zoom-in" />
                                   </div>
                                 )}
                               </div>
@@ -691,6 +686,12 @@ export default function Predict() {
           </div>
         </div>
       </main>
+
+      {lightboxImg && (
+        <div onClick={() => setLightboxImg(null)} className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center cursor-pointer">
+          <img src={lightboxImg} alt="Full view" className="max-w-[90vw] max-h-[90vh] object-contain rounded-xl" />
+        </div>
+      )}
     </div>
   );
 }
