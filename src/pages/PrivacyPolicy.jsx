@@ -26,7 +26,7 @@ const sections = [
   {
     title: 'Your Rights',
     content:
-      'You have the right to access, correct, or delete your personal data. You may opt out of marketing communications at any time. To exercise these rights, contact us at hello@farmai.agriculture.',
+      'You have the right to access, correct, or delete your personal data. You may opt out of marketing communications at any time. To exercise these rights, contact us at venkatesh@aislyntech.com.',
   },
   {
     title: 'Cookies',
