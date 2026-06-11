@@ -48,7 +48,7 @@ export default function Login() {
       >
        
 
-        <div className="glass rounded-2xl mt-10 p-6 lg:p-8">
+        <div className="glass rounded-2xl mt-14 p-6 lg:p-8">
 
            <div className="text-center mb-8">
           <div className="w-14 h-14 rounded-2xl gradient-bg flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-500/20">
@@ -87,7 +87,7 @@ export default function Login() {
             </Button>
           </form>
 
-          <div className="relative my-5">
+          {/* <div className="relative my-5">
             <div className="absolute inset-0 flex items-center">
               <div className="w-full border-t border-gray-200 dark:border-gray-700" />
             </div>
@@ -99,7 +99,7 @@ export default function Login() {
           <button className="w-full flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-xl border border-gray-200 dark:border-gray-600 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200 cursor-pointer">
             <Globe size={18} />
             Sign in with Google
-          </button>
+          </button> */}
 
           <p className="mt-5 text-center text-xs text-gray-500 dark:text-gray-400">
             Don&apos;t have an account?{' '}
