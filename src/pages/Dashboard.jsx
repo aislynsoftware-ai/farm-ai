@@ -4,9 +4,11 @@ import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import Sidebar from '../components/dashboard/Sidebar';
 import api from '../services/api';
+import Skeleton, { DashboardWelcomeSkeleton, GridCardSkeleton } from '../components/common/Skeleton';
 
 export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [farmingTips, setFarmingTips] = useState([]);
   const [resources, setResources] = useState([]);
   const [user, setUser] = useState(null);
@@ -33,6 +35,7 @@ export default function Dashboard() {
 
       setFarmingTips(tips);
       setResources(agri);
+      setLoading(false);
     }
     fetchData();
   }, []);
@@ -49,6 +52,29 @@ export default function Dashboard() {
         </div>
 
         <div className="p-4 lg:p-6 space-y-5 max-w-7xl mx-auto">
+          {loading ? (
+            <>
+              <DashboardWelcomeSkeleton />
+              <div className="bg-white dark:bg-gray-800 rounded-2xl p-5 border-2 border-gray-100 dark:border-gray-700">
+                <Skeleton className="w-48 h-5 mb-4" />
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {[1, 2, 3].map((i) => <GridCardSkeleton key={i} />)}
+                </div>
+              </div>
+              <div className="bg-white dark:bg-gray-800 rounded-2xl p-5 border-2 border-gray-100 dark:border-gray-700">
+                <Skeleton className="w-32 h-5 mb-3" />
+                <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="p-3 rounded-xl bg-gray-100 dark:bg-gray-700">
+                      <Skeleton className="w-3/4 h-4 mb-2" />
+                      <Skeleton />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
+          ) : (
+          <>
           <motion.div
             className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600 via-green-700 to-blue-800 p-6 lg:p-8"
             initial={{ opacity: 0, y: 20 }}
@@ -95,7 +121,7 @@ export default function Dashboard() {
                       to={`/agriculture/${agri.id}`}
                       className="group block rounded-xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden hover:shadow-lg hover:border-emerald-400 dark:hover:border-emerald-400 hover:-translate-y-0.5 hover:bg-emerald-50/80 dark:hover:bg-emerald-950/40 transition-all duration-300"
                     >
-                      <div className="relative overflow-hidden">
+                      <div className="relative overflow-hidden rounded-t-xl mt-2 mb-2">
                         {agri.image_url ? (
                           <img src={agri.image_url} alt={agri.title} className="w-full h-36 object-contain bg-emerald-50/30 dark:bg-emerald-950 transition-transform duration-500 group-hover:scale-105" />
                         ) : (
@@ -136,6 +162,8 @@ export default function Dashboard() {
                 ))}
               </div>
             </motion.div>
+          )}
+          </>
           )}
         </div>
       </main>
