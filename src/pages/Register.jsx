@@ -8,6 +8,7 @@ import api from '../services/api';
 
 export default function Register() {
   const navigate = useNavigate();
+  const [tab, setTab] = useState('email');
   const [form, setForm] = useState({ name: '', email: '', phone: '', terms: false });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -16,10 +17,13 @@ export default function Register() {
   const validate = () => {
     const errs = {};
     if (!form.name.trim()) errs.name = 'Full name is required';
-    if (!form.email.trim()) errs.email = 'Email is required';
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) errs.email = 'Invalid email address';
-    if (!form.phone.trim()) errs.phone = 'Mobile number is required';
-    else if (!/^\+?[\d\s-]{7,15}$/.test(form.phone)) errs.phone = 'Invalid phone number';
+    if (tab === 'email') {
+      if (!form.email.trim()) errs.email = 'Email is required';
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) errs.email = 'Invalid email address';
+    } else {
+      if (!form.phone.trim()) errs.phone = 'Mobile number is required';
+      else if (!/^[6-9]\d{9}$/.test(form.phone)) errs.phone = 'Enter valid 10-digit Indian number';
+    }
     if (!form.terms) errs.terms = 'You must agree to the terms';
     return errs;
   };
@@ -64,24 +68,24 @@ export default function Register() {
 
   const iconClass = "absolute left-3 top-1/2 -translate-y-1/2 text-gray-400";
 
+  const TabBtn = ({ value, label, icon: Icon }) => (
+    <button type="button" onClick={() => { setTab(value); setErrors({}); }} className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 text-sm font-medium rounded-xl transition-all duration-200 ${tab === value ? 'bg-emerald-600 text-white shadow-md' : 'bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'}`}>
+      <Icon size={15} /> {label}
+    </button>
+  );
+
   return (
     <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-12">
-      <motion.div
-        className="w-full max-w-md"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5 }}
-      >
-       
-
+      <motion.div className="w-full max-w-md" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
         <div className="glass rounded-2xl p-6 mt-10 lg:p-8">
-           <div className="text-center mb-8">
-          <div className="w-14 h-14 rounded-2xl gradient-bg flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-500/20">
-            <Sprout className="w-7 h-7 text-white" />
+          <div className="text-center mb-8">
+            <div className="w-14 h-14 rounded-2xl gradient-bg flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-500/20">
+              <Sprout className="w-7 h-7 text-white" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{APP_NAME}</h2>
+            <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">Start your AI-powered farming journey</p>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{APP_NAME}</h2>
-          <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">Start your AI-powered farming journey</p>
-        </div>
+
           {apiError && (
             <div className="flex items-center gap-2 p-3 mb-4 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800">
               <AlertCircle size={14} className="text-red-500 flex-shrink-0" />
@@ -90,6 +94,11 @@ export default function Register() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="flex gap-2">
+              <TabBtn value="email" label="Email" icon={Mail} />
+              <TabBtn value="phone" label="Phone" icon={Phone} />
+            </div>
+
             <div>
               <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">Full Name</label>
               <div className="relative">
@@ -99,34 +108,30 @@ export default function Register() {
               {errors.name && <p className="input-error mt-1"><AlertCircle size={12} />{errors.name}</p>}
             </div>
 
-            <div>
-              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">Email</label>
-              <div className="relative">
-                <Mail size={16} className={iconClass} />
-                <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="your@email.com" className={`${inputClass('email')} pl-10`} />
+            {tab === 'email' ? (
+              <div>
+                <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">Email</label>
+                <div className="relative">
+                  <Mail size={16} className={iconClass} />
+                  <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="your@email.com" className={`${inputClass('email')} pl-10`} />
+                </div>
+                {errors.email && <p className="input-error mt-1"><AlertCircle size={12} />{errors.email}</p>}
               </div>
-              {errors.email && <p className="input-error mt-1"><AlertCircle size={12} />{errors.email}</p>}
-            </div>
-
-            <div>
-              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">Mobile</label>
-              <div className="relative">
-                <Phone size={16} className={iconClass} />
-                <input type="tel" name="phone" value={form.phone} onChange={handleChange} placeholder="+1 555..." className={`${inputClass('phone')} pl-10`} />
+            ) : (
+              <div>
+                <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">Mobile</label>
+                <div className="relative">
+                  <Phone size={16} className={iconClass} />
+                  <input type="tel" name="phone" value={form.phone} onChange={handleChange} placeholder="9876543210" className={`${inputClass('phone')} pl-10`} />
+                </div>
+                {errors.phone && <p className="input-error mt-1"><AlertCircle size={12} />{errors.phone}</p>}
               </div>
-              {errors.phone && <p className="input-error mt-1"><AlertCircle size={12} />{errors.phone}</p>}
-            </div>
+            )}
 
             <label className="flex items-start gap-2 cursor-pointer">
-              <input
-                type="checkbox"
-                name="terms"
-                checked={form.terms}
-                onChange={handleChange}
-                className="mt-0.5 w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-emerald-600 focus:ring-emerald-500"
-              />
+              <input type="checkbox" name="terms" checked={form.terms} onChange={handleChange} className="mt-0.5 w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-emerald-600 focus:ring-emerald-500" />
               <span className="text-xs text-gray-600 dark:text-gray-400">
-                I agree to the <a href="#" className="text-emerald-600 dark:text-emerald-400 hover:underline">Terms of Service</a> and <a href="#" className="text-emerald-600 dark:text-emerald-400 hover:underline">Privacy Policy</a>
+                I agree to the <Link to={ROUTES.TERMS} className="text-emerald-600 dark:text-emerald-400 hover:underline">Terms of Service</Link> and <Link to={ROUTES.PRIVACY} className="text-emerald-600 dark:text-emerald-400 hover:underline">Privacy Policy</Link>
               </span>
             </label>
             {errors.terms && <p className="input-error"><AlertCircle size={12} />{errors.terms}</p>}
