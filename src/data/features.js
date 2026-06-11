@@ -1,4 +1,4 @@
-import { Zap, Cloud, Shield, Activity, Smartphone, FileText, Layers, Lightbulb } from 'lucide-react';
+import { Zap, Cloud, Shield, Activity, Smartphone, FileText, Layers, Lightbulb, Camera, Search, Leaf, DollarSign, Clock, BarChart, Users, RefreshCw } from 'lucide-react';
 
 const featuresData = [
   {
@@ -9,9 +9,9 @@ const featuresData = [
   },
   {
     id: 2,
-    icon: Cloud,
-    title: 'Cloud Infrastructure',
-    description: 'Scalable cloud infrastructure handles thousands of concurrent requests with high availability.',
+    icon: Camera,
+    title: 'Disease Detection',
+    description: 'Upload a photo of any crop leaf and our AI instantly identifies diseases, pests, and nutrient deficiencies with 95% accuracy.',
   },
   {
     id: 3,
@@ -39,15 +39,39 @@ const featuresData = [
   },
   {
     id: 7,
-    icon: Layers,
-    title: 'Scalable Architecture',
-    description: 'Microservices-based architecture designed to scale effortlessly as your agricultural operation grows.',
+    icon: Leaf,
+    title: 'Multi-Crop Support',
+    description: 'Supports 100+ crop varieties including vegetables, fruits, flowers, and grains with specialized detection models.',
   },
   {
     id: 8,
     icon: Lightbulb,
     title: 'AI-Powered Insights',
     description: 'Advanced machine learning algorithms provide intelligent insights and predictive analytics for agriculture.',
+  },
+  {
+    id: 9,
+    icon: Cloud,
+    title: 'Cloud Infrastructure',
+    description: 'Scalable cloud infrastructure handles thousands of concurrent requests with high availability 24/7.',
+  },
+  {
+    id: 10,
+    icon: DollarSign,
+    title: 'Cost Effective',
+    description: 'Affordable pricing with pay-per-use model makes advanced AI technology accessible to farmers of all scales.',
+  },
+  {
+    id: 11,
+    icon: BarChart,
+    title: 'Yield Prediction',
+    description: 'AI-driven yield forecasting helps farmers plan harvesting, storage, and market sales more effectively.',
+  },
+  {
+    id: 12,
+    icon: RefreshCw,
+    title: 'Continuous Learning',
+    description: 'Models are continuously updated with new data to improve accuracy and expand crop coverage over time.',
   },
 ];
 
