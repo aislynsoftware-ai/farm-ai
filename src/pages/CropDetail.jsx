@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Sprout, ArrowLeft, Search, Upload, ArrowRight } from 'lucide-react';
+import { Sprout, ArrowLeft, Search, Upload, ArrowRight, Leaf, Apple, Flower2, Bug, ChevronDown, ChevronUp } from 'lucide-react';
 import api from '../services/api';
 import Skeleton, { GridCardSkeleton } from '../components/common/Skeleton';
 
@@ -32,6 +32,8 @@ export default function CropDetail() {
   const [agri, setAgri] = useState(null);
   const [crop, setCrop] = useState(null);
   const [subs, setSubs] = useState([]);
+  const [groupedSubs, setGroupedSubs] = useState({});
+  const [expandedGroups, setExpandedGroups] = useState({});
 
   const isLoggedIn = () => {
     try { return !!localStorage.getItem('token'); } catch { return false; }
@@ -56,7 +58,26 @@ export default function CropDetail() {
 
       setAgri(allAgri.find((a) => Number(a.id) === Number(agriId)));
       setCrop(allCrops.find((c) => Number(c.id) === Number(cropId)));
-      setSubs(allSubs.filter((s) => Number(s.crop_id) === Number(cropId)));
+      const filtered = allSubs.filter((s) => Number(s.crop_id) === Number(cropId));
+      setSubs(filtered);
+      const deriveLabel = (seg) => {
+        let s = seg;
+        if (s.endsWith('s')) s = s.slice(0, -1);
+        return s.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+      };
+      const groups = {};
+      filtered.forEach((sub) => {
+        const key = sub.title.toLowerCase().trim();
+        const endpoint = titleEndpoint[key];
+        if (!endpoint) return;
+        const seg = endpoint.split('/')[1];
+        const label = deriveLabel(seg);
+        if (!groups[label]) groups[label] = { label, icon: Sprout, items: [] };
+        groups[label].items.push(sub);
+      });
+      setGroupedSubs(groups);
+      const keys = Object.keys(groups);
+      if (keys.length) setExpandedGroups({ [keys[0]]: true });
     }
     fetch();
   }, [agriId, cropId]);
@@ -83,7 +104,7 @@ export default function CropDetail() {
   );
 
   return (
-    <div className="min-h-screen bg-emerald-50/30 dark:bg-emerald-950 mt-12">
+    <div className="min-h-screen bg-emerald-50/30 dark:bg-emerald-950 mt-14">
       <div className="max-w-7xl mx-auto px-4 py-8">
         <Link to={`/agriculture/${agriId}`} className="inline-flex items-center gap-1 text-xs text-emerald-600 hover:text-emerald-700 dark:hover:text-emerald-300 mb-4">
           <ArrowLeft size={14} /> Back to {agri?.title || 'Category'}
@@ -116,7 +137,55 @@ export default function CropDetail() {
           </div>
         </motion.div>
 
-        {subs.length > 0 ? (
+        {Object.keys(groupedSubs).length > 0 ? (
+          <div className="space-y-5">
+            {Object.values(groupedSubs).map((group) => {
+              const open = expandedGroups[group.label] !== false;
+              return (
+                <div key={group.label} className="rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden">
+                  <button
+                    onClick={() => setExpandedGroups((prev) => ({ ...prev, [group.label]: !prev[group.label] }))}
+                    className="w-full flex items-center gap-2 p-4 text-left hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-colors cursor-pointer"
+                  >
+                    <group.icon size={16} className="text-emerald-500 flex-shrink-0" />
+                    <span className="text-xs font-semibold text-emerald-700 dark:text-emerald-300 flex-1">{group.label}</span>
+                    {open ? <ChevronUp size={14} className="text-emerald-500" /> : <ChevronDown size={14} className="text-emerald-500" />}
+                  </button>
+                  {open && (
+                    <div className="px-4 pb-4">
+                      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {group.items.map((sub) => (
+                          <Link
+                            key={sub.id}
+                            to={authLink(`/crop/${sub.id}`)}
+                            className="group block rounded-xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden hover:shadow-lg hover:border-emerald-400 dark:hover:border-emerald-400 hover:-translate-y-0.5 hover:bg-emerald-50/80 dark:hover:bg-emerald-950/40 transition-all duration-300"
+                          >
+                            <div className="relative">
+                              {sub.image_url ? (
+                                <img src={sub.image_url} alt={sub.title} className="w-full h-32 object-contain mt-2 mb-2 rounded-[20px] bg-emerald-50/30 dark:bg-emerald-950 transition-transform duration-500 group-hover:scale-105" />
+                              ) : (
+                                <div className="w-full h-32 flex items-center justify-center bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-950/30 dark:to-green-950/30">
+                                  <Sprout size={32} className="text-emerald-400" />
+                                </div>
+                              )}
+                              <span className="absolute bottom-3 left-3 px-2.5 py-1 rounded-lg text-[10px] font-medium bg-white/90 dark:bg-gray-900/90 text-emerald-600 dark:text-emerald-400 shadow-sm backdrop-blur border border-emerald-200 dark:border-emerald-700">
+                                {titleEndpoint[sub.title.toLowerCase().trim()] ? 'Detect' : 'Coming Soon'}
+                              </span>
+                            </div>
+                            <div className="p-3 relative">
+                              <h3 className="text-sm font-bold text-center text-gray-900 dark:text-white">{sub.title}</h3>
+                              <ArrowRight size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-500 dark:text-emerald-400 group-hover:text-emerald-600 transition-colors" />
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        ) : subs.length > 0 ? (
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {subs.map((sub, index) => (
               <motion.div
@@ -145,15 +214,9 @@ export default function CropDetail() {
                     </div>
                   </div>
                   <div className="p-4 relative">
-  <h3 className="text-sm font-bold text-center text-gray-900 dark:text-white">
-    {sub.title}
-  </h3>
-
-  <ArrowRight
-    size={16}
-    className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-500 dark:text-emerald-400 group-hover:text-emerald-600 transition-colors"
-  />
-</div>
+                    <h3 className="text-sm font-bold text-center text-gray-900 dark:text-white">{sub.title}</h3>
+                    <ArrowRight size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-emerald-500 dark:text-emerald-400 group-hover:text-emerald-600 transition-colors" />
+                  </div>
                 </Link>
               </motion.div>
             ))}

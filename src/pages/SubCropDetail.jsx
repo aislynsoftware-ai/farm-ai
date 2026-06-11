@@ -6,6 +6,26 @@ import api from '../services/api';
 import Skeleton from '../components/common/Skeleton';
 import PredictionProgress from '../components/common/PredictionProgress';
 
+function SubCropTipCard({ tip }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="rounded-xl bg-amber-50 dark:bg-amber-950/20 border-2 border-amber-300 dark:border-amber-700 overflow-hidden">
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full flex items-center justify-between p-3 text-left hover:bg-amber-100/50 dark:hover:bg-amber-950/40 transition-colors cursor-pointer"
+      >
+        <p className="text-xs font-bold text-amber-800 dark:text-amber-300">{tip.tip_title || tip.title}</p>
+        {open ? <ChevronUp size={14} className="text-amber-500 flex-shrink-0" /> : <ChevronDown size={14} className="text-amber-500 flex-shrink-0" />}
+      </button>
+      {open && (
+        <div className="px-3 pb-3">
+          <p className="text-xs text-amber-700 dark:text-amber-400/80 leading-relaxed">{tip.tip_description || tip.description}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 const BASE_URL = 'https://aislynajay-product-development.hf.space';
 
 const titleEndpoint = {
@@ -43,8 +63,9 @@ export default function SubCropDetail() {
   const fileRef = useRef(null);
   const [profile, setProfile] = useState(null);
   const [tips, setTips] = useState([]);
+  const [agriTitle, setAgriTitle] = useState('');
+  const [agriLinkId, setAgriLinkId] = useState('');
   const [expandedSections, setExpandedSections] = useState({});
-  const [tipExpanded, setTipExpanded] = useState({});
   const [lightbox, setLightbox] = useState(null);
 
   const toggleSection = (key) => setExpandedSections((prev) => ({ ...prev, [key]: !prev[key] }));
@@ -59,15 +80,22 @@ export default function SubCropDetail() {
   useEffect(() => {
     async function fetch() {
       try {
-        const [subsRes, tipsRes] = await Promise.allSettled([
+        const [subsRes, tipsRes, cropsRes] = await Promise.allSettled([
           api.farming.crops(),
           api.farming.tips(),
+          api.farming.allCrops(),
         ]);
         const subs = subsRes.status === 'fulfilled' && Array.isArray(subsRes.value) ? subsRes.value : [];
         const found = subs.find((s) => Number(s.id) === Number(id));
         setSub(found || null);
         const allTips = tipsRes.status === 'fulfilled' && Array.isArray(tipsRes.value) ? tipsRes.value : [];
         setTips(allTips.filter((t) => Number(t.crop_sub_id) === Number(id)));
+        const allCrops = cropsRes.status === 'fulfilled' && Array.isArray(cropsRes.value) ? cropsRes.value : [];
+        if (found) {
+          const parent = allCrops.find((c) => Number(c.id) === Number(found.crop_id));
+          setAgriTitle(parent?.agri_title || '');
+          setAgriLinkId(parent?.agri_id || '');
+        }
       } finally {
         setLoading(false);
       }
@@ -160,10 +188,10 @@ export default function SubCropDetail() {
   const yoloConf = parseConfidence(result?.prediction || result?.prediction_result);
 
   return (
-    <div className="min-h-screen bg-emerald-50/30 dark:bg-emerald-950">
+    <div className="min-h-screen bg-emerald-50/30 dark:bg-emerald-950 mt-14">
       <div className="max-w-5xl mx-auto px-4 py-8 space-y-6">
-        <Link to={`/agriculture/${sub.crop_id ? `../crop/${sub.crop_id}` : '/services'}`} className="inline-flex items-center gap-1 text-xs text-emerald-600 hover:text-emerald-700 dark:hover:text-emerald-300">
-          <ArrowLeft size={14} /> Back
+        <Link to={sub?.crop_id && agriLinkId ? `/agriculture/${agriLinkId}/crop/${sub.crop_id}` : '/services'} className="inline-flex items-center gap-1 text-xs text-emerald-600 hover:text-emerald-700 dark:hover:text-emerald-300">
+          <ArrowLeft size={14} /> Back to {sub.crop_name || 'Category'}
         </Link>
 
         <motion.div
@@ -267,10 +295,10 @@ export default function SubCropDetail() {
                     </div>
                     <div className="flex-1">
                       <p className="text-lg font-bold text-gray-900 dark:text-white">{resultLabel || 'Analysis Complete'}</p>
-                      {(yoloConf || result.confidence) && (
+                      {result.confidence && (
                         <div className="flex items-center gap-1.5 mt-1">
                           <Target size={12} className="text-emerald-500" />
-                          <span className="text-xs text-emerald-600 dark:text-emerald-400">AI Accuracy: <strong>{yoloConf || Math.round(Number(result.confidence))}%</strong></span>
+                          <span className="text-xs text-emerald-600 dark:text-emerald-400">AI Accuracy: <strong>{Math.round(Number(result.confidence))}%</strong></span>
                         </div>
                       )}
                     </div>
@@ -581,25 +609,9 @@ export default function SubCropDetail() {
               <Lightbulb size={14} className="text-emerald-500" /> Farming Tips for {sub.title}
             </h3>
             <div className="space-y-2">
-              {tips.map((tip) => {
-                const open = tipExpanded[tip.id];
-                return (
-                <div key={tip.id} className="rounded-xl bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 overflow-hidden">
-                  <button
-                    onClick={() => setTipExpanded((prev) => ({ ...prev, [tip.id]: !prev[tip.id] }))}
-                    className="w-full flex items-center justify-between p-3 text-left hover:bg-amber-100/50 dark:hover:bg-amber-950/40 transition-colors cursor-pointer"
-                  >
-                    <p className="text-xs font-bold text-amber-800 dark:text-amber-300">{tip.tip_title}</p>
-                    {open ? <ChevronUp size={14} className="text-amber-500 flex-shrink-0" /> : <ChevronDown size={14} className="text-amber-500 flex-shrink-0" />}
-                  </button>
-                  {open && (
-                    <div className="px-3 pb-3">
-                      <p className="text-xs text-amber-700 dark:text-amber-400/80 leading-relaxed">{tip.tip_description}</p>
-                    </div>
-                  )}
-                </div>
-                );
-              })}
+              {tips.map((tip) => (
+                <SubCropTipCard key={tip.id} tip={tip} />
+              ))}
             </div>
           </div>
         )}
