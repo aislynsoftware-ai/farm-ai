@@ -27,7 +27,7 @@ const highlights = [
 
 export default function AboutSection() {
   return (
-    <section id="about" className="relative py-12 lg:py-16">
+    <section id="about" className="relative py-4 lg:py-4">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionTitle
           subtitle="About Farmlyt AI"

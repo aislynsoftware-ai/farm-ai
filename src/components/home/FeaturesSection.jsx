@@ -4,7 +4,7 @@ import SectionTitle from '../common/SectionTitle';
 
 export default function FeaturesSection() {
   return (
-    <section id="features" className="relative py-12 lg:py-16">
+    <section id="features" className="relative py-4 lg:py-4">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-blue-50/30 to-transparent dark:via-blue-950/10" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
