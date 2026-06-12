@@ -29,6 +29,9 @@ const titleEndpoint = {
   'rose': '/flowers/rose',
   'marigold': '/flowers/marigold',
   'chrysanthemum': '/flowers/chrysanthemums',
+  'potted plant': '/potted_plant',
+  'plant identification': '/plant_idetification',
+  'food identification': '/food_identification',
 };
 
 export default function Predict() {
@@ -229,6 +232,17 @@ export default function Predict() {
   const isHealthy = !result?.disease || result?.disease?.toLowerCase().includes('healthy');
   const diseaseFound = result?.disease && !result?.disease?.toLowerCase().includes('healthy');
 
+  const getConfidence = () => {
+    if (result?.confidence != null) {
+      const c = Number(result.confidence);
+      return c < 1 ? (c * 100).toFixed(1) : c.toFixed(1);
+    }
+    const m = result?.prediction?.match(/\((\d+\.\d+)\)/);
+    if (m) return (parseFloat(m[1]) * 100).toFixed(1);
+    return null;
+  };
+  const displayConfidence = getConfidence();
+
   return (
     <div className="flex min-h-screen bg-emerald-50/30 dark:bg-emerald-950">
       <Sidebar mobileOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -375,10 +389,10 @@ export default function Predict() {
                             </div>
                             <div className="flex-1">
                               <p className="text-lg font-bold text-gray-900 dark:text-white">{resultLabel || 'Analysis Complete'}</p>
-                              {result.confidence && (
+                              {displayConfidence && (
                                 <div className="flex items-center gap-1.5 mt-1">
                                   <Target size={12} className="text-emerald-500" />
-                                  <span className="text-xs text-emerald-600 dark:text-emerald-400">Confidence: <strong>{result.confidence}%</strong></span>
+                                  <span className="text-xs text-emerald-600 dark:text-emerald-400">Confidence: <strong>{displayConfidence}%</strong></span>
                                 </div>
                               )}
                             </div>
