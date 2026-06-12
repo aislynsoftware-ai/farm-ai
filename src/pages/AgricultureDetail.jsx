@@ -28,6 +28,10 @@ const titleEndpoint = {
   'rose': '/flowers/rose',
   'marigold': '/flowers/marigold',
   'chrysanthemum': '/flowers/chrysanthemums',
+  'potted plant': '/potted_plant',
+  'plant identification': '/plant_idetification',
+  'food identification': '/food_identification',
+  'food grains': '/food_identification',
 };
 
 export default function AgricultureDetail() {
@@ -45,6 +49,7 @@ export default function AgricultureDetail() {
   const [expandedSections, setExpandedSections] = useState({});
   const [lightboxImg, setLightboxImg] = useState(null);
   const [selectedCrop, setSelectedCrop] = useState('');
+  const [usedEndpoint, setUsedEndpoint] = useState('');
 
   const toggleSection = (key) => setExpandedSections((prev) => ({ ...prev, [key]: !prev[key] }));
 
@@ -98,9 +103,13 @@ export default function AgricultureDetail() {
 
   const handlePredict = async () => {
     if (!file) { setError('Please upload an image'); return; }
-    if (!selectedCrop) { setError('Please select a crop from the dropdown'); return; }
+    if (crops.length > 0 && !selectedCrop) { setError('Please select a crop from the dropdown'); return; }
     const cropKey = selectedCrop.toLowerCase().trim();
-    const endpoint = titleEndpoint[cropKey] || '/food_identification';
+    const agriKey = agri?.title?.toLowerCase().trim() || '';
+    const cropEndpoint = titleEndpoint[cropKey];
+    const agriEndpoint = titleEndpoint[agriKey];
+    const endpoint = cropEndpoint || agriEndpoint || '/food_identification';
+    setUsedEndpoint(endpoint);
     setLoading(true);
     setPredictStartTime(Date.now());
     setError('');
@@ -129,6 +138,17 @@ export default function AgricultureDetail() {
   const resultLabel = result?.food_name || result?.identified_plant || result?.disease || result?.prediction || result?.prediction_result;
   const isHealthy = !result?.disease || result?.disease?.toLowerCase().includes('healthy');
   const diseaseFound = result?.disease && !result?.disease?.toLowerCase().includes('healthy');
+
+  const getConfidence = () => {
+    if (result?.confidence != null) {
+      const c = Number(result.confidence);
+      return c < 1 ? (c * 100).toFixed(1) : c.toFixed(1);
+    }
+    const m = result?.prediction?.match(/\((\d+\.\d+)\)/);
+    if (m) return (parseFloat(m[1]) * 100).toFixed(1);
+    return null;
+  };
+  const displayConfidence = getConfidence();
 
   if (!agri) return (
     <div className="min-h-screen bg-emerald-50/30 dark:bg-emerald-950">
@@ -242,24 +262,24 @@ export default function AgricultureDetail() {
           </div>
         )}
 
-        {crops.length === 0 && (
+        {/* {crops.length === 0 && (
           <div className="text-center py-12">
             <div className="w-20 h-20 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 flex items-center justify-center mx-auto mb-4">
               <Sprout size={40} className="text-emerald-400" />
             </div>
             <p className="text-xs text-emerald-600 dark:text-emerald-400">No crops listed. Use the detection panel below.</p>
           </div>
-        )}
+        )} */}
 
         <div className="mt-8 rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 p-5">
           <p className="text-xs font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-            <Upload size={14} className="text-emerald-500" /> Quick Detection
+            <Search size={14} className="text-emerald-500" /> {agri.title}
           </p>
 
           {crops.length > 0 && (
             <div className="mb-4">
               <label className="block text-[10px] font-medium text-gray-600 dark:text-gray-400 mb-1.5">Select Crop</label>
-              <select value={selectedCrop} onChange={(e) => setSelectedCrop(e.target.value)} className="w-full px-3 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none text-xs text-gray-900 dark:text-white">
+              <select value={selectedCrop} onChange={(e) => { setSelectedCrop(e.target.value); setResult(null); setError(''); }} className="w-full px-3 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none text-xs text-gray-900 dark:text-white">
                 <option value="">-- Select a crop --</option>
                 {crops.map((c) => <option key={c.id} value={c.title}>{c.title}</option>)}
               </select>
@@ -300,7 +320,7 @@ export default function AgricultureDetail() {
             </div>
           )}
 
-          <button onClick={handlePredict} disabled={loading || !file || !selectedCrop} className="w-full flex items-center justify-center gap-2 px-4 py-3 mt-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-300 dark:disabled:bg-emerald-800 text-white text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed">
+          <button onClick={handlePredict} disabled={loading || !file || (crops.length > 0 && !selectedCrop)} className="w-full flex items-center justify-center gap-2 px-4 py-3 mt-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-300 dark:disabled:bg-emerald-800 text-white text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed">
             {loading ? <Loader size={16} className="animate-spin" /> : <Search size={16} />}
             {loading ? 'Analyzing...' : 'Detect'}
           </button>
@@ -312,6 +332,7 @@ export default function AgricultureDetail() {
               <div className="flex items-center gap-2 mb-1">
                 <div className="w-1 h-5 rounded-full bg-emerald-500" />
                 <h3 className="text-sm font-bold text-gray-900 dark:text-white">AI Analysis Results</h3>
+                {usedEndpoint && <p className="text-[9px] text-emerald-400 mt-0.5">Endpoint: {usedEndpoint}</p>}
               </div>
 
               <motion.div className="rounded-2xl bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-950/30 dark:to-green-950/30 border border-emerald-200 dark:border-emerald-800 p-4" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
@@ -331,10 +352,10 @@ export default function AgricultureDetail() {
                     </div>
                     <div className="flex-1">
                       <p className="text-base font-bold text-gray-900 dark:text-white">{resultLabel || 'Analysis Complete'}</p>
-                      {result.confidence && (
+                      {displayConfidence && (
                         <div className="flex items-center gap-1.5 mt-0.5">
                           <Target size={11} className="text-emerald-500" />
-                          <span className="text-xs text-emerald-600 dark:text-emerald-400">Confidence: <strong>{result.confidence ? (result.confidence < 1 ? (result.confidence * 100).toFixed(1) : Number(result.confidence).toFixed(1)) : ''}%</strong></span>
+                          <span className="text-xs text-emerald-600 dark:text-emerald-400">AI Confidence Score: <strong>{displayConfidence}%</strong></span>
                         </div>
                       )}
                     </div>
@@ -342,7 +363,7 @@ export default function AgricultureDetail() {
                 </div>
               </motion.div>
 
-              {(result.original_image || result.predicted_image) && (
+              {(result.original_image || result.predicted_image || preview) && (
                 <motion.div className="rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                   <button onClick={() => toggleSection('images')} className="w-full flex items-center justify-between p-3 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-colors cursor-pointer">
                     <div className="flex items-center gap-2">
@@ -354,12 +375,10 @@ export default function AgricultureDetail() {
                   {expandedSections.images !== false && (
                     <div className="px-3 pb-3">
                       <div className="grid sm:grid-cols-2 gap-3">
-                        {result.original_image && (
-                          <div className="rounded-xl bg-emerald-50/30 dark:bg-emerald-950/50 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden">
-                            <div className="px-3 py-2 border-b border-emerald-200 dark:border-emerald-700"><p className="text-[10px] font-medium text-emerald-600">Original Image</p></div>
-                            <img src={result.original_image} alt="Original" onClick={() => setLightboxImg(result.original_image)} className="w-full h-40 object-contain cursor-zoom-in" />
-                          </div>
-                        )}
+                        <div className="rounded-xl bg-emerald-50/30 dark:bg-emerald-950/50 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden">
+                          <div className="px-3 py-2 border-b border-emerald-200 dark:border-emerald-700"><p className="text-[10px] font-medium text-emerald-600">Original Image</p></div>
+                          <img src={result.original_image || preview} alt="Original" onClick={() => setLightboxImg(result.original_image || preview)} className="w-full h-40 object-contain cursor-zoom-in" />
+                        </div>
                         {result.predicted_image && (
                           <div className="rounded-xl bg-emerald-50/30 dark:bg-emerald-950/50 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden">
                             <div className="px-3 py-2 border-b border-emerald-200 dark:border-emerald-700"><p className="text-[10px] font-medium text-emerald-600">Detection Output</p></div>
