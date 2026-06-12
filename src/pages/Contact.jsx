@@ -5,7 +5,7 @@ import PageHeader from '../components/layout/PageHeader';
 import Button from '../components/common/Button';
 
 const contactInfo = [
-  { icon: Mail, label: 'Email', value: 'venkatesh@aislyntech.com', href: 'mailto:venkatesh@aislyntech.com' },
+  { icon: Mail, label: 'Email', value: 'support@farmlytai.in', href: 'mailto:support@farmlytai.in' },
   { icon: Phone, label: 'Phone', value: '+91 8892209021', href: 'tel:+918892209021' },
   { icon: MessageCircle, label: 'WhatsApp', value: '+91 8892209021', href: 'https://wa.me/918892209021' },
   { icon: MapPin, label: 'Address', value: 'No:1688, 1st floor, 18th Cross, 21st Main Rd, MC Layout, Vijayanagar, Bengaluru, Karnataka 560040' },
