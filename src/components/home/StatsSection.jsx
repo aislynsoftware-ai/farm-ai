@@ -3,7 +3,7 @@ import StatCard from '../ui/StatCard';
 
 export default function StatsSection() {
   return (
-    <section className="relative py-12 lg:py-16">
+    <section className="relative py-4 lg:py-4">
       <div className="absolute inset-0 bg-gradient-to-b from-emerald-50/50 to-transparent dark:from-emerald-950/20" />
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

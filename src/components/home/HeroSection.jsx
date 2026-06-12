@@ -6,7 +6,7 @@ import { HERO, ROUTES } from '../../constants';
 
 export default function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-4">
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(16,185,129,0.1),transparent_60%),radial-gradient(ellipse_at_bottom_left,_rgba(59,130,246,0.08),transparent_50%)]" />
 
       <div className="absolute top-1/4 left-1/4 w-72 h-72 bg-emerald-500/20 rounded-full blur-3xl" />
