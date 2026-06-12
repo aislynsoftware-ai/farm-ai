@@ -144,6 +144,7 @@ export default function SubCropDetail() {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       const data = await res.json();
+      console.log('API:', endpoint, '->', data);
       if (!res.ok) throw new Error(data.message || data.detail || data.error || 'Request failed');
       setResult(data);
     } catch (err) {
