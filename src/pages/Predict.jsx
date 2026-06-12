@@ -29,6 +29,9 @@ const titleEndpoint = {
   'rose': '/flowers/rose',
   'marigold': '/flowers/marigold',
   'chrysanthemum': '/flowers/chrysanthemums',
+  'potted plant': '/potted_plant',
+  'plant identification': '/plant_idetification',
+  'food identification': '/food_identification',
 };
 
 export default function Predict() {
@@ -229,6 +232,17 @@ export default function Predict() {
   const isHealthy = !result?.disease || result?.disease?.toLowerCase().includes('healthy');
   const diseaseFound = result?.disease && !result?.disease?.toLowerCase().includes('healthy');
 
+  const getConfidence = () => {
+    if (result?.confidence != null) {
+      const c = Number(result.confidence);
+      return c < 1 ? (c * 100).toFixed(1) : c.toFixed(1);
+    }
+    const m = result?.prediction?.match(/\((\d+\.\d+)\)/);
+    if (m) return (parseFloat(m[1]) * 100).toFixed(1);
+    return null;
+  };
+  const displayConfidence = getConfidence();
+
   return (
     <div className="flex min-h-screen bg-emerald-50/30 dark:bg-emerald-950">
       <Sidebar mobileOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
@@ -375,10 +389,10 @@ export default function Predict() {
                             </div>
                             <div className="flex-1">
                               <p className="text-lg font-bold text-gray-900 dark:text-white">{resultLabel || 'Analysis Complete'}</p>
-                              {result.confidence && (
+                              {displayConfidence && (
                                 <div className="flex items-center gap-1.5 mt-1">
                                   <Target size={12} className="text-emerald-500" />
-                                  <span className="text-xs text-emerald-600 dark:text-emerald-400">Confidence: <strong>{result.confidence}%</strong></span>
+                                  <span className="text-xs text-emerald-600 dark:text-emerald-400">Confidence: <strong>{displayConfidence}%</strong></span>
                                 </div>
                               )}
                             </div>
@@ -388,7 +402,7 @@ export default function Predict() {
                       </motion.div>
 
                       {/* Section 2: Image Comparison */}
-                      {(result.original_image || result.predicted_image) && (
+                      {(result.original_image || result.predicted_image || preview) && (
                         <motion.div
                           className="rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden"
                           initial={{ opacity: 0, y: 20 }}
@@ -407,14 +421,12 @@ export default function Predict() {
                           {expandedSections.images !== false && (
                             <div className="px-4 pb-4">
                               <div className="grid sm:grid-cols-2 gap-3">
-                                {result.original_image && (
-                                  <div className="rounded-xl bg-emerald-50/30 dark:bg-emerald-950/50 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden">
-                                    <div className="px-3 py-2 border-b border-emerald-200 dark:border-emerald-700">
-                                      <p className="text-[10px] font-medium text-emerald-600">Original Image</p>
-                                    </div>
-                                    <img src={result.original_image} alt="Original" onClick={() => setLightboxImg(result.original_image)} className="w-full h-48 object-contain cursor-zoom-in" />
+                                <div className="rounded-xl bg-emerald-50/30 dark:bg-emerald-950/50 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden">
+                                  <div className="px-3 py-2 border-b border-emerald-200 dark:border-emerald-700">
+                                    <p className="text-[10px] font-medium text-emerald-600">Original Image</p>
                                   </div>
-                                )}
+                                  <img src={result.original_image || preview} alt="Original" onClick={() => setLightboxImg(result.original_image || preview)} className="w-full h-48 object-contain cursor-zoom-in" />
+                                </div>
                                 {result.predicted_image && (
                                   <div className="rounded-xl bg-emerald-50/30 dark:bg-emerald-950/50 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden">
                                     <div className="px-3 py-2 border-b border-emerald-200 dark:border-emerald-700">

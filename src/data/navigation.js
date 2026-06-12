@@ -17,7 +17,7 @@ const navigationData = {
       { label: 'AI Recommendations', path: '/services' },
     ],
     contact: {
-      email: 'venkatesh@aislyntech.com',
+      email: 'support@farmlytai.in',
       phone: '+91 8892209021',
       whatsapp: '+91 8892209021',
       address: 'No:1688, 1st floor, 18th Cross, 21st Main Rd, MC Layout, Vijayanagar, Bengaluru, Karnataka 560040',
