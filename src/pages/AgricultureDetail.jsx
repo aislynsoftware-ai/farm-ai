@@ -363,7 +363,7 @@ export default function AgricultureDetail() {
                 </div>
               </motion.div>
 
-              {(result.original_image || result.predicted_image) && (
+              {(result.original_image || result.predicted_image || preview) && (
                 <motion.div className="rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
                   <button onClick={() => toggleSection('images')} className="w-full flex items-center justify-between p-3 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition-colors cursor-pointer">
                     <div className="flex items-center gap-2">
@@ -375,12 +375,10 @@ export default function AgricultureDetail() {
                   {expandedSections.images !== false && (
                     <div className="px-3 pb-3">
                       <div className="grid sm:grid-cols-2 gap-3">
-                        {result.original_image && (
-                          <div className="rounded-xl bg-emerald-50/30 dark:bg-emerald-950/50 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden">
-                            <div className="px-3 py-2 border-b border-emerald-200 dark:border-emerald-700"><p className="text-[10px] font-medium text-emerald-600">Original Image</p></div>
-                            <img src={result.original_image} alt="Original" onClick={() => setLightboxImg(result.original_image)} className="w-full h-40 object-contain cursor-zoom-in" />
-                          </div>
-                        )}
+                        <div className="rounded-xl bg-emerald-50/30 dark:bg-emerald-950/50 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden">
+                          <div className="px-3 py-2 border-b border-emerald-200 dark:border-emerald-700"><p className="text-[10px] font-medium text-emerald-600">Original Image</p></div>
+                          <img src={result.original_image || preview} alt="Original" onClick={() => setLightboxImg(result.original_image || preview)} className="w-full h-40 object-contain cursor-zoom-in" />
+                        </div>
                         {result.predicted_image && (
                           <div className="rounded-xl bg-emerald-50/30 dark:bg-emerald-950/50 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden">
                             <div className="px-3 py-2 border-b border-emerald-200 dark:border-emerald-700"><p className="text-[10px] font-medium text-emerald-600">Detection Output</p></div>
