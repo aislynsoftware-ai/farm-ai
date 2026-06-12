@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, MessageCircle, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, MessageCircle, Send, CheckCircle, AlertCircle, Loader } from 'lucide-react';
 import PageHeader from '../components/layout/PageHeader';
 import Button from '../components/common/Button';
 
@@ -17,6 +17,8 @@ export default function Contact() {
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState('');
 
   const validate = () => {
     const errs = {};
@@ -29,14 +31,38 @@ export default function Contact() {
     return errs;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setApiError('');
     const errs = validate();
     setErrors(errs);
-    if (Object.keys(errs).length === 0) {
-      setSubmitted(true);
-      setForm(initialForm);
-      setTimeout(() => setSubmitted(false), 5000);
+    if (Object.keys(errs).length > 0) return;
+
+    setLoading(true);
+    try {
+      const fd = new FormData();
+      fd.append('access_key', import.meta.env.VITE_WEB3FORMS_KEY);
+      fd.append('name', form.name);
+      fd.append('email', form.email);
+      fd.append('subject', form.subject);
+      fd.append('message', form.message);
+
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: fd,
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSubmitted(true);
+        setForm(initialForm);
+        setTimeout(() => setSubmitted(false), 5000);
+      } else {
+        setApiError(data.message || 'Failed to send message');
+      }
+    } catch {
+      setApiError('Network error. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -135,7 +161,7 @@ export default function Contact() {
                         name="name"
                         value={form.name}
                         onChange={handleChange}
-                        placeholder="John Doe"
+                        placeholder="Enter your full name"
                         className={inputClass('name')}
                       />
                       {errors.name && (
@@ -154,7 +180,7 @@ export default function Contact() {
                         name="email"
                         value={form.email}
                         onChange={handleChange}
-                        placeholder="john@example.com"
+                        placeholder="Enter your email address"
                         className={inputClass('email')}
                       />
                       {errors.email && (
@@ -175,7 +201,7 @@ export default function Contact() {
                       name="subject"
                       value={form.subject}
                       onChange={handleChange}
-                      placeholder="How can we help?"
+                        placeholder="Enter your subject"
                       className={inputClass('subject')}
                     />
                     {errors.subject && (
@@ -195,7 +221,7 @@ export default function Contact() {
                       value={form.message}
                       onChange={handleChange}
                       rows={4}
-                      placeholder="Tell us more about your inquiry..."
+                        placeholder="Enter your message"
                       className={`${inputClass('message')} resize-none`}
                     />
                     {errors.message && (
@@ -206,9 +232,17 @@ export default function Contact() {
                     )}
                   </div>
 
+                  {apiError && (
+                    <div className="flex items-center gap-2 p-3 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800">
+                      <AlertCircle size={14} className="text-red-500 flex-shrink-0" />
+                      <p className="text-xs text-red-600 dark:text-red-400">{apiError}</p>
+                    </div>
+                  )}
+
                   <div className="pt-1">
-                    <Button type="submit" icon={Send} className="w-full sm:w-auto">
-                      Send Message
+                    <Button type="submit" icon={loading ? null : Send} disabled={loading} className="w-full sm:w-auto">
+                      {loading ? <Loader size={16} className="animate-spin" /> : null}
+                      {loading ? 'Sending...' : 'Send Message'}
                     </Button>
                   </div>
                 </form>

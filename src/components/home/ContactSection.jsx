@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Send, AlertCircle, CheckCircle, MessageCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, AlertCircle, CheckCircle, MessageCircle, Loader } from 'lucide-react';
 import Button from '../common/Button';
 import SectionTitle from '../common/SectionTitle';
 
@@ -17,6 +17,8 @@ export default function ContactSection() {
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState('');
 
   const validate = () => {
     const errs = {};
@@ -29,14 +31,35 @@ export default function ContactSection() {
     return errs;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setApiError('');
     const errs = validate();
     setErrors(errs);
-    if (Object.keys(errs).length === 0) {
-      setSubmitted(true);
-      setForm(initialForm);
-      setTimeout(() => setSubmitted(false), 3000);
+    if (Object.keys(errs).length > 0) return;
+
+    setLoading(true);
+    try {
+      const fd = new FormData();
+      fd.append('access_key', import.meta.env.VITE_WEB3FORMS_KEY);
+      fd.append('name', form.name);
+      fd.append('email', form.email);
+      fd.append('subject', form.subject);
+      fd.append('message', form.message);
+
+      const res = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: fd });
+      const data = await res.json();
+      if (data.success) {
+        setSubmitted(true);
+        setForm(initialForm);
+        setTimeout(() => setSubmitted(false), 3000);
+      } else {
+        setApiError(data.message || 'Failed to send message');
+      }
+    } catch {
+      setApiError('Network error. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -127,14 +150,14 @@ export default function ContactSection() {
                       <label className="block text-xs font-medium text-emerald-700 dark:text-emerald-300 mb-1.5">
                         Name <span className="text-red-400">*</span>
                       </label>
-                      <input type="text" name="name" value={form.name} onChange={handleChange} placeholder="John Doe" className={inputClass('name')} />
+                      <input type="text" name="name" value={form.name} onChange={handleChange} placeholder="Enter your full name" className={inputClass('name')} />
                       {errors.name && <p className="flex items-center gap-1 mt-1 text-xs text-red-500"><AlertCircle size={12} />{errors.name}</p>}
                     </div>
                     <div>
                       <label className="block text-xs font-medium text-emerald-700 dark:text-emerald-300 mb-1.5">
                         Email <span className="text-red-400">*</span>
                       </label>
-                      <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="john@example.com" className={inputClass('email')} />
+                      <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="Enter your email address" className={inputClass('email')} />
                       {errors.email && <p className="flex items-center gap-1 mt-1 text-xs text-red-500"><AlertCircle size={12} />{errors.email}</p>}
                     </div>
                   </div>
@@ -143,7 +166,7 @@ export default function ContactSection() {
                     <label className="block text-xs font-medium text-emerald-700 dark:text-emerald-300 mb-1.5">
                       Subject <span className="text-red-400">*</span>
                     </label>
-                    <input type="text" name="subject" value={form.subject} onChange={handleChange} placeholder="How can we help?" className={inputClass('subject')} />
+                    <input type="text" name="subject" value={form.subject} onChange={handleChange} placeholder="Enter your subject" className={inputClass('subject')} />
                     {errors.subject && <p className="flex items-center gap-1 mt-1 text-xs text-red-500"><AlertCircle size={12} />{errors.subject}</p>}
                   </div>
 
@@ -151,13 +174,21 @@ export default function ContactSection() {
                     <label className="block text-xs font-medium text-emerald-700 dark:text-emerald-300 mb-1.5">
                       Message <span className="text-red-400">*</span>
                     </label>
-                    <textarea name="message" value={form.message} onChange={handleChange} rows={4} placeholder="Tell us more about your inquiry..." className={`${inputClass('message')} resize-none`} />
+                    <textarea name="message" value={form.message} onChange={handleChange} rows={4} placeholder="Enter your message" className={`${inputClass('message')} resize-none`} />
                     {errors.message && <p className="flex items-center gap-1 mt-1 text-xs text-red-500"><AlertCircle size={12} />{errors.message}</p>}
                   </div>
 
+                  {apiError && (
+                    <div className="flex items-center gap-2 p-3 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800">
+                      <AlertCircle size={14} className="text-red-500 flex-shrink-0" />
+                      <p className="text-xs text-red-600 dark:text-red-400">{apiError}</p>
+                    </div>
+                  )}
+
                   <div className="pt-1 text-center lg:text-right">
-                    <Button type="submit" icon={Send} className="w-full sm:w-auto">
-                      Send Message
+                    <Button type="submit" icon={loading ? null : Send} disabled={loading} className="w-full sm:w-auto">
+                      {loading ? <Loader size={16} className="animate-spin" /> : null}
+                      {loading ? 'Sending...' : 'Send Message'}
                     </Button>
                   </div>
                 </form>
