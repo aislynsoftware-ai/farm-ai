@@ -18,6 +18,7 @@ import Wallet from '../pages/Wallet';
 import AgricultureDetail from '../pages/AgricultureDetail';
 import CropDetail from '../pages/CropDetail';
 import SubCropDetail from '../pages/SubCropDetail';
+import Research from '../pages/Research';
 
 function ErrorPage() {
   return (
@@ -42,6 +43,7 @@ export default function createAppRouter(isDark, toggleTheme) {
         { path: 'about', element: <About /> },
         { path: 'services', element: <Services /> },
         { path: 'features', element: <Features /> },
+        { path: 'research', element: <Research /> },
         { path: 'contact', element: <Contact /> },
         { path: 'login', element: <Login /> },
         { path: 'register', element: <Register /> },

@@ -1,0 +1,4084 @@
+{
+  "stage1": {
+    "categories": {
+      "Flowers": {
+        "Chrysanthemums": {
+          "classes": [
+            "healthy",
+            "unhealthy"
+          ],
+          "classCounts": {
+            "healthy": 5517,
+            "unhealthy": 5517
+          },
+          "totalImages": 11034,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage1/Flowers/Chrysanthemums/sample_1.jpg",
+            "/samples/stage1/Flowers/Chrysanthemums/sample_2.jpg",
+            "/samples/stage1/Flowers/Chrysanthemums/sample_3.jpg",
+            "/samples/stage1/Flowers/Chrysanthemums/sample_4.jpg",
+            "/samples/stage1/Flowers/Chrysanthemums/sample_5.jpg",
+            "/samples/stage1/Flowers/Chrysanthemums/sample_6.jpg",
+            "/samples/stage1/Flowers/Chrysanthemums/sample_7.jpg",
+            "/samples/stage1/Flowers/Chrysanthemums/sample_8.jpg",
+            "/samples/stage1/Flowers/Chrysanthemums/sample_9.jpg",
+            "/samples/stage1/Flowers/Chrysanthemums/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "healthy": {
+              "actual": 75,
+              "normal": 2758,
+              "realtime": 2759
+            },
+            "unhealthy": {
+              "actual": 75,
+              "normal": 2758,
+              "realtime": 2759
+            }
+          }
+        },
+        "Jasmine": {
+          "classes": [
+            "bud_worm",
+            "healthy",
+            "petal_blight"
+          ],
+          "classCounts": {
+            "bud_worm": 5206,
+            "healthy": 5103,
+            "petal_blight": 5206
+          },
+          "totalImages": 15515,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage1/Flowers/Jasmine/sample_1.PNG",
+            "/samples/stage1/Flowers/Jasmine/sample_2.jpg",
+            "/samples/stage1/Flowers/Jasmine/sample_3.jpg",
+            "/samples/stage1/Flowers/Jasmine/sample_4.jpg",
+            "/samples/stage1/Flowers/Jasmine/sample_5.PNG",
+            "/samples/stage1/Flowers/Jasmine/sample_6.PNG",
+            "/samples/stage1/Flowers/Jasmine/sample_7.jpg",
+            "/samples/stage1/Flowers/Jasmine/sample_8.PNG",
+            "/samples/stage1/Flowers/Jasmine/sample_9.PNG",
+            "/samples/stage1/Flowers/Jasmine/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "bud_worm": {
+              "actual": 30,
+              "normal": 2603,
+              "realtime": 2603
+            },
+            "healthy": {
+              "actual": 15,
+              "normal": 2551,
+              "realtime": 2552
+            },
+            "petal_blight": {
+              "actual": 30,
+              "normal": 2603,
+              "realtime": 2603
+            }
+          }
+        },
+        "Marigold": {
+          "classes": [
+            "healthy",
+            "unhealthy"
+          ],
+          "classCounts": {
+            "healthy": 5000,
+            "unhealthy": 5000
+          },
+          "totalImages": 10000,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage1/Flowers/Marigold/sample_1.jpg",
+            "/samples/stage1/Flowers/Marigold/sample_2.jpg",
+            "/samples/stage1/Flowers/Marigold/sample_3.jpg",
+            "/samples/stage1/Flowers/Marigold/sample_4.jpg",
+            "/samples/stage1/Flowers/Marigold/sample_5.jpg",
+            "/samples/stage1/Flowers/Marigold/sample_6.jpg",
+            "/samples/stage1/Flowers/Marigold/sample_7.jpg",
+            "/samples/stage1/Flowers/Marigold/sample_8.jpg",
+            "/samples/stage1/Flowers/Marigold/sample_9.jpg",
+            "/samples/stage1/Flowers/Marigold/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "healthy": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "unhealthy": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            }
+          }
+        },
+        "Roses": {
+          "classes": [
+            "botrytis_blight",
+            "bud_rot",
+            "healthy",
+            "petal_blight",
+            "thrips"
+          ],
+          "classCounts": {
+            "botrytis_blight": 5206,
+            "bud_rot": 5000,
+            "healthy": 5206,
+            "petal_blight": 5206,
+            "thrips": 5206
+          },
+          "totalImages": 25824,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage1/Flowers/Roses/sample_1.jpg",
+            "/samples/stage1/Flowers/Roses/sample_2.jpg",
+            "/samples/stage1/Flowers/Roses/sample_3.jpg",
+            "/samples/stage1/Flowers/Roses/sample_4.jpg",
+            "/samples/stage1/Flowers/Roses/sample_5.jpg",
+            "/samples/stage1/Flowers/Roses/sample_6.jpg",
+            "/samples/stage1/Flowers/Roses/sample_7.jpg",
+            "/samples/stage1/Flowers/Roses/sample_8.jpg",
+            "/samples/stage1/Flowers/Roses/sample_9.jpg",
+            "/samples/stage1/Flowers/Roses/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "botrytis_blight": {
+              "actual": 30,
+              "normal": 2603,
+              "realtime": 2603
+            },
+            "bud_rot": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "healthy": {
+              "actual": 30,
+              "normal": 2603,
+              "realtime": 2603
+            },
+            "petal_blight": {
+              "actual": 30,
+              "normal": 2603,
+              "realtime": 2603
+            },
+            "thrips": {
+              "actual": 30,
+              "normal": 2603,
+              "realtime": 2603
+            }
+          }
+        }
+      },
+      "Fruits": {
+        "Custard_Apple": {
+          "classes": [
+            "Athracnose",
+            "Blank_Canker",
+            "Diplodia_Rot",
+            "Healthy",
+            "Mealy_Bug"
+          ],
+          "classCounts": {
+            "Athracnose": 12413,
+            "Blank_Canker": 5000,
+            "Diplodia_Rot": 5000,
+            "Healthy": 5193,
+            "Mealy_Bug": 5000
+          },
+          "totalImages": 32606,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage1/Fruits/Custard_Apple/sample_1.jpg",
+            "/samples/stage1/Fruits/Custard_Apple/sample_2.jpg",
+            "/samples/stage1/Fruits/Custard_Apple/sample_3.jpg",
+            "/samples/stage1/Fruits/Custard_Apple/sample_4.jpg",
+            "/samples/stage1/Fruits/Custard_Apple/sample_5.jpg",
+            "/samples/stage1/Fruits/Custard_Apple/sample_6.jpg",
+            "/samples/stage1/Fruits/Custard_Apple/sample_7.jpg",
+            "/samples/stage1/Fruits/Custard_Apple/sample_8.jpg",
+            "/samples/stage1/Fruits/Custard_Apple/sample_9.jpg",
+            "/samples/stage1/Fruits/Custard_Apple/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "Athracnose": {
+              "actual": 1075,
+              "normal": 6206,
+              "realtime": 6207
+            },
+            "Blank_Canker": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Diplodia_Rot": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Healthy": {
+              "actual": 28,
+              "normal": 2596,
+              "realtime": 2597
+            },
+            "Mealy_Bug": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            }
+          }
+        },
+        "Guava": {
+          "classes": [
+            "Anthracnose",
+            "fruit_fly",
+            "healthy_guava"
+          ],
+          "classCounts": {
+            "Anthracnose": 12448,
+            "fruit_fly": 11331,
+            "healthy_guava": 9475
+          },
+          "totalImages": 33254,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage1/Fruits/Guava/sample_1.png",
+            "/samples/stage1/Fruits/Guava/sample_2.png",
+            "/samples/stage1/Fruits/Guava/sample_3.png",
+            "/samples/stage1/Fruits/Guava/sample_4.png",
+            "/samples/stage1/Fruits/Guava/sample_5.png",
+            "/samples/stage1/Fruits/Guava/sample_6.png",
+            "/samples/stage1/Fruits/Guava/sample_7.png",
+            "/samples/stage1/Fruits/Guava/sample_8.png",
+            "/samples/stage1/Fruits/Guava/sample_9.png",
+            "/samples/stage1/Fruits/Guava/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "Anthracnose": {
+              "actual": 1080,
+              "normal": 6224,
+              "realtime": 6224
+            },
+            "fruit_fly": {
+              "actual": 918,
+              "normal": 5665,
+              "realtime": 5666
+            },
+            "healthy_guava": {
+              "actual": 649,
+              "normal": 4737,
+              "realtime": 4738
+            }
+          }
+        },
+        "Lemon": {
+          "classes": [
+            "black_spot",
+            "citrus_canker",
+            "greening",
+            "healthy",
+            "lemon_scab"
+          ],
+          "classCounts": {
+            "black_spot": 5000,
+            "citrus_canker": 5000,
+            "greening": 5000,
+            "healthy": 5000,
+            "lemon_scab": 5000
+          },
+          "totalImages": 25000,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage1/Fruits/Lemon/sample_1.jpg",
+            "/samples/stage1/Fruits/Lemon/sample_2.jpg",
+            "/samples/stage1/Fruits/Lemon/sample_3.jpg",
+            "/samples/stage1/Fruits/Lemon/sample_4.jpg",
+            "/samples/stage1/Fruits/Lemon/sample_5.jpg",
+            "/samples/stage1/Fruits/Lemon/sample_6.jpg",
+            "/samples/stage1/Fruits/Lemon/sample_7.jpg",
+            "/samples/stage1/Fruits/Lemon/sample_8.jpg",
+            "/samples/stage1/Fruits/Lemon/sample_9.PNG",
+            "/samples/stage1/Fruits/Lemon/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "black_spot": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "citrus_canker": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "greening": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "healthy": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "lemon_scab": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            }
+          }
+        },
+        "Pomegranate": {
+          "classes": [
+            "Alternaria",
+            "Anthracnose",
+            "Bacterial_Blight",
+            "Cercospora",
+            "Healthy"
+          ],
+          "classCounts": {
+            "Alternaria": 11110,
+            "Anthracnose": 13041,
+            "Bacterial_Blight": 11662,
+            "Cercospora": 9351,
+            "Healthy": 15000
+          },
+          "totalImages": 60164,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage1/Fruits/Pomegranate/sample_1.jpg",
+            "/samples/stage1/Fruits/Pomegranate/sample_2.jpg",
+            "/samples/stage1/Fruits/Pomegranate/sample_3.jpg",
+            "/samples/stage1/Fruits/Pomegranate/sample_4.jpg",
+            "/samples/stage1/Fruits/Pomegranate/sample_5.jpg",
+            "/samples/stage1/Fruits/Pomegranate/sample_6.jpg",
+            "/samples/stage1/Fruits/Pomegranate/sample_7.jpg",
+            "/samples/stage1/Fruits/Pomegranate/sample_8.jpg",
+            "/samples/stage1/Fruits/Pomegranate/sample_9.jpg",
+            "/samples/stage1/Fruits/Pomegranate/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "Alternaria": {
+              "actual": 886,
+              "normal": 5555,
+              "realtime": 5555
+            },
+            "Anthracnose": {
+              "actual": 1166,
+              "normal": 6520,
+              "realtime": 6521
+            },
+            "Bacterial_Blight": {
+              "actual": 966,
+              "normal": 5831,
+              "realtime": 5831
+            },
+            "Cercospora": {
+              "actual": 631,
+              "normal": 4675,
+              "realtime": 4676
+            },
+            "Healthy": {
+              "actual": 1450,
+              "normal": 7500,
+              "realtime": 7500
+            }
+          }
+        },
+        "Tomato": {
+          "classes": [
+            "healthy",
+            "unhealthy"
+          ],
+          "classCounts": {
+            "healthy": 5000,
+            "unhealthy": 5000
+          },
+          "totalImages": 10000,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage1/Fruits/Tomato/sample_1.png",
+            "/samples/stage1/Fruits/Tomato/sample_2.jpg",
+            "/samples/stage1/Fruits/Tomato/sample_3.jpg",
+            "/samples/stage1/Fruits/Tomato/sample_4.jpg",
+            "/samples/stage1/Fruits/Tomato/sample_5.jpg",
+            "/samples/stage1/Fruits/Tomato/sample_6.jpg",
+            "/samples/stage1/Fruits/Tomato/sample_7.jpg",
+            "/samples/stage1/Fruits/Tomato/sample_8.jpg",
+            "/samples/stage1/Fruits/Tomato/sample_9.jpg",
+            "/samples/stage1/Fruits/Tomato/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "healthy": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "unhealthy": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            }
+          }
+        }
+      },
+      "Leafs": {
+        "Brinjal": {
+          "classes": [
+            "Healthy Leaf",
+            "Insect Pest Disease",
+            "Leaf Spot Disease",
+            "Mosaic Virus Disease",
+            "Wilt Disease"
+          ],
+          "classCounts": {
+            "Healthy Leaf": 8793,
+            "Insect Pest Disease": 8793,
+            "Leaf Spot Disease": 8793,
+            "Mosaic Virus Disease": 8793,
+            "Wilt Disease": 8793
+          },
+          "totalImages": 43965,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage1/Leafs/Brinjal/sample_1.jpg",
+            "/samples/stage1/Leafs/Brinjal/sample_2.jpg",
+            "/samples/stage1/Leafs/Brinjal/sample_3.jpg",
+            "/samples/stage1/Leafs/Brinjal/sample_4.jpg",
+            "/samples/stage1/Leafs/Brinjal/sample_5.jpg",
+            "/samples/stage1/Leafs/Brinjal/sample_6.jpg",
+            "/samples/stage1/Leafs/Brinjal/sample_7.jpg",
+            "/samples/stage1/Leafs/Brinjal/sample_8.jpg",
+            "/samples/stage1/Leafs/Brinjal/sample_9.jpg",
+            "/samples/stage1/Leafs/Brinjal/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "Healthy Leaf": {
+              "actual": 550,
+              "normal": 4396,
+              "realtime": 4397
+            },
+            "Insect Pest Disease": {
+              "actual": 550,
+              "normal": 4396,
+              "realtime": 4397
+            },
+            "Leaf Spot Disease": {
+              "actual": 550,
+              "normal": 4396,
+              "realtime": 4397
+            },
+            "Mosaic Virus Disease": {
+              "actual": 550,
+              "normal": 4396,
+              "realtime": 4397
+            },
+            "Wilt Disease": {
+              "actual": 550,
+              "normal": 4396,
+              "realtime": 4397
+            }
+          }
+        },
+        "Chili": {
+          "classes": [
+            "bacterial",
+            "cercospora",
+            "curl",
+            "healthy",
+            "whitespot"
+          ],
+          "classCounts": {
+            "bacterial": 5000,
+            "cercospora": 5000,
+            "curl": 5000,
+            "healthy": 5000,
+            "whitespot": 5000
+          },
+          "totalImages": 25000,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage1/Leafs/Chili/sample_1.JPG",
+            "/samples/stage1/Leafs/Chili/sample_2.JPG",
+            "/samples/stage1/Leafs/Chili/sample_3.JPG",
+            "/samples/stage1/Leafs/Chili/sample_4.JPG",
+            "/samples/stage1/Leafs/Chili/sample_5.JPG",
+            "/samples/stage1/Leafs/Chili/sample_6.JPG",
+            "/samples/stage1/Leafs/Chili/sample_7.JPG",
+            "/samples/stage1/Leafs/Chili/sample_8.JPG",
+            "/samples/stage1/Leafs/Chili/sample_9.JPG",
+            "/samples/stage1/Leafs/Chili/sample_10.JPG"
+          ],
+          "classCountsDetail": {
+            "bacterial": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "cercospora": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "curl": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "healthy": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "whitespot": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            }
+          }
+        },
+        "Lady_Finger": {
+          "classes": [
+            "Alternaria_Leaf_Spot",
+            "Cercospora_Leaf_Spot",
+            "Downy_Mildew",
+            "Healthy",
+            "Leaf_curly_virus"
+          ],
+          "classCounts": {
+            "Alternaria_Leaf_Spot": 5000,
+            "Cercospora_Leaf_Spot": 5000,
+            "Downy_Mildew": 5000,
+            "Healthy": 6731,
+            "Leaf_curly_virus": 5000
+          },
+          "totalImages": 26731,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage1/Leafs/Lady_Finger/sample_1.JPG",
+            "/samples/stage1/Leafs/Lady_Finger/sample_2.JPG",
+            "/samples/stage1/Leafs/Lady_Finger/sample_3.JPG",
+            "/samples/stage1/Leafs/Lady_Finger/sample_4.JPG",
+            "/samples/stage1/Leafs/Lady_Finger/sample_5.JPG",
+            "/samples/stage1/Leafs/Lady_Finger/sample_6.JPG",
+            "/samples/stage1/Leafs/Lady_Finger/sample_7.JPG",
+            "/samples/stage1/Leafs/Lady_Finger/sample_8.JPG",
+            "/samples/stage1/Leafs/Lady_Finger/sample_9.JPG",
+            "/samples/stage1/Leafs/Lady_Finger/sample_10.JPG"
+          ],
+          "classCountsDetail": {
+            "Alternaria_Leaf_Spot": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Cercospora_Leaf_Spot": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Downy_Mildew": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Healthy": {
+              "actual": 251,
+              "normal": 3365,
+              "realtime": 3366
+            },
+            "Leaf_curly_virus": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            }
+          }
+        },
+        "Potato": {
+          "classes": [
+            "early_blight",
+            "healthy",
+            "late_blight",
+            "plant_pests",
+            "cyst_nematode"
+          ],
+          "classCounts": {
+            "early_blight": 5000,
+            "healthy": 8448,
+            "late_blight": 5000,
+            "plant_pests": 5000,
+            "cyst_nematode": 5000
+          },
+          "totalImages": 28448,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage1/Leafs/Potato/sample_1.JPG",
+            "/samples/stage1/Leafs/Potato/sample_2.jpg",
+            "/samples/stage1/Leafs/Potato/sample_3.jpeg",
+            "/samples/stage1/Leafs/Potato/sample_4.jpg",
+            "/samples/stage1/Leafs/Potato/sample_5.jpg",
+            "/samples/stage1/Leafs/Potato/sample_6.JPG",
+            "/samples/stage1/Leafs/Potato/sample_7.jpg",
+            "/samples/stage1/Leafs/Potato/sample_8.jpg",
+            "/samples/stage1/Leafs/Potato/sample_9.jpeg",
+            "/samples/stage1/Leafs/Potato/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "early_blight": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "healthy": {
+              "actual": 500,
+              "normal": 4224,
+              "realtime": 4224
+            },
+            "late_blight": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "plant_pests": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "cyst_nematode": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            }
+          }
+        },
+        "Tomato": {
+          "classes": [
+            "Early_blight",
+            "Late_blight",
+            "Septoria_leaf_spot",
+            "Bacterial_spot",
+            "healthy"
+          ],
+          "classCounts": {
+            "Early_blight": 5000,
+            "Late_blight": 5000,
+            "Septoria_leaf_spot": 5000,
+            "Bacterial_spot": 5000,
+            "healthy": 5000
+          },
+          "totalImages": 25000,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage1/Leafs/Tomato/sample_1.jpg",
+            "/samples/stage1/Leafs/Tomato/sample_2.jpg",
+            "/samples/stage1/Leafs/Tomato/sample_3.jpg",
+            "/samples/stage1/Leafs/Tomato/sample_4.jpg",
+            "/samples/stage1/Leafs/Tomato/sample_5.jpg",
+            "/samples/stage1/Leafs/Tomato/sample_6.jpg",
+            "/samples/stage1/Leafs/Tomato/sample_7.jpg",
+            "/samples/stage1/Leafs/Tomato/sample_8.jpg",
+            "/samples/stage1/Leafs/Tomato/sample_9.jpg",
+            "/samples/stage1/Leafs/Tomato/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "Early_blight": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Late_blight": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Septoria_leaf_spot": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Bacterial_spot": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "healthy": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            }
+          }
+        }
+      },
+      "Vegitables": {
+        "Bitter_Gourd": {
+          "classes": [
+            "healthy",
+            "unhealthy"
+          ],
+          "classCounts": {
+            "healthy": 7255,
+            "unhealthy": 5517
+          },
+          "totalImages": 12772,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage1/Vegitables/Bitter_Gourd/sample_1.jpg",
+            "/samples/stage1/Vegitables/Bitter_Gourd/sample_2.jpg",
+            "/samples/stage1/Vegitables/Bitter_Gourd/sample_3.jpg",
+            "/samples/stage1/Vegitables/Bitter_Gourd/sample_4.jpg",
+            "/samples/stage1/Vegitables/Bitter_Gourd/sample_5.jpg",
+            "/samples/stage1/Vegitables/Bitter_Gourd/sample_6.jpg",
+            "/samples/stage1/Vegitables/Bitter_Gourd/sample_7.jpg",
+            "/samples/stage1/Vegitables/Bitter_Gourd/sample_8.jpg",
+            "/samples/stage1/Vegitables/Bitter_Gourd/sample_9.jpg",
+            "/samples/stage1/Vegitables/Bitter_Gourd/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "healthy": {
+              "actual": 327,
+              "normal": 3627,
+              "realtime": 3628
+            },
+            "unhealthy": {
+              "actual": 75,
+              "normal": 2758,
+              "realtime": 2759
+            }
+          }
+        },
+        "Brinjal": {
+          "classes": [
+            "brinjal_fruit_creaking",
+            "healthy_brinjal",
+            "phomopsis_blight",
+            "shoot_and_fruit_borer",
+            "wet_rot"
+          ],
+          "classCounts": {
+            "brinjal_fruit_creaking": 5000,
+            "healthy_brinjal": 5206,
+            "phomopsis_blight": 5000,
+            "shoot_and_fruit_borer": 5206,
+            "wet_rot": 5206
+          },
+          "totalImages": 25618,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage1/Vegitables/Brinjal/sample_1.jpg",
+            "/samples/stage1/Vegitables/Brinjal/sample_2.jpg",
+            "/samples/stage1/Vegitables/Brinjal/sample_3.jpg",
+            "/samples/stage1/Vegitables/Brinjal/sample_4.jpg",
+            "/samples/stage1/Vegitables/Brinjal/sample_5.jpg",
+            "/samples/stage1/Vegitables/Brinjal/sample_6.jpg",
+            "/samples/stage1/Vegitables/Brinjal/sample_7.jpg",
+            "/samples/stage1/Vegitables/Brinjal/sample_8.jpg",
+            "/samples/stage1/Vegitables/Brinjal/sample_9.jpg",
+            "/samples/stage1/Vegitables/Brinjal/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "brinjal_fruit_creaking": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "healthy_brinjal": {
+              "actual": 30,
+              "normal": 2603,
+              "realtime": 2603
+            },
+            "phomopsis_blight": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "shoot_and_fruit_borer": {
+              "actual": 30,
+              "normal": 2603,
+              "realtime": 2603
+            },
+            "wet_rot": {
+              "actual": 30,
+              "normal": 2603,
+              "realtime": 2603
+            }
+          }
+        },
+        "Cauliflower": {
+          "classes": [
+            "Alternaria_Brassicae",
+            "Bacterial_Soft_Rot",
+            "Bacterial_Spot",
+            "Black_Spot",
+            "Healthy"
+          ],
+          "classCounts": {
+            "Alternaria_Brassicae": 5000,
+            "Bacterial_Soft_Rot": 5000,
+            "Bacterial_Spot": 5000,
+            "Black_Spot": 5000,
+            "Healthy": 9151
+          },
+          "totalImages": 29151,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage1/Vegitables/Cauliflower/sample_1.jpeg",
+            "/samples/stage1/Vegitables/Cauliflower/sample_2.jpg",
+            "/samples/stage1/Vegitables/Cauliflower/sample_3.jpeg",
+            "/samples/stage1/Vegitables/Cauliflower/sample_4.jpeg",
+            "/samples/stage1/Vegitables/Cauliflower/sample_5.png",
+            "/samples/stage1/Vegitables/Cauliflower/sample_6.png",
+            "/samples/stage1/Vegitables/Cauliflower/sample_7.jpeg",
+            "/samples/stage1/Vegitables/Cauliflower/sample_8.jpeg",
+            "/samples/stage1/Vegitables/Cauliflower/sample_9.jpeg",
+            "/samples/stage1/Vegitables/Cauliflower/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "Alternaria_Brassicae": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Bacterial_Soft_Rot": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Bacterial_Spot": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Black_Spot": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Healthy": {
+              "actual": 602,
+              "normal": 4575,
+              "realtime": 4576
+            }
+          }
+        },
+        "Cucumber": {
+          "classes": [
+            "healthy",
+            "unhealthy"
+          ],
+          "classCounts": {
+            "healthy": 5000,
+            "unhealthy": 5000
+          },
+          "totalImages": 10000,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage1/Vegitables/Cucumber/sample_1.jpg",
+            "/samples/stage1/Vegitables/Cucumber/sample_2.jpg",
+            "/samples/stage1/Vegitables/Cucumber/sample_3.jpg",
+            "/samples/stage1/Vegitables/Cucumber/sample_4.jpg",
+            "/samples/stage1/Vegitables/Cucumber/sample_5.jpg",
+            "/samples/stage1/Vegitables/Cucumber/sample_6.jpg",
+            "/samples/stage1/Vegitables/Cucumber/sample_7.jpg",
+            "/samples/stage1/Vegitables/Cucumber/sample_8.jpg",
+            "/samples/stage1/Vegitables/Cucumber/sample_9.jpg",
+            "/samples/stage1/Vegitables/Cucumber/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "healthy": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "unhealthy": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            }
+          }
+        },
+        "Ridge_Gourd": {
+          "classes": [
+            "healthy",
+            "unhealthy"
+          ],
+          "classCounts": {
+            "healthy": 5131,
+            "unhealthy": 5055
+          },
+          "totalImages": 10186,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage1/Vegitables/Ridge_Gourd/sample_1.jpg",
+            "/samples/stage1/Vegitables/Ridge_Gourd/sample_2.jpg",
+            "/samples/stage1/Vegitables/Ridge_Gourd/sample_3.jpg",
+            "/samples/stage1/Vegitables/Ridge_Gourd/sample_4.jpg",
+            "/samples/stage1/Vegitables/Ridge_Gourd/sample_5.jpg",
+            "/samples/stage1/Vegitables/Ridge_Gourd/sample_6.jpg",
+            "/samples/stage1/Vegitables/Ridge_Gourd/sample_7.jpg",
+            "/samples/stage1/Vegitables/Ridge_Gourd/sample_8.jpg",
+            "/samples/stage1/Vegitables/Ridge_Gourd/sample_9.jpg",
+            "/samples/stage1/Vegitables/Ridge_Gourd/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "healthy": {
+              "actual": 19,
+              "normal": 2565,
+              "realtime": 2566
+            },
+            "unhealthy": {
+              "actual": 8,
+              "normal": 2527,
+              "realtime": 2528
+            }
+          }
+        }
+      }
+    },
+    "totalImages": 460268
+  },
+  "stage2": {
+    "categories": {
+      "Flowers": {
+        "Chrysanthemums": {
+          "classes": [
+            "healthy",
+            "unhealthy"
+          ],
+          "classCounts": {
+            "healthy": 5150,
+            "unhealthy": 5150
+          },
+          "totalImages": 10300,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage2/Flowers/Chrysanthemums/sample_1.jpg",
+            "/samples/stage2/Flowers/Chrysanthemums/sample_2.jpg",
+            "/samples/stage2/Flowers/Chrysanthemums/sample_3.jpg",
+            "/samples/stage2/Flowers/Chrysanthemums/sample_4.jpg",
+            "/samples/stage2/Flowers/Chrysanthemums/sample_5.jpg",
+            "/samples/stage2/Flowers/Chrysanthemums/sample_6.jpg",
+            "/samples/stage2/Flowers/Chrysanthemums/sample_7.jpg",
+            "/samples/stage2/Flowers/Chrysanthemums/sample_8.jpg",
+            "/samples/stage2/Flowers/Chrysanthemums/sample_9.jpg",
+            "/samples/stage2/Flowers/Chrysanthemums/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "healthy": {
+              "actual": 150,
+              "normal": 2575,
+              "realtime": 2575
+            },
+            "unhealthy": {
+              "actual": 150,
+              "normal": 2575,
+              "realtime": 2575
+            }
+          }
+        },
+        "Jasmine": {
+          "classes": [
+            "Boreholes",
+            "Buds_changes_to_pink",
+            "Caterpillars_inside_bud",
+            "healthy",
+            "Infested_bud"
+          ],
+          "classCounts": {
+            "Boreholes": 5000,
+            "Buds_changes_to_pink": 5000,
+            "Caterpillars_inside_bud": 5000,
+            "healthy": 5015,
+            "Infested_bud": 5000
+          },
+          "totalImages": 25015,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage2/Flowers/Jasmine/sample_1.jpg",
+            "/samples/stage2/Flowers/Jasmine/sample_2.PNG",
+            "/samples/stage2/Flowers/Jasmine/sample_3.jpg",
+            "/samples/stage2/Flowers/Jasmine/sample_4.jpg",
+            "/samples/stage2/Flowers/Jasmine/sample_5.jpg",
+            "/samples/stage2/Flowers/Jasmine/sample_6.jpg",
+            "/samples/stage2/Flowers/Jasmine/sample_7.jpg",
+            "/samples/stage2/Flowers/Jasmine/sample_8.jpg",
+            "/samples/stage2/Flowers/Jasmine/sample_9.jpg",
+            "/samples/stage2/Flowers/Jasmine/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "Boreholes": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Buds_changes_to_pink": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Caterpillars_inside_bud": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "healthy": {
+              "actual": 15,
+              "normal": 2507,
+              "realtime": 2508
+            },
+            "Infested_bud": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            }
+          }
+        },
+        "Marigold": {
+          "classes": [
+            "healthy",
+            "unhealthy"
+          ],
+          "classCounts": {
+            "healthy": 5000,
+            "unhealthy": 5000
+          },
+          "totalImages": 10000,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage2/Flowers/Marigold/sample_1.jpg",
+            "/samples/stage2/Flowers/Marigold/sample_2.jpg",
+            "/samples/stage2/Flowers/Marigold/sample_3.jpg",
+            "/samples/stage2/Flowers/Marigold/sample_4.jpg",
+            "/samples/stage2/Flowers/Marigold/sample_5.jpg",
+            "/samples/stage2/Flowers/Marigold/sample_6.jpg",
+            "/samples/stage2/Flowers/Marigold/sample_7.jpg",
+            "/samples/stage2/Flowers/Marigold/sample_8.jpg",
+            "/samples/stage2/Flowers/Marigold/sample_9.jpg",
+            "/samples/stage2/Flowers/Marigold/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "healthy": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "unhealthy": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            }
+          }
+        },
+        "Roses": {
+          "classes": [
+            "Botrytis_Blight",
+            "Bud_Rot",
+            "Healthy",
+            "Petal_Blight",
+            "Thrips"
+          ],
+          "classCounts": {
+            "Botrytis_Blight": 5000,
+            "Bud_Rot": 5000,
+            "Healthy": 5000,
+            "Petal_Blight": 5000,
+            "Thrips": 5000
+          },
+          "totalImages": 25000,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage2/Flowers/Roses/sample_1.jpg",
+            "/samples/stage2/Flowers/Roses/sample_2.png",
+            "/samples/stage2/Flowers/Roses/sample_3.jpg",
+            "/samples/stage2/Flowers/Roses/sample_4.jpg",
+            "/samples/stage2/Flowers/Roses/sample_5.jpg",
+            "/samples/stage2/Flowers/Roses/sample_6.jpg",
+            "/samples/stage2/Flowers/Roses/sample_7.jpg",
+            "/samples/stage2/Flowers/Roses/sample_8.jpg",
+            "/samples/stage2/Flowers/Roses/sample_9.jpg",
+            "/samples/stage2/Flowers/Roses/sample_10.png"
+          ],
+          "classCountsDetail": {
+            "Botrytis_Blight": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Bud_Rot": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Healthy": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Petal_Blight": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Thrips": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            }
+          }
+        }
+      },
+      "Fruits": {
+        "Custard_Apple": {
+          "classes": [
+            "Athracnose",
+            "Blank_Canker",
+            "Diplodia_Rot",
+            "Healthy",
+            "Mealy_Bug"
+          ],
+          "classCounts": {
+            "Athracnose": 5000,
+            "Blank_Canker": 5000,
+            "Diplodia_Rot": 5000,
+            "Healthy": 5028,
+            "Mealy_Bug": 5000
+          },
+          "totalImages": 25028,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage2/Fruits/Custard_Apple/sample_1.jpg",
+            "/samples/stage2/Fruits/Custard_Apple/sample_2.jpg",
+            "/samples/stage2/Fruits/Custard_Apple/sample_3.jpg",
+            "/samples/stage2/Fruits/Custard_Apple/sample_4.jpg",
+            "/samples/stage2/Fruits/Custard_Apple/sample_5.jpg",
+            "/samples/stage2/Fruits/Custard_Apple/sample_6.jpg",
+            "/samples/stage2/Fruits/Custard_Apple/sample_7.jpg",
+            "/samples/stage2/Fruits/Custard_Apple/sample_8.jpg",
+            "/samples/stage2/Fruits/Custard_Apple/sample_9.jpg",
+            "/samples/stage2/Fruits/Custard_Apple/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "Athracnose": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Blank_Canker": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Diplodia_Rot": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Healthy": {
+              "actual": 28,
+              "normal": 2514,
+              "realtime": 2514
+            },
+            "Mealy_Bug": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            }
+          }
+        },
+        "Guava": {
+          "classes": [
+            "Anthracnose",
+            "Fruit_Fly",
+            "Healthy"
+          ],
+          "classCounts": {
+            "Anthracnose": 6080,
+            "Fruit_Fly": 5918,
+            "Healthy": 5000
+          },
+          "totalImages": 16998,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage2/Fruits/Guava/sample_1.png",
+            "/samples/stage2/Fruits/Guava/sample_2.png",
+            "/samples/stage2/Fruits/Guava/sample_3.jpg",
+            "/samples/stage2/Fruits/Guava/sample_4.png",
+            "/samples/stage2/Fruits/Guava/sample_5.png",
+            "/samples/stage2/Fruits/Guava/sample_6.jpg",
+            "/samples/stage2/Fruits/Guava/sample_7.png",
+            "/samples/stage2/Fruits/Guava/sample_8.png",
+            "/samples/stage2/Fruits/Guava/sample_9.jpg",
+            "/samples/stage2/Fruits/Guava/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "Anthracnose": {
+              "actual": 1080,
+              "normal": 3040,
+              "realtime": 3040
+            },
+            "Fruit_Fly": {
+              "actual": 918,
+              "normal": 2959,
+              "realtime": 2959
+            },
+            "Healthy": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            }
+          }
+        },
+        "Lemon": {
+          "classes": [
+            "black_spot",
+            "citrus_canker",
+            "greening",
+            "healthy",
+            "lemon_scab"
+          ],
+          "classCounts": {
+            "black_spot": 5000,
+            "citrus_canker": 5000,
+            "greening": 5000,
+            "healthy": 5000,
+            "lemon_scab": 5000
+          },
+          "totalImages": 25000,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage2/Fruits/Lemon/sample_1.jpg",
+            "/samples/stage2/Fruits/Lemon/sample_2.jpg",
+            "/samples/stage2/Fruits/Lemon/sample_3.jpg",
+            "/samples/stage2/Fruits/Lemon/sample_4.jpg",
+            "/samples/stage2/Fruits/Lemon/sample_5.jpg",
+            "/samples/stage2/Fruits/Lemon/sample_6.jpg",
+            "/samples/stage2/Fruits/Lemon/sample_7.jpg",
+            "/samples/stage2/Fruits/Lemon/sample_8.jpg",
+            "/samples/stage2/Fruits/Lemon/sample_9.jpg",
+            "/samples/stage2/Fruits/Lemon/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "black_spot": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "citrus_canker": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "greening": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "healthy": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "lemon_scab": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            }
+          }
+        },
+        "Pomegranate": {
+          "classes": [
+            "Alternaria",
+            "Anthracnose",
+            "Bacterial_Blight",
+            "Cercospora",
+            "Healthy"
+          ],
+          "classCounts": {
+            "Alternaria": 5886,
+            "Anthracnose": 6166,
+            "Bacterial_Blight": 5966,
+            "Cercospora": 5631,
+            "Healthy": 6450
+          },
+          "totalImages": 30099,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage2/Fruits/Pomegranate/sample_1.jpg",
+            "/samples/stage2/Fruits/Pomegranate/sample_2.jpg",
+            "/samples/stage2/Fruits/Pomegranate/sample_3.jpg",
+            "/samples/stage2/Fruits/Pomegranate/sample_4.jpg",
+            "/samples/stage2/Fruits/Pomegranate/sample_5.jpg",
+            "/samples/stage2/Fruits/Pomegranate/sample_6.jpg",
+            "/samples/stage2/Fruits/Pomegranate/sample_7.jpg",
+            "/samples/stage2/Fruits/Pomegranate/sample_8.jpg",
+            "/samples/stage2/Fruits/Pomegranate/sample_9.jpg",
+            "/samples/stage2/Fruits/Pomegranate/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "Alternaria": {
+              "actual": 886,
+              "normal": 2943,
+              "realtime": 2943
+            },
+            "Anthracnose": {
+              "actual": 1166,
+              "normal": 3083,
+              "realtime": 3083
+            },
+            "Bacterial_Blight": {
+              "actual": 966,
+              "normal": 2983,
+              "realtime": 2983
+            },
+            "Cercospora": {
+              "actual": 631,
+              "normal": 2815,
+              "realtime": 2816
+            },
+            "Healthy": {
+              "actual": 1450,
+              "normal": 3225,
+              "realtime": 3225
+            }
+          }
+        },
+        "Tomato": {
+          "classes": [
+            "healthy",
+            "unhealthy"
+          ],
+          "classCounts": {
+            "healthy": 5000,
+            "unhealthy": 5000
+          },
+          "totalImages": 10000,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage2/Fruits/Tomato/sample_1.jpg",
+            "/samples/stage2/Fruits/Tomato/sample_2.jpg",
+            "/samples/stage2/Fruits/Tomato/sample_3.jpg",
+            "/samples/stage2/Fruits/Tomato/sample_4.jpg",
+            "/samples/stage2/Fruits/Tomato/sample_5.jpg",
+            "/samples/stage2/Fruits/Tomato/sample_6.png",
+            "/samples/stage2/Fruits/Tomato/sample_7.png",
+            "/samples/stage2/Fruits/Tomato/sample_8.jpg",
+            "/samples/stage2/Fruits/Tomato/sample_9.jpg",
+            "/samples/stage2/Fruits/Tomato/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "healthy": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "unhealthy": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            }
+          }
+        }
+      },
+      "Leafs": {
+        "Brinjal": {
+          "classes": [
+            "Healthy Leaf",
+            "Insect Pest Disease",
+            "Leaf Spot Disease",
+            "Mosaic Virus Disease",
+            "Wilt Disease"
+          ],
+          "classCounts": {
+            "Healthy Leaf": 5550,
+            "Insect Pest Disease": 5550,
+            "Leaf Spot Disease": 5550,
+            "Mosaic Virus Disease": 5550,
+            "Wilt Disease": 5550
+          },
+          "totalImages": 27750,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage2/Leafs/Brinjal/sample_1.jpg",
+            "/samples/stage2/Leafs/Brinjal/sample_2.jpg",
+            "/samples/stage2/Leafs/Brinjal/sample_3.jpg",
+            "/samples/stage2/Leafs/Brinjal/sample_4.jpg",
+            "/samples/stage2/Leafs/Brinjal/sample_5.jpg",
+            "/samples/stage2/Leafs/Brinjal/sample_6.jpg",
+            "/samples/stage2/Leafs/Brinjal/sample_7.jpg",
+            "/samples/stage2/Leafs/Brinjal/sample_8.jpg",
+            "/samples/stage2/Leafs/Brinjal/sample_9.jpg",
+            "/samples/stage2/Leafs/Brinjal/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "Healthy Leaf": {
+              "actual": 550,
+              "normal": 2775,
+              "realtime": 2775
+            },
+            "Insect Pest Disease": {
+              "actual": 550,
+              "normal": 2775,
+              "realtime": 2775
+            },
+            "Leaf Spot Disease": {
+              "actual": 550,
+              "normal": 2775,
+              "realtime": 2775
+            },
+            "Mosaic Virus Disease": {
+              "actual": 550,
+              "normal": 2775,
+              "realtime": 2775
+            },
+            "Wilt Disease": {
+              "actual": 550,
+              "normal": 2775,
+              "realtime": 2775
+            }
+          }
+        },
+        "Chili": {
+          "classes": [
+            "bacterial",
+            "cercospora",
+            "curl",
+            "healthy",
+            "whitespot"
+          ],
+          "classCounts": {
+            "bacterial": 5000,
+            "cercospora": 5000,
+            "curl": 5000,
+            "healthy": 5000,
+            "whitespot": 5000
+          },
+          "totalImages": 25000,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage2/Leafs/Chili/sample_1.JPG",
+            "/samples/stage2/Leafs/Chili/sample_2.JPG",
+            "/samples/stage2/Leafs/Chili/sample_3.jpg",
+            "/samples/stage2/Leafs/Chili/sample_4.JPG",
+            "/samples/stage2/Leafs/Chili/sample_5.jpg",
+            "/samples/stage2/Leafs/Chili/sample_6.JPG",
+            "/samples/stage2/Leafs/Chili/sample_7.JPG",
+            "/samples/stage2/Leafs/Chili/sample_8.JPG",
+            "/samples/stage2/Leafs/Chili/sample_9.JPG",
+            "/samples/stage2/Leafs/Chili/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "bacterial": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "cercospora": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "curl": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "healthy": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "whitespot": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            }
+          }
+        },
+        "Lady_Finger": {
+          "classes": [
+            "Alternaria_Leaf_Spot",
+            "Cercospora_Leaf_Spot",
+            "Downy_Mildew",
+            "Healthy",
+            "Leaf_curly_virus"
+          ],
+          "classCounts": {
+            "Alternaria_Leaf_Spot": 5000,
+            "Cercospora_Leaf_Spot": 5000,
+            "Downy_Mildew": 5000,
+            "Healthy": 5251,
+            "Leaf_curly_virus": 5000
+          },
+          "totalImages": 25251,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage2/Leafs/Lady_Finger/sample_1.jpg",
+            "/samples/stage2/Leafs/Lady_Finger/sample_2.JPG",
+            "/samples/stage2/Leafs/Lady_Finger/sample_3.jpg",
+            "/samples/stage2/Leafs/Lady_Finger/sample_4.jpg",
+            "/samples/stage2/Leafs/Lady_Finger/sample_5.JPG",
+            "/samples/stage2/Leafs/Lady_Finger/sample_6.JPG",
+            "/samples/stage2/Leafs/Lady_Finger/sample_7.JPG",
+            "/samples/stage2/Leafs/Lady_Finger/sample_8.jpg",
+            "/samples/stage2/Leafs/Lady_Finger/sample_9.jpg",
+            "/samples/stage2/Leafs/Lady_Finger/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "Alternaria_Leaf_Spot": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Cercospora_Leaf_Spot": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Downy_Mildew": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Healthy": {
+              "actual": 251,
+              "normal": 2625,
+              "realtime": 2626
+            },
+            "Leaf_curly_virus": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            }
+          }
+        },
+        "Potato": {
+          "classes": [
+            "early_blight",
+            "healthy",
+            "late_blight",
+            "plant_pests",
+            "cyst_nematode"
+          ],
+          "classCounts": {
+            "early_blight": 5000,
+            "healthy": 5000,
+            "late_blight": 5000,
+            "plant_pests": 5000,
+            "cyst_nematode": 5000
+          },
+          "totalImages": 25000,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage2/Leafs/Potato/sample_1.jpg",
+            "/samples/stage2/Leafs/Potato/sample_2.jpg",
+            "/samples/stage2/Leafs/Potato/sample_3.jpg",
+            "/samples/stage2/Leafs/Potato/sample_4.jpg",
+            "/samples/stage2/Leafs/Potato/sample_5.jpg",
+            "/samples/stage2/Leafs/Potato/sample_6.jpg",
+            "/samples/stage2/Leafs/Potato/sample_7.jpg",
+            "/samples/stage2/Leafs/Potato/sample_8.jpg",
+            "/samples/stage2/Leafs/Potato/sample_9.jpg",
+            "/samples/stage2/Leafs/Potato/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "early_blight": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "healthy": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "late_blight": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "plant_pests": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "cyst_nematode": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            }
+          }
+        },
+        "Tomato": {
+          "classes": [
+            "Healthy",
+            "Tomato Early blight leaf",
+            "Tomato leaf bacterial spot",
+            "Tomato leaf late blight",
+            "Tomato leaf yellow virus",
+            "Tomato mold leaf",
+            "Tomato Septoria leaf spot"
+          ],
+          "classCounts": {
+            "Healthy": 5053,
+            "Tomato Early blight leaf": 5074,
+            "Tomato leaf bacterial spot": 5098,
+            "Tomato leaf late blight": 5101,
+            "Tomato leaf yellow virus": 5069,
+            "Tomato mold leaf": 5085,
+            "Tomato Septoria leaf spot": 5137
+          },
+          "totalImages": 35617,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage2/Leafs/Tomato/sample_1.jpg",
+            "/samples/stage2/Leafs/Tomato/sample_2.jpg",
+            "/samples/stage2/Leafs/Tomato/sample_3.jpg",
+            "/samples/stage2/Leafs/Tomato/sample_4.jpg",
+            "/samples/stage2/Leafs/Tomato/sample_5.jpg",
+            "/samples/stage2/Leafs/Tomato/sample_6.jpg",
+            "/samples/stage2/Leafs/Tomato/sample_7.jpg",
+            "/samples/stage2/Leafs/Tomato/sample_8.jpg",
+            "/samples/stage2/Leafs/Tomato/sample_9.jpg",
+            "/samples/stage2/Leafs/Tomato/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "Healthy": {
+              "actual": 53,
+              "normal": 2526,
+              "realtime": 2527
+            },
+            "Tomato Early blight leaf": {
+              "actual": 74,
+              "normal": 2537,
+              "realtime": 2537
+            },
+            "Tomato leaf bacterial spot": {
+              "actual": 98,
+              "normal": 2549,
+              "realtime": 2549
+            },
+            "Tomato leaf late blight": {
+              "actual": 101,
+              "normal": 2550,
+              "realtime": 2551
+            },
+            "Tomato leaf yellow virus": {
+              "actual": 69,
+              "normal": 2534,
+              "realtime": 2535
+            },
+            "Tomato mold leaf": {
+              "actual": 85,
+              "normal": 2542,
+              "realtime": 2543
+            },
+            "Tomato Septoria leaf spot": {
+              "actual": 137,
+              "normal": 2568,
+              "realtime": 2569
+            }
+          }
+        }
+      },
+      "Vegitables": {
+        "Bitter_Gourd": {
+          "classes": [
+            "healthy",
+            "unhealthy"
+          ],
+          "classCounts": {
+            "healthy": 5327,
+            "unhealthy": 5075
+          },
+          "totalImages": 10402,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage2/Vegitables/Bitter_Gourd/sample_1.jpg",
+            "/samples/stage2/Vegitables/Bitter_Gourd/sample_2.jpg",
+            "/samples/stage2/Vegitables/Bitter_Gourd/sample_3.jpg",
+            "/samples/stage2/Vegitables/Bitter_Gourd/sample_4.jpg",
+            "/samples/stage2/Vegitables/Bitter_Gourd/sample_5.jpg",
+            "/samples/stage2/Vegitables/Bitter_Gourd/sample_6.jpg",
+            "/samples/stage2/Vegitables/Bitter_Gourd/sample_7.jpg",
+            "/samples/stage2/Vegitables/Bitter_Gourd/sample_8.jpg",
+            "/samples/stage2/Vegitables/Bitter_Gourd/sample_9.jpg",
+            "/samples/stage2/Vegitables/Bitter_Gourd/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "healthy": {
+              "actual": 327,
+              "normal": 2663,
+              "realtime": 2664
+            },
+            "unhealthy": {
+              "actual": 75,
+              "normal": 2537,
+              "realtime": 2538
+            }
+          }
+        },
+        "Brinjal": {
+          "classes": [
+            "brinjal_fruit_creaking",
+            "healthy_brinjal",
+            "phomopsis_bright",
+            "shoot_and_fruit_borer",
+            "wet_rot"
+          ],
+          "classCounts": {
+            "brinjal_fruit_creaking": 5080,
+            "healthy_brinjal": 5080,
+            "phomopsis_bright": 5080,
+            "shoot_and_fruit_borer": 5080,
+            "wet_rot": 5080
+          },
+          "totalImages": 25400,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage2/Vegitables/Brinjal/sample_1.jpg",
+            "/samples/stage2/Vegitables/Brinjal/sample_2.jpg",
+            "/samples/stage2/Vegitables/Brinjal/sample_3.jpg",
+            "/samples/stage2/Vegitables/Brinjal/sample_4.jpg",
+            "/samples/stage2/Vegitables/Brinjal/sample_5.jpg",
+            "/samples/stage2/Vegitables/Brinjal/sample_6.jpg",
+            "/samples/stage2/Vegitables/Brinjal/sample_7.jpg",
+            "/samples/stage2/Vegitables/Brinjal/sample_8.jpg",
+            "/samples/stage2/Vegitables/Brinjal/sample_9.jpg",
+            "/samples/stage2/Vegitables/Brinjal/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "brinjal_fruit_creaking": {
+              "actual": 80,
+              "normal": 2540,
+              "realtime": 2540
+            },
+            "healthy_brinjal": {
+              "actual": 80,
+              "normal": 2540,
+              "realtime": 2540
+            },
+            "phomopsis_bright": {
+              "actual": 80,
+              "normal": 2540,
+              "realtime": 2540
+            },
+            "shoot_and_fruit_borer": {
+              "actual": 80,
+              "normal": 2540,
+              "realtime": 2540
+            },
+            "wet_rot": {
+              "actual": 80,
+              "normal": 2540,
+              "realtime": 2540
+            }
+          }
+        },
+        "Cauliflower": {
+          "classes": [
+            "Alternaria_Brassicae",
+            "Bacterial_Soft_Rot",
+            "Bacterial_Spot",
+            "Black_Spot",
+            "Healthy"
+          ],
+          "classCounts": {
+            "Alternaria_Brassicae": 5000,
+            "Bacterial_Soft_Rot": 5000,
+            "Bacterial_Spot": 5000,
+            "Black_Spot": 5000,
+            "Healthy": 5602
+          },
+          "totalImages": 25602,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage2/Vegitables/Cauliflower/sample_1.jpeg",
+            "/samples/stage2/Vegitables/Cauliflower/sample_2.jpeg",
+            "/samples/stage2/Vegitables/Cauliflower/sample_3.jpg",
+            "/samples/stage2/Vegitables/Cauliflower/sample_4.jpeg",
+            "/samples/stage2/Vegitables/Cauliflower/sample_5.jpeg",
+            "/samples/stage2/Vegitables/Cauliflower/sample_6.jpeg",
+            "/samples/stage2/Vegitables/Cauliflower/sample_7.jpeg",
+            "/samples/stage2/Vegitables/Cauliflower/sample_8.jpeg",
+            "/samples/stage2/Vegitables/Cauliflower/sample_9.jpg",
+            "/samples/stage2/Vegitables/Cauliflower/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "Alternaria_Brassicae": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Bacterial_Soft_Rot": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Bacterial_Spot": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Black_Spot": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "Healthy": {
+              "actual": 602,
+              "normal": 2801,
+              "realtime": 2801
+            }
+          }
+        },
+        "Cucumber": {
+          "classes": [
+            "healthy",
+            "belly_rot",
+            "pythium_fruit_rot"
+          ],
+          "classCounts": {
+            "healthy": 5000,
+            "belly_rot": 5000,
+            "pythium_fruit_rot": 5000
+          },
+          "totalImages": 15000,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage2/Vegitables/Cucumber/sample_1.jpg",
+            "/samples/stage2/Vegitables/Cucumber/sample_2.jpg",
+            "/samples/stage2/Vegitables/Cucumber/sample_3.jpg",
+            "/samples/stage2/Vegitables/Cucumber/sample_4.jpg",
+            "/samples/stage2/Vegitables/Cucumber/sample_5.jpg",
+            "/samples/stage2/Vegitables/Cucumber/sample_6.jpg",
+            "/samples/stage2/Vegitables/Cucumber/sample_7.jpg",
+            "/samples/stage2/Vegitables/Cucumber/sample_8.jpg",
+            "/samples/stage2/Vegitables/Cucumber/sample_9.jpg",
+            "/samples/stage2/Vegitables/Cucumber/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "healthy": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "belly_rot": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "pythium_fruit_rot": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            }
+          }
+        },
+        "Ridge_Gourd": {
+          "classes": [
+            "anthracnose",
+            "downy_mildew",
+            "healthy",
+            "powdery_mildew"
+          ],
+          "classCounts": {
+            "anthracnose": 5000,
+            "downy_mildew": 5000,
+            "healthy": 5019,
+            "powdery_mildew": 5000
+          },
+          "totalImages": 20019,
+          "splits": null,
+          "sampleImages": [
+            "/samples/stage2/Vegitables/Ridge_Gourd/sample_1.jpg",
+            "/samples/stage2/Vegitables/Ridge_Gourd/sample_2.jpg",
+            "/samples/stage2/Vegitables/Ridge_Gourd/sample_3.jpg",
+            "/samples/stage2/Vegitables/Ridge_Gourd/sample_4.jpg",
+            "/samples/stage2/Vegitables/Ridge_Gourd/sample_5.jpg",
+            "/samples/stage2/Vegitables/Ridge_Gourd/sample_6.jpg",
+            "/samples/stage2/Vegitables/Ridge_Gourd/sample_7.jpg",
+            "/samples/stage2/Vegitables/Ridge_Gourd/sample_8.jpg",
+            "/samples/stage2/Vegitables/Ridge_Gourd/sample_9.jpg",
+            "/samples/stage2/Vegitables/Ridge_Gourd/sample_10.jpg"
+          ],
+          "classCountsDetail": {
+            "anthracnose": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "downy_mildew": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            },
+            "healthy": {
+              "actual": 19,
+              "normal": 2509,
+              "realtime": 2510
+            },
+            "powdery_mildew": {
+              "actual": 0,
+              "normal": 2500,
+              "realtime": 2500
+            }
+          }
+        }
+      }
+    },
+    "totalImages": 412481
+  },
+  "additional": {
+    "Vegetable_Spinach_Identification": {
+      "train": {
+        "classes": [
+          "beetroot",
+          "bell pepper",
+          "cabbage",
+          "capsicum",
+          "carrot",
+          "cauliflower",
+          "chilli pepper",
+          "corn",
+          "cucumber",
+          "eggplant",
+          "garlic",
+          "ginger",
+          "jalepeno",
+          "lemon",
+          "lettuce",
+          "onion",
+          "paprika",
+          "peas",
+          "potato",
+          "raddish",
+          "soy beans",
+          "spinach",
+          "sweetcorn",
+          "sweetpotato",
+          "tomato",
+          "turnip"
+        ],
+        "totalImages": 2278
+      },
+      "validation": {
+        "classes": [
+          "beetroot",
+          "bell pepper",
+          "cabbage",
+          "capsicum",
+          "carrot",
+          "cauliflower",
+          "chilli pepper",
+          "corn",
+          "cucumber",
+          "eggplant",
+          "garlic",
+          "ginger",
+          "jalepeno",
+          "lemon",
+          "lettuce",
+          "onion",
+          "paprika",
+          "peas",
+          "potato",
+          "raddish",
+          "soy beans",
+          "spinach",
+          "sweetcorn",
+          "sweetpotato",
+          "tomato",
+          "turnip"
+        ],
+        "totalImages": 254
+      },
+      "test": {
+        "classes": [
+          "beetroot",
+          "bell pepper",
+          "cabbage",
+          "capsicum",
+          "carrot",
+          "cauliflower",
+          "chilli pepper",
+          "corn",
+          "cucumber",
+          "eggplant",
+          "garlic",
+          "ginger",
+          "jalepeno",
+          "lemon",
+          "lettuce",
+          "onion",
+          "paprika",
+          "peas",
+          "potato",
+          "raddish",
+          "soy beans",
+          "spinach",
+          "sweetcorn",
+          "sweetpotato",
+          "tomato",
+          "turnip"
+        ],
+        "totalImages": 260
+      },
+      "totalImages": 2792
+    },
+    "Dracaena_Plant": {
+      "classes": [
+        "Anthracnose",
+        "Leaf Spot",
+        "Phyllosticta Leaf",
+        "Yellowing leaves",
+        "insect bite"
+      ],
+      "totalImages": 25150,
+      "classCounts": {
+        "Anthracnose": 5030,
+        "Leaf Spot": 5030,
+        "Phyllosticta Leaf": 5030,
+        "Yellowing leaves": 5030,
+        "insect bite": 5030
+      },
+      "classCountsDetail": {
+        "Anthracnose": {
+          "actual": 30,
+          "normal": 2515,
+          "realtime": 2515
+        },
+        "Leaf Spot": {
+          "actual": 30,
+          "normal": 2515,
+          "realtime": 2515
+        },
+        "Phyllosticta Leaf": {
+          "actual": 30,
+          "normal": 2515,
+          "realtime": 2515
+        },
+        "Yellowing leaves": {
+          "actual": 30,
+          "normal": 2515,
+          "realtime": 2515
+        },
+        "insect bite": {
+          "actual": 30,
+          "normal": 2515,
+          "realtime": 2515
+        }
+      }
+    },
+    "Indoor_Potted_Plant": {
+      "train": {
+        "classes": {
+          "Aloe_Anthracnose": 3007,
+          "Aloe_Healthy": 4286,
+          "Aloe_LeafSpot": 3024,
+          "Aloe_Rust": 1552,
+          "Aloe_Sunburn": 3053,
+          "Cactus_Dactylopius_Opuntia": 274,
+          "Cactus_Healthy": 228,
+          "Money_Plant_Bacterial_wilt_disease": 135,
+          "Money_Plant_Healthy": 186,
+          "Money_Plant_Manganese_Toxicity": 144,
+          "Snake_Plant_Anthracnose": 177,
+          "Snake_Plant_Healthy": 189,
+          "Snake_Plant_Leaf_Withering": 165,
+          "Spider_Plant_Fungal_leaf_spot": 189,
+          "Spider_Plant_Healthy": 207,
+          "Spider_Plant_Leaf_Tip_Necrosis": 192
+        },
+        "totalImages": 17008
+      },
+      "test": {
+        "classes": {
+          "Aloe_Anthracnose": 377,
+          "Aloe_Healthy": 537,
+          "Aloe_LeafSpot": 378,
+          "Aloe_Rust": 195,
+          "Aloe_Sunburn": 383,
+          "Cactus_Dactylopius_Opuntia": 35,
+          "Cactus_Healthy": 29,
+          "Money_Plant_Bacterial_wilt_disease": 4,
+          "Money_Plant_Healthy": 12,
+          "Money_Plant_Manganese_Toxicity": 9,
+          "Snake_Plant_Anthracnose": 6,
+          "Snake_Plant_Healthy": 10,
+          "Snake_Plant_Leaf_Withering": 12,
+          "Spider_Plant_Fungal_leaf_spot": 9,
+          "Spider_Plant_Healthy": 7,
+          "Spider_Plant_Leaf_Tip_Necrosis": 8
+        },
+        "totalImages": 2011
+      },
+      "valid": {
+        "classes": {
+          "Aloe_Anthracnose": 375,
+          "Aloe_Healthy": 535,
+          "Aloe_LeafSpot": 378,
+          "Aloe_Rust": 194,
+          "Aloe_Sunburn": 381,
+          "Cactus_Dactylopius_Opuntia": 34,
+          "Cactus_Healthy": 28,
+          "Money_Plant_Bacterial_wilt_disease": 10,
+          "Money_Plant_Healthy": 19,
+          "Money_Plant_Manganese_Toxicity": 23,
+          "Snake_Plant_Anthracnose": 16,
+          "Snake_Plant_Healthy": 16,
+          "Snake_Plant_Leaf_Withering": 19,
+          "Spider_Plant_Fungal_leaf_spot": 15,
+          "Spider_Plant_Healthy": 16,
+          "Spider_Plant_Leaf_Tip_Necrosis": 19
+        },
+        "totalImages": 2078
+      },
+      "totalImages": 21097
+    },
+    "Plant_Identification": {
+      "Aloe_Vera": {
+        "classes": [
+          "01_aloe_vera.jpg",
+          "02_aloe_vera.jpg",
+          "03_aloe_vera.jpg",
+          "04_aloe_vera.jpg",
+          "05_aloe_vera.jpg",
+          "06_aloe_vera.jpg",
+          "07_aloe_vera.jpg",
+          "08_aloe_vera.jpg",
+          "09_aloe_vera.jpg",
+          "10_aloe_vera.jpg",
+          "11_aloe_vera.jpg",
+          "12_aloe_vera.jpg",
+          "13_aloe_vera.jpg",
+          "14_aloe_vera.jpg",
+          "15_aloe_vera.jpg",
+          "16_aloe_vera.jpg",
+          "17_aloe_vera.jpg",
+          "18_aloe_vera.jpg",
+          "19_aloe_vera.jpg",
+          "20_aloe_vera.jpg",
+          "21_aloe_vera.jpg",
+          "22_aloe_vera.jpg",
+          "23_aloe_vera.jpg",
+          "24_aloe_vera.jpg",
+          "25_aloe_vera.jpg",
+          "26_aloe_vera.jpg",
+          "27_aloe_vera.jpg",
+          "28_aloe_vera.jpg",
+          "29_aloe_vera.jpg",
+          "30_aloe_vera.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Apple": {
+        "classes": [
+          "01_apple.jpg",
+          "02_apple.jpg",
+          "03_apple.jpg",
+          "04_apple.jpg",
+          "05_apple.jpg",
+          "06_apple.jpg",
+          "07_apple.jpg",
+          "08_apple.jpg",
+          "09_apple.jpg",
+          "10_apple.jpg",
+          "11_apple.jpg",
+          "12_apple.jpg",
+          "13_apple.jpg",
+          "14_apple.jpg",
+          "15_apple.jpg",
+          "16_apple.jpg",
+          "17_apple.jpg",
+          "18_apple.jpg",
+          "19_apple.jpg",
+          "20_apple.jpg",
+          "21_apple.jpg",
+          "22_apple.jpg",
+          "23_apple.jpg",
+          "24_apple.jpg",
+          "25_apple.jpg",
+          "26_apple.jpg",
+          "27_apple.jpg",
+          "28_apple.jpg",
+          "29_apple.jpg",
+          "30_apple.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Ashoka": {
+        "classes": [
+          "01_ashoka.jpg",
+          "02_ashoka.jpg",
+          "03_ashoka.jpg",
+          "04_ashoka.jpg",
+          "05_ashoka.jpg",
+          "06_ashoka.jpg",
+          "07_ashoka.jpg",
+          "08_ashoka.jpg",
+          "09_ashoka.jpg",
+          "10_ashoka.jpg",
+          "11_ashoka.jpg",
+          "12_ashoka.jpg",
+          "13_ashoka.jpg",
+          "14_ashoka.jpg",
+          "15_ashoka.jpg",
+          "16_ashoka.jpg",
+          "17_ashoka.jpg",
+          "18_ashoka.jpg",
+          "19_ashoka.jpg",
+          "20_ashoka.jpg",
+          "21_ashoka.jpg",
+          "22_ashoka.jpg",
+          "23_ashoka.jpg",
+          "24_ashoka.jpg",
+          "25_ashoka.jpg",
+          "26_ashoka.jpg",
+          "27_ashoka.jpg",
+          "28_ashoka.jpg",
+          "29_ashoka.jpg",
+          "30_ashoka.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Ashwagandha": {
+        "classes": [
+          "01_ashwagandha.jpg",
+          "02_ashwagandha.jpg",
+          "03_ashwagandha.jpg",
+          "04_ashwagandha.jpg",
+          "05_ashwagandha.jpg",
+          "06_ashwagandha.jpg",
+          "07_ashwagandha.jpg",
+          "08_ashwagandha.jpg",
+          "09_ashwagandha.jpg",
+          "10_ashwagandha.jpg",
+          "11_ashwagandha.jpg",
+          "12_ashwagandha.jpg",
+          "13_ashwagandha.jpg",
+          "14_ashwagandha.jpg",
+          "15_ashwagandha.jpg",
+          "16_ashwagandha.jpg",
+          "17_ashwagandha.jpg",
+          "18_ashwagandha.jpg",
+          "19_ashwagandha.jpg",
+          "20_ashwagandha.jpg",
+          "21_ashwagandha.jpg",
+          "22_ashwagandha.jpg",
+          "23_ashwagandha.jpg",
+          "24_ashwagandha.jpg",
+          "25_ashwagandha.jpg",
+          "26_ashwagandha.jpg",
+          "27_ashwagandha.jpg",
+          "28_ashwagandha.jpg",
+          "29_ashwagandha.jpg",
+          "30_ashwagandha.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Avocado": {
+        "classes": [
+          "01_avocado.jpg",
+          "02_avocado.jpg",
+          "03_avocado.jpg",
+          "04_avocado.jpg",
+          "05_avocado.jpg",
+          "06_avocado.jpg",
+          "07_avocado.jpg",
+          "08_avocado.jpg",
+          "09_avocado.jpg",
+          "10_avocado.jpg",
+          "11_avocado.jpg",
+          "12_avocado.jpg",
+          "13_avocado.jpg",
+          "14_avocado.jpg",
+          "15_avocado.jpg",
+          "16_avocado.jpg",
+          "17_avocado.jpg",
+          "18_avocado.jpg",
+          "19_avocado.jpg",
+          "20_avocado.jpg",
+          "21_avocado.jpg",
+          "22_avocado.jpg",
+          "23_avocado.jpg",
+          "24_avocado.jpg",
+          "25_avocado.jpg",
+          "26_avocado.jpg",
+          "27_avocado.jpg",
+          "28_avocado.jpg",
+          "29_avocado.jpg",
+          "30_avocado.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Bael": {
+        "classes": [
+          "01_bael.jpg",
+          "02_bael.jpg",
+          "03_bael.jpg",
+          "04_bael.jpg",
+          "05_bael.jpg",
+          "06_bael.jpg",
+          "07_bael.jpg",
+          "08_bael.jpg",
+          "09_bael.jpg",
+          "10_bael.jpg",
+          "11_bael.jpg",
+          "12_bael.jpg",
+          "13_bael.jpg",
+          "14_bael.jpg",
+          "15_bael.jpg",
+          "16_bael.jpg",
+          "17_bael.jpg",
+          "18_bael.jpg",
+          "19_bael.jpg",
+          "20_bael.jpg",
+          "21_bael.jpg",
+          "22_bael.jpg",
+          "23_bael.jpg",
+          "24_bael.jpg",
+          "25_bael.jpg",
+          "26_bael.jpg",
+          "27_bael.jpg",
+          "28_bael.jpg",
+          "29_bael.jpg",
+          "30_bael.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Bamboo": {
+        "classes": [
+          "01_bamboo.jpg",
+          "02_bamboo.jpg",
+          "03_bamboo.jpg",
+          "04_bamboo.jpg",
+          "05_bamboo.jpg",
+          "06_bamboo.jpg",
+          "07_bamboo.jpg",
+          "08_bamboo.jpg",
+          "09_bamboo.jpg",
+          "10_bamboo.jpg",
+          "11_bamboo.jpg",
+          "12_bamboo.jpg",
+          "13_bamboo.jpg",
+          "14_bamboo.jpg",
+          "15_bamboo.jpg",
+          "16_bamboo.jpg",
+          "17_bamboo.jpg",
+          "18_bamboo.jpg",
+          "19_bamboo.jpg",
+          "20_bamboo.jpg",
+          "21_bamboo.jpg",
+          "22_bamboo.jpg",
+          "23_bamboo.jpg",
+          "24_bamboo.jpg",
+          "25_bamboo.jpg",
+          "26_bamboo.jpg",
+          "27_bamboo.jpg",
+          "28_bamboo.jpg",
+          "29_bamboo.webp",
+          "30_bamboo.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Banana": {
+        "classes": [
+          "01_banana.jpg",
+          "02_banana.jpg",
+          "03_banana.jpg",
+          "04_banana.jpg",
+          "05_banana.jpg",
+          "06_banana.jpg",
+          "07_banana.jpg",
+          "08_banana.jpg",
+          "09_banana.jpg",
+          "10_banana.jpg",
+          "11_banana.jpg",
+          "12_banana.jpg",
+          "13_banana.jpg",
+          "14_banana.jpg",
+          "15_banana.jpg",
+          "16_banana.jpg",
+          "17_banana.jpg",
+          "18_banana.jpg",
+          "19_banana.jpg",
+          "20_banana.jpg",
+          "21_banana.jpg",
+          "22_banana.jpg",
+          "23_banana.jpg",
+          "24_banana.jpg",
+          "25_banana.jpg",
+          "26_banana.jpg",
+          "27_banana.jpg",
+          "28_banana.jpg",
+          "29_banana.jpg",
+          "30_banana.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Bitter_Gourd": {
+        "classes": [
+          "01_bitter_gourd.jpg",
+          "02_bitter_gourd.jpg",
+          "03_bitter_gourd.jpg",
+          "04_bitter_gourd.jpg",
+          "05_bitter_gourd.jpg",
+          "06_bitter_gourd.jpg",
+          "07_bitter_gourd.jpg",
+          "08_bitter_gourd.jpg",
+          "09_bitter_gourd.jpg",
+          "10_bitter_gourd.jpg",
+          "11_bitter_gourd.jpg",
+          "12_bitter_gourd.jpg",
+          "13_bitter_gourd.jpg",
+          "14_bitter_gourd.jpg",
+          "15_bitter_gourd.jpg",
+          "16_bitter_gourd.jpg",
+          "17_bitter_gourd.jpg",
+          "18_bitter_gourd.jpg",
+          "19_bitter_gourd.jpg",
+          "20_bitter_gourd.jpg",
+          "21_bitter_gourd.jpg",
+          "22_bitter_gourd.jpg",
+          "23_bitter_gourd.jpg",
+          "24_bitter_gourd.jpg",
+          "25_bitter_gourd.jpg",
+          "26_bitter_gourd.jpg",
+          "27_bitter_gourd.jpg",
+          "28_bitter_gourd.jpg",
+          "29_bitter_gourd.jpg",
+          "30_bitter_gourd.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Brinjal": {
+        "classes": [
+          "01_brinjal.jpg",
+          "02_brinjal.jpg",
+          "03_brinjal.jpg",
+          "04_brinjal.jpg",
+          "05_brinjal.jpg",
+          "06_brinjal.jpg",
+          "07_brinjal.jpg",
+          "08_brinjal.jpg",
+          "09_brinjal.jpg",
+          "10_brinjal.jpg",
+          "11_brinjal.jpg",
+          "12_brinjal.jpg",
+          "13_brinjal.jpg",
+          "14_brinjal.jpg",
+          "15_brinjal.jpg",
+          "16_brinjal.jpg",
+          "17_brinjal.jpg",
+          "18_brinjal.jpg",
+          "19_brinjal.jpg",
+          "20_brinjal.jpg",
+          "21_brinjal.jpg",
+          "22_brinjal.jpg",
+          "23_brinjal.jpg",
+          "24_brinjal.jpg",
+          "25_brinjal.jpg",
+          "26_brinjal.jpg",
+          "27_brinjal.jpg",
+          "28_brinjal.jpg",
+          "29_brinjal.jpg",
+          "30_brinjal.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Calotropis": {
+        "classes": [
+          "01_calotropis.jpg",
+          "02_calotropis.jpg",
+          "03_calotropis.jpg",
+          "04_calotropis.jpg",
+          "05_calotropis.jpg",
+          "06_calotropis.jpg",
+          "07_calotropis.jpg",
+          "08_calotropis.jpg",
+          "09_calotropis.jpg",
+          "10_calotropis.jpg",
+          "11_calotropis.jpg",
+          "12_calotropis.jpg",
+          "13_calotropis.jpg",
+          "14_calotropis.jpg",
+          "15_calotropis.jpg",
+          "16_calotropis.jpg",
+          "17_calotropis.jpg",
+          "18_calotropis.jpg",
+          "19_calotropis.jpg",
+          "20_calotropis.jpg",
+          "21_calotropis.jpg",
+          "22_calotropis.jpg",
+          "23_calotropis.jpg",
+          "24_calotropis.jpg",
+          "25_calotropis.jpg",
+          "26_calotropis.jpg",
+          "27_calotropis.jpg",
+          "28_calotropis.jpg",
+          "29_calotropis.jpg",
+          "30_calotropis.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Capsicum": {
+        "classes": [
+          "01_capsicum.jpg",
+          "02_capsicum.jpg",
+          "03_capsicum.jpg",
+          "04_capsicum.jpg",
+          "05_capsicum.jpg",
+          "06_capsicum.jpg",
+          "07_capsicum.jpg",
+          "08_capsicum.jpg",
+          "09_capsicum.jpg",
+          "10_capsicum.jpg",
+          "11_capsicum.jpg",
+          "12_capsicum.jpg",
+          "13_capsicum.jpg",
+          "14_capsicum.jpg",
+          "15_capsicum.jpg",
+          "16_capsicum.jpg",
+          "17_capsicum.jpg",
+          "18_capsicum.jpg",
+          "19_capsicum.jpg",
+          "20_capsicum.jpg",
+          "21_capsicum.jpg",
+          "22_capsicum.jpg",
+          "23_capsicum.jpg",
+          "24_capsicum.jpg",
+          "25_capsicum.jpg",
+          "26_capsicum.jpg",
+          "27_capsicum.jpg",
+          "28_capsicum.jpg",
+          "29_capsicum.jpg",
+          "30_capsicum.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Cashew": {
+        "classes": [
+          "01_cashew.jpg",
+          "02_cashew.jpg",
+          "03_cashew.jpg",
+          "04_cashew.jpg",
+          "05_cashew.jpg",
+          "06_cashew.jpg",
+          "07_cashew.jpg",
+          "08_cashew.jpg",
+          "09_cashew.jpg",
+          "10_cashew.jpg",
+          "11_cashew.jpg",
+          "12_cashew.jpg",
+          "13_cashew.jpg",
+          "14_cashew.jpg",
+          "15_cashew.jpg",
+          "16_cashew.jpg",
+          "17_cashew.jpg",
+          "18_cashew.jpg",
+          "19_cashew.jpg",
+          "20_cashew.jpg",
+          "21_cashew.jpg",
+          "22_cashew.jpg",
+          "23_cashew.jpg",
+          "24_cashew.jpg",
+          "25_cashew.jpg",
+          "26_cashew.jpg",
+          "27_cashew.jpg",
+          "28_cashew.jpg",
+          "29_cashew.jpg",
+          "30_cashew.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Castor": {
+        "classes": [
+          "01_castor.jpg",
+          "02_castor.jpg",
+          "03_castor.jpg",
+          "04_castor.jpg",
+          "05_castor.jpg",
+          "06_castor.jpg",
+          "07_castor.jpg",
+          "08_castor.jpg",
+          "09_castor.jpg",
+          "10_castor.jpg",
+          "11_castor.jpg",
+          "12_castor.jpg",
+          "13_castor.jpg",
+          "14_castor.jpg",
+          "15_castor.jpg",
+          "16_castor.jpg",
+          "17_castor.jpg",
+          "18_castor.jpg",
+          "19_castor.jpg",
+          "20_castor.jpg",
+          "21_castor.jpg",
+          "22_castor.jpg",
+          "23_castor.jpg",
+          "24_castor.jpg",
+          "25_castor.jpg",
+          "26_castor.jpg",
+          "27_castor.jpg",
+          "28_castor.jpg",
+          "29_castor.jpg",
+          "30_castor.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Chickpea": {
+        "classes": [
+          "01_chickpea.jpg",
+          "02_chickpea.jpg",
+          "03_chickpea.jpg",
+          "04_chickpea.jpg",
+          "05_chickpea.jpg",
+          "06_chickpea.jpg",
+          "07_chickpea.jpg",
+          "08_chickpea.jpg",
+          "09_chickpea.jpg",
+          "10_chickpea.jpg",
+          "11_chickpea.jpg",
+          "12_chickpea.jpg",
+          "13_chickpea.jpg",
+          "14_chickpea.jpg",
+          "15_chickpea.jpg",
+          "16_chickpea.jpg",
+          "17_chickpea.jpg",
+          "18_chickpea.jpg",
+          "19_chickpea.jpg",
+          "20_chickpea.jpg",
+          "21_chickpea.jpg",
+          "22_chickpea.jpg",
+          "23_chickpea.jpg",
+          "24_chickpea.jpg",
+          "25_chickpea.jpg",
+          "26_chickpea.jpg",
+          "27_chickpea.jpg",
+          "28_chickpea.jpg",
+          "29_chickpea.jpg",
+          "30_chickpea.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Chilli": {
+        "classes": [
+          "01_chilli.jpg",
+          "02_chilli.jpg",
+          "03_chilli.jpg",
+          "04_chilli.jpg",
+          "05_chilli.jpg",
+          "06_chilli.jpg",
+          "07_chilli.jpg",
+          "08_chilli.jpg",
+          "09_chilli.jpg",
+          "10_chilli.jpg",
+          "11_chilli.jpg",
+          "12_chilli.jpg",
+          "13_chilli.jpg",
+          "14_chilli.jpg",
+          "15_chilli.jpg",
+          "16_chilli.jpg",
+          "17_chilli.jpg",
+          "18_chilli.jpg",
+          "19_chilli.jpg",
+          "20_chilli.jpg",
+          "21_chilli.jpg",
+          "22_chilli.jpg",
+          "23_chilli.jpg",
+          "24_chilli.jpg",
+          "25_chilli.jpg",
+          "26_chilli.jpg",
+          "27_chilli.jpg",
+          "28_chilli.jpeg",
+          "29_chilli.jpg",
+          "30_chilli.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Cluster Bean": {
+        "classes": [
+          "01_cluster_bean.jpg",
+          "02_cluster_bean.jpg",
+          "03_cluster_bean.jpg",
+          "04_cluster_bean.jpg",
+          "05_cluster_bean.jpg",
+          "06_cluster_bean.jpg",
+          "07_cluster_bean.jpg",
+          "08_cluster_bean.jpg",
+          "09_cluster_bean.jpg",
+          "10_cluster_bean.jpg",
+          "11_cluster_bean.jpg",
+          "12_cluster_bean.jpg",
+          "13_cluster_bean.jpg",
+          "14_cluster_bean.jpg",
+          "15_cluster_bean.jpg",
+          "16_cluster_bean.jpg",
+          "17_cluster_bean.jpg",
+          "18_cluster_bean.jpg",
+          "19_cluster_bean.jpg",
+          "20_cluster_bean.jpg",
+          "21_cluster_bean.jpg",
+          "22_cluster_bean.jpg",
+          "23_cluster_bean.jpg",
+          "24_cluster_bean.jpg",
+          "25_cluster_bean.jpg",
+          "26_cluster_bean.jpg",
+          "27_cluster_bean.jpg",
+          "28_cluster_bean.jpg",
+          "29_cluster_bean.jpg",
+          "30_cluster_bean.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Cocoa": {
+        "classes": [
+          "01_cocoa.jpg",
+          "02_cocoa.jpg",
+          "03_cocoa.jpg",
+          "04_cocoa.jpg",
+          "05_cocoa.jpg",
+          "06_cocoa.jpg",
+          "07_cocoa.jpg",
+          "08_cocoa.jpg",
+          "09_cocoa.jpg",
+          "10_cocoa.jpg",
+          "11_cocoa.jpg",
+          "12_cocoa.jpg",
+          "13_cocoa.jpg",
+          "14_cocoa.jpg",
+          "15_cocoa.jpg",
+          "16_cocoa.jpg",
+          "17_cocoa.jpg",
+          "18_cocoa.jpg",
+          "19_cocoa.jpg",
+          "20_cocoa.jpg",
+          "21_cocoa.jpg",
+          "22_cocoa.jpg",
+          "23_cocoa.jpg",
+          "24_cocoa.jpg",
+          "25_cocoa.jpg",
+          "26_cocoa.jpg",
+          "27_cocoa.jpg",
+          "28_cocoa.jpg",
+          "29_cocoa.jpg",
+          "30_cocoa.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Coconut": {
+        "classes": [
+          "01_coconut.jpg",
+          "02_coconut.jpg",
+          "03_coconut.jpg",
+          "04_coconut.jpg",
+          "05_coconut.jpg",
+          "06_coconut.jpg",
+          "07_coconut.jpg",
+          "08_coconut.jpg",
+          "09_coconut.jpg",
+          "10_coconut.jpg",
+          "11_coconut.jpg",
+          "12_coconut.jpg",
+          "13_coconut.jpg",
+          "14_coconut.jpg",
+          "15_coconut.jpg",
+          "16_coconut.jpg",
+          "17_coconut.jpg",
+          "18_coconut.jpg",
+          "19_coconut.jpg",
+          "20_coconut.jpg",
+          "21_coconut.jpg",
+          "22_coconut.jpg",
+          "23_coconut.jpg",
+          "24_coconut.jpg",
+          "25_coconut.jpg",
+          "26_coconut.jpg",
+          "27_coconut.jpg",
+          "28_coconut.jpg",
+          "29_coconut.jpg",
+          "30_coconut.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Congress Grass": {
+        "classes": [
+          "01_congress_grass.jpg",
+          "02_congress_grass.jpg",
+          "03_congress_grass.jpg",
+          "04_congress_grass.jpg",
+          "05_congress_grass.jpg",
+          "06_congress_grass.jpg",
+          "07_congress_grass.jpg",
+          "08_congress_grass.jpg",
+          "09_congress_grass.jpg",
+          "10_congress_grass.jpg",
+          "11_congress_grass.jpg",
+          "12_congress_grass.jpg",
+          "13_congress_grass.jpg",
+          "14_congress_grass.jpg",
+          "15_congress_grass.jpg",
+          "16_congress_grass.jpg",
+          "17_congress_grass.jpg",
+          "18_congress_grass.jpg",
+          "19_congress_grass.jpg",
+          "20_congress_grass.jpg",
+          "21_congress_grass.jpg",
+          "22_congress_grass.jpg",
+          "23_congress_grass.jpg",
+          "24_congress_grass.jpg",
+          "25_congress_grass.jpg",
+          "26_congress_grass.jpg",
+          "27_congress_grass.jpg",
+          "28_congress_grass.jpg",
+          "29_congress_grass.jpg",
+          "30_congress_grass.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Coriander": {
+        "classes": [
+          "01_coriander.jpg",
+          "02_coriander.jpg",
+          "03_coriander.jpg",
+          "04_coriander.jpg",
+          "05_coriander.jpg",
+          "06_coriander.jpg",
+          "07_coriander.jpg",
+          "08_coriander.jpg",
+          "09_coriander.jpg",
+          "10_coriander.jpg",
+          "11_coriander.jpg",
+          "12_coriander.jpg",
+          "13_coriander.jpg",
+          "14_coriander.jpg",
+          "15_coriander.jpg",
+          "16_coriander.jpg",
+          "17_coriander.jpg",
+          "18_coriander.jpg",
+          "19_coriander.jpg",
+          "20_coriander.jpg",
+          "21_coriander.jpg",
+          "22_coriander.jpg",
+          "23_coriander.jpg",
+          "24_coriander.jpg",
+          "25_coriander.jpg",
+          "26_coriander.jpg",
+          "27_coriander.jpg",
+          "28_coriander.jpg",
+          "29_coriander.jpg",
+          "30_coriander.webp"
+        ],
+        "totalImages": 30
+      },
+      "Cotton": {
+        "classes": [
+          "01_cotton.jpg",
+          "02_cotton.jpg",
+          "03_cotton.jpg",
+          "04_cotton.jpg",
+          "05_cotton.jpg",
+          "06_cotton.jpg",
+          "07_cotton.jpg",
+          "08_cotton.jpg",
+          "09_cotton.jpg",
+          "10_cotton.jpg",
+          "11_cotton.jpg",
+          "12_cotton.jpg",
+          "13_cotton.jpg",
+          "14_cotton.jpg",
+          "15_cotton.jpg",
+          "16_cotton.jpg",
+          "17_cotton.jpg",
+          "18_cotton.jpg",
+          "19_cotton.jpg",
+          "20_cotton.jpg",
+          "21_cotton.jpg",
+          "22_cotton.jpg",
+          "23_cotton.jpg",
+          "24_cotton.jpg",
+          "25_cotton.jpg",
+          "26_cotton.jpg",
+          "27_cotton.jpg",
+          "28_cotton.jpg",
+          "29_cotton.jpg",
+          "30_cotton.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Curry_Tree": {
+        "classes": [
+          "01_curry_tree.jpg",
+          "02_curry_tree.jpg",
+          "03_curry_tree.jpg",
+          "04_curry_tree.jpg",
+          "05_curry_tree.jpg",
+          "06_curry_tree.jpg",
+          "07_curry_tree.jpg",
+          "08_curry_tree.jpg",
+          "09_curry_tree.jpg",
+          "10_curry_tree.jpg",
+          "11_curry_tree.jpg",
+          "12_curry_tree.jpg",
+          "13_curry_tree.jpg",
+          "14_curry_tree.jpg",
+          "15_curry_tree.jpg",
+          "16_curry_tree.jpg",
+          "17_curry_tree.jpg",
+          "18_curry_tree.jpg",
+          "19_curry_tree.jpg",
+          "20_curry_tree.jpg",
+          "21_curry_tree.jpg",
+          "22_curry_tree.jpg",
+          "23_curry_tree.jpg",
+          "24_curry_tree.jpg",
+          "25_curry_tree.jpg",
+          "26_curry_tree.jpg",
+          "27_curry_tree.jpg",
+          "28_curry_tree.jpg",
+          "29_curry_tree.jpg",
+          "30_curry_tree.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Custard_Apple": {
+        "classes": [
+          "01_custard_apple.jpg",
+          "02_custard_apple.jpg",
+          "03_custard_apple.jpg",
+          "04_custard_apple.jpg",
+          "05_custard_apple.jpg",
+          "06_custard_apple.jpg",
+          "07_custard_apple.jpg",
+          "08_custard_apple.jpg",
+          "09_custard_apple.jpg",
+          "10_custard_apple.jpg",
+          "11_custard_apple.jpg",
+          "12_custard_apple.jpg",
+          "13_custard_apple.jpg",
+          "14_custard_apple.jpg",
+          "15_custard_apple.jpg",
+          "16_custard_apple.jpg",
+          "17_custard_apple.jpg",
+          "18_custard_apple.jpg",
+          "19_custard_apple.jpg",
+          "20_custard_apple.jpg",
+          "21_custard_apple.jpg",
+          "22_custard_apple.jpg",
+          "23_custard_apple.jpg",
+          "24_custard_apple.jpg",
+          "25_custard_apple.jpg",
+          "26_custard_apple.jpg",
+          "27_custard_apple.jpg",
+          "28_custard_apple.jpg",
+          "29_custard_apple.jpg",
+          "30_custard_apple.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Dragon_Fruit": {
+        "classes": [
+          "01_dragon_fruit.jpg",
+          "02_dragon_fruit.jpg",
+          "03_dragon_fruit.jpg",
+          "04_dragon_fruit.jpg",
+          "05_dragon_fruit.jpg",
+          "06_dragon_fruit.jpg",
+          "07_dragon_fruit.jpg",
+          "08_dragon_fruit.jpg",
+          "09_dragon_fruit.jpg",
+          "10_dragon_fruit.jpg",
+          "11_dragon_fruit.jpg",
+          "12_dragon_fruit.jpg",
+          "13_dragon_fruit.jpg",
+          "14_dragon_fruit.jpg",
+          "15_dragon_fruit.jpg",
+          "16_dragon_fruit.jpg",
+          "17_dragon_fruit.jpg",
+          "18_dragon_fruit.jpg",
+          "19_dragon_fruit.jpg",
+          "20_dragon_fruit.jpg",
+          "21_dragon_fruit.jpg",
+          "22_dragon_fruit.jpg",
+          "23_dragon_fruit.jpg",
+          "24_dragon_fruit.jpg",
+          "25_dragon_fruit.jpg",
+          "26_dragon_fruit.jpg",
+          "27_dragon_fruit.jpg"
+        ],
+        "totalImages": 27
+      },
+      "Gauva": {
+        "classes": [
+          "01_gauva.jpg",
+          "02_gauva.jpg",
+          "03_gauva.jpg",
+          "04_gauva.jpg",
+          "05_gauva.jpg",
+          "06_gauva.jpg",
+          "07_gauva.jpg",
+          "08_gauva.jpg",
+          "09_gauva.jpg",
+          "10_gauva.jpg",
+          "11_gauva.jpg",
+          "12_gauva.jpg",
+          "13_gauva.jpg",
+          "14_gauva.jpg",
+          "15_gauva.jpg",
+          "16_gauva.jpg",
+          "17_gauva.jpg",
+          "18_gauva.jpg",
+          "19_gauva.jpg",
+          "20_gauva.jpg",
+          "21_gauva.jpg",
+          "22_gauva.jpg",
+          "23_gauva.jpg",
+          "24_gauva.jpg",
+          "25_gauva.jpg",
+          "26_gauva.jpg",
+          "27_gauva.jpg",
+          "28_gauva.jpg",
+          "29_gauva.jpg",
+          "30_gauva.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Grapes": {
+        "classes": [
+          "01_grapes.jpg",
+          "02_grapes.jpg",
+          "03_grapes.jpg",
+          "04_grapes.jpg",
+          "05_grapes.jpg",
+          "06_grapes.jpg",
+          "07_grapes.jpg",
+          "08_grapes.jpg",
+          "09_grapes.jpg",
+          "10_grapes.jpg",
+          "11_grapes.jpg",
+          "12_grapes.jpg",
+          "13_grapes.jpg",
+          "14_grapes.jpg",
+          "15_grapes.jpg",
+          "16_grapes.jpg",
+          "17_grapes.jpg",
+          "18_grapes.jpg",
+          "19_grapes.jpg",
+          "20_grapes.jpg",
+          "21_grapes.jpg",
+          "22_grapes.jpg",
+          "23_grapes.jpg",
+          "24_grapes.jpg",
+          "25_grapes.jpg",
+          "26_grapes.jpg",
+          "27_grapes.jpg",
+          "28_grapes.jpg",
+          "29_grapes.jpg",
+          "30_grapes.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Groundnut": {
+        "classes": [
+          "01_groundnut.jpg",
+          "02_groundnut.jpg",
+          "03_groundnut.jpg",
+          "04_groundnut.jpg",
+          "05_groundnut.jpg",
+          "06_groundnut.jpg",
+          "07_groundnut.jpg",
+          "08_groundnut.jpg",
+          "09_groundnut.jpg",
+          "10_groundnut.jpg",
+          "11_groundnut.jpg",
+          "12_groundnut.jpg",
+          "13_groundnut.jpg",
+          "14_groundnut.jpg",
+          "15_groundnut.jpg",
+          "16_groundnut.jpg",
+          "17_groundnut.jpg",
+          "18_groundnut.jpg",
+          "19_groundnut.jpg",
+          "20_groundnut.jpg",
+          "21_groundnut.jpg",
+          "22_groundnut.jpg",
+          "23_groundnut.jpg",
+          "24_groundnut.jpg",
+          "25_groundnut.jpg",
+          "26_groundnut.jpg",
+          "27_groundnut.jpg",
+          "28_groundnut.jpg",
+          "29_groundnut.jpg",
+          "30_groundnut.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Jackfruit": {
+        "classes": [
+          "01_jackfruit.jpg",
+          "02_jackfruit.jpg",
+          "03_jackfruit.jpg",
+          "04_jackfruit.jpg",
+          "05_jackfruit.jpg",
+          "06_jackfruit.jpg",
+          "07_jackfruit.jpg",
+          "08_jackfruit.jpg",
+          "09_jackfruit.jpg",
+          "10_jackfruit.jpg",
+          "11_jackfruit.jpg",
+          "12_jackfruit.jpg",
+          "13_jackfruit.jpg",
+          "14_jackfruit.jpg",
+          "15_jackfruit.jpg",
+          "16_jackfruit.jpg",
+          "17_jackfruit.jpg",
+          "18_jackfruit.jpg",
+          "19_jackfruit.jpg",
+          "20_jackfruit.jpg",
+          "21_jackfruit.jpg",
+          "22_jackfruit.jpg",
+          "23_jackfruit.jpg",
+          "24_jackfruit.jpg",
+          "25_jackfruit.jpg",
+          "26_jackfruit.jpg",
+          "27_jackfruit.jpg",
+          "28_jackfruit.jpg",
+          "29_jackfruit.jpg",
+          "30_jackfruit.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Jasmine": {
+        "classes": [
+          "01_Jasmine.jpg",
+          "02_Jasmine.jpg",
+          "03_Jasmine.jpg",
+          "04_Jasmine.jpg",
+          "05_Jasmine.jpg",
+          "06_Jasmine.jpg",
+          "07_Jasmine.jpg",
+          "08_Jasmine.jpg",
+          "09_Jasmine.jpg",
+          "10_Jasmine.jpg",
+          "11_Jasmine.jpg",
+          "12_Jasmine.jpg",
+          "13_Jasmine.jpg",
+          "14_Jasmine.jpg",
+          "15_Jasmine.jpg",
+          "16_Jasmine.jpg",
+          "17_Jasmine.jpg",
+          "18_Jasmine.jpg",
+          "19_Jasmine.jpg",
+          "20_Jasmine.jpg",
+          "21_Jasmine.jpg",
+          "22_Jasmine.jpg",
+          "23_Jasmine.jpg",
+          "24_Jasmine.jpg",
+          "25_Jasmine.jpg",
+          "26_Jasmine.jpg",
+          "27_Jasmine.jpg",
+          "28_Jasmine.jpg",
+          "29_Jasmine.jpg",
+          "30_Jasmine.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Kiwi": {
+        "classes": [
+          "01_kiwi.jpg",
+          "02_kiwi.jpg",
+          "03_kiwi.jpg",
+          "04_kiwi.jpg",
+          "05_kiwi.jpg",
+          "06_kiwi.jpg",
+          "07_kiwi.jpg",
+          "08_kiwi.jpg",
+          "09_kiwi.jpg",
+          "10_kiwi.jpg",
+          "11_kiwi.jpg",
+          "12_kiwi.jpg",
+          "13_kiwi.jpg",
+          "14_kiwi.jpg",
+          "15_kiwi.jpg",
+          "16_kiwi.jpg",
+          "17_kiwi.jpg",
+          "18_kiwi.jpg",
+          "19_kiwi.jpg",
+          "20_kiwi.jpg",
+          "21_kiwi.jpg",
+          "22_kiwi.jpg",
+          "23_kiwi.jpg",
+          "24_kiwi.jpg",
+          "25_kiwi.jpg",
+          "26_kiwi.jpg",
+          "27_kiwi.jpg",
+          "28_kiwi.jpg",
+          "29_kiwi.jpg"
+        ],
+        "totalImages": 29
+      },
+      "Lemon": {
+        "classes": [
+          "01_lemon.jpg",
+          "02_lemon.jpg",
+          "03_lemon.jpg",
+          "04_lemon.jpg",
+          "05_lemon.jpg",
+          "06_lemon.jpg",
+          "07_lemon.jpg",
+          "08_lemon.jpg",
+          "09_lemon.jpg",
+          "10_lemon.jpg",
+          "11_lemon.jpg",
+          "12_lemon.jpg",
+          "13_lemon.jpg",
+          "14_lemon.jpg",
+          "15_lemon.jpg",
+          "16_lemon.jpg",
+          "17_lemon.jpg",
+          "18_lemon.jpg",
+          "19_lemon.jpg",
+          "20_lemon.jpg",
+          "21_lemon.jpg",
+          "22_lemon.jpg",
+          "23_lemon.jpg",
+          "24_lemon.jpg",
+          "25_lemon.jpg",
+          "26_lemon.jpg",
+          "27_lemon.jpg",
+          "28_lemon.jpg",
+          "29_lemon.jpg",
+          "30_lemon.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Mango": {
+        "classes": [
+          "01_mango.jpg",
+          "02_mango.jpg",
+          "03_mango.jpg",
+          "04_mango.jpg",
+          "05_mango.jpg",
+          "06_mango.jpg",
+          "07_mango.jpg",
+          "08_mango.jpg",
+          "09_mango.jpg",
+          "10_mango.jpg",
+          "11_mango.jpg",
+          "12_mango.jpg",
+          "13_mango.jpg",
+          "14_mango.jpg",
+          "15_mango.jpg",
+          "16_mango.jpg",
+          "17_mango.jpg",
+          "18_mango.jpg",
+          "19_mango.jpg",
+          "20_mango.jpg",
+          "21_mango.jpg",
+          "22_mango.jpg",
+          "23_mango.jpg",
+          "24_mango.jpg",
+          "25_mango.jpg",
+          "26_mango.jpg",
+          "27_mango.jpg",
+          "28_mango.jpg",
+          "29_mango.jpg",
+          "30_mango.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Mariglod": {
+        "classes": [
+          "01_mariglod.jpg",
+          "02_mariglod.jpg",
+          "03_mariglod.jpg",
+          "04_mariglod.jpg",
+          "05_mariglod.jpg",
+          "06_mariglod.jpg",
+          "07_mariglod.jpg",
+          "08_mariglod.jpg",
+          "09_mariglod.jpg",
+          "10_mariglod.jpg",
+          "11_mariglod.jpg",
+          "12_mariglod.jpg",
+          "13_mariglod.jpg",
+          "14_mariglod.jpg",
+          "15_mariglod.jpg",
+          "16_mariglod.jpg",
+          "17_mariglod.jpg",
+          "18_mariglod.jpg",
+          "19_mariglod.jpg",
+          "20_mariglod.jpg",
+          "21_mariglod.jpg",
+          "22_mariglod.jpg",
+          "23_mariglod.jpg",
+          "24_mariglod.jpg",
+          "25_mariglod.jpg",
+          "26_mariglod.jpg",
+          "27_mariglod.jpg",
+          "28_mariglod.jpg",
+          "29_mariglod.jpg"
+        ],
+        "totalImages": 29
+      },
+      "Moringa": {
+        "classes": [
+          "01_moringa.jpg",
+          "02_moringa.jpg",
+          "03_moringa.jpg",
+          "04_moringa.jpg",
+          "05_moringa.jpg",
+          "06_moringa.jpg",
+          "07_moringa.jpg",
+          "08_moringa.jpg",
+          "09_moringa.jpg",
+          "10_moringa.jpg",
+          "11_moringa.jpg",
+          "12_moringa.jpg",
+          "13_moringa.jpg",
+          "14_moringa.jpg",
+          "15_moringa.jpg",
+          "16_moringa.jpg",
+          "17_moringa.jpg",
+          "18_moringa.jpg",
+          "19_moringa.jpg",
+          "20_moringa.jpg",
+          "21_moringa.jpg",
+          "22_moringa.jpg",
+          "23_moringa.jpg",
+          "24_moringa.jpg",
+          "25_moringa.jpg",
+          "26_moringa.jpg",
+          "27_moringa.jpg",
+          "28_moringa.jpg",
+          "29_moringa.jpg",
+          "30_moringa.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Neem": {
+        "classes": [
+          "01_neem.jpg",
+          "02_neem.jpg",
+          "03_neem.jpg",
+          "04_neem.jpg",
+          "05_neem.jpg",
+          "06_neem.jpg",
+          "07_neem.jpg",
+          "08_neem.jpg",
+          "09_neem.jpg",
+          "10_neem.jpg",
+          "11_neem.jpg",
+          "12_neem.jpg",
+          "13_neem.jpg",
+          "14_neem.jpg",
+          "15_neem.jpg",
+          "16_neem.jpg",
+          "17_neem.jpg",
+          "18_neem.jpg",
+          "19_neem.jpg",
+          "20_neem.jpg",
+          "21_neem.jpg",
+          "22_neem.jpg",
+          "23_neem.jpg",
+          "24_neem.jpg",
+          "25_neem.jpg",
+          "26_neem.jpg",
+          "27_neem.jpg",
+          "28_neem.jpg",
+          "29_neem.jpg",
+          "30_neem.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Okra": {
+        "classes": [
+          "01_okra.jpg",
+          "02_okra.jpg",
+          "03_okra.jpg",
+          "04_okra.jpg",
+          "05_okra.jpg",
+          "06_okra.jpg",
+          "07_okra.jpg",
+          "08_okra.jpg",
+          "09_okra.jpg",
+          "10_okra.jpg",
+          "11_okra.jpg",
+          "12_okra.jpg",
+          "13_okra.jpg",
+          "14_okra.jpg",
+          "15_okra.jpg",
+          "16_okra.jpg",
+          "17_okra.jpg",
+          "18_okra.jpg",
+          "19_okra.jpg",
+          "20_okra.jpg",
+          "21_okra.jpg",
+          "22_okra.jpg",
+          "23_okra.jpg",
+          "24_okra.jpg",
+          "25_okra.jpg",
+          "26_okra.jpg",
+          "27_okra.jpg",
+          "28_okra.jpg",
+          "29_okra.jpg",
+          "30_okra.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Orange": {
+        "classes": [
+          "01_orange.jpg",
+          "02_orange.jpg",
+          "03_orange.jpg",
+          "04_orange.jpg",
+          "05_orange.jpg",
+          "06_orange.jpg",
+          "07_orange.jpg",
+          "08_orange.jpg",
+          "09_orange.jpg",
+          "10_orange.jpg",
+          "11_orange.jpg",
+          "12_orange.jpg",
+          "13_orange.jpg",
+          "14_orange.jpg",
+          "15_orange.jpg",
+          "16_orange.jpg",
+          "17_orange.jpg",
+          "18_orange.jpg",
+          "19_orange.jpg",
+          "20_orange.jpg",
+          "21_orange.jpg",
+          "22_orange.jpg",
+          "23_orange.jpg",
+          "24_orange.jpg",
+          "25_orange.jpg",
+          "26_orange.jpg",
+          "27_orange.jpg",
+          "28_orange.jpg",
+          "29_orange.jpg",
+          "30_orange.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Papaya": {
+        "classes": [
+          "01_papaya.jpg",
+          "02_papaya.jpg",
+          "03_papaya.jpg",
+          "04_papaya.jpg",
+          "05_papaya.jpg",
+          "06_papaya.jpg",
+          "07_papaya.jpg",
+          "08_papaya.jpg",
+          "09_papaya.jpg",
+          "10_papaya.jpg",
+          "11_papaya.jpg",
+          "12_papaya.jpg",
+          "13_papaya.jpg",
+          "14_papaya.jpg",
+          "15_papaya.jpg",
+          "16_papaya.jpg",
+          "17_papaya.jpg",
+          "18_papaya.jpg",
+          "19_papaya.jpg",
+          "20_papaya.jpg",
+          "21_papaya.jpg",
+          "22_papaya.jpg",
+          "23_papaya.jpg",
+          "24_papaya.jpg",
+          "25_papaya.jpg",
+          "26_papaya.jpg",
+          "27_papaya.jpg",
+          "28_papaya.jpg",
+          "29_papaya.jpg",
+          "30_papaya.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Pearl Millet": {
+        "classes": [
+          "01_pearl_millet.jpg",
+          "02_pearl_millet.jpg",
+          "03_pearl_millet.jpg",
+          "04_pearl_millet.jpg",
+          "05_pearl_millet.jpg",
+          "06_pearl_millet.jpg",
+          "07_pearl_millet.jpg",
+          "08_pearl_millet.jpg",
+          "09_pearl_millet.jpg",
+          "10_pearl_millet.jpg",
+          "11_pearl_millet.jpg",
+          "12_pearl_millet.jpg",
+          "13_pearl_millet.jpg",
+          "14_pearl_millet.jpg",
+          "15_pearl_millet.jpg",
+          "16_pearl_millet.jpg",
+          "17_pearl_millet.jpg",
+          "18_pearl_millet.jpg",
+          "19_pearl_millet.jpg",
+          "20_pearl_millet.jpg",
+          "21_pearl_millet.jpg",
+          "22_pearl_millet.jpg",
+          "23_pearl_millet.jpg",
+          "24_pearl_millet.jpg",
+          "25_pearl_millet.jpg",
+          "26_pearl_millet.jpg",
+          "27_pearl_millet.jpg",
+          "28_pearl_millet.jpg",
+          "29_pearl_millet.jpg",
+          "30_pearl_millet.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Pineapple": {
+        "classes": [
+          "01_pineapple.jpg",
+          "02_pineapple.jpg",
+          "03_pineapple.jpg",
+          "04_pineapple.jpg",
+          "05_pineapple.jpg",
+          "06_pineapple.jpg",
+          "07_pineapple.jpg",
+          "08_pineapple.jpg",
+          "09_pineapple.jpg",
+          "10_pineapple.jpg",
+          "11_pineapple.jpg",
+          "12_pineapple.jpg",
+          "13_pineapple.jpg",
+          "14_pineapple.jpg",
+          "15_pineapple.jpg",
+          "16_pineapple.jpg",
+          "17_pineapple.jpg",
+          "18_pineapple.jpg",
+          "19_pineapple.jpg",
+          "20_pineapple.jpg",
+          "21_pineapple.jpg",
+          "22_pineapple.jpg",
+          "23_pineapple.jpg",
+          "24_pineapple.jpg",
+          "25_pineapple.jpg",
+          "26_pineapple.jpg",
+          "27_pineapple.jpg",
+          "28_pineapple.jpg",
+          "29_pineapple.jpg",
+          "30_pineapple.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Pomegranate": {
+        "classes": [
+          "01_pomegranate.jpg",
+          "02_pomegranate.jpg",
+          "03_pomegranate.jpg",
+          "04_pomegranate.jpg",
+          "05_pomegranate.jpg",
+          "06_pomegranate.jpg",
+          "07_pomegranate.jpg",
+          "08_pomegranate.jpg",
+          "09_pomegranate.jpg",
+          "10_pomegranate.jpg",
+          "11_pomegranate.jpg",
+          "12_pomegranate.jpg",
+          "13_pomegranate.jpg",
+          "14_pomegranate.jpg",
+          "15_pomegranate.jpg",
+          "16_pomegranate.jpg",
+          "17_pomegranate.jpg",
+          "18_pomegranate.jpg",
+          "19_pomegranate.jpg",
+          "20_pomegranate.jpg",
+          "21_pomegranate.jpg",
+          "22_pomegranate.jpg",
+          "23_pomegranate.jpg",
+          "24_pomegranate.jpg",
+          "25_pomegranate.jpg",
+          "26_pomegranate.jpg",
+          "27_pomegranate.jpg",
+          "28_pomegranate.jpg",
+          "29_pomegranate.jpg",
+          "30_pomegranate.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Raspberry": {
+        "classes": [
+          "01_raspberry.jpg",
+          "02_raspberry.jpg",
+          "03_raspberry.jpg",
+          "04_raspberry.jpg",
+          "05_raspberry.jpg",
+          "06_raspberry.jpg",
+          "07_raspberry.jpg",
+          "08_raspberry.jpg",
+          "09_raspberry.jpg",
+          "10_raspberry.jpg",
+          "11_raspberry.jpg",
+          "12_raspberry.jpg",
+          "13_raspberry.jpg",
+          "14_raspberry.jpg",
+          "15_raspberry.jpg",
+          "16_raspberry.jpg",
+          "17_raspberry.jpg",
+          "18_raspberry.jpg",
+          "19_raspberry.jpg",
+          "20_raspberry.jpg",
+          "21_raspberry.jpg",
+          "22_raspberry.jpg",
+          "23_raspberry.jpg",
+          "24_raspberry.jpg",
+          "25_raspberry.jpg",
+          "26_raspberry.jpg",
+          "27_raspberry.jpg",
+          "28_raspberry.jpg",
+          "29_raspberry.jpg",
+          "30_raspberry.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Rose": {
+        "classes": [
+          "01_rose.jpg",
+          "02_rose.jpg",
+          "03_rose.jpg",
+          "04_rose.jpg",
+          "05_rose.jpg",
+          "06_rose.jpg",
+          "07_rose.jpg",
+          "08_rose.jpg",
+          "09_rose.jpg",
+          "10_rose.jpg",
+          "11_rose.jpg",
+          "12_rose.jpg",
+          "13_rose.jpg",
+          "14_rose.jpg",
+          "15_rose.jpg",
+          "16_rose.jpg",
+          "17_rose.jpg",
+          "18_rose.jpg",
+          "19_rose.jpg",
+          "20_rose.jpg",
+          "21_rose.jpg",
+          "22_rose.jpg",
+          "23_rose.jpg",
+          "24_rose.jpg",
+          "25_rose.jpg",
+          "26_rose.jpg",
+          "27_rose.jpg",
+          "28_rose.jpg",
+          "29_rose.jpg",
+          "30_rose.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Sandalwood": {
+        "classes": [
+          "01_sandalwood.jpg",
+          "02_sandalwood.jpg",
+          "03_sandalwood.jpg",
+          "04_sandalwood.jpg",
+          "05_sandalwood.jpg",
+          "06_sandalwood.jpg",
+          "07_sandalwood.jpg",
+          "08_sandalwood.jpg",
+          "09_sandalwood.jpg",
+          "10_sandalwood.jpg",
+          "11_sandalwood.jpg",
+          "12_sandalwood.jpg",
+          "13_sandalwood.jpg",
+          "14_sandalwood.jpg",
+          "15_sandalwood.jpg",
+          "16_sandalwood.jpg",
+          "17_sandalwood.jpg",
+          "18_sandalwood.jpg",
+          "19_sandalwood.jpg",
+          "20_sandalwood.jpg",
+          "21_sandalwood.jpg",
+          "22_sandalwood.jpg",
+          "23_sandalwood.jpg",
+          "24_sandalwood.jpg",
+          "25_sandalwood.jpg",
+          "26_sandalwood.jpg",
+          "27_sandalwood.jpg",
+          "28_sandalwood.jpg",
+          "29_sandalwood.jpg",
+          "30_sandalwood.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Star_Fruit": {
+        "classes": [
+          "01_star_fruit.jpg",
+          "02_star_fruit.jpg",
+          "03_star_fruit.jpg",
+          "04_star_fruit.jpg",
+          "05_star_fruit.jpg",
+          "06_star_fruit.jpg",
+          "07_star_fruit.jpg",
+          "08_star_fruit.jpg",
+          "09_star_fruit.jpg",
+          "10_star_fruit.jpg",
+          "11_star_fruit.jpg",
+          "12_star_fruit.jpg",
+          "13_star_fruit.jpg",
+          "14_star_fruit.jpg",
+          "15_star_fruit.jpg",
+          "16_star_fruit.jpg",
+          "17_star_fruit.jpg",
+          "18_star_fruit.jpg",
+          "19_star_fruit.jpg",
+          "20_star_fruit.jpg",
+          "21_star_fruit.jpg",
+          "22_star_fruit.jpg",
+          "23_star_fruit.jpg",
+          "24_star_fruit.jpg",
+          "25_star_fruit.jpg",
+          "26_star_fruit.jpg",
+          "27_star_fruit.jpg",
+          "28_star_fruit.jpg",
+          "29_star_fruit.jpg",
+          "30_star_fruit.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Sugarcane": {
+        "classes": [
+          "01_sugarcane.jpg",
+          "02_sugarcane.jpg",
+          "03_sugarcane.jpg",
+          "04_sugarcane.jpg",
+          "05_sugarcane.jpg",
+          "06_sugarcane.jpg",
+          "07_sugarcane.jpg",
+          "08_sugarcane.jpg",
+          "09_sugarcane.jpg",
+          "10_sugarcane.jpg",
+          "11_sugarcane.jpg",
+          "12_sugarcane.jpg",
+          "13_sugarcane.jpg",
+          "14_sugarcane.jpg",
+          "15_sugarcane.jpg",
+          "16_sugarcane.jpg",
+          "17_sugarcane.jpg",
+          "18_sugarcane.jpg",
+          "19_sugarcane.jpg",
+          "20_sugarcane.jpg",
+          "21_sugarcane.jpg",
+          "22_sugarcane.jpg",
+          "23_sugarcane.jpg",
+          "24_sugarcane.jpg",
+          "25_sugarcane.jpg",
+          "26_sugarcane.jpg",
+          "27_sugarcane.jpg",
+          "28_sugarcane.jpg",
+          "29_sugarcane.jpg",
+          "30_sugarcane.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Tuberose": {
+        "classes": [
+          "01_tuberose.jpg",
+          "02_tuberose.jpg",
+          "03_tuberose.jpg",
+          "04_tuberose.jpg",
+          "05_tuberose.jpg",
+          "06_tuberose.jpg",
+          "07_tuberose.jpg",
+          "08_tuberose.jpg",
+          "09_tuberose.jpg",
+          "10_tuberose.jpg",
+          "11_tuberose.jpg",
+          "12_tuberose.jpg",
+          "13_tuberose.jpg",
+          "14_tuberose.jpg",
+          "15_tuberose.jpg",
+          "16_tuberose.jpg",
+          "17_tuberose.jpg",
+          "18_tuberose.jpg",
+          "19_tuberose.jpg",
+          "20_tuberose.jpg",
+          "21_tuberose.jpg",
+          "22_tuberose.jpg",
+          "23_tuberose.jpg",
+          "24_tuberose.jpg",
+          "25_tuberose.jpg",
+          "26_tuberose.jpg",
+          "27_tuberose.jpg",
+          "28_tuberose.jpg",
+          "29_tuberose.jpg",
+          "30_tuberose.jpg"
+        ],
+        "totalImages": 30
+      },
+      "Wheat": {
+        "classes": [
+          "01_wheat.jpg",
+          "02_wheat.jpg",
+          "03_wheat.jpg",
+          "04_wheat.jpg",
+          "05_wheat.jpg",
+          "06_wheat.jpg",
+          "07_wheat.jpg",
+          "08_wheat.jpg",
+          "09_wheat.jpg",
+          "10_wheat.jpg",
+          "11_wheat.jpg",
+          "12_wheat.jpg",
+          "13_wheat.jpg",
+          "14_wheat.jpg",
+          "15_wheat.jpg",
+          "16_wheat.jpg",
+          "17_wheat.jpg",
+          "18_wheat.jpg",
+          "19_wheat.jpg",
+          "20_wheat.jpg",
+          "21_wheat.jpg",
+          "22_wheat.jpg",
+          "23_wheat.jpg",
+          "24_wheat.jpg",
+          "25_wheat.jpg",
+          "26_wheat.jpg",
+          "27_wheat.jpg",
+          "28_wheat.jpg",
+          "29_wheat.jpg",
+          "30_wheat.jpg"
+        ],
+        "totalImages": 30
+      },
+      "test_new": {
+        "classes": [
+          "Aloe_Vera",
+          "Apple",
+          "Ashoka",
+          "Ashwagandha",
+          "Avocado",
+          "Bael",
+          "Bamboo",
+          "Banana",
+          "Bitter_Gourd",
+          "Brinjal",
+          "Calotropis",
+          "Capsicum",
+          "Cashew",
+          "Castor",
+          "Chickpea",
+          "Chilli",
+          "Cluster Bean",
+          "Cocoa",
+          "Coconut",
+          "Congress Grass",
+          "Coriander",
+          "Cotton",
+          "Curry_Tree",
+          "Custard_Apple",
+          "Dragon_Fruit",
+          "Gauva",
+          "Grapes",
+          "Groundnut",
+          "Jackfruit",
+          "Jasmine",
+          "Kiwi",
+          "Lemon",
+          "Mango",
+          "Mariglod",
+          "Moringa",
+          "Neem",
+          "Okra",
+          "Orange",
+          "Papaya",
+          "Pearl Millet",
+          "Pineapple",
+          "Pomegranate",
+          "Raspberry",
+          "Rose",
+          "Sandalwood",
+          "Star_Fruit",
+          "Sugarcane",
+          "Tuberose",
+          "Wheat",
+          "vetiver grass"
+        ],
+        "totalImages": 1495
+      },
+      "vetiver grass": {
+        "classes": [
+          "01_vetiver_grass.jpg",
+          "02_vetiver_grass.jpg",
+          "03_vetiver_grass.jpg",
+          "04_vetiver_grass.jpg",
+          "05_vetiver_grass.jpg",
+          "06_vetiver_grass.jpg",
+          "07_vetiver_grass.jpg",
+          "08_vetiver_grass.jpg",
+          "09_vetiver_grass.jpg",
+          "10_vetiver_grass.jpg",
+          "11_vetiver_grass.jpg",
+          "12_vetiver_grass.jpg",
+          "13_vetiver_grass.jpg",
+          "14_vetiver_grass.jpg",
+          "15_vetiver_grass.jpg",
+          "16_vetiver_grass.jpg",
+          "17_vetiver_grass.jpg",
+          "18_vetiver_grass.jpg",
+          "19_vetiver_grass.jpg",
+          "20_vetiver_grass.jpg",
+          "21_vetiver_grass.jpg",
+          "22_vetiver_grass.jpg",
+          "23_vetiver_grass.jpg",
+          "24_vetiver_grass.jpg",
+          "25_vetiver_grass.jpg",
+          "26_vetiver_grass.jpg",
+          "27_vetiver_grass.jpg",
+          "28_vetiver_grass.jpg",
+          "29_vetiver_grass.jpg",
+          "30_vetiver_grass.jpg"
+        ],
+        "totalImages": 30
+      },
+      "totalImages": 2990
+    },
+    "Food_Grains": {
+      "train": {
+        "classes": [
+          "almonds",
+          "apple",
+          "bajra",
+          "banana",
+          "barley",
+          "basmati",
+          "besan_flour",
+          "biryani",
+          "black_pepper",
+          "brinjal",
+          "cabbage",
+          "cardamom",
+          "carrot",
+          "cashews",
+          "cauliflower",
+          "chana_dal",
+          "chapathi",
+          "chickpeas",
+          "cooked_rice",
+          "coriander_seeds",
+          "cumin_seeds",
+          "dates",
+          "dosa",
+          "dry_red_chili",
+          "fennel_seeds",
+          "fenugreek_seeds",
+          "flax_seeds",
+          "grapes",
+          "green_chili",
+          "groundnuts",
+          "idli",
+          "jowar",
+          "lobia",
+          "maize",
+          "mango",
+          "masoor_dal",
+          "moong_dal",
+          "mustard_seeds",
+          "oats",
+          "onion",
+          "pistachios",
+          "poha_flour",
+          "pomegranate",
+          "potato",
+          "puffed_rice",
+          "pumpkin_seeds",
+          "ragi",
+          "raisins",
+          "rajma",
+          "rava_flour",
+          "rice_brown",
+          "sesame_seeds",
+          "soybeans",
+          "sunflower_seeds",
+          "turmeric",
+          "upma",
+          "urad_dal",
+          "walnuts",
+          "wheat",
+          "wheat_flour",
+          "whole_green_gram"
+        ],
+        "totalImages": 2506
+      },
+      "val": {
+        "classes": [
+          "almonds",
+          "apple",
+          "bajra",
+          "banana",
+          "barley",
+          "basmati",
+          "besan_flour",
+          "biryani",
+          "black_pepper",
+          "brinjal",
+          "cabbage",
+          "cardamom",
+          "carrot",
+          "cashews",
+          "cauliflower",
+          "chana_dal",
+          "chapathi",
+          "chickpeas",
+          "cooked_rice",
+          "coriander_seeds",
+          "cumin_seeds",
+          "dates",
+          "dosa",
+          "dry_red_chili",
+          "fennel_seeds",
+          "fenugreek_seeds",
+          "flax_seeds",
+          "grapes",
+          "green_chili",
+          "groundnuts",
+          "idli",
+          "jowar",
+          "lobia",
+          "maize",
+          "mango",
+          "masoor_dal",
+          "moong_dal",
+          "mustard_seeds",
+          "oats",
+          "onion",
+          "pistachios",
+          "poha_flour",
+          "pomegranate",
+          "potato",
+          "puffed_rice",
+          "pumpkin_seeds",
+          "ragi",
+          "raisins",
+          "rajma",
+          "rava_flour",
+          "rice_brown",
+          "sesame_seeds",
+          "soybeans",
+          "sunflower_seeds",
+          "turmeric",
+          "upma",
+          "urad_dal",
+          "walnuts",
+          "wheat",
+          "wheat_flour",
+          "whole_green_gram"
+        ],
+        "totalImages": 630
+      },
+      "totalImages": 3136
+    }
+  },
+  "totalImages": 900122,
+  "totalModels": 44,
+  "totalDatasets": 43
+}
