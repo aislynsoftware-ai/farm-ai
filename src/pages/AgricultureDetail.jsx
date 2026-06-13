@@ -32,6 +32,9 @@ const titleEndpoint = {
   'plant identification': '/plant_idetification',
   'food identification': '/food_identification',
   'food grains': '/food_identification',
+  'vegetable & spinach identification': '/vegetable-spinach-identification',
+  'vegetable spinach identification': '/vegetable-spinach-identification',
+  'vegetable_spinach_identification': '/vegetable-spinach-identification',
 };
 
 export default function AgricultureDetail() {
