@@ -8,6 +8,7 @@ export const ROUTES = {
   SERVICES: '/services',
   FEATURES: '/features',
   CONTACT: '/contact',
+  RESEARCH: '/research',
   PRIVACY: '/privacy',
   TERMS: '/terms',
   COOKIES: '/cookies',
@@ -25,6 +26,7 @@ export const NAV_LINKS = [
   { label: 'About', path: ROUTES.ABOUT },
   { label: 'Services', path: ROUTES.SERVICES },
   { label: 'Features', path: ROUTES.FEATURES },
+  { label: 'Research', path: ROUTES.RESEARCH },
   { label: 'Contact', path: ROUTES.CONTACT },
 ];
 
