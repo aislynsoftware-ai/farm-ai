@@ -28,7 +28,5 @@ AI-powered product development platform containing:
 - Docker
 - Hugging Face Spaces
 
-## Deployment
 
-This project is deployed using Docker on Hugging Face Spaces.
 
