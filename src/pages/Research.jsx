@@ -643,4 +643,30 @@ export default function Research() {
                 </div>
                 <p className="text-sm font-bold text-gray-900 dark:text-white mb-1">For Dataset Download, Contact</p>
                 <p className="text-[11px] text-gray-500 dark:text-gray-400 mb-4">Reach out for dataset access and inquiries</p>
-                <div className="flex i
+                <div className="flex items-center justify-center gap-3">
+                  <a
+                    href="https://wa.me/918892209021"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-green-500 to-emerald-500 text-white hover:from-green-600 hover:to-emerald-600 shadow-md hover:shadow-lg hover:shadow-green-500/25 transition-all duration-200 text-xs font-semibold"
+                  >
+                    <MessageCircle size={15} />
+                    +91 88922 09021
+                  </a>
+                  <div className="w-px h-8 bg-gray-200 dark:bg-gray-700" />
+                  <a
+                    href="mailto:support@farmlytai.in"
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white hover:from-blue-600 hover:to-cyan-600 shadow-md hover:shadow-lg hover:shadow-blue-500/25 transition-all duration-200 text-xs font-semibold"
+                  >
+                    <Mail size={15} />
+                    support@farmlytai.in
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
