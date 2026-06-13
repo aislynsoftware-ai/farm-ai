@@ -19,6 +19,8 @@ import AgricultureDetail from '../pages/AgricultureDetail';
 import CropDetail from '../pages/CropDetail';
 import SubCropDetail from '../pages/SubCropDetail';
 import Research from '../pages/Research';
+import Blogs from '../pages/Blogs';
+import BlogDetails from '../pages/BlogDetails';
 
 function ErrorPage() {
   return (
@@ -44,6 +46,8 @@ export default function createAppRouter(isDark, toggleTheme) {
         { path: 'services', element: <Services /> },
         { path: 'features', element: <Features /> },
         { path: 'research', element: <Research /> },
+        { path: 'blogs', element: <Blogs /> },
+        { path: 'blog/:slug', element: <BlogDetails /> },
         { path: 'contact', element: <Contact /> },
         { path: 'login', element: <Login /> },
         { path: 'register', element: <Register /> },

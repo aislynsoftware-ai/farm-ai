@@ -1,16 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Sprout, LogIn, UserPlus, LayoutDashboard } from 'lucide-react';
+import { Menu, X, Sprout, LogIn, UserPlus, LayoutDashboard, ChevronDown, LogOut } from 'lucide-react';
 import { NAV_LINKS, ROUTES, APP_NAME } from '../../constants';
 import ThemeToggle from '../common/ThemeToggle';
 import Button from '../common/Button';
+import GoogleTranslate from '../common/GoogleTranslate';
 import { cn } from '../../utils/cn';
 
 export default function Navbar({ isDark, toggleTheme }) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState(null);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const userMenuRef = useRef(null);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -37,6 +40,14 @@ export default function Navbar({ isDark, toggleTheme }) {
   useEffect(() => {
     setIsOpen(false);
   }, [location.pathname]);
+
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target)) setUserMenuOpen(false);
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, []);
 
   const isActive = (path) => location.pathname === path;
 
@@ -90,21 +101,37 @@ export default function Navbar({ isDark, toggleTheme }) {
 
           <div className="flex items-center gap-2.5">
             <ThemeToggle isDark={isDark} toggle={toggleTheme} />
+            <GoogleTranslate />
             <div className="hidden md:flex items-center gap-2">
               {user ? (
-                <div className="flex items-center gap-3">
-                  <Link to={ROUTES.DASHBOARD}>
-                    <Button size="sm" icon={LayoutDashboard}>Dashboard</Button>
-                  </Link>
+                <div className="relative" ref={userMenuRef}>
                   <button
-                    onClick={handleLogout}
-                    className="text-xs text-emerald-700 dark:text-emerald-400 hover:text-red-500 dark:hover:text-red-400 transition-colors cursor-pointer"
+                    onClick={() => setUserMenuOpen(!userMenuOpen)}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-100 dark:border-emerald-900/50 text-xs font-medium text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-950/70 transition-all"
                   >
-                    Logout
+                    <Sprout size={13} />
+                    {user.name || 'User'}
+                    <ChevronDown size={12} className={`transition-transform ${userMenuOpen ? 'rotate-180' : ''}`} />
                   </button>
-                  <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/50 text-xs font-medium text-emerald-600 dark:text-emerald-400">
-                    <Sprout size={12} />{user.name || 'User'}
-                  </span>
+                  {userMenuOpen && (
+                    <div className="absolute right-0 top-full mt-1.5 w-40 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg shadow-black/5 dark:shadow-black/20 z-[9999] overflow-hidden">
+                      <Link
+                        to={ROUTES.DASHBOARD}
+                        onClick={() => setUserMenuOpen(false)}
+                        className="flex items-center gap-2 px-3 py-2 text-xs text-gray-600 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-colors"
+                      >
+                        <LayoutDashboard size={13} />
+                        Dashboard
+                      </Link>
+                      <button
+                        onClick={() => { setUserMenuOpen(false); handleLogout(); }}
+                        className="w-full flex items-center gap-2 px-3 py-2 text-xs text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
+                      >
+                        <LogOut size={13} />
+                        Logout
+                      </button>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <>

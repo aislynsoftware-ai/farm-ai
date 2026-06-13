@@ -19,6 +19,7 @@ export const ROUTES = {
   VERIFY: '/verify-otp',
   PREDICT: '/predict',
   WALLET: '/wallet',
+  BLOGS: '/blogs',
 };
 
 export const NAV_LINKS = [
@@ -28,6 +29,7 @@ export const NAV_LINKS = [
   { label: 'Features', path: ROUTES.FEATURES },
   { label: 'Research', path: ROUTES.RESEARCH },
   { label: 'Contact', path: ROUTES.CONTACT },
+ 
 ];
 
 export const DASHBOARD_SIDEBAR = [
