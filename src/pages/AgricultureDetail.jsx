@@ -29,6 +29,7 @@ const titleEndpoint = {
   'marigold': '/flowers/marigold',
   'chrysanthemum': '/flowers/chrysanthemums',
   'potted plant': '/potted_plant',
+  'potted plant identification': '/potted_plant',
   'plant identification': '/plant_idetification',
   'food identification': '/food_identification',
   'food grains': '/food_identification',
