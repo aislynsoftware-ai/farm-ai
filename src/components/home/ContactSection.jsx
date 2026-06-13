@@ -75,7 +75,7 @@ export default function ContactSection() {
     } focus:ring-2 focus:ring-emerald-500/20 outline-none transition-all duration-200 text-gray-900 dark:text-white placeholder-emerald-400 text-sm`;
 
   return (
-    <section id="contact" className="relative py-12 lg:py-16 overflow-hidden">
+    <section id="contact" className="relative py-4 lg:py-4 overflow-hidden">
       <div className="absolute inset-0 gradient-bg opacity-5" />
       <div className="absolute top-1/3 right-0 w-[500px] h-[500px] bg-emerald-500/10 rounded-full blur-3xl" />
 

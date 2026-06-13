@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Sprout, ArrowLeft, ChevronRight, Search, ArrowRight, Upload, Leaf, Apple, Shield, CheckCircle, Bug, Target, AlertCircle, Loader, FlaskConical, Droplets, AlertTriangle, ShoppingCart, ExternalLink, Sparkles, ImageIcon, ChevronDown, ChevronUp } from 'lucide-react';
+import { Sprout, ArrowLeft, ChevronRight, Search, ArrowRight, Upload, Leaf, Apple, Shield, CheckCircle, Bug, Target, AlertCircle, Loader, FlaskConical, Droplets, AlertTriangle, ShoppingCart, ExternalLink, Sparkles, ImageIcon, ChevronDown, ChevronUp, Camera } from 'lucide-react';
 import api from '../services/api';
 import Skeleton, { DetailHeaderSkeleton, GridCardSkeleton } from '../components/common/Skeleton';
 import PredictionProgress from '../components/common/PredictionProgress';
@@ -46,10 +46,13 @@ export default function AgricultureDetail() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
   const fileRef = useRef(null);
+  const videoRef = useRef(null);
   const [expandedSections, setExpandedSections] = useState({});
   const [lightboxImg, setLightboxImg] = useState(null);
   const [selectedCrop, setSelectedCrop] = useState('');
   const [usedEndpoint, setUsedEndpoint] = useState('');
+  const [showCamera, setShowCamera] = useState(false);
+  const [cameraStream, setCameraStream] = useState(null);
 
   const toggleSection = (key) => setExpandedSections((prev) => ({ ...prev, [key]: !prev[key] }));
 
@@ -95,6 +98,48 @@ export default function AgricultureDetail() {
     setPreview(URL.createObjectURL(f));
     setResult(null);
     setError('');
+  };
+
+  useEffect(() => {
+    if (showCamera && cameraStream && videoRef.current) {
+      videoRef.current.srcObject = cameraStream;
+    }
+  }, [showCamera, cameraStream]);
+
+  const startCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } } });
+      setCameraStream(stream);
+      setShowCamera(true);
+    } catch {
+      setError('Camera not found or access denied');
+    }
+  };
+
+  const stopCamera = () => {
+    if (cameraStream) {
+      cameraStream.getTracks().forEach((t) => t.stop());
+      setCameraStream(null);
+    }
+    setShowCamera(false);
+  };
+
+  const handleCapture = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video, 0, 0);
+    canvas.toBlob((blob) => {
+      if (!blob) return;
+      const f = new File([blob], 'camera-capture.jpg', { type: 'image/jpeg' });
+      setFile(f);
+      setPreview(URL.createObjectURL(f));
+      setResult(null);
+      setError('');
+      stopCamera();
+    }, 'image/jpeg', 0.9);
   };
 
   const getUserId = () => {
@@ -321,10 +366,19 @@ export default function AgricultureDetail() {
             </div>
           )}
 
-          <button onClick={handlePredict} disabled={loading || !file || (crops.length > 0 && !selectedCrop)} className="w-full flex items-center justify-center gap-2 px-4 py-3 mt-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-300 dark:disabled:bg-emerald-800 text-white text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed">
-            {loading ? <Loader size={16} className="animate-spin" /> : <Search size={16} />}
-            {loading ? 'Analyzing...' : 'Detect'}
-          </button>
+          <div className="flex gap-3 mt-4">
+            <button
+              onClick={startCamera}
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-200 dark:hover:bg-emerald-800 text-sm font-medium transition-colors cursor-pointer border-2 border-emerald-200 dark:border-emerald-700 hover:border-emerald-400"
+            >
+              <Camera size={16} />
+              Open Camera
+            </button>
+            <button onClick={handlePredict} disabled={loading || !file || (crops.length > 0 && !selectedCrop)} className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-300 dark:disabled:bg-emerald-800 text-white text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed">
+              {loading ? <Loader size={16} className="animate-spin" /> : <Search size={16} />}
+              {loading ? 'Analyzing...' : 'Detect'}
+            </button>
+          </div>
 
           {loading && predictStartTime && <PredictionProgress startTime={predictStartTime} />}
 
@@ -399,6 +453,28 @@ export default function AgricultureDetail() {
       {lightboxImg && (
         <div onClick={() => setLightboxImg(null)} className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center cursor-pointer">
           <img src={lightboxImg} alt="Full view" className="max-w-[90vw] max-h-[90vh] object-contain rounded-xl" />
+        </div>
+      )}
+
+      {showCamera && (
+        <div className="fixed inset-0 z-[9999] bg-black/60 flex items-center justify-center p-4">
+          <div className="bg-gray-900 rounded-2xl overflow-hidden w-full max-w-md">
+            <video ref={videoRef} autoPlay playsInline className="w-full aspect-[4/3] object-cover" />
+            <div className="flex items-center justify-center gap-4 px-4 py-4">
+              <button
+                onClick={stopCamera}
+                className="px-5 py-2.5 rounded-xl bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition-colors cursor-pointer"
+              >
+                Close
+              </button>
+              <button
+                onClick={handleCapture}
+                className="px-8 py-2.5 rounded-xl bg-white text-gray-900 text-sm font-bold hover:bg-gray-200 transition-colors cursor-pointer shadow-lg"
+              >
+                Capture
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
