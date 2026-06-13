@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Sprout, ArrowLeft, Search, Upload, AlertCircle, Loader, Bug, Droplets, AlertTriangle, ShoppingCart, Lightbulb, CheckCircle, X, Shield, Zap, ImageIcon, Target, FlaskConical, Sparkles, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
+import { Sprout, ArrowLeft, Search, Upload, AlertCircle, Loader, Bug, Droplets, AlertTriangle, ShoppingCart, Lightbulb, CheckCircle, X, Shield, Zap, ImageIcon, Target, FlaskConical, Sparkles, ChevronDown, ChevronUp, ExternalLink, Camera } from 'lucide-react';
 import api from '../services/api';
 import Skeleton from '../components/common/Skeleton';
 import PredictionProgress from '../components/common/PredictionProgress';
@@ -64,14 +64,23 @@ export default function SubCropDetail() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
   const fileRef = useRef(null);
+  const videoRef = useRef(null);
   const [profile, setProfile] = useState(null);
   const [tips, setTips] = useState([]);
   const [agriTitle, setAgriTitle] = useState('');
   const [agriLinkId, setAgriLinkId] = useState('');
   const [expandedSections, setExpandedSections] = useState({});
   const [lightbox, setLightbox] = useState(null);
+  const [showCamera, setShowCamera] = useState(false);
+  const [cameraStream, setCameraStream] = useState(null);
 
   const toggleSection = (key) => setExpandedSections((prev) => ({ ...prev, [key]: !prev[key] }));
+
+  useEffect(() => {
+    if (showCamera && cameraStream && videoRef.current) {
+      videoRef.current.srcObject = cameraStream;
+    }
+  }, [showCamera, cameraStream]);
 
   useEffect(() => {
     try {
@@ -121,6 +130,42 @@ export default function SubCropDetail() {
     setPreview(URL.createObjectURL(f));
     setResult(null);
     setError('');
+  };
+
+  const startCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } } });
+      setCameraStream(stream);
+      setShowCamera(true);
+    } catch {
+      setError('Camera not found or access denied');
+    }
+  };
+
+  const stopCamera = () => {
+    if (cameraStream) {
+      cameraStream.getTracks().forEach((t) => t.stop());
+      setCameraStream(null);
+    }
+    setShowCamera(false);
+  };
+
+  const handleCapture = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video, 0, 0);
+    canvas.toBlob((blob) => {
+      if (!blob) return;
+      const f = new File([blob], 'camera-capture.jpg', { type: 'image/jpeg' });
+      setFile(f);
+      setPreview(URL.createObjectURL(f));
+      setResult(null);
+      setError('');
+      stopCamera();
+    }, 'image/jpeg', 0.9);
   };
 
   const handlePredict = async () => {
@@ -256,14 +301,23 @@ export default function SubCropDetail() {
             </div>
           )}
 
-          <button
-            onClick={handlePredict}
-          disabled={predictLoading || !file}
-          className="w-full flex items-center justify-center gap-2 px-4 py-3 mt-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-300 dark:disabled:bg-emerald-800 text-white text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed"
-          >
-            {predictLoading ? <Loader size={16} className="animate-spin" /> : <Search size={16} />}
-            {predictLoading ? 'Analyzing...' : 'Detect Disease'}
-          </button>
+          <div className="flex gap-3 mt-4">
+            <button
+              onClick={startCamera}
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-200 dark:hover:bg-emerald-800 text-sm font-medium transition-colors cursor-pointer border-2 border-emerald-200 dark:border-emerald-700 hover:border-emerald-400"
+            >
+              <Camera size={16} />
+              Open Camera
+            </button>
+            <button
+              onClick={handlePredict}
+              disabled={predictLoading || !file}
+              className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-300 dark:disabled:bg-emerald-800 text-white text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed"
+            >
+              {predictLoading ? <Loader size={16} className="animate-spin" /> : <Search size={16} />}
+              {predictLoading ? 'Analyzing...' : 'Detect Disease'}
+            </button>
+          </div>
 
           {predictLoading && predictStartTime && (
             <PredictionProgress startTime={predictStartTime} />
@@ -627,6 +681,28 @@ export default function SubCropDetail() {
             <X size={20} />
           </button>
           <img src={lightbox} alt="Full size" className="max-w-full max-h-full object-contain rounded-xl" onClick={(e) => e.stopPropagation()} />
+        </div>
+      )}
+
+      {showCamera && (
+        <div className="fixed inset-0 z-[9999] bg-black/60 flex items-center justify-center p-4">
+          <div className="bg-gray-900 rounded-2xl overflow-hidden w-full max-w-md">
+            <video ref={videoRef} autoPlay playsInline className="w-full aspect-[4/3] object-cover" />
+            <div className="flex items-center justify-center gap-4 px-4 py-4">
+              <button
+                onClick={stopCamera}
+                className="px-5 py-2.5 rounded-xl bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition-colors cursor-pointer"
+              >
+                Close
+              </button>
+              <button
+                onClick={handleCapture}
+                className="px-8 py-2.5 rounded-xl bg-white text-gray-900 text-sm font-bold hover:bg-gray-200 transition-colors cursor-pointer shadow-lg"
+              >
+                Capture
+              </button>
+            </div>
+          </div>
         </div>
       )}
       </div>

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Navigate, useLocation } from 'react-router-dom';
-import { Upload, Leaf, Apple, Sprout, Bug, AlertCircle, Loader, Search, Menu, ChevronDown, ShoppingCart, Droplets, AlertTriangle, CheckCircle, Shield, Target, ImageIcon, FlaskConical, Sparkles, ChevronUp, ExternalLink } from 'lucide-react';
+import { Upload, Leaf, Apple, Sprout, Bug, AlertCircle, Loader, Search, Menu, ChevronDown, ShoppingCart, Droplets, AlertTriangle, CheckCircle, Shield, Target, ImageIcon, FlaskConical, Sparkles, ChevronUp, ExternalLink, Camera } from 'lucide-react';
 import Sidebar from '../components/dashboard/Sidebar';
 import api from '../services/api';
 import Skeleton from '../components/common/Skeleton';
@@ -36,6 +36,7 @@ const titleEndpoint = {
 
 export default function Predict() {
   const fileRef = useRef(null);
+  const videoRef = useRef(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [selectedCat, setSelectedCat] = useState(null);
   const [selectedSub, setSelectedSub] = useState(null);
@@ -51,6 +52,8 @@ export default function Predict() {
   const [loadingCats, setLoadingCats] = useState(true);
   const [expandedSections, setExpandedSections] = useState({});
   const [lightboxImg, setLightboxImg] = useState(null);
+  const [showCamera, setShowCamera] = useState(false);
+  const [cameraStream, setCameraStream] = useState(null);
 
   const toggleSection = (key) => setExpandedSections((prev) => ({ ...prev, [key]: !prev[key] }));
 
@@ -166,6 +169,48 @@ export default function Predict() {
     setPreview(URL.createObjectURL(f));
     setResult(null);
     setError('');
+  };
+
+  useEffect(() => {
+    if (showCamera && cameraStream && videoRef.current) {
+      videoRef.current.srcObject = cameraStream;
+    }
+  }, [showCamera, cameraStream]);
+
+  const startCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } } });
+      setCameraStream(stream);
+      setShowCamera(true);
+    } catch {
+      setError('Camera not found or access denied');
+    }
+  };
+
+  const stopCamera = () => {
+    if (cameraStream) {
+      cameraStream.getTracks().forEach((t) => t.stop());
+      setCameraStream(null);
+    }
+    setShowCamera(false);
+  };
+
+  const handleCapture = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    canvas.getContext('2d').drawImage(video, 0, 0);
+    canvas.toBlob((blob) => {
+      if (!blob) return;
+      const f = new File([blob], 'camera-capture.jpg', { type: 'image/jpeg' });
+      setFile(f);
+      setPreview(URL.createObjectURL(f));
+      setResult(null);
+      setError('');
+      stopCamera();
+    }, 'image/jpeg', 0.9);
   };
 
   const handlePredict = async () => {
@@ -348,14 +393,23 @@ export default function Predict() {
                     </div>
                   )}
 
-                  <button
-                    onClick={handlePredict}
-                    disabled={loading || !file}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 mt-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-300 dark:disabled:bg-emerald-800 text-white text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed"
-                  >
-                    {loading ? <Loader size={16} className="animate-spin" /> : <Search size={16} />}
-                    {loading ? 'Analyzing...' : 'Detect'}
-                  </button>
+                  <div className="flex gap-3 mt-4">
+                    <button
+                      onClick={startCamera}
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-200 dark:hover:bg-emerald-800 text-sm font-medium transition-colors cursor-pointer border-2 border-emerald-200 dark:border-emerald-700 hover:border-emerald-400"
+                    >
+                      <Camera size={16} />
+                      Open Camera
+                    </button>
+                    <button
+                      onClick={handlePredict}
+                      disabled={loading || !file}
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-300 dark:disabled:bg-emerald-800 text-white text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed"
+                    >
+                      {loading ? <Loader size={16} className="animate-spin" /> : <Search size={16} />}
+                      {loading ? 'Analyzing...' : 'Detect'}
+                    </button>
+                  </div>
 
                   {loading && predictStartTime && (
                     <PredictionProgress startTime={predictStartTime} />
@@ -703,6 +757,28 @@ export default function Predict() {
       {lightboxImg && (
         <div onClick={() => setLightboxImg(null)} className="fixed inset-0 z-[9999] bg-black/80 flex items-center justify-center cursor-pointer">
           <img src={lightboxImg} alt="Full view" className="max-w-[90vw] max-h-[90vh] object-contain rounded-xl" />
+        </div>
+      )}
+
+      {showCamera && (
+        <div className="fixed inset-0 z-[9999] bg-black/60 flex items-center justify-center p-4">
+          <div className="bg-gray-900 rounded-2xl overflow-hidden w-full max-w-md">
+            <video ref={videoRef} autoPlay playsInline className="w-full aspect-[4/3] object-cover" />
+            <div className="flex items-center justify-center gap-4 px-4 py-4">
+              <button
+                onClick={stopCamera}
+                className="px-5 py-2.5 rounded-xl bg-red-600 text-white text-sm font-medium hover:bg-red-700 transition-colors cursor-pointer"
+              >
+                Close
+              </button>
+              <button
+                onClick={handleCapture}
+                className="px-8 py-2.5 rounded-xl bg-white text-gray-900 text-sm font-bold hover:bg-gray-200 transition-colors cursor-pointer shadow-lg"
+              >
+                Capture
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
