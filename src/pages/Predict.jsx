@@ -162,9 +162,53 @@ export default function Predict() {
     return subGroups[selectedSub]?.items[selectedItem] || null;
   };
 
-  const handleFileChange = (e) => {
+  const validateImage = (file) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      const url = URL.createObjectURL(file);
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        const minDim = 100;
+        if (img.width < minDim || img.height < minDim) {
+          resolve('Image too small — minimum 100x100 pixels');
+          return;
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0);
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        const pixels = imageData.data;
+        let greenCount = 0;
+        let greenBrownCount = 0;
+        for (let i = 0; i < pixels.length; i += 20) {
+          const r = pixels[i], g = pixels[i + 1], b = pixels[i + 2];
+          if (g > r && g > b) greenCount++;
+          if (r > 100 && g > 60 && b < 80) greenBrownCount++;
+        }
+        const total = Math.floor(pixels.length / 4 / 20);
+        const greenRatio = greenCount / total;
+        const brownRatio = greenBrownCount / total;
+        if (greenRatio < 0.02 && brownRatio < 0.02) {
+          resolve('Image does not look like a plant or crop — please upload a clear photo of a leaf, fruit, or vegetable');
+          return;
+        }
+        resolve(null);
+      };
+      img.onerror = () => { URL.revokeObjectURL(url); resolve('Invalid image file'); };
+      img.src = url;
+    });
+  };
+
+  const handleFileChange = async (e) => {
     const f = e.target.files?.[0];
     if (!f) return;
+    const validationError = await validateImage(f);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
     setFile(f);
     setPreview(URL.createObjectURL(f));
     setResult(null);
@@ -195,16 +239,22 @@ export default function Predict() {
     setShowCamera(false);
   };
 
-  const handleCapture = () => {
+  const handleCapture = async () => {
     const video = videoRef.current;
     if (!video) return;
     const canvas = document.createElement('canvas');
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     canvas.getContext('2d').drawImage(video, 0, 0);
-    canvas.toBlob((blob) => {
+    canvas.toBlob(async (blob) => {
       if (!blob) return;
       const f = new File([blob], 'camera-capture.jpg', { type: 'image/jpeg' });
+      const validationError = await validateImage(f);
+      if (validationError) {
+        setError(validationError);
+        stopCamera();
+        return;
+      }
       setFile(f);
       setPreview(URL.createObjectURL(f));
       setResult(null);
@@ -236,7 +286,12 @@ export default function Predict() {
       });
       const data = await res.json();
       console.log('API:', endpoint, '->', data);
-      if (!res.ok) throw new Error(data.message || data.detail || data.error || 'Request failed');
+      if (!res.ok) throw new Error(data.message || data.detail || data.error || 'Model could not process this image');
+      if (res.status === 404) throw new Error('This image does not match any trained category. Please upload a clear photo of a plant, crop, or food item.');
+      const conf = data.confidence != null ? (Number(data.confidence) < 1 ? Number(data.confidence) * 100 : Number(data.confidence)) : null;
+      if (conf !== null && conf < 30) {
+        throw new Error(`Low confidence (${conf.toFixed(1)}%) — the uploaded image does not match any trained class. Please try a different image.`);
+      }
       setResult(data);
     } catch (err) {
       setError(err.message);
@@ -274,7 +329,13 @@ export default function Predict() {
     </div>
   );
 
-  const resultLabel = result?.food_name || result?.identified_plant || result?.disease || result?.prediction || result?.prediction_result;
+  const singleClass = (val) => {
+    if (!val) return null;
+    if (Array.isArray(val)) return val[0] || null;
+    return val.split(',').map(s => s.trim()).filter(Boolean)[0] || val;
+  };
+
+  const resultLabel = singleClass(result?.food_name || result?.identified_plant || result?.disease || result?.prediction || result?.prediction_result);
   const isHealthy = !result?.disease || result?.disease?.toLowerCase().includes('healthy');
   const diseaseFound = result?.disease && !result?.disease?.toLowerCase().includes('healthy');
 
@@ -381,6 +442,11 @@ export default function Predict() {
                           <span className="text-emerald-600 dark:text-emerald-400 font-medium">Click to upload</span> or drag and drop
                         </p>
                         <p className="text-xs text-emerald-500">JPG, PNG up to 10MB</p>
+                  {getSelectedItem() && (
+                    <p className="text-[10px] text-amber-600 dark:text-amber-400 mt-1">
+                      Upload a clear photo of {getSelectedItem().label.toLowerCase()} — ensure good lighting and focus
+                    </p>
+                  )}
                       </div>
                     )}
                   </div>
@@ -446,8 +512,16 @@ export default function Predict() {
                               <p className="text-lg font-bold text-gray-900 dark:text-white">{resultLabel || 'Analysis Complete'}</p>
                               {displayConfidence && (
                                 <div className="flex items-center gap-1.5 mt-1">
-                                  <Target size={12} className="text-emerald-500" />
-                                  <span className="text-xs text-emerald-600 dark:text-emerald-400">Confidence: <strong>{displayConfidence}%</strong></span>
+                                  <Target size={12} className={Number(displayConfidence) < 60 ? 'text-amber-500' : 'text-emerald-500'} />
+                                  <span className={`text-xs ${Number(displayConfidence) < 60 ? 'text-amber-600 dark:text-amber-400' : 'text-emerald-600 dark:text-emerald-400'}`}>
+                                    Confidence: <strong>{displayConfidence}%</strong>
+                                    {Number(displayConfidence) < 60 && (
+                                      <span className="block mt-0.5 text-[10px] text-amber-500">Low confidence — result may be inaccurate</span>
+                                    )}
+                                    {Number(displayConfidence) < 30 && (
+                                      <span className="block mt-0.5 text-[10px] text-red-500 font-semibold">This image may not match any trained class</span>
+                                    )}
+                                  </span>
                                 </div>
                               )}
                             </div>
