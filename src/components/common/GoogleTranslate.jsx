@@ -110,20 +110,12 @@ export default function GoogleTranslate() {
 
   const changeLanguage = (code) => {
     setOpen(false);
-    if (code === 'en') {
-      document.cookie = 'googtrans=; path=/; max-age=0';
-      const restore = () => {
-        const frame = document.querySelector('.goog-te-banner-frame');
-        if (frame) frame.remove();
-        document.querySelectorAll('.goog-te-balloon-frame, .skiptranslate').forEach((e) => e.remove());
-        document.body.style.top = '';
-      };
-      restore();
-      setTimeout(() => window.location.reload(), 50);
-    } else {
-      document.cookie = `googtrans=/en/${code}; path=/`;
-      window.location.reload();
-    }
+    const frame = document.querySelector('.goog-te-banner-frame');
+    if (frame) frame.remove();
+    document.querySelectorAll('.goog-te-balloon-frame, .skiptranslate').forEach((e) => e.remove());
+    document.body.style.top = '';
+    document.cookie = `googtrans=/en/${code}; path=/`;
+    window.location.reload();
   };
 
   return (
