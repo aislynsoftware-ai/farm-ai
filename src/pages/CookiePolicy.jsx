@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import PageHeader from '../components/layout/PageHeader';
 import { APP_NAME } from '../constants';
+import SEO from '../components/common/SEO';
 
 const sections = [
   {
@@ -48,6 +49,7 @@ const sections = [
 export default function CookiePolicy() {
   return (
     <main>
+      <SEO title="Cookie Policy" description="Farmlyt AI cookie policy - learn how we use cookies to improve your experience." url="/cookies" />
       <PageHeader
         title="Cookie Policy"
         description={`How ${APP_NAME} uses cookies and similar tracking technologies.`}

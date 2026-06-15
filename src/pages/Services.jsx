@@ -1,3 +1,4 @@
+import SEO from '../components/common/SEO';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -29,6 +30,7 @@ export default function Services() {
 
   return (
     <main>
+      <SEO title="Services" description="Explore Farmlyt AI services including crop disease detection, plant identification, food analysis, and smart agriculture solutions." url="/services" />
       <PageHeader
         title="Our Services"
         description="Comprehensive AI-powered solutions designed to address every aspect of modern agriculture and farming."

@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Navigate, useLocation } from 'react-router-dom';
 import { Upload, Leaf, Apple, Sprout, Bug, AlertCircle, Loader, Search, Menu, ChevronDown, ShoppingCart, Droplets, AlertTriangle, CheckCircle, Shield, Target, ImageIcon, FlaskConical, Sparkles, ChevronUp, ExternalLink, Camera } from 'lucide-react';
+import SEO from '../components/common/SEO';
 import Sidebar from '../components/dashboard/Sidebar';
 import api from '../services/api';
 import Skeleton from '../components/common/Skeleton';
@@ -293,6 +294,7 @@ export default function Predict() {
     <div className="flex min-h-screen bg-emerald-50/30 dark:bg-emerald-950">
       <Sidebar mobileOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <main className="flex-1 overflow-x-hidden">
+        <SEO title="AI Detection" description="Detect crop diseases, identify plants, and analyze food items using Farmlyt AI." url="/predict" noindex />
         <div className="sticky top-0 z-30 lg:hidden bg-white/80 dark:bg-emerald-950/80 backdrop-blur border-b border-emerald-100 dark:border-emerald-800 px-4 py-3 flex items-center gap-3">
           <button onClick={() => setSidebarOpen(true)} className="p-1.5 rounded-lg text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900 cursor-pointer">
             <Menu size={20} />

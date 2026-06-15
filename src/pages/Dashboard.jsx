@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Menu, Sprout, FileText, Leaf, Apple, Bug, Search, Coins, User, ChevronRight, ArrowRight, ChevronDown, ChevronUp } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import SEO from '../components/common/SEO';
 import Sidebar from '../components/dashboard/Sidebar';
 import api from '../services/api';
 import Skeleton, { DashboardWelcomeSkeleton, GridCardSkeleton } from '../components/common/Skeleton';
@@ -64,6 +65,7 @@ export default function Dashboard() {
     <div className="flex min-h-screen bg-emerald-50/30 dark:bg-emerald-950">
       <Sidebar mobileOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <main className="flex-1 overflow-x-hidden">
+        <SEO title="Dashboard" description="Your Farmlyt AI dashboard for managing crop predictions and detection history." url="/dashboard" noindex />
         <div className="sticky top-0 z-30 lg:hidden bg-white/80 dark:bg-emerald-950/80 backdrop-blur border-b border-emerald-100 dark:border-emerald-800 px-4 py-3 flex items-center gap-3">
           <button onClick={() => setSidebarOpen(true)} className="p-1.5 rounded-lg text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900 cursor-pointer">
             <Menu size={20} />

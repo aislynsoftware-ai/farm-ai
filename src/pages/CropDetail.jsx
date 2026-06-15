@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Sprout, ArrowLeft, Search, Upload, ArrowRight, Leaf, Apple, Flower2, Bug, ChevronDown, ChevronUp } from 'lucide-react';
 import api from '../services/api';
 import Skeleton, { GridCardSkeleton } from '../components/common/Skeleton';
+import SEO from '../components/common/SEO';
 
 const titleEndpoint = {
   'tomato': '/leafs/tomato',
@@ -105,6 +106,7 @@ export default function CropDetail() {
 
   return (
     <div className="min-h-screen bg-emerald-50/30 dark:bg-emerald-950 mt-14">
+      <SEO title={crop?.title || 'Crop'} description={`Learn about ${crop?.title || 'crop'} - farming insights and best practices.`} url={window.location.pathname} />
       <div className="max-w-7xl mx-auto px-4 py-8">
         <Link to={`/agriculture/${agriId}`} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 border-emerald-200 dark:border-emerald-700 bg-white dark:bg-gray-800 text-[11px] font-medium text-emerald-700 dark:text-emerald-300 hover:bg-emerald-700 dark:hover:bg-emerald-200 hover:text-white dark:hover:text-emerald-700 hover:border-emerald-700 dark:hover:border-emerald-200 transition-all duration-200 mb-4 shadow-sm">
           <ArrowLeft size={13} /> Back{agri?.title ? ` to ${agri.title}` : ''}

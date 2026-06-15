@@ -1,3 +1,4 @@
+import SEO from '../components/common/SEO';
 import { motion } from 'framer-motion';
 import { Target, Eye, Heart, Leaf, Shield, TrendingUp, Users, Globe, Sprout, Camera, CheckCircle, BookOpen, Award, Quote } from 'lucide-react';
 import PageHeader from '../components/layout/PageHeader';
@@ -71,6 +72,7 @@ const fadeUp = {
 export default function About() {
   return (
     <main>
+      <SEO title="About" description="Learn about Farmlyt AI - our mission to revolutionize agriculture with artificial intelligence and smart farming solutions." url="/about" />
       <PageHeader
         title="About Farmlyt AI"
         description="Empowering farmers worldwide with artificial intelligence for smarter, more sustainable agriculture."

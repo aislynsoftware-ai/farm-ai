@@ -1,3 +1,4 @@
+import SEO from '../components/common/SEO';
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -533,6 +534,7 @@ export default function Research() {
 
   return (
     <main>
+      <SEO title="Research" description="Explore Farmlyt AI research and datasets for agriculture, crop analysis, and machine learning model development." url="/research" />
       <PageHeader
         title="Research & Development"
         description="Comprehensive overview of AI datasets, class distributions, and training pipelines powering Farmlyt AI."
