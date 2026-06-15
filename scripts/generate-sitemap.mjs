@@ -18,6 +18,7 @@ const staticPages = [
   { loc: '/privacy', priority: '0.4', changefreq: 'yearly' },
   { loc: '/terms', priority: '0.4', changefreq: 'yearly' },
   { loc: '/cookies', priority: '0.3', changefreq: 'yearly' },
+  { loc: '/landing', priority: '0.8', changefreq: 'monthly' },
 ];
 
 async function generateSitemap() {
