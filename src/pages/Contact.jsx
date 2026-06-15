@@ -1,3 +1,4 @@
+import SEO, { LocalBusinessSchema } from '../components/common/SEO';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, MessageCircle, Send, CheckCircle, AlertCircle, Loader } from 'lucide-react';
@@ -79,6 +80,7 @@ export default function Contact() {
 
   return (
     <main>
+      <SEO title="Contact" description="Get in touch with Farmlyt AI. Reach us for support, partnerships, or inquiries about our smart agriculture platform." url="/contact" schema={LocalBusinessSchema({ description: 'Contact Farmlyt AI for smart agriculture solutions', phone: '+91-XXXXXXXXXX', email: 'support@farmlyt.ai' })} />
       <PageHeader
         title="Contact Us"
         description="Have a question, suggestion, or want to learn more? We'd love to hear from you."

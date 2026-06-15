@@ -5,6 +5,7 @@ import { Sprout, ArrowLeft, Search, Upload, AlertCircle, Loader, Bug, Droplets, 
 import api from '../services/api';
 import Skeleton from '../components/common/Skeleton';
 import PredictionProgress from '../components/common/PredictionProgress';
+import SEO from '../components/common/SEO';
 
 
 // {hllo}
@@ -238,6 +239,7 @@ export default function SubCropDetail() {
 
   return (
     <div className="min-h-screen bg-emerald-50/30 dark:bg-emerald-950 mt-14">
+      <SEO title={sub?.title || 'Crop Detail'} description={`Details about ${sub?.title || 'crop'} with AI-powered insights.`} url={window.location.pathname} noindex />
       <div className="max-w-5xl mx-auto px-4 py-8 space-y-6">
         <Link to={sub?.crop_id && agriLinkId ? `/agriculture/${agriLinkId}/crop/${sub.crop_id}` : '/services'} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border-2 border-emerald-200 dark:border-emerald-700 bg-white dark:bg-gray-800 text-[11px] font-medium text-emerald-700 dark:text-emerald-300 hover:bg-emerald-700 dark:hover:bg-emerald-200 hover:text-white dark:hover:text-emerald-700 hover:border-emerald-700 dark:hover:border-emerald-200 transition-all duration-200 mb-4 shadow-sm">
           <ArrowLeft size={13} /> Back{agriTitle ? ` to ${agriTitle}` : ''}

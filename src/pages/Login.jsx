@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Phone, LogIn, AlertCircle, Sprout, Loader } from 'lucide-react';
 import Button from '../components/common/Button';
+import SEO from '../components/common/SEO';
 import { ROUTES, APP_NAME } from '../constants';
 import api from '../services/api';
 
@@ -56,10 +57,12 @@ export default function Login() {
   );
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-12">
+    <main className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-12">
+      <SEO title="Login" description="Login to your Farmlyt AI account to access smart agriculture tools and dashboard." url="/login" />
       <motion.div className="w-full max-w-md" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
         <div className="glass rounded-2xl mt-14 p-6 lg:p-8">
           <div className="text-center mb-8">
+            <h1 className="sr-only">Login to Farmlyt AI</h1>
             <div className="w-14 h-14 rounded-2xl gradient-bg flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-500/20">
               <Sprout className="w-7 h-7 text-white" />
             </div>
@@ -114,6 +117,6 @@ export default function Login() {
           </p>
         </div>
       </motion.div>
-    </div>
+    </main>
   );
 }

@@ -1,3 +1,4 @@
+import SEO from '../components/common/SEO';
 import { motion } from 'framer-motion';
 import { CheckCircle, Upload, Search, Sparkles, Smartphone, Globe, BarChart, Shield } from 'lucide-react';
 import PageHeader from '../components/layout/PageHeader';
@@ -33,6 +34,7 @@ const featStats = [
 export default function Features() {
   return (
     <main>
+      <SEO title="Features" description="Discover Farmlyt AI features - AI-powered crop disease detection, plant identification, smart irrigation, and precision farming tools." url="/features" />
       <PageHeader
         title="Platform Features"
         description="Discover the powerful features that make Farmlyt AI the leading AI-powered agriculture platform."

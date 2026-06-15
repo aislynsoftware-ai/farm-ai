@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { Coins, CreditCard, Plus, Loader, AlertCircle, ArrowLeft, Sprout, Menu } from 'lucide-react';
+import SEO from '../components/common/SEO';
 import Button from '../components/common/Button';
 import Sidebar from '../components/dashboard/Sidebar';
 import { ROUTES, APP_NAME } from '../constants';
@@ -110,12 +111,14 @@ export default function Wallet() {
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
       <Sidebar mobileOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <main className="flex-1 overflow-x-hidden">
+        <SEO title="Wallet" description="Manage your Farmlyt AI wallet and coins." url="/wallet" noindex />
         <div className="sticky top-0 z-30 lg:hidden bg-white/80 dark:bg-gray-900/80 backdrop-blur border-b border-gray-100 dark:border-gray-800 px-4 py-3 flex items-center gap-3">
           <button onClick={() => setSidebarOpen(true)} className="p-1.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer">
             <Menu size={20} />
           </button>
           <span className="text-sm font-semibold text-gray-900 dark:text-white">Wallet</span>
         </div>
+        <h1 className="sr-only">Wallet</h1>
 
         <div className="p-4 lg:p-6 space-y-5 max-w-4xl mx-auto">
       

@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import PageHeader from '../components/layout/PageHeader';
 import { APP_NAME } from '../constants';
+import SEO from '../components/common/SEO';
 
 const sections = [
   {
@@ -43,6 +44,7 @@ const sections = [
 export default function PrivacyPolicy() {
   return (
     <main>
+      <SEO title="Privacy Policy" description="Farmlyt AI privacy policy - learn how we collect, use, and protect your data." url="/privacy" />
       <PageHeader
         title="Privacy Policy"
         description={`How ${APP_NAME} collects, uses, and protects your personal information.`}

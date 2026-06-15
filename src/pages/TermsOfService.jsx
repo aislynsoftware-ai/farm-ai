@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
 import PageHeader from '../components/layout/PageHeader';
 import { APP_NAME } from '../constants';
+import SEO from '../components/common/SEO';
 
 const sections = [
   {
@@ -43,6 +44,7 @@ const sections = [
 export default function TermsOfService() {
   return (
     <main>
+      <SEO title="Terms of Service" description="Farmlyt AI terms of service - please read these terms carefully before using our platform." url="/terms" />
       <PageHeader
         title="Terms of Service"
         description={`Rules and guidelines for using the ${APP_NAME} platform.`}

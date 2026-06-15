@@ -1,3 +1,4 @@
+import SEO from '../components/common/SEO';
 import HeroSection from '../components/home/HeroSection';
 import StatsSection from '../components/home/StatsSection';
 import AboutSection from '../components/home/AboutSection';
@@ -10,6 +11,8 @@ import ContactSection from '../components/home/ContactSection';
 export default function Home() {
   return (
     <main>
+      <SEO title="Home" description="AI-Powered Smart Agriculture Platform for crop disease detection, plant identification, and smart farming insights." url="/" />
+      <h1 className="sr-only">Farmlyt AI - Smart Agriculture Platform</h1>
       <HeroSection />
       <StatsSection />
       <AboutSection />
