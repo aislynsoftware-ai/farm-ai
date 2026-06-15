@@ -202,7 +202,7 @@ export default function Landing() {
                       <span className="text-xs font-medium text-emerald-300">Detection Result (Sample)</span>
                     </div>
                     <p className="text-sm text-emerald-200">Disease: <strong>Early Blight</strong> (Alternaria solani)</p>
-                    <p className="text-xs text-emerald-300/70">Confidence: 97.3% | Severity: Moderate | Treatment: Organic fungicide recommended</p>
+                    <p className="text-xs text-emerald-300/70">Confidence: 97.3% | Treatment: Organic fungicide recommended</p>
                   </div>
                 </div>
               </div>
