@@ -74,7 +74,7 @@ export default function HeroSection() {
                   <div className="flex items-center gap-2 mb-1">
                                      
                   </div>
-                  <p className="text-sm text-emerald-200">Disease: <strong>Early Blight</strong> (Alternaria solani) Confidence: 97.3%</p>
+                  <p className="text-sm text-emerald-200">Disease: <strong>Bacterial Spot</strong> (Cassava leaf) Confidence: 97.3%</p>
                  
                 </div>
               </div>
