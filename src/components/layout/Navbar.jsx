@@ -54,10 +54,8 @@ export default function Navbar({ isDark, toggleTheme }) {
   return (
     <header
       className={cn(
-        'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
-        scrolled
-          ? 'glass-solid shadow-lg shadow-black/5 dark:shadow-black/20'
-          : 'bg-transparent'
+        'fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-emerald-50/80 dark:bg-emerald-950/80 backdrop-blur-md',
+        scrolled && 'shadow-lg shadow-emerald-500/5 dark:shadow-emerald-950/50'
       )}
     >
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

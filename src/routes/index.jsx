@@ -21,6 +21,7 @@ import SubCropDetail from '../pages/SubCropDetail';
 import Research from '../pages/Research';
 import Blogs from '../pages/Blogs';
 import BlogDetails from '../pages/BlogDetails';
+import Landing from '../pages/Landing';
 
 function ErrorPage() {
   return (
@@ -46,6 +47,7 @@ export default function createAppRouter(isDark, toggleTheme) {
         { path: 'services', element: <Services /> },
         { path: 'features', element: <Features /> },
         { path: 'research', element: <Research /> },
+        { path: 'landing', element: <Landing /> },
         { path: 'blogs', element: <Blogs /> },
         { path: 'blog/:slug', element: <BlogDetails /> },
         { path: 'contact', element: <Contact /> },
