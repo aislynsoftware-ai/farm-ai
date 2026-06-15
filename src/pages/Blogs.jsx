@@ -6,6 +6,7 @@ import PageHeader from '../components/layout/PageHeader';
 import BlogCard from '../components/blog/BlogCard';
 import { BlogGridSkeleton } from '../components/blog/BlogSkeleton';
 import { getAllBlogs } from '../services/blogApi';
+import { SITE_URL } from '../constants';
 
 const PER_PAGE = 6;
 
@@ -50,7 +51,7 @@ export default function Blogs() {
         <meta property="og:title" content="Blogs - Farmlyt AI | Smart Agriculture Insights" />
         <meta property="og:description" content="Explore Farmlyt AI blogs on smart agriculture, AI-powered crop disease detection, plant identification, and farming technology insights." />
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://farmlyt.ai/blogs" />
+        <meta property="og:url" content={`${SITE_URL}/blogs`} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Blogs - Farmlyt AI | Smart Agriculture Insights" />
         <meta name="twitter:description" content="Explore Farmlyt AI blogs on smart agriculture, AI-powered crop disease detection, plant identification, and farming technology insights." />

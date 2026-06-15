@@ -2,6 +2,11 @@ export const APP_NAME = 'Farmlyt AI';
 
 export const APP_DESCRIPTION = 'AI-Powered Smart Agriculture Platform';
 
+export const SITE_URL = 'https://www.farmlytai.in';
+export const SITE_EMAIL = 'support@farmlytai.in';
+export const SITE_PHONE = '+91-8892209021';
+export const DEFAULT_IMAGE = `${SITE_URL}/logo.png`;
+
 export const ROUTES = {
   HOME: '/',
   ABOUT: '/about',

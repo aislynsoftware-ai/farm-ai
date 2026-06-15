@@ -8,6 +8,7 @@ import ShareButtons from '../components/blog/ShareButtons';
 import RelatedBlogs from '../components/blog/RelatedBlogs';
 import { BlogDetailSkeleton } from '../components/blog/BlogSkeleton';
 import { getBlogBySlug, getAllBlogs } from '../services/blogApi';
+import { SITE_URL, DEFAULT_IMAGE, APP_NAME } from '../constants';
 
 export default function BlogDetails() {
   const { slug } = useParams();
@@ -83,7 +84,7 @@ export default function BlogDetails() {
   const author = blog.author || blog.author_name || 'Farmlyt AI';
   const date = blog.published_at || blog.created_at || blog.date || '';
   const formattedDate = date ? new Date(date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '';
-  const pageUrl = `https://farmlyt.ai/blog/${slug}`;
+  const pageUrl = `${SITE_URL}/blog/${slug}`;
   const readingTime = blog.reading_time || blog.read_time || Math.ceil((blog.content?.length || 1000) / 1000) || 3;
 
   const contentFields = ['contentone', 'contenttwo', 'contentthree', 'contentfour', 'contentfive'];
@@ -119,7 +120,7 @@ export default function BlogDetails() {
     publisher: {
       '@type': 'Organization',
       name: 'Farmlyt AI',
-      logo: { '@type': 'ImageObject', url: 'https://farmlyt.ai/logo.png' },
+      logo: { '@type': 'ImageObject', url: DEFAULT_IMAGE },
     },
   };
 

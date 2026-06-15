@@ -1,8 +1,7 @@
 import { Helmet } from 'react-helmet-async';
+import { SITE_URL, DEFAULT_IMAGE, APP_NAME, SITE_EMAIL, SITE_PHONE } from '../../constants';
 
-const SITE_URL = 'https://farmlyt.ai';
-const DEFAULT_IMAGE = 'https://farmlyt.ai/logo.png';
-const SITE_NAME = 'Farmlyt AI';
+const SITE_NAME = APP_NAME;
 
 export default function SEO({
   title,
@@ -52,15 +51,15 @@ export default function SEO({
 export const ORGANIZATION_SCHEMA = {
   '@context': 'https://schema.org',
   '@type': 'Organization',
-  name: 'Farmlyt AI',
+  name: APP_NAME,
   url: SITE_URL,
   logo: DEFAULT_IMAGE,
   description: 'AI-Powered Smart Agriculture Platform for crop disease detection, plant identification, and smart farming insights.',
   contactPoint: {
     '@type': 'ContactPoint',
-    telephone: '+91-88922 09021',
+    telephone: SITE_PHONE,
     contactType: 'customer service',
-    email: 'support@farmlyt.ai',
+    email: SITE_EMAIL,
   },
   sameAs: [
     'https://twitter.com/farmlytai',
@@ -71,7 +70,7 @@ export function LocalBusinessSchema(data) {
   return {
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
-    name: 'Farmlyt AI',
+    name: APP_NAME,
     url: SITE_URL,
     logo: DEFAULT_IMAGE,
     description: data.description || 'AI-Powered Smart Agriculture Platform',
@@ -83,8 +82,8 @@ export function LocalBusinessSchema(data) {
       postalCode: data.zip || '',
       addressCountry: data.country || 'IN',
     },
-    telephone: data.phone || '',
-    email: data.email || 'support@farmlyt.ai',
+    telephone: data.phone || SITE_PHONE,
+    email: data.email || SITE_EMAIL,
   };
 }
 
