@@ -1,8 +1,3 @@
-import { writeFileSync } from 'fs';
-import { resolve, dirname } from 'path';
-import { fileURLToPath } from 'url';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
 const SITE_URL = 'https://farmlyt.ai';
 const API_URL = 'https://aislyn.in/admin/admin/farmly_api.php';
 
@@ -15,18 +10,19 @@ const staticPages = [
   { loc: '/predict', priority: '0.7', changefreq: 'monthly' },
   { loc: '/contact', priority: '0.7', changefreq: 'monthly' },
   { loc: '/blogs', priority: '0.9', changefreq: 'weekly' },
+  { loc: '/landing', priority: '0.8', changefreq: 'monthly' },
   { loc: '/privacy', priority: '0.4', changefreq: 'yearly' },
   { loc: '/terms', priority: '0.4', changefreq: 'yearly' },
   { loc: '/cookies', priority: '0.3', changefreq: 'yearly' },
-  { loc: '/landing', priority: '0.8', changefreq: 'monthly' },
 ];
 
-async function generateSitemap() {
-  let blogUrls = [];
+export default async function handler(req, res) {
+  res.setHeader('Content-Type', 'application/xml; charset=utf-8');
 
+  let blogUrls = [];
   try {
-    const res = await fetch(API_URL);
-    const data = await res.json();
+    const response = await fetch(API_URL);
+    const data = await response.json();
     const blogs = data?.blogs || [];
     blogUrls = blogs.map((b) => ({
       loc: `/blog/${b.slug}`,
@@ -50,9 +46,5 @@ ${urls.map((u) => `  <url>
   </url>`).join('\n')}
 </urlset>`;
 
-  const outPath = resolve(__dirname, '..', 'public', 'sitemap.xml');
-  writeFileSync(outPath, xml, 'utf-8');
-  console.log(`Sitemap generated: ${outPath} (${urls.length} URLs)`);
+  res.status(200).send(xml);
 }
-
-generateSitemap();
