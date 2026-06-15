@@ -126,7 +126,7 @@ export default function GoogleTranslate() {
         className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 text-xs text-gray-600 dark:text-gray-300 hover:border-emerald-300 dark:hover:border-emerald-600 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all"
       >
         <Globe size={13} />
-        <span className="hidden sm:inline">{current}</span>
+        <span className="hidden sm:inline notranslate" translate="no">{current}</span>
       </button>
       {open && (
         <div className="absolute right-0 top-full mt-1.5 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg shadow-black/5 dark:shadow-black/20 z-[9999] max-h-64 overflow-y-auto">
@@ -134,11 +134,12 @@ export default function GoogleTranslate() {
             <button
               key={lang.code}
               onClick={() => { setOpen(false); changeLanguage(lang.code); }}
-              className={`w-full text-left px-3 py-2 text-xs transition-colors hover:bg-emerald-50 dark:hover:bg-emerald-950/40 ${
+              className={`w-full text-left px-3 py-2 text-xs transition-colors hover:bg-emerald-50 dark:hover:bg-emerald-950/40 notranslate ${
                 current === lang.name
                   ? 'text-emerald-600 dark:text-emerald-400 font-semibold bg-emerald-50/50 dark:bg-emerald-950/30'
                   : 'text-gray-600 dark:text-gray-300'
               }`}
+              translate="no"
             >
               {lang.name}
             </button>
