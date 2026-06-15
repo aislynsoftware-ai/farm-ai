@@ -3,7 +3,7 @@ import { resolve, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const SITE_URL = 'https://farmlyt.ai';
+const SITE_URL = 'https://www.farmlytai.in';
 const API_URL = 'https://aislyn.in/admin/admin/farmly_api.php';
 
 const staticPages = [

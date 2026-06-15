@@ -2,12 +2,10 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet-async';
-import { APP_NAME, ROUTES } from '../constants';
+import { APP_NAME, ROUTES, SITE_URL, DEFAULT_IMAGE, SITE_EMAIL, SITE_PHONE } from '../constants';
 import SEO, { ORGANIZATION_SCHEMA, BreadcrumbListSchema } from '../components/common/SEO';
 
-const SITE_URL = 'https://farmlyt.ai';
 const SITE_NAME = APP_NAME;
-const DEFAULT_IMAGE = `${SITE_URL}/logo.png`;
 const FAVICON = `${SITE_URL}/favicon.ico`;
 
 const FOCUS_KEYWORDS = [
@@ -126,7 +124,7 @@ export default function Landing() {
           '@context': 'https://schema.org', '@type': 'Organization',
           name: SITE_NAME, url: SITE_URL, logo: DEFAULT_IMAGE,
           description: PAGE_DESC, foundingDate: '2024',
-          contactPoint: { '@type': 'ContactPoint', telephone: '+91-8892209021', contactType: 'customer service', email: 'support@farmlyt.ai' },
+          contactPoint: { '@type': 'ContactPoint', telephone: SITE_PHONE, contactType: 'customer service', email: SITE_EMAIL },
           sameAs: ['https://twitter.com/farmlytai'], areaServed: { '@type': 'Country', name: 'India' },
         })}</script>
         <script type="application/ld+json">{JSON.stringify({
