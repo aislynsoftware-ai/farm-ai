@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Sprout, LogIn, UserPlus, LayoutDashboard, ChevronDown, LogOut } from 'lucide-react';
+import { Menu, X, Sprout, LogIn, UserPlus, LayoutDashboard, ChevronDown, LogOut, ChevronRight } from 'lucide-react';
 import { NAV_LINKS, ROUTES, APP_NAME } from '../../constants';
 import ThemeToggle from '../common/ThemeToggle';
 import Button from '../common/Button';
@@ -13,7 +13,10 @@ export default function Navbar({ isDark, toggleTheme }) {
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState(null);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const [mobileExpanded, setMobileExpanded] = useState(null);
   const userMenuRef = useRef(null);
+  const dropdownRefs = useRef({});
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -39,17 +42,187 @@ export default function Navbar({ isDark, toggleTheme }) {
 
   useEffect(() => {
     setIsOpen(false);
+    setMobileExpanded(null);
   }, [location.pathname]);
 
   useEffect(() => {
     const handleClick = (e) => {
       if (userMenuRef.current && !userMenuRef.current.contains(e.target)) setUserMenuOpen(false);
+      if (openDropdown) {
+        const ref = dropdownRefs.current[openDropdown];
+        if (ref && !ref.contains(e.target)) setOpenDropdown(null);
+      }
     };
     document.addEventListener('mousedown', handleClick);
     return () => document.removeEventListener('mousedown', handleClick);
-  }, []);
+  }, [openDropdown]);
 
   const isActive = (path) => location.pathname === path;
+  const isChildActive = (children) => children?.some((c) => location.pathname === c.path);
+
+  const renderDesktopLink = (link) => {
+    if (link.children) {
+      const active = isActive(link.path) || isChildActive(link.children);
+      return (
+        <div
+          key={link.label}
+          className="relative"
+          ref={(el) => { dropdownRefs.current[link.label] = el; }}
+          onMouseEnter={() => setOpenDropdown(link.label)}
+          onMouseLeave={() => setOpenDropdown(null)}
+        >
+          <button
+            onClick={() => setOpenDropdown(openDropdown === link.label ? null : link.label)}
+            className={cn(
+              'flex items-center gap-1 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 group cursor-pointer',
+              active
+                ? 'text-emerald-600 dark:text-emerald-400'
+                : 'text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300'
+            )}
+          >
+            <span className="relative z-10">{link.label}</span>
+            <ChevronDown
+              size={12}
+              className={`transition-transform duration-200 ${openDropdown === link.label ? 'rotate-180' : ''}`}
+            />
+            {active && (
+              <motion.div
+                layoutId="nav-indicator"
+                className="absolute inset-0 bg-emerald-50 dark:bg-emerald-950/40 rounded-lg"
+                transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+              />
+            )}
+            {!active && (
+              <span className="absolute inset-x-2 bottom-1 h-0.5 bg-emerald-500 rounded-full scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+            )}
+          </button>
+          <AnimatePresence>
+            {openDropdown === link.label && (
+              <motion.div
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: 6 }}
+                transition={{ duration: 0.15 }}
+                className="absolute left-0 top-full mt-1 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg shadow-black/5 dark:shadow-black/20 z-[9999] overflow-hidden"
+              >
+                {link.children.map((child) => (
+                  <Link
+                    key={child.label}
+                    to={child.path}
+                    onClick={() => setOpenDropdown(null)}
+                    className={cn(
+                      'flex items-center gap-2 px-3.5 py-2.5 text-xs transition-colors',
+                      isActive(child.path)
+                        ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40'
+                        : 'text-gray-600 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 hover:text-emerald-600 dark:hover:text-emerald-400'
+                    )}
+                  >
+                    <ChevronRight size={11} className="text-emerald-400" />
+                    {child.label}
+                  </Link>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      );
+    }
+
+    const active = isActive(link.path);
+    return (
+      <Link
+        key={link.path}
+        to={link.path}
+        className={cn(
+          'relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 group',
+          active
+            ? 'text-emerald-600 dark:text-emerald-400'
+            : 'text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300'
+        )}
+      >
+        <span className="relative z-10">{link.label}</span>
+        {active && (
+          <motion.div
+            layoutId="nav-indicator"
+            className="absolute inset-0 bg-emerald-50 dark:bg-emerald-950/40 rounded-lg"
+            transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+          />
+        )}
+        {!active && (
+          <span className="absolute inset-x-2 bottom-1 h-0.5 bg-emerald-500 rounded-full scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+        )}
+      </Link>
+    );
+  };
+
+  const renderMobileLink = (link) => {
+    if (link.children) {
+      const expanded = mobileExpanded === link.label;
+      const active = isActive(link.path) || isChildActive(link.children);
+      return (
+        <div key={link.label}>
+          <button
+            onClick={() => setMobileExpanded(expanded ? null : link.label)}
+            className={cn(
+              'w-full flex items-center justify-between px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 cursor-pointer',
+              active
+                ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60'
+                : 'text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900 hover:text-emerald-600 dark:hover:text-emerald-300'
+            )}
+          >
+            <span>{link.label}</span>
+            <ChevronDown
+              size={14}
+              className={`transition-transform duration-200 ${expanded ? 'rotate-180' : ''}`}
+            />
+          </button>
+          <AnimatePresence>
+            {expanded && (
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: 'auto', opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                className="overflow-hidden"
+              >
+                <div className="ml-4 mt-1 space-y-1 border-l-2 border-emerald-200 dark:border-emerald-700 pl-3">
+                  {link.children.map((child) => (
+                    <Link
+                      key={child.label}
+                      to={child.path}
+                      className={cn(
+                        'block px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
+                        isActive(child.path)
+                          ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60'
+                          : 'text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900 hover:text-emerald-600 dark:hover:text-emerald-300'
+                      )}
+                    >
+                      {child.label}
+                    </Link>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      );
+    }
+
+    const active = isActive(link.path);
+    return (
+      <Link
+        key={link.path}
+        to={link.path}
+        className={cn(
+          'block px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200',
+          active
+            ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60'
+            : 'text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900 hover:text-emerald-600 dark:hover:text-emerald-300'
+        )}
+      >
+        {link.label}
+      </Link>
+    );
+  };
 
   return (
     <header
@@ -68,33 +241,7 @@ export default function Navbar({ isDark, toggleTheme }) {
           </Link>
 
           <div className="hidden lg:flex items-center gap-1">
-            {NAV_LINKS.map((link) => {
-              const active = isActive(link.path);
-              return (
-                <Link
-                  key={link.path}
-                  to={link.path}
-                  className={cn(
-                    'relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 group',
-                    active
-                      ? 'text-emerald-600 dark:text-emerald-400'
-                      : 'text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300'
-                  )}
-                >
-                  <span className="relative z-10">{link.label}</span>
-                  {active && (
-                    <motion.div
-                      layoutId="nav-indicator"
-                      className="absolute inset-0 bg-emerald-50 dark:bg-emerald-950/40 rounded-lg"
-                      transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                    />
-                  )}
-                  {!active && (
-                    <span className="absolute inset-x-2 bottom-1 h-0.5 bg-emerald-500 rounded-full scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-                  )}
-                </Link>
-              );
-            })}
+            {NAV_LINKS.map(renderDesktopLink)}
           </div>
 
           <div className="flex items-center gap-2.5">
@@ -163,23 +310,7 @@ export default function Navbar({ isDark, toggleTheme }) {
             className="lg:hidden border-t border-emerald-100 dark:border-emerald-800 bg-white/95 dark:bg-emerald-950/95 backdrop-blur-xl shadow-xl"
           >
             <div className="px-4 py-4 space-y-1">
-              {NAV_LINKS.map((link) => {
-                const active = isActive(link.path);
-                return (
-                  <Link
-                    key={link.path}
-                    to={link.path}
-                    className={cn(
-                      'block px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200',
-                      active
-                        ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/60'
-                        : 'text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900 hover:text-emerald-600 dark:hover:text-emerald-300'
-                    )}
-                  >
-                    {link.label}
-                  </Link>
-                );
-              })}
+              {NAV_LINKS.map(renderMobileLink)}
               <div className="pt-3 border-t border-emerald-100 dark:border-emerald-800 space-y-2 px-4">
                 {user ? (
                   <>

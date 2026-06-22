@@ -25,16 +25,38 @@ export const ROUTES = {
   PREDICT: '/predict',
   WALLET: '/wallet',
   BLOGS: '/blogs',
+  PRICING: '/pricing',
+  DEVELOPERS: '/developers',
+  API_DOCS: '/api-docs',
+  ENTERPRISE: '/enterprise',
+  DASHBOARD_API_KEYS: '/dashboard/api-keys',
+  DASHBOARD_DEVELOPER: '/dashboard/developer',
 };
 
 export const NAV_LINKS = [
   { label: 'Home', path: ROUTES.HOME },
   { label: 'About', path: ROUTES.ABOUT },
   { label: 'Services', path: ROUTES.SERVICES },
-  { label: 'Features', path: ROUTES.FEATURES },
-  { label: 'Research', path: ROUTES.RESEARCH },
+  {
+    label: 'Research',
+    path: ROUTES.RESEARCH,
+    children: [
+      { label: 'Overview', path: ROUTES.RESEARCH },
+      { label: 'Blogs', path: ROUTES.BLOGS },
+      { label: 'Features', path: ROUTES.FEATURES },
+    ],
+  },
+  {
+    label: 'Pricing',
+    path: ROUTES.PRICING,
+    children: [
+      { label: 'Plans', path: ROUTES.PRICING },
+      { label: 'Enterprise', path: ROUTES.ENTERPRISE },
+      { label: 'API Docs', path: ROUTES.API_DOCS },
+      { label: 'Developers', path: ROUTES.DEVELOPERS },
+    ],
+  },
   { label: 'Contact', path: ROUTES.CONTACT },
- 
 ];
 
 export const DASHBOARD_SIDEBAR = [

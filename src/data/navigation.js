@@ -6,14 +6,16 @@ const navigationData = {
       { label: 'Home', path: '/' },
       { label: 'About Us', path: '/about' },
       { label: 'Services', path: '/services' },
-  
+      { label: 'Pricing', path: '/pricing' },
+      { label: 'API Docs', path: '/api-docs' },
       { label: 'Contact', path: '/contact' },
     ],
     services: [
       { label: 'Disease Detection', path: '/services' },
       { label: 'Plant Identification', path: '/services' },
       { label: 'Food Identification', path: '/services' },
-     
+      { label: 'Developer Portal', path: '/developers' },
+      { label: 'Enterprise', path: '/enterprise' },
       { label: 'AI Recommendations', path: '/services' },
     ],
     contact: {
