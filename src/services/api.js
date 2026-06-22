@@ -191,6 +191,38 @@ const api = {
         body: JSON.stringify(data),
       }),
   },
+  apiKeys: {
+    list: (userId) => request(`/api-keys?user_id=${encodeURIComponent(userId)}`),
+    create: (userId) =>
+      request('/api-keys/create', {
+        method: 'POST',
+        body: JSON.stringify({ user_id: userId }),
+      }),
+    regenerate: (id, userId) =>
+      request('/api-keys/regenerate', {
+        method: 'POST',
+        body: JSON.stringify({ id, user_id: userId }),
+      }),
+    revoke: (id, userId) =>
+      request('/api-keys/revoke', {
+        method: 'POST',
+        body: JSON.stringify({ id, user_id: userId }),
+      }),
+    usage: (userId) => request(`/api-usage/stats?user_id=${encodeURIComponent(userId)}`),
+  },
+  plan: {
+    get: (userId) => request(`/user/plan?user_id=${encodeURIComponent(userId)}`),
+    createOrder: (userId, plan) =>
+      request('/buy-plan/create-order', {
+        method: 'POST',
+        body: JSON.stringify({ user_id: userId, plan }),
+      }),
+    verifyPayment: (data) =>
+      request('/buy-plan/verify', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      }),
+  },
 };
 
 export default api;

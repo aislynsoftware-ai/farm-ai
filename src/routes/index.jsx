@@ -22,6 +22,13 @@ import Research from '../pages/Research';
 import Blogs from '../pages/Blogs';
 import BlogDetails from '../pages/BlogDetails';
 import Landing from '../pages/Landing';
+import Pricing from '../pages/Pricing';
+import Developers from '../pages/Developers';
+import ApiDocs from '../pages/ApiDocs';
+import Enterprise from '../pages/Enterprise';
+import DashboardApiKeys from '../pages/DashboardApiKeys';
+import DashboardDeveloper from '../pages/DashboardDeveloper';
+import PlanCheckout from '../pages/PlanCheckout';
 
 function ErrorPage() {
   return (
@@ -60,6 +67,13 @@ export default function createAppRouter(isDark, toggleTheme) {
         { path: 'agriculture/:id', element: <AgricultureDetail /> },
         { path: 'agriculture/:agriId/crop/:cropId', element: <CropDetail /> },
         { path: 'crop/:id', element: <SubCropDetail /> },
+        { path: 'pricing', element: <Pricing /> },
+        { path: 'developers', element: <Developers /> },
+        { path: 'api-docs', element: <ApiDocs /> },
+        { path: 'enterprise', element: <Enterprise /> },
+        { path: 'dashboard/api-keys', element: <DashboardApiKeys /> },
+        { path: 'dashboard/developer', element: <DashboardDeveloper /> },
+        { path: 'plan-checkout', element: <PlanCheckout /> },
       ],
     },
     {
