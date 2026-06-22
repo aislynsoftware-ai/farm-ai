@@ -7,7 +7,7 @@ const navigationData = {
       { label: 'About Us', path: '/about' },
       { label: 'Services', path: '/services' },
       { label: 'Pricing', path: '/pricing' },
-      { label: 'API Docs', path: '/api-docs' },
+    
       { label: 'Contact', path: '/contact' },
     ],
     services: [
@@ -16,7 +16,7 @@ const navigationData = {
       { label: 'Food Identification', path: '/services' },
       { label: 'Developer Portal', path: '/developers' },
       { label: 'Enterprise', path: '/enterprise' },
-      { label: 'AI Recommendations', path: '/services' },
+     
     ],
     contact: {
       email: 'support@farmlytai.in',
