@@ -131,7 +131,7 @@ export default function Profile() {
                 <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
               </div>
               <div className="flex-1 min-w-0">
-                <h2 className="text-lg font-bold text-white truncate">{user?.name || 'Farmer'}</h2>
+                <h5 className="text-sm font-bold text-white truncate">{user?.name || 'Farmer'}</h5>
                 <p className="text-emerald-100/80 text-xs mt-0.5 truncate">{user?.email || ''}</p>
               </div>
             </div>
