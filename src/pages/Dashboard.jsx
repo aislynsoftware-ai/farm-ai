@@ -1,29 +1,42 @@
 import { useState, useEffect } from 'react';
 import { Menu, Sprout, FileText, Leaf, Apple, Bug, Search, Coins, User, ChevronRight, ArrowRight, ChevronDown, ChevronUp } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import SEO from '../components/common/SEO';
 import Sidebar from '../components/dashboard/Sidebar';
 import api from '../services/api';
 import Skeleton, { DashboardWelcomeSkeleton, GridCardSkeleton } from '../components/common/Skeleton';
 
-function TipCard({ tip }) {
-  const [open, setOpen] = useState(false);
+function TipCard({ tip, isOpen, onToggle }) {
   return (
-    <div className="rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border-2 border-emerald-300 dark:border-emerald-700 overflow-hidden">
+    <motion.div
+      layout
+      className="rounded-xl bg-emerald-50/50 dark:bg-emerald-950/20 border-2 border-emerald-300 dark:border-emerald-700 overflow-hidden"
+    >
       <button
-        onClick={() => setOpen(!open)}
+        onClick={onToggle}
         className="w-full flex items-center justify-between p-3 text-left hover:bg-emerald-100/50 dark:hover:bg-emerald-900/30 transition-colors cursor-pointer"
       >
         <h4 className="text-xs font-semibold text-emerald-800 dark:text-emerald-200">{tip.title}</h4>
-        {open ? <ChevronUp size={12} className="text-emerald-500 flex-shrink-0" /> : <ChevronDown size={12} className="text-emerald-500 flex-shrink-0" />}
+        {isOpen ? <ChevronUp size={12} className="text-emerald-500 flex-shrink-0" /> : <ChevronDown size={12} className="text-emerald-500 flex-shrink-0" />}
       </button>
-      {open && (
-        <div className="px-3 pb-3">
-          <p className="text-xs text-emerald-700 dark:text-emerald-400 leading-relaxed">{tip.description}</p>
-        </div>
-      )}
-    </div>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            key="content"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden"
+          >
+            <div className="px-3 pb-3">
+              <p className="text-xs text-emerald-700 dark:text-emerald-400 leading-relaxed">{tip.description}</p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </motion.div>
   );
 }
 
@@ -31,6 +44,7 @@ export default function Dashboard() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [farmingTips, setFarmingTips] = useState([]);
+  const [expandedTip, setExpandedTip] = useState(null);
   const [resources, setResources] = useState([]);
   const [user, setUser] = useState(null);
   const [coins, setCoins] = useState(null);
@@ -177,7 +191,12 @@ export default function Dashboard() {
               </h3>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {farmingTips.slice(0, 9).map((tip) => (
-                  <TipCard key={tip.id} tip={tip} />
+                  <TipCard
+                    key={tip.id}
+                    tip={tip}
+                    isOpen={expandedTip === tip.id}
+                    onToggle={() => setExpandedTip(expandedTip === tip.id ? null : tip.id)}
+                  />
                 ))}
               </div>
             </motion.div>
