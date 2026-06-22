@@ -239,7 +239,7 @@ function SampleGrid({ images }) {
 
   return (
     <>
-      <div className="grid grid-cols-5 gap-1.5">
+      <div className="grid grid-cols-3 sm:grid-cols-5 gap-1.5">
         {images.slice(0, 10).map((src, i) => (
           <button
             key={i}
@@ -505,7 +505,7 @@ export default function Research() {
             />
           </div>
 
-          <div className="grid grid-cols-3 gap-4 mb-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
             <StatCard icon={Brain} label="Models" value={data.totalModels} color="from-blue-500 to-cyan-500" delay={0} />
             <StatCard icon={Database} label="Total Images" value={data.totalImages} color="from-purple-500 to-violet-500" delay={0.05} />
             <StatCard icon={FolderTree} label="Datasets" value={data.totalDatasets} color="from-orange-500 to-red-500" delay={0.1} />
