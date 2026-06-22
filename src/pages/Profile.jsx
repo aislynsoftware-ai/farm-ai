@@ -111,15 +111,16 @@ export default function Profile() {
           >
             <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-400/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-400/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
-            <div className="relative flex items-center gap-4">
-              <div className="relative group">
-                <div className="w-16 h-16 rounded-xl bg-white/15 backdrop-blur flex items-center justify-center overflow-hidden">
-                  {user?.profile_image ? (
-                    <img src={user.profile_image} alt="" className="w-full h-full object-cover" />
-                  ) : (
-                    <User className="w-8 h-8 text-white" />
-                  )}
-                </div>
+            <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <div className="flex items-center gap-4 w-full">
+                <div className="relative group shrink-0">
+                  <div className="w-16 h-16 rounded-xl bg-white/15 backdrop-blur flex items-center justify-center overflow-hidden">
+                    {user?.profile_image ? (
+                      <img src={user.profile_image} alt="" className="w-full h-full object-cover" />
+                    ) : (
+                      <User className="w-8 h-8 text-white" />
+                    )}
+                  </div>
                 <button
                   type="button"
                   onClick={() => fileRef.current?.click()}
@@ -129,28 +130,30 @@ export default function Profile() {
                 </button>
                 <input ref={fileRef} type="file" accept="image/*" className="hidden" onChange={handleImageUpload} />
               </div>
-              <div className="flex-1">
-                <h2 className="text-lg font-bold text-white">{user?.name || 'Farmer'}</h2>
-                <p className="text-emerald-100/80 text-xs mt-0.5">{user?.email || ''}</p>
-              </div>
-              {/* Wallet Badge */}
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/15 backdrop-blur">
-                  <Coins size={18} className="text-yellow-300" />
-                  <span className="text-sm font-bold text-white">{coins !== null ? coins : '...'}</span>
-                  <span className="text-[10px] text-emerald-100/70">coins</span>
-                </div>
-                {user?.user_id && (
-                  <button
-                    onClick={() => { navigator.clipboard.writeText(user.user_id); }}
-                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/15 backdrop-blur hover:bg-white/25 transition-all cursor-pointer text-[11px] text-emerald-100"
-                    title="Click to copy User ID"
-                  >
-                    User ID: {user.user_id}
-                  </button>
-                )}
+              <div className="flex-1 min-w-0">
+                <h2 className="text-lg font-bold text-white truncate">{user?.name || 'Farmer'}</h2>
+                <p className="text-emerald-100/80 text-xs mt-0.5 truncate">{user?.email || ''}</p>
               </div>
             </div>
+            {/* Wallet Badge */}
+            <div className="flex items-center gap-3 flex-wrap w-full sm:w-auto">
+              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/15 backdrop-blur">
+                <Coins size={18} className="text-yellow-300" />
+                <span className="text-sm font-bold text-white">{coins !== null ? coins : '...'}</span>
+                <span className="text-[10px] text-emerald-100/70">coins</span>
+              </div>
+              {user?.user_id && (
+                <button
+                  onClick={() => { navigator.clipboard.writeText(user.user_id); }}
+                  className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/15 backdrop-blur hover:bg-white/25 transition-all cursor-pointer text-[11px] text-emerald-100 truncate max-w-[180px] sm:max-w-none"
+                  title="Click to copy User ID"
+                >
+                  <Copy size={11} />
+                  {user.user_id}
+                </button>
+              )}
+            </div>
+          </div>
           </motion.div>
 
           {/* Profile form */}
