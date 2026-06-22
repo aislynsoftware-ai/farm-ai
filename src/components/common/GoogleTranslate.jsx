@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Globe } from 'lucide-react';
 
 const LANGUAGES = [
@@ -55,75 +55,127 @@ const LANGUAGES = [
   { code: 'km', name: 'ភាសាខ្មែរ' },
 ];
 
+const STORAGE_KEY = 'farmai_lang';
+
+function findName(code) {
+  const lang = LANGUAGES.find((l) => l.code === code);
+  return lang ? lang.name : 'English';
+}
+
+function findCode(name) {
+  const lang = LANGUAGES.find((l) => l.name === name);
+  return lang ? lang.code : 'en';
+}
+
+function setGoogtransCookie(code) {
+  if (code === 'en') {
+    document.cookie = 'googtrans=; path=/; max-age=0';
+  } else {
+    document.cookie = `googtrans=/en/${code}; path=/; max-age=86400`;
+  }
+}
+
+function deleteAllGoogtransCookies() {
+  document.cookie.split(';').forEach((c) => {
+    if (c.trim().startsWith('googtrans=')) {
+      document.cookie = 'googtrans=; path=/; max-age=0';
+      document.cookie =
+        'googtrans=; path=/; domain=' + window.location.hostname + '; max-age=0';
+    }
+  });
+}
+
+function triggerGoogleCombo(code) {
+  const combo = document.querySelector('.goog-te-combo');
+  if (!combo) return false;
+  combo.value = code;
+  combo.dispatchEvent(new Event('change', { bubbles: true }));
+  return true;
+}
+
 export default function GoogleTranslate() {
   const [open, setOpen] = useState(false);
   const [current, setCurrent] = useState('English');
   const menuRef = useRef(null);
 
-  const getCookie = (name) => {
-    const match = document.cookie.match(new RegExp(`(^| )${name}=([^;]+)`));
-    return match ? decodeURIComponent(match[2]) : null;
-  };
-
-  const getCurrentLang = () => {
-    const cookie = getCookie('googtrans');
-    if (cookie) {
-      const code = cookie.split('/').pop();
-      const lang = LANGUAGES.find((l) => l.code === code);
-      if (lang && code !== 'en') return lang.name;
-    }
-    return 'English';
-  };
+  const applyLanguage = useCallback((code) => {
+    const name = findName(code);
+    setCurrent(name);
+    localStorage.setItem(STORAGE_KEY, name);
+    setGoogtransCookie(code);
+  }, []);
 
   useEffect(() => {
-    setCurrent(getCurrentLang());
+    const stored = localStorage.getItem(STORAGE_KEY);
+    const valid = stored && LANGUAGES.some((l) => l.name === stored);
+    const initialName = valid ? stored : 'English';
+    const initialCode = findCode(initialName);
 
-    if (sessionStorage.getItem('gt_reset')) {
-      sessionStorage.removeItem('gt_reset');
-      document.cookie = 'googtrans=; path=/; max-age=0';
-      return;
+    setCurrent(initialName);
+    deleteAllGoogtransCookies();
+    if (initialCode !== 'en') {
+      setGoogtransCookie(initialCode);
     }
 
     window.googleTranslateElementInit = () => {
-      new window.google.translate.TranslateElement({
-        pageLanguage: 'en',
-        includedLanguages: LANGUAGES.map((l) => l.code).join(','),
-        autoDisplay: false,
-      }, 'google_translate_element_hidden');
+      new window.google.translate.TranslateElement(
+        {
+          pageLanguage: 'en',
+          includedLanguages: LANGUAGES.map((l) => l.code).join(','),
+          autoDisplay: false,
+        },
+        'google_translate_element_hidden',
+      );
     };
 
-    if (!document.querySelector('[src*="translate_a/element.js"]')) {
+    const scriptExists = document.querySelector(
+      '[src*="translate_a/element.js"]',
+    );
+    if (!scriptExists) {
       const script = document.createElement('script');
-      script.src = '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
+      script.src =
+        '//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit';
       script.async = true;
       document.body.appendChild(script);
+    } else if (
+      window.google &&
+      window.google.translate &&
+      window.google.translate.TranslateElement
+    ) {
+      window.googleTranslateElementInit();
     }
-
-    const interval = setInterval(() => {
-      const lang = getCurrentLang();
-      if (lang !== current) setCurrent(lang);
-    }, 500);
-    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
-    const handleClick = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) setOpen(false);
+    const handler = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setOpen(false);
+      }
     };
-    document.addEventListener('mousedown', handleClick);
-    return () => document.removeEventListener('mousedown', handleClick);
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
   }, []);
 
-  const changeLanguage = (code) => {
-    setOpen(false);
-    if (code === 'en') {
-      sessionStorage.setItem('gt_reset', 'true');
-      document.cookie = 'googtrans=; path=/; max-age=0';
-    } else {
-      document.cookie = `googtrans=/en/${code}; path=/`;
-    }
-    window.location.reload();
-  };
+  const changeLanguage = useCallback(
+    (code) => {
+      setOpen(false);
+      applyLanguage(code);
+
+      if (triggerGoogleCombo(code)) return;
+
+      let attempts = 0;
+      const poll = setInterval(() => {
+        attempts++;
+        if (triggerGoogleCombo(code)) {
+          clearInterval(poll);
+        } else if (attempts >= 15) {
+          clearInterval(poll);
+          window.location.reload();
+        }
+      }, 200);
+    },
+    [applyLanguage],
+  );
 
   return (
     <div className="relative" ref={menuRef}>
@@ -133,14 +185,19 @@ export default function GoogleTranslate() {
         className="cursor-pointer flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl border border-gray-200 dark:border-gray-700 text-xs text-gray-600 dark:text-gray-300 hover:border-emerald-300 dark:hover:border-emerald-600 hover:text-emerald-600 dark:hover:text-emerald-400 transition-all"
       >
         <Globe size={13} />
-        <span className="hidden sm:inline notranslate" translate="no">{current}</span>
+        <span className="hidden sm:inline notranslate" translate="no">
+          {current}
+        </span>
       </button>
       {open && (
         <div className="absolute right-0 top-full mt-1.5 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg shadow-black/5 dark:shadow-black/20 z-[9999] max-h-64 overflow-y-auto">
           {LANGUAGES.map((lang) => (
             <button
               key={lang.code}
-              onClick={() => { setOpen(false); changeLanguage(lang.code); }}
+              onClick={() => {
+                setOpen(false);
+                changeLanguage(lang.code);
+              }}
               className={`cursor-pointer w-full text-left px-3 py-2 text-xs transition-colors hover:bg-emerald-50 dark:hover:bg-emerald-950/40 notranslate ${
                 current === lang.name
                   ? 'text-emerald-600 dark:text-emerald-400 font-semibold bg-emerald-50/50 dark:bg-emerald-950/30'
