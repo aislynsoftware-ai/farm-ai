@@ -260,7 +260,6 @@ export default function DashboardApiKeys() {
                     </div>
                     <div className="flex items-center gap-3 text-[10px] text-gray-400 dark:text-gray-500">
                       <span>Created: {k.created_at ? new Date(k.created_at).toLocaleDateString() : '-'}</span>
-                      <span>ID: {k.id}</span>
                       {k.last_used && (
                         <span className="flex items-center gap-1">
                           <Clock size={10} />
