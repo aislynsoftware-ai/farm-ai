@@ -137,7 +137,7 @@ export default function DashboardApiKeys() {
                   <span className="text-[10px] text-emerald-100/70">coins</span>
                 </div>
                 <div className="px-3 py-1.5 rounded-xl bg-white/15 backdrop-blur text-[11px] font-medium text-emerald-100">
-                  {plan ? plan.toUpperCase() : 'FREE'} · {requestLimit} total
+                  {plan ? plan.toUpperCase() : 'FREE'} · {requestLimit} limit
                 </div>
               </div>
             </div>
