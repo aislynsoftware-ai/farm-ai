@@ -1,4 +1,4 @@
-const BASE_URL = 'https://aislynajay-product-development.hf.space';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 const cache = new Map();
 const CACHE_TTL = 5 * 60 * 1000;

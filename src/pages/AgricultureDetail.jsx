@@ -7,7 +7,7 @@ import Skeleton, { DetailHeaderSkeleton, GridCardSkeleton } from '../components/
 import PredictionProgress from '../components/common/PredictionProgress';
 import SEO from '../components/common/SEO';
 
-const BASE_URL = 'https://aislynajay-product-development.hf.space';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 const titleEndpoint = {
   'tomato': '/leafs/tomato',

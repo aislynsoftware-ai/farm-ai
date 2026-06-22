@@ -8,7 +8,7 @@ import api from '../services/api';
 import Skeleton from '../components/common/Skeleton';
 import PredictionProgress from '../components/common/PredictionProgress';
 
-const BASE_URL = 'https://aislynajay-product-development.hf.space';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
 const titleEndpoint = {
   'tomato': '/leafs/tomato',

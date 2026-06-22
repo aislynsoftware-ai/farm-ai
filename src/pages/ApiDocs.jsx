@@ -18,7 +18,7 @@ const DOCS = [
           { name: 'image', type: 'file', required: true, desc: 'JPEG/PNG image of tomato leaf' },
           { name: 'user_id', type: 'string', required: true, desc: 'User identifier for coin deduction' },
         ],
-        request: `curl -X POST https://api.farmlytai.in/leafs/tomato \\
+        request: `curl -X POST https://farmlytai.in/api/leafs/tomato \\
   -F "image=@tomato_leaf.jpg" \\
   -F "user_id=USR123456"`,
         response: `{
@@ -37,7 +37,7 @@ const DOCS = [
           { name: 'image', type: 'file', required: true, desc: 'JPEG/PNG image of potato leaf' },
           { name: 'user_id', type: 'string', required: true, desc: 'User identifier for coin deduction' },
         ],
-        request: `curl -X POST https://api.farmlytai.in/leafs/potato \\
+        request: `curl -X POST https://farmlytai.in/api/leafs/potato \\
   -F "image=@potato_leaf.jpg" \\
   -F "user_id=USR123456"`,
         response: `{
@@ -56,7 +56,7 @@ const DOCS = [
           { name: 'image', type: 'file', required: true, desc: 'JPEG/PNG image of brinjal leaf' },
           { name: 'user_id', type: 'string', required: true, desc: 'User identifier for coin deduction' },
         ],
-        request: `curl -X POST https://api.farmlytai.in/leafs/brinjal \\
+        request: `curl -X POST https://farmlytai.in/api/leafs/brinjal \\
   -F "image=@brinjal_leaf.jpg" \\
   -F "user_id=USR123456"`,
         response: `{
@@ -82,7 +82,7 @@ const DOCS = [
           { name: 'image', type: 'file', required: true, desc: 'JPEG/PNG image of tomato fruit' },
           { name: 'user_id', type: 'string', required: true, desc: 'User identifier' },
         ],
-        request: `curl -X POST https://api.farmlytai.in/fruits/tomato \\
+        request: `curl -X POST https://farmlytai.in/api/fruits/tomato \\
   -F "image=@tomato.jpg" \\
   -F "user_id=USR123456"`,
         response: `{
@@ -101,7 +101,7 @@ const DOCS = [
           { name: 'image', type: 'file', required: true, desc: 'JPEG/PNG image of pomegranate' },
           { name: 'user_id', type: 'string', required: true, desc: 'User identifier' },
         ],
-        request: `curl -X POST https://api.farmlytai.in/fruits/pomegranate \\
+        request: `curl -X POST https://farmlytai.in/api/fruits/pomegranate \\
   -F "image=@pomegranate.jpg" \\
   -F "user_id=USR123456"`,
         response: `{
@@ -127,7 +127,7 @@ const DOCS = [
           { name: 'image', type: 'file', required: true, desc: 'JPEG/PNG image of rose' },
           { name: 'user_id', type: 'string', required: true, desc: 'User identifier' },
         ],
-        request: `curl -X POST https://api.farmlytai.in/flowers/rose \\
+        request: `curl -X POST https://farmlytai.in/api/flowers/rose \\
   -F "image=@rose.jpg" \\
   -F "user_id=USR123456"`,
         response: `{
@@ -153,7 +153,7 @@ const DOCS = [
           { name: 'image', type: 'file', required: true, desc: 'JPEG/PNG image of the plant' },
           { name: 'user_id', type: 'string', required: true, desc: 'User identifier' },
         ],
-        request: `curl -X POST https://api.farmlytai.in/plant_idetification \\
+        request: `curl -X POST https://farmlytai.in/api/plant_idetification \\
   -F "image=@plant.jpg" \\
   -F "user_id=USR123456"`,
         response: `{
@@ -178,7 +178,7 @@ const DOCS = [
         params: [
           { name: 'image', type: 'file', required: true, desc: 'JPEG/PNG image of food grains' },
         ],
-        request: `curl -X POST https://api.farmlytai.in/food_identification \\
+        request: `curl -X POST https://farmlytai.in/api/food_identification \\
   -F "image=@grains.jpg"`,
         response: `{
   "prediction": "Basmati Rice",
@@ -202,7 +202,7 @@ const DOCS = [
         params: [
           { name: 'image', type: 'file', required: true, desc: 'JPEG/PNG image of vegetable' },
         ],
-        request: `curl -X POST https://api.farmlytai.in/vegetable-spinach-identification \\
+        request: `curl -X POST https://farmlytai.in/api/vegetable-spinach-identification \\
   -F "image=@vegetable.jpg"`,
         response: `{
   "prediction": "Spinach",
