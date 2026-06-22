@@ -1,17 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Activity, BarChart3, Key, Globe, Calendar, TrendingUp, ArrowUp, ArrowDown, Coins, Menu } from 'lucide-react';
+import { Activity, BarChart3, Key, Globe, Calendar, TrendingUp, Coins, Menu } from 'lucide-react';
 import SEO from '../components/common/SEO';
 import api from '../services/api';
 import Sidebar from '../components/dashboard/Sidebar';
-
-const PLAN_LIMITS = {
-  free: 10,
-  basic: 150,
-  standard: 500,
-  pro: 1000,
-  enterprise: 99999,
-};
 
 function StatCard({ icon: Icon, label, value, sub, color }) {
   return (
@@ -41,6 +33,7 @@ export default function DashboardDeveloper() {
   const [user, setUser] = useState(null);
   const [keys, setKeys] = useState([]);
   const [plan, setPlan] = useState('free');
+  const [planLimit, setPlanLimit] = useState(10);
   const [usage, setUsage] = useState({ total_requests: 0, requests_today: 0, endpoints: [] });
   const [coins, setCoins] = useState(0);
 
@@ -62,7 +55,7 @@ export default function DashboardDeveloper() {
         api.apiKeys.list(userId).catch(() => []),
         api.farming.wallet(userId),
       ]);
-      if (planRes.status === 'fulfilled') setPlan(planRes.value.plan || 'free');
+      if (planRes.status === 'fulfilled') { setPlan(planRes.value.plan || 'free'); setPlanLimit(planRes.value.limit || 10); }
       if (usageRes.status === 'fulfilled') setUsage(usageRes.value);
       if (keysRes.status === 'fulfilled') setKeys(keysRes.value.filter((k) => k.status === 'active'));
       if (walletRes.status === 'fulfilled') setCoins(walletRes.value.coins || 0);
@@ -73,7 +66,7 @@ export default function DashboardDeveloper() {
     }
   };
 
-  const limit = PLAN_LIMITS[plan] || 10;
+  const limit = planLimit;
   const used = usage.total_requests || 0;
   const remaining = Math.max(limit - used, 0);
 
