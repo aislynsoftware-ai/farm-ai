@@ -1,5 +1,6 @@
 import SEO from '../components/common/SEO';
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo } from 'react';
+import INITIAL_DATA from './catalog_data';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   Brain, Database, FolderTree,
@@ -10,7 +11,6 @@ import {
 } from 'lucide-react';
 import PageHeader from '../components/layout/PageHeader';
 import SectionTitle from '../components/common/SectionTitle';
-import Skeleton from '../components/common/Skeleton';
 
 const CAT_ICONS = {
   Flowers: Flower2,
@@ -436,8 +436,7 @@ function OverviewGrid({ data }) {
 }
 
 export default function Research() {
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState(INITIAL_DATA);
   const [activeTab, setActiveTab] = useState('overview');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -470,19 +469,6 @@ export default function Research() {
     return { normal: n, realtime: r };
   }, [data]);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await fetch('/dataset-catalog.json');
-        setData(await res.json());
-      } catch (e) {
-        console.error('Failed to load catalog:', e);
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, []);
-
   const filterCrops = useCallback((crops) => {
     if (!searchQuery) return crops;
     const q = searchQuery.toLowerCase();
@@ -497,40 +483,6 @@ export default function Research() {
     { id: 'stage2', label: 'Stage 2', icon: Layers },
     { id: 'datasets', label: 'Datasets', icon: Database },
   ];
-
-  if (loading) {
-    return (
-      <main>
-        <PageHeader title="Research & Development" description="Comprehensive overview of datasets, models, and training pipelines." />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 space-y-4">
-          <div className="grid grid-cols-3 gap-4">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="bg-white dark:bg-gray-800 rounded-2xl p-5 border border-gray-100 dark:border-gray-700">
-                <Skeleton className="w-16 h-3 mb-2" />
-                <Skeleton variant="title" className="w-20" />
-              </div>
-            ))}
-          </div>
-          <Skeleton variant="card" className="h-40" />
-          <Skeleton variant="card" className="h-60" />
-        </div>
-      </main>
-    );
-  }
-
-  if (!data) {
-    return (
-      <main>
-        <PageHeader title="Research & Development" description="Comprehensive overview of datasets, models, and training pipelines." />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16 text-center">
-          <div className="p-12 rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
-            <Database size={40} className="mx-auto text-gray-300 dark:text-gray-600 mb-3" />
-            <p className="text-sm text-gray-500 dark:text-gray-400">Catalog not found. Run <code className="px-2 py-0.5 rounded bg-gray-100 dark:bg-gray-700 text-xs">python generate_dataset_catalog.py</code> to generate it.</p>
-          </div>
-        </div>
-      </main>
-    );
-  }
 
   return (
     <main>
