@@ -88,13 +88,13 @@ export default function DashboardDeveloper() {
   };
 
   const limit = PLAN_LIMITS[plan] || 10;
-  const monthlyUsage = usage.total_requests || MONTHLY_DATA[MONTHLY_DATA.length - 1].requests;
+  const totalUsage = usage.total_requests || MONTHLY_DATA[MONTHLY_DATA.length - 1].requests;
 
   const stats = [
     { icon: Key, label: 'Active Keys', value: keys.length, color: 'from-emerald-500 to-teal-500' },
-    { icon: Activity, label: 'Total Requests', value: usage.total_requests || 12580, sub: 'Lifetime', color: 'from-blue-500 to-cyan-500' },
+    { icon: Activity, label: 'Total Requests', value: usage.total_requests || 12580, color: 'from-blue-500 to-cyan-500' },
     { icon: Calendar, label: 'Requests Today', value: usage.requests_today || 248, color: 'from-purple-500 to-violet-500' },
-    { icon: TrendingUp, label: 'Monthly Usage', value: monthlyUsage, sub: `of ${limit} limit`, color: 'from-orange-500 to-red-500' },
+    { icon: TrendingUp, label: 'Total Usage', value: totalUsage, sub: `of ${limit} limit`, color: 'from-orange-500 to-red-500' },
   ];
 
   const endpoints = usage.endpoints?.length > 0
