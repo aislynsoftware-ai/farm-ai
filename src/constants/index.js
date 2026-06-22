@@ -41,8 +41,8 @@ export const NAV_LINKS = [
     label: 'Research',
     path: ROUTES.RESEARCH,
     children: [
-      { label: 'Overview', path: ROUTES.RESEARCH },
-      { label: 'Blogs', path: ROUTES.BLOGS },
+      { label: 'Our Research', path: ROUTES.RESEARCH },
+      
       { label: 'Features', path: ROUTES.FEATURES },
     ],
   },
