@@ -9,7 +9,7 @@ const PLANS = [
   {
     name: 'FREE',
     price: '₹0',
-    requests: '50 Requests',
+    requests: '10 Requests',
     popular: false,
     features: [
       '10 API requests per month',

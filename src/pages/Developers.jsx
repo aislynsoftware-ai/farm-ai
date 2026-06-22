@@ -7,15 +7,17 @@ import {
 import SEO from '../components/common/SEO';
 import PageHeader from '../components/layout/PageHeader';
 
+const API_BASE = 'https://farmlytai.in/api';
+
 const LANGUAGES = ['cURL', 'Python', 'JavaScript', 'PHP'];
 
 const CODE_SAMPLES = {
-  cURL: `curl -X POST https://api.farmlytai.in/leafs/tomato \\
+  cURL: `curl -X POST ${API_BASE}/leafs/tomato \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
   -F "image=@tomato_leaf.jpg"`,
   Python: `import requests
 
-url = "https://api.farmlytai.in/leafs/tomato"
+url = "${API_BASE}/leafs/tomato"
 headers = {"Authorization": "Bearer YOUR_API_KEY"}
 files = {"image": open("tomato_leaf.jpg", "rb")}
 
@@ -24,7 +26,7 @@ print(response.json())`,
   JavaScript: `const formData = new FormData();
 formData.append('image', fileInput.files[0]);
 
-fetch('https://api.farmlytai.in/leafs/tomato', {
+fetch('${API_BASE}/leafs/tomato', {
   method: 'POST',
   headers: { 'Authorization': 'Bearer YOUR_API_KEY' },
   body: formData
@@ -32,7 +34,7 @@ fetch('https://api.farmlytai.in/leafs/tomato', {
 .then(res => res.json())
 .then(data => console.log(data));`,
   PHP: `$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, "https://api.farmlytai.in/leafs/tomato");
+curl_setopt($ch, CURLOPT_URL, "${API_BASE}/leafs/tomato");
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
   "Authorization: Bearer YOUR_API_KEY"
@@ -51,83 +53,64 @@ const SECTIONS = [
     title: 'Overview',
     icon: BookOpen,
     content:
-      'Farmlyt AI provides powerful REST APIs for agricultural AI — crop disease detection, plant identification, food grain analysis, and more. Our APIs are designed to be simple, fast, and reliable.',
+      'Farmlyt AI provides powerful REST APIs for agricultural AI — crop disease detection, plant identification, food grain analysis, and more. Our APIs are designed to be simple, fast, and reliable. All endpoints are accessible at the base URL below.',
   },
   {
     title: 'Authentication',
     icon: Key,
     content:
-      'All API requests require authentication via an API key passed in the Authorization header. You can generate and manage your API keys from the Developer Dashboard.',
+      'All API requests require authentication via an API key passed in the Authorization header. Generate and manage your API keys from the Developer Dashboard. Format: Authorization: Bearer YOUR_API_KEY',
   },
   {
     title: 'Base URL',
     icon: Globe,
-    content: 'https://api.farmlytai.in',
+    content: API_BASE,
   },
   {
     title: 'Rate Limits',
     icon: Terminal,
     content:
-      'Rate limits vary by plan. Free: 50 req/mo. Basic: 150 req/mo. Standard: 500 req/mo. Pro: 1000 req/mo. Enterprise: Unlimited.',
+      'Rate limits vary by plan. Free: 10 req/mo. Basic: 150 req/mo. Standard: 500 req/mo. Pro: 1000 req/mo. Enterprise: Unlimited. Exceeding your limit returns a 429 Too Many Requests response.',
   },
 ];
 
 const ENDPOINTS = [
-  {
-    method: 'POST',
-    path: '/leafs/tomato',
-    desc: 'Detect diseases in tomato leaves',
-  },
-  {
-    method: 'POST',
-    path: '/leafs/potato',
-    desc: 'Detect diseases in potato leaves',
-  },
-  {
-    method: 'POST',
-    path: '/leafs/brinjal',
-    desc: 'Detect diseases in brinjal leaves',
-  },
-  {
-    method: 'POST',
-    path: '/leafs/chili',
-    desc: 'Detect diseases in chili leaves',
-  },
-  {
-    method: 'POST',
-    path: '/flowers/rose',
-    desc: 'Detect diseases in rose flowers',
-  },
-  {
-    method: 'POST',
-    path: '/plant_idetification',
-    desc: 'Identify plant species from image',
-  },
-  {
-    method: 'POST',
-    path: '/food_identification',
-    desc: 'Identify food grains from image',
-  },
-  {
-    method: 'POST',
-    path: '/vegetable-spinach-identification',
-    desc: 'Identify vegetables and spinach',
-  },
-  {
-    method: 'POST',
-    path: '/potted_plant',
-    desc: 'Identify potted plant diseases',
-  },
-  {
-    method: 'GET',
-    path: '/get_leaf_predictions?user_id=',
-    desc: 'Get prediction history for a user',
-  },
+  { method: 'POST', path: '/leafs/tomato', desc: 'Detect diseases in tomato leaves' },
+  { method: 'POST', path: '/leafs/potato', desc: 'Detect diseases in potato leaves' },
+  { method: 'POST', path: '/leafs/brinjal', desc: 'Detect diseases in brinjal leaves' },
+  { method: 'POST', path: '/leafs/chili', desc: 'Detect diseases in chili leaves' },
+  { method: 'POST', path: '/leafs/ladyfinger', desc: 'Detect diseases in ladyfinger leaves' },
+  { method: 'POST', path: '/vegtables/brinjal', desc: 'Analyze brinjal vegetable conditions' },
+  { method: 'POST', path: '/vegtables/cauliflower', desc: 'Analyze cauliflower conditions' },
+  { method: 'POST', path: '/vegtables/cucumber', desc: 'Analyze cucumber conditions' },
+  { method: 'POST', path: '/vegtables/ridge', desc: 'Analyze ridge gourd conditions' },
+  { method: 'POST', path: '/vegtables/bitter_gourd', desc: 'Analyze bitter gourd conditions' },
+  { method: 'POST', path: '/fruits/custard_apple', desc: 'Analyze custard apple conditions' },
+  { method: 'POST', path: '/fruits/guava', desc: 'Analyze guava conditions' },
+  { method: 'POST', path: '/fruits/pomegranate', desc: 'Analyze pomegranate conditions' },
+  { method: 'POST', path: '/fruits/lemon', desc: 'Analyze lemon conditions' },
+  { method: 'POST', path: '/fruits/tomato', desc: 'Analyze tomato fruit conditions' },
+  { method: 'POST', path: '/flowers/jasmine', desc: 'Analyze jasmine flower conditions' },
+  { method: 'POST', path: '/flowers/rose', desc: 'Analyze rose flower conditions' },
+  { method: 'POST', path: '/flowers/marigold', desc: 'Analyze marigold flower conditions' },
+  { method: 'POST', path: '/flowers/chrysanthemums', desc: 'Analyze chrysanthemum conditions' },
+  { method: 'POST', path: '/potted_plant', desc: 'Identify potted plant diseases' },
+  { method: 'POST', path: '/plant_idetification', desc: 'Identify plant species from image' },
+  { method: 'POST', path: '/food_identification', desc: 'Identify food grains from image' },
+  { method: 'POST', path: '/vegetable-spinach-identification', desc: 'Identify vegetables and spinach' },
+  { method: 'GET', path: '/get_leaf_predictions?user_id=', desc: 'Get prediction history for a user' },
+  { method: 'GET', path: '/user/wallet/', desc: 'Get user coin balance' },
+  { method: 'POST', path: '/api-keys/create', desc: 'Create a new API key' },
+  { method: 'GET', path: '/api-keys', desc: 'List all API keys' },
+  { method: 'POST', path: '/api-keys/regenerate', desc: 'Regenerate an API key' },
+  { method: 'POST', path: '/api-keys/revoke', desc: 'Revoke an API key' },
+  { method: 'GET', path: '/user/plan', desc: 'Get current plan info' },
 ];
 
 const ERROR_CODES = [
   { code: 400, desc: 'Bad Request — Missing or invalid parameters' },
   { code: 401, desc: 'Unauthorized — Invalid or missing API key' },
+  { code: 403, desc: 'Forbidden — Plan does not allow this action' },
   { code: 404, desc: 'Not Found — Endpoint does not exist' },
   { code: 429, desc: 'Too Many Requests — Rate limit exceeded' },
   { code: 500, desc: 'Internal Server Error — Please contact support' },
@@ -214,7 +197,16 @@ export default function Developers() {
                 </button>
                 {expandedSection === i && (
                   <div className="px-4 pb-4">
-                    <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">{s.content}</p>
+                    {s.title === 'Base URL' ? (
+                      <div className="flex items-center gap-2">
+                        <code className="text-xs font-mono bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-2 text-emerald-600 dark:text-emerald-400 border border-gray-200 dark:border-gray-700 select-all">
+                          {s.content}
+                        </code>
+                        <CopyButton text={s.content} />
+                      </div>
+                    ) : (
+                      <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">{s.content}</p>
+                    )}
                   </div>
                 )}
               </div>
@@ -244,13 +236,19 @@ export default function Developers() {
                   <div className="px-4 pb-4 border-t border-gray-100 dark:border-gray-700">
                     <div className="pt-3 space-y-3">
                       <div>
+                        <p className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Full URL</p>
+                        <code className="text-xs font-mono bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-1.5 text-emerald-600 dark:text-emerald-400 select-all">
+                          {API_BASE}{ep.path}
+                        </code>
+                      </div>
+                      <div>
                         <p className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Parameters</p>
                         <div className="text-xs text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
                           <code className="font-mono">image</code> (required) — Image file (JPEG/PNG)
-                          {ep.method === 'POST' && (
+                          {ep.method === 'POST' && !ep.path.includes('api-keys') && (
                             <>
                               <br />
-                              <code className="font-mono">user_id</code> (required for paid plans) — User identifier
+                              <code className="font-mono">user_id</code> (required for coin-based endpoints) — User identifier
                             </>
                           )}
                         </div>
