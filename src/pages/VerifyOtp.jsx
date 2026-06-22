@@ -144,6 +144,20 @@ export default function VerifyOtp() {
                       value={digit}
                       onChange={(e) => handleOtpChange(index, e.target.value)}
                       onKeyDown={(e) => handleKeyDown(index, e)}
+                      onPaste={(e) => {
+                        e.preventDefault();
+                        const pasted = (e.clipboardData || window.clipboardData).getData('text').replace(/\D/g, '').slice(0, 6);
+                        if (!pasted) return;
+                        const newOtp = [...otp];
+                        for (let i = 0; i < 6; i++) {
+                          newOtp[i] = pasted[i] || '';
+                        }
+                        setOtp(newOtp);
+                        otpRef.current = pasted;
+                        setError('');
+                        const nextIdx = Math.min(pasted.length, 5);
+                        document.getElementById(`otp-${nextIdx}`)?.focus();
+                      }}
                       className="w-10 h-12 text-center text-lg font-bold rounded-xl bg-white dark:bg-gray-800 border-2 border-gray-200 dark:border-gray-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none text-gray-900 dark:text-white transition-all duration-200"
                     />
                   ))}
