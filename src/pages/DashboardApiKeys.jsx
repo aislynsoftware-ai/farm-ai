@@ -22,6 +22,7 @@ export default function DashboardApiKeys() {
   const [plan, setPlan] = useState(null);
   const [planLimit, setPlanLimit] = useState(10);
   const [coins, setCoins] = useState(null);
+  const [usage, setUsage] = useState({ total_requests: 0 });
 
   useEffect(() => {
     const stored = localStorage.getItem('user');
@@ -32,6 +33,7 @@ export default function DashboardApiKeys() {
         loadPlan(u.user_id);
         loadKeys(u.user_id);
         loadCoins(u.user_id);
+        loadUsage(u.user_id);
       } catch { setLoading(false); }
     } else {
       setLoading(false);
@@ -44,6 +46,10 @@ export default function DashboardApiKeys() {
 
   const loadCoins = async (userId) => {
     try { const res = await api.farming.wallet(userId); setCoins(res.coins); } catch {}
+  };
+
+  const loadUsage = async (userId) => {
+    try { const res = await api.apiKeys.usage(userId); setUsage(res); } catch {}
   };
 
   const loadKeys = async (userId) => {
@@ -138,7 +144,7 @@ export default function DashboardApiKeys() {
                   <span className="text-[10px] text-emerald-100/70">coins</span>
                 </div>
                 <div className="px-3 py-1.5 rounded-xl bg-white/15 backdrop-blur text-[11px] font-medium text-emerald-100">
-                  {plan ? plan.toUpperCase() : 'FREE'} · {requestLimit} limit
+                  {plan ? plan.toUpperCase() : 'FREE'} · {Math.max(requestLimit - (usage.total_requests || 0), 0)} remaining
                 </div>
               </div>
             </div>
