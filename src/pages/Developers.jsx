@@ -70,7 +70,7 @@ const SECTIONS = [
     title: 'Rate Limits',
     icon: Terminal,
     content:
-      'Rate limits vary by plan. Free: 10 req/mo. Basic: 150 req/mo. Standard: 500 req/mo. Pro: 1000 req/mo. Enterprise: Unlimited. Exceeding your limit returns a 429 Too Many Requests response.',
+      'Rate limits by plan. Free: 10 total. Basic: 150 total. Standard: 500 total. Pro: 1000 total. Enterprise: Unlimited. Exceeding your limit returns a 429 Too Many Requests response.',
   },
 ];
 

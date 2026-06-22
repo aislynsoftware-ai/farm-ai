@@ -12,7 +12,7 @@ const PLANS = [
     requests: '10 Requests',
     popular: false,
     features: [
-      '10 API requests per month',
+      '10 API requests total',
       'Basic disease detection',
       'Standard response time',
       'Email support',
@@ -27,7 +27,7 @@ const PLANS = [
     requests: '150 Requests',
     popular: false,
     features: [
-      '150 API requests per month',
+      '150 API requests total',
       'All detection models',
       'Standard response time',
       'Email support',
@@ -42,7 +42,7 @@ const PLANS = [
     requests: '500 Requests',
     popular: true,
     features: [
-      '500 API requests per month',
+      '500 API requests total',
       'All detection models',
       'Priority response time',
       'Priority support',
@@ -58,7 +58,7 @@ const PLANS = [
     requests: '1000 Requests',
     popular: false,
     features: [
-      '1000 API requests per month',
+      '1000 API requests total',
       'All detection models',
       'Priority response time',
       'Dedicated support',
@@ -169,7 +169,7 @@ export default function Pricing() {
                   <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-1">{plan.name}</h3>
                   <div className="flex items-baseline gap-1">
                     <span className="text-3xl font-extrabold text-gray-900 dark:text-white">{plan.price}</span>
-                    {plan.price !== 'Custom' && <span className="text-xs text-gray-500 dark:text-gray-400">/mo</span>}
+                    {plan.price !== 'Custom' && <span className="text-xs text-gray-500 dark:text-gray-400"> total</span>}
                   </div>
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{plan.requests}</p>
                 </div>
