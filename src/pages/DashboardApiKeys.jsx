@@ -20,6 +20,7 @@ export default function DashboardApiKeys() {
   const [revealedIdx, setRevealedIdx] = useState(null);
   const [user, setUser] = useState(null);
   const [plan, setPlan] = useState(null);
+  const [planLimit, setPlanLimit] = useState(10);
   const [coins, setCoins] = useState(null);
 
   useEffect(() => {
@@ -38,7 +39,7 @@ export default function DashboardApiKeys() {
   }, []);
 
   const loadPlan = async (userId) => {
-    try { const res = await api.plan.get(userId); setPlan(res.plan); } catch { setPlan('free'); }
+    try { const res = await api.plan.get(userId); setPlan(res.plan); setPlanLimit(res.limit || 10); } catch { setPlan('free'); setPlanLimit(10); }
   };
 
   const loadCoins = async (userId) => {
@@ -88,7 +89,7 @@ export default function DashboardApiKeys() {
     }
   };
 
-  const requestLimit = plan === 'free' ? 10 : plan === 'basic' || plan === 'BASIC' ? 150 : plan === 'standard' || plan === 'STANDARD' ? 500 : plan === 'pro' || plan === 'PRO' ? 1000 : 99999;
+  const requestLimit = planLimit;
 
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900 mt-10">
