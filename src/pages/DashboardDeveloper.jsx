@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Activity, BarChart3, Key, Globe, Calendar, TrendingUp, ArrowUp, ArrowDown, Coins } from 'lucide-react';
+import { Activity, BarChart3, Key, Globe, Calendar, TrendingUp, ArrowUp, ArrowDown, Coins, Menu } from 'lucide-react';
 import SEO from '../components/common/SEO';
 import api from '../services/api';
+import Sidebar from '../components/dashboard/Sidebar';
 
 const PLAN_LIMITS = {
   free: 10,
@@ -12,16 +13,7 @@ const PLAN_LIMITS = {
   enterprise: 99999,
 };
 
-const MONTHLY_DATA = [
-  { month: 'Jan', requests: 320 },
-  { month: 'Feb', requests: 450 },
-  { month: 'Mar', requests: 380 },
-  { month: 'Apr', requests: 520 },
-  { month: 'May', requests: 610 },
-  { month: 'Jun', requests: 580 },
-];
-
-function StatCard({ icon: Icon, label, value, sub, trend, color }) {
+function StatCard({ icon: Icon, label, value, sub, color }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
@@ -38,20 +30,14 @@ function StatCard({ icon: Icon, label, value, sub, trend, color }) {
         </div>
       </div>
       {sub && (
-        <div className="flex items-center gap-1 text-[10px]">
-          {trend === 'up' ? (
-            <ArrowUp size={10} className="text-emerald-500" />
-          ) : (
-            <ArrowDown size={10} className="text-red-500" />
-          )}
-          <span className={trend === 'up' ? 'text-emerald-500' : 'text-red-500'}>{sub}</span>
-        </div>
+        <div className="text-[10px] text-gray-400 dark:text-gray-500">{sub}</div>
       )}
     </motion.div>
   );
 }
 
 export default function DashboardDeveloper() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [keys, setKeys] = useState([]);
   const [plan, setPlan] = useState('free');
@@ -88,125 +74,117 @@ export default function DashboardDeveloper() {
   };
 
   const limit = PLAN_LIMITS[plan] || 10;
-  const totalUsage = usage.total_requests || MONTHLY_DATA[MONTHLY_DATA.length - 1].requests;
 
   const stats = [
     { icon: Key, label: 'Active Keys', value: keys.length, color: 'from-emerald-500 to-teal-500' },
-    { icon: Activity, label: 'Total Requests', value: usage.total_requests || 12580, color: 'from-blue-500 to-cyan-500' },
-    { icon: Calendar, label: 'Requests Today', value: usage.requests_today || 248, color: 'from-purple-500 to-violet-500' },
-    { icon: TrendingUp, label: 'Total Usage', value: totalUsage, sub: `of ${limit} limit`, color: 'from-orange-500 to-red-500' },
+    { icon: Activity, label: 'Total Requests', value: usage.total_requests || 0, color: 'from-blue-500 to-cyan-500' },
+    { icon: Calendar, label: 'Requests Today', value: usage.requests_today || 0, color: 'from-purple-500 to-violet-500' },
+    { icon: TrendingUp, label: 'Total Usage', value: usage.total_requests || 0, sub: `of ${limit} limit`, color: 'from-orange-500 to-red-500' },
   ];
 
   const endpoints = usage.endpoints?.length > 0
     ? usage.endpoints.map((e) => ({ path: e.endpoint, count: e.count }))
-    : [
-        { path: '/leafs/tomato', count: 145 },
-        { path: '/leafs/potato', count: 98 },
-        { path: '/leafs/brinjal', count: 76 },
-        { path: '/leafs/chili', count: 54 },
-        { path: '/flowers/rose', count: 42 },
-        { path: '/plant_idetification', count: 120 },
-        { path: '/food_identification', count: 88 },
-        { path: '/vegetable-spinach-identification', count: 35 },
-      ];
+    : [];
 
-  const maxMonthly = Math.max(...MONTHLY_DATA.map((d) => d.requests));
-  const maxEndpoint = Math.max(...endpoints.map((e) => e.count));
+  const maxEndpoint = Math.max(...endpoints.map((e) => e.count), 1);
 
   return (
-    <div className="p-4 sm:p-6">
-      <SEO title="Developer Dashboard" url="/dashboard/developer" />
-      <div className="max-w-6xl mx-auto">
-        <div className="mb-6">
-          <h1 className="text-lg font-bold text-gray-900 dark:text-white">Developer Dashboard</h1>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Monitor your API usage and performance</p>
+    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900 mt-10">
+      <Sidebar mobileOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <main className="flex-1 overflow-x-hidden">
+        <SEO title="Developer Dashboard" url="/dashboard/developer" />
+        <div className="sticky top-0 z-30 lg:hidden bg-white/80 dark:bg-gray-900/80 backdrop-blur border-b border-gray-100 dark:border-gray-800 px-4 py-3 flex items-center gap-3">
+          <button onClick={() => setSidebarOpen(true)} className="p-1.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer">
+            <Menu size={20} />
+          </button>
+          <span className="text-sm font-semibold text-gray-900 dark:text-white">Developer</span>
         </div>
 
-        <div className="flex items-center gap-2 mb-4">
-          <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white">
-            {plan.toUpperCase()} Plan
-          </span>
-          <span className="flex items-center gap-1 text-[10px] text-gray-500 dark:text-gray-400">
-            <Coins size={11} />
-            {coins} coins
-          </span>
-        </div>
-
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-          {stats.map((s) => (
-            <StatCard key={s.label} {...s} />
-          ))}
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="p-5 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
-            <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-              <BarChart3 size={15} className="text-emerald-500" />
-              Monthly Usage
-            </h3>
-            <div className="space-y-2">
-              {MONTHLY_DATA.map((d) => (
-                <div key={d.month}>
-                  <div className="flex items-center justify-between text-[11px] mb-1">
-                    <span className="text-gray-500 dark:text-gray-400">{d.month}</span>
-                    <span className="font-mono text-gray-700 dark:text-gray-300">{d.requests.toLocaleString()}</span>
-                  </div>
-                  <div className="h-2 rounded-full bg-gray-100 dark:bg-gray-700 overflow-hidden">
-                    <motion.div
-                      className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-500"
-                      initial={{ width: 0 }}
-                      animate={{ width: `${(d.requests / maxMonthly) * 100}%` }}
-                      transition={{ duration: 0.6, ease: 'easeOut' }}
-                    />
-                  </div>
+        <div className="p-4 lg:p-6 space-y-5 max-w-7xl mx-auto">
+          {/* Greeting card */}
+          <motion.div
+            className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-600 via-green-700 to-blue-800 p-6 lg:p-8"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-400/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
+            <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-400/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
+            <div className="relative flex items-center gap-4">
+              <div className="w-14 h-14 rounded-xl bg-white/15 backdrop-blur flex items-center justify-center">
+                <BarChart3 size={24} className="text-white" />
+              </div>
+              <div className="flex-1">
+                <h2 className="text-lg font-bold text-white">Developer Dashboard</h2>
+                <p className="text-emerald-100/80 text-xs mt-0.5">Monitor your API usage and performance</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/15 backdrop-blur">
+                  <Coins size={14} className="text-yellow-300" />
+                  <span className="text-sm font-bold text-white">{coins !== null ? coins : '...'}</span>
+                  <span className="text-[10px] text-emerald-100/70">coins</span>
                 </div>
-              ))}
+                <div className="px-3 py-1.5 rounded-xl bg-white/15 backdrop-blur text-[11px] font-medium text-emerald-100">
+                  {plan ? plan.toUpperCase() : 'FREE'} · {limit} total
+                </div>
+              </div>
             </div>
+          </motion.div>
+
+          {/* Stats */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+            {stats.map((s) => (
+              <StatCard key={s.label} {...s} />
+            ))}
           </div>
 
-          <div className="p-5 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
-            <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-              <Globe size={15} className="text-emerald-500" />
-              Endpoint Usage
-            </h3>
-            <div className="space-y-1">
-              {endpoints.map((ep) => (
-                <div key={ep.path} className="flex items-center gap-3 py-1.5">
-                  <code className="text-[10px] font-mono text-gray-600 dark:text-gray-400 w-32 truncate">{ep.path}</code>
-                  <div className="flex-1 h-1.5 rounded-full bg-gray-100 dark:bg-gray-700 overflow-hidden">
-                    <motion.div
-                      className="h-full rounded-full bg-emerald-500"
-                      initial={{ width: 0 }}
-                      animate={{ width: `${(ep.count / maxEndpoint) * 100}%` }}
-                      transition={{ duration: 0.5, ease: 'easeOut' }}
-                    />
+          {/* Endpoint Usage */}
+          {endpoints.length > 0 && (
+            <div className="p-5 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
+              <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                <Globe size={15} className="text-emerald-500" />
+                Endpoint Usage
+              </h3>
+              <div className="space-y-1">
+                {endpoints.map((ep) => (
+                  <div key={ep.path} className="flex items-center gap-3 py-1.5">
+                    <code className="text-[10px] font-mono text-gray-600 dark:text-gray-400 w-32 truncate">{ep.path}</code>
+                    <div className="flex-1 h-1.5 rounded-full bg-gray-100 dark:bg-gray-700 overflow-hidden">
+                      <motion.div
+                        className="h-full rounded-full bg-emerald-500"
+                        initial={{ width: 0 }}
+                        animate={{ width: `${(ep.count / maxEndpoint) * 100}%` }}
+                        transition={{ duration: 0.5, ease: 'easeOut' }}
+                      />
+                    </div>
+                    <span className="text-[10px] font-mono text-gray-500 dark:text-gray-400 w-10 text-right">{ep.count}</span>
                   </div>
-                  <span className="text-[10px] font-mono text-gray-500 dark:text-gray-400 w-10 text-right">{ep.count}</span>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        </div>
+          )}
 
-        {keys.length > 0 && (
-          <div className="mt-6 p-5 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
-            <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
-              <Key size={15} className="text-emerald-500" />
-              Active API Keys
-            </h3>
-            <div className="space-y-2">
-              {keys.map((k) => (
-                <div key={k.id} className="flex items-center gap-3 text-xs bg-gray-50 dark:bg-gray-900 rounded-lg p-3 border border-gray-100 dark:border-gray-700">
-                  <code className="flex-1 font-mono text-gray-600 dark:text-gray-400">
-                    {(k.api_key || '').slice(0, 12)}••••••••••
-                  </code>
-                  <span className="text-gray-400">{k.created_at ? new Date(k.created_at).toLocaleDateString() : '-'}</span>
-                </div>
-              ))}
+          {/* Active API Keys */}
+          {keys.length > 0 && (
+            <div className="p-5 rounded-xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
+              <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                <Key size={15} className="text-emerald-500" />
+                Active API Keys
+              </h3>
+              <div className="space-y-2">
+                {keys.map((k) => (
+                  <div key={k.id} className="flex items-center gap-3 text-xs bg-gray-50 dark:bg-gray-900 rounded-lg p-3 border border-gray-100 dark:border-gray-700">
+                    <code className="flex-1 font-mono text-gray-600 dark:text-gray-400">
+                      {(k.api_key || '').slice(0, 12)}••••••••••
+                    </code>
+                    <span className="text-gray-400">{k.created_at ? new Date(k.created_at).toLocaleDateString() : '-'}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      </main>
     </div>
   );
 }
