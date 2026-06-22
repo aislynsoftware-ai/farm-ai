@@ -1,6 +1,6 @@
 import SEO from '../components/common/SEO';
 import { motion } from 'framer-motion';
-import { Target, Eye, Heart, Leaf, Shield, TrendingUp, Users, Globe, Sprout, Camera, CheckCircle, BookOpen, Award, Quote } from 'lucide-react';
+import { Target, Eye, Heart, Leaf, Shield, TrendingUp, Users, Globe, Sprout, Camera, BookOpen, Award, Quote } from 'lucide-react';
 import PageHeader from '../components/layout/PageHeader';
 import SectionTitle from '../components/common/SectionTitle';
 

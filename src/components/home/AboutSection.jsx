@@ -44,18 +44,12 @@ export default function AboutSection() {
             transition={{ duration: 0.5 }}
           >
             <div className="relative rounded-2xl overflow-hidden border border-emerald-200/30 dark:border-emerald-800/30">
-              <div className="aspect-[4/3] bg-gradient-to-br from-emerald-100 to-blue-100 dark:from-emerald-950 dark:to-blue-950 rounded-2xl flex items-center justify-center p-8">
-                <div className="text-center">
-                  <div className="w-16 h-16 rounded-2xl gradient-bg flex items-center justify-center mx-auto mb-3 shadow-lg shadow-emerald-500/20">
-                    <Leaf className="w-8 h-8 text-white" />
-                  </div>
-                  <p className="text-base font-semibold text-emerald-700 dark:text-emerald-300">
-                    Smart Agriculture
-                    <br />
-                    for a Better Future
-                  </p>
-                </div>
-              </div>
+              <img
+                src="/about.png"
+                alt="Smart Agriculture"
+                className="w-full aspect-[16/10] object-cover"
+                loading="lazy"
+              />
             </div>
           </motion.div>
 
