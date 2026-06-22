@@ -134,10 +134,21 @@ export default function Profile() {
                 <p className="text-emerald-100/80 text-xs mt-0.5">{user?.email || ''}</p>
               </div>
               {/* Wallet Badge */}
-              <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/15 backdrop-blur">
-                <Coins size={18} className="text-yellow-300" />
-                <span className="text-sm font-bold text-white">{coins !== null ? coins : '...'}</span>
-                <span className="text-[10px] text-emerald-100/70">coins</span>
+              <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/15 backdrop-blur">
+                  <Coins size={18} className="text-yellow-300" />
+                  <span className="text-sm font-bold text-white">{coins !== null ? coins : '...'}</span>
+                  <span className="text-[10px] text-emerald-100/70">coins</span>
+                </div>
+                {user?.user_id && (
+                  <button
+                    onClick={() => { navigator.clipboard.writeText(user.user_id); }}
+                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/15 backdrop-blur hover:bg-white/25 transition-all cursor-pointer text-[11px] text-emerald-100"
+                    title="Click to copy User ID"
+                  >
+                    User ID: {user.user_id}
+                  </button>
+                )}
               </div>
             </div>
           </motion.div>

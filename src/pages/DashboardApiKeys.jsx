@@ -107,6 +107,7 @@ export default function DashboardApiKeys() {
           <div>
             <h1 className="text-lg font-bold text-gray-900 dark:text-white">API Keys</h1>
             <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Manage your API keys for programmatic access{plan === 'free' ? ' (10 requests/month)' : ''}</p>
+            {user && <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1">Your User ID: {user.user_id}</p>}
           </div>
           <button
             onClick={createKey}
