@@ -67,6 +67,44 @@ const DOCS = [
 }`,
         classes: ['Healthy Leaf', 'Insect Pest Disease', 'Leaf Spot Disease', 'Mosaic Virus Disease', 'Wilt Disease'],
       },
+      {
+        path: '/leafs/chili',
+        method: 'POST',
+        description: 'Detect diseases in chili leaves',
+        params: [
+          { name: 'image', type: 'file', required: true, desc: 'JPEG/PNG image of chili leaf' },
+          { name: 'user_id', type: 'string', required: true, desc: 'User identifier for coin deduction' },
+        ],
+        request: `curl -X POST https://farmlytai.in/api/leafs/chili \\
+  -F "image=@chili_leaf.jpg" \\
+  -F "user_id=USR123456"`,
+        response: `{
+  "prediction": "Leaf Curl",
+  "confidence": 95.0,
+  "original_image": "https://...",
+  "predicted_image": "https://..."
+}`,
+        classes: ['Healthy', 'Leaf Curl', 'Bacterial Spot', 'Anthracnose', 'Powdery Mildew'],
+      },
+      {
+        path: '/leafs/ladyfinger',
+        method: 'POST',
+        description: 'Detect diseases in ladyfinger (okra) leaves',
+        params: [
+          { name: 'image', type: 'file', required: true, desc: 'JPEG/PNG image of ladyfinger leaf' },
+          { name: 'user_id', type: 'string', required: true, desc: 'User identifier for coin deduction' },
+        ],
+        request: `curl -X POST https://farmlytai.in/api/leafs/ladyfinger \\
+  -F "image=@ladyfinger_leaf.jpg" \\
+  -F "user_id=USR123456"`,
+        response: `{
+  "prediction": "Yellow Vein Mosaic",
+  "confidence": 96.8,
+  "original_image": "https://...",
+  "predicted_image": "https://..."
+}`,
+        classes: ['Healthy', 'Yellow Vein Mosaic', 'Powdery Mildew', 'Leaf Spot', 'Damping Off'],
+      },
     ],
   },
   {
@@ -112,6 +150,63 @@ const DOCS = [
 }`,
         classes: ['Alternaria', 'Anthracnose', 'Bacterial Blight', 'Cercospora', 'Healthy'],
       },
+      {
+        path: '/fruits/guava',
+        method: 'POST',
+        description: 'Detect diseases in guava fruits',
+        params: [
+          { name: 'image', type: 'file', required: true, desc: 'JPEG/PNG image of guava' },
+          { name: 'user_id', type: 'string', required: true, desc: 'User identifier' },
+        ],
+        request: `curl -X POST https://farmlytai.in/api/fruits/guava \\
+  -F "image=@guava.jpg" \\
+  -F "user_id=USR123456"`,
+        response: `{
+  "prediction": "Anthracnose",
+  "confidence": 94.0,
+  "original_image": "https://...",
+  "predicted_image": "https://..."
+}`,
+        classes: ['Anthracnose', 'Fruit Fly', 'Healthy', 'Stem Canker', 'Wilt'],
+      },
+      {
+        path: '/fruits/lemon',
+        method: 'POST',
+        description: 'Detect diseases in lemon fruits',
+        params: [
+          { name: 'image', type: 'file', required: true, desc: 'JPEG/PNG image of lemon' },
+          { name: 'user_id', type: 'string', required: true, desc: 'User identifier' },
+        ],
+        request: `curl -X POST https://farmlytai.in/api/fruits/lemon \\
+  -F "image=@lemon.jpg" \\
+  -F "user_id=USR123456"`,
+        response: `{
+  "prediction": "Citrus Canker",
+  "confidence": 97.2,
+  "original_image": "https://...",
+  "predicted_image": "https://..."
+}`,
+        classes: ['Citrus Canker', 'Healthy', 'Scab', 'Black Spot', 'Melanose'],
+      },
+      {
+        path: '/fruits/custard_apple',
+        method: 'POST',
+        description: 'Detect diseases in custard apple fruits',
+        params: [
+          { name: 'image', type: 'file', required: true, desc: 'JPEG/PNG image of custard apple' },
+          { name: 'user_id', type: 'string', required: true, desc: 'User identifier' },
+        ],
+        request: `curl -X POST https://farmlytai.in/api/fruits/custard_apple \\
+  -F "image=@custard_apple.jpg" \\
+  -F "user_id=USR123456"`,
+        response: `{
+  "prediction": "Healthy",
+  "confidence": 96.5,
+  "original_image": "https://...",
+  "predicted_image": "https://..."
+}`,
+        classes: ['Healthy', 'Fruit Rot', 'Mealybug', 'Scab', 'Wilt'],
+      },
     ],
   },
   {
@@ -138,12 +233,171 @@ const DOCS = [
 }`,
         classes: ['Botrytis Blight', 'Bud Rot', 'Healthy', 'Petal Blight', 'Thrips'],
       },
+      {
+        path: '/flowers/jasmine',
+        method: 'POST',
+        description: 'Detect diseases in jasmine flowers',
+        params: [
+          { name: 'image', type: 'file', required: true, desc: 'JPEG/PNG image of jasmine' },
+          { name: 'user_id', type: 'string', required: true, desc: 'User identifier' },
+        ],
+        request: `curl -X POST https://farmlytai.in/api/flowers/jasmine \\
+  -F "image=@jasmine.jpg" \\
+  -F "user_id=USR123456"`,
+        response: `{
+  "prediction": "Bud Worm",
+  "confidence": 94.5,
+  "original_image": "https://...",
+  "predicted_image": "https://..."
+}`,
+        classes: ['Healthy', 'Bud Worm', 'Leaf Webber', 'Wilt', 'Powdery Mildew'],
+      },
+      {
+        path: '/flowers/marigold',
+        method: 'POST',
+        description: 'Detect diseases in marigold flowers',
+        params: [
+          { name: 'image', type: 'file', required: true, desc: 'JPEG/PNG image of marigold' },
+          { name: 'user_id', type: 'string', required: true, desc: 'User identifier' },
+        ],
+        request: `curl -X POST https://farmlytai.in/api/flowers/marigold \\
+  -F "image=@marigold.jpg" \\
+  -F "user_id=USR123456"`,
+        response: `{
+  "prediction": "Blight",
+  "confidence": 92.0,
+  "original_image": "https://...",
+  "predicted_image": "https://..."
+}`,
+        classes: ['Healthy', 'Blight', 'Bud Rot', 'Leaf Spot', 'Wilt'],
+      },
+      {
+        path: '/flowers/chrysanthemums',
+        method: 'POST',
+        description: 'Detect diseases in chrysanthemum flowers',
+        params: [
+          { name: 'image', type: 'file', required: true, desc: 'JPEG/PNG image of chrysanthemum' },
+          { name: 'user_id', type: 'string', required: true, desc: 'User identifier' },
+        ],
+        request: `curl -X POST https://farmlytai.in/api/flowers/chrysanthemums \\
+  -F "image=@chrysanthemum.jpg" \\
+  -F "user_id=USR123456"`,
+        response: `{
+  "prediction": "Leaf Spot",
+  "confidence": 95.1,
+  "original_image": "https://...",
+  "predicted_image": "https://..."
+}`,
+        classes: ['Healthy', 'Leaf Spot', 'Rust', 'Wilt', 'Powdery Mildew'],
+      },
     ],
   },
   {
-    category: 'Plant Identification',
-    icon: Sprout,
-    color: 'from-emerald-500 to-teal-500',
+    category: 'Vegetable Disease Detection',
+    icon: Grid3X3,
+    color: 'from-green-500 to-emerald-600',
+    endpoints: [
+      {
+        path: '/vegtables/brinjal',
+        method: 'POST',
+        description: 'Detect diseases in brinjal vegetables',
+        params: [
+          { name: 'image', type: 'file', required: true, desc: 'JPEG/PNG image of brinjal' },
+          { name: 'user_id', type: 'string', required: true, desc: 'User identifier' },
+        ],
+        request: `curl -X POST https://farmlytai.in/api/vegtables/brinjal \\
+  -F "image=@brinjal.jpg" \\
+  -F "user_id=USR123456"`,
+        response: `{
+  "prediction": "Shoot and Fruit Borer",
+  "confidence": 96.2,
+  "original_image": "https://...",
+  "predicted_image": "https://..."
+}`,
+        classes: ['Healthy', 'Shoot and Fruit Borer', 'Leafhopper', 'Bacterial Wilt', 'Damping Off'],
+      },
+      {
+        path: '/vegtables/cauliflower',
+        method: 'POST',
+        description: 'Detect diseases in cauliflower',
+        params: [
+          { name: 'image', type: 'file', required: true, desc: 'JPEG/PNG image of cauliflower' },
+          { name: 'user_id', type: 'string', required: true, desc: 'User identifier' },
+        ],
+        request: `curl -X POST https://farmlytai.in/api/vegtables/cauliflower \\
+  -F "image=@cauliflower.jpg" \\
+  -F "user_id=USR123456"`,
+        response: `{
+  "prediction": "Downy Mildew",
+  "confidence": 94.8,
+  "original_image": "https://...",
+  "predicted_image": "https://..."
+}`,
+        classes: ['Healthy', 'Downy Mildew', 'Black Rot', 'Clubroot', 'Leaf Spot'],
+      },
+      {
+        path: '/vegtables/cucumber',
+        method: 'POST',
+        description: 'Detect diseases in cucumber',
+        params: [
+          { name: 'image', type: 'file', required: true, desc: 'JPEG/PNG image of cucumber' },
+          { name: 'user_id', type: 'string', required: true, desc: 'User identifier' },
+        ],
+        request: `curl -X POST https://farmlytai.in/api/vegtables/cucumber \\
+  -F "image=@cucumber.jpg" \\
+  -F "user_id=USR123456"`,
+        response: `{
+  "prediction": "Powdery Mildew",
+  "confidence": 97.0,
+  "original_image": "https://...",
+  "predicted_image": "https://..."
+}`,
+        classes: ['Healthy', 'Powdery Mildew', 'Downy Mildew', 'Anthracnose', 'Bacterial Wilt'],
+      },
+      {
+        path: '/vegtables/ridge',
+        method: 'POST',
+        description: 'Detect diseases in ridge gourd',
+        params: [
+          { name: 'image', type: 'file', required: true, desc: 'JPEG/PNG image of ridge gourd' },
+          { name: 'user_id', type: 'string', required: true, desc: 'User identifier' },
+        ],
+        request: `curl -X POST https://farmlytai.in/api/vegtables/ridge \\
+  -F "image=@ridge_gourd.jpg" \\
+  -F "user_id=USR123456"`,
+        response: `{
+  "prediction": "Fruit Fly",
+  "confidence": 93.5,
+  "original_image": "https://...",
+  "predicted_image": "https://..."
+}`,
+        classes: ['Healthy', 'Fruit Fly', 'Powdery Mildew', 'Leaf Spot', 'Wilt'],
+      },
+      {
+        path: '/vegtables/bitter_gourd',
+        method: 'POST',
+        description: 'Detect diseases in bitter gourd',
+        params: [
+          { name: 'image', type: 'file', required: true, desc: 'JPEG/PNG image of bitter gourd' },
+          { name: 'user_id', type: 'string', required: true, desc: 'User identifier' },
+        ],
+        request: `curl -X POST https://farmlytai.in/api/vegtables/bitter_gourd \\
+  -F "image=@bitter_gourd.jpg" \\
+  -F "user_id=USR123456"`,
+        response: `{
+  "prediction": "Downy Mildew",
+  "confidence": 95.0,
+  "original_image": "https://...",
+  "predicted_image": "https://..."
+}`,
+        classes: ['Healthy', 'Downy Mildew', 'Fruit Fly', 'Leaf Spot', 'Powdery Mildew'],
+      },
+    ],
+  },
+  {
+    category: 'Identification APIs',
+    icon: Search,
+    color: 'from-purple-500 to-violet-500',
     endpoints: [
       {
         path: '/plant_idetification',
@@ -164,13 +418,6 @@ const DOCS = [
 }`,
         classes: ['Aloe Vera', 'Apple', 'Ashoka', 'Banana', 'Coconut', 'Mango', 'Neem', 'Rose', 'Tulasi', '50+ species'],
       },
-    ],
-  },
-  {
-    category: 'Food Grain Identification',
-    icon: Grid3X3,
-    color: 'from-purple-500 to-violet-500',
-    endpoints: [
       {
         path: '/food_identification',
         method: 'POST',
@@ -188,13 +435,6 @@ const DOCS = [
 }`,
         classes: ['Rice', 'Wheat', 'Bajra', 'Jowar', 'Moong Dal', 'Chana Dal', '60+ food items'],
       },
-    ],
-  },
-  {
-    category: 'Vegetable & Spinach Identification',
-    icon: Bug,
-    color: 'from-blue-500 to-cyan-500',
-    endpoints: [
       {
         path: '/vegetable-spinach-identification',
         method: 'POST',
@@ -211,6 +451,25 @@ const DOCS = [
   "predicted_image": "https://..."
 }`,
         classes: ['Spinach', 'Beetroot', 'Cabbage', 'Carrot', 'Cauliflower', 'Tomato', '26+ vegetables'],
+      },
+      {
+        path: '/potted_plant',
+        method: 'POST',
+        description: 'Identify potted plant species',
+        params: [
+          { name: 'image', type: 'file', required: true, desc: 'JPEG/PNG image of potted plant' },
+          { name: 'user_id', type: 'string', required: true, desc: 'User identifier' },
+        ],
+        request: `curl -X POST https://farmlytai.in/api/potted_plant \\
+  -F "image=@potted_plant.jpg" \\
+  -F "user_id=USR123456"`,
+        response: `{
+  "prediction": "Snake Plant",
+  "confidence": 96.1,
+  "original_image": "https://...",
+  "predicted_image": "https://..."
+}`,
+        classes: ['Snake Plant', 'Money Plant', 'Spider Plant', 'Peace Lily', '10+ indoor plants'],
       },
     ],
   },
@@ -243,7 +502,15 @@ function EndpointDoc({ ep, index }) {
         className="w-full flex items-center justify-between p-4 text-left hover:bg-emerald-50/50 dark:hover:bg-emerald-950/20 transition-colors cursor-pointer"
       >
         <div className="flex items-center gap-3 min-w-0">
-          <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">POST</span>
+          <span className={`px-2 py-0.5 rounded text-[10px] font-bold border flex-shrink-0 ${
+            ep.method === 'GET'
+              ? 'bg-blue-500/20 text-blue-600 dark:text-blue-400 border-blue-500/30'
+              : ep.method === 'POST'
+              ? 'bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border-emerald-500/30'
+              : ep.method === 'PUT'
+              ? 'bg-amber-500/20 text-amber-600 dark:text-amber-400 border-amber-500/30'
+              : 'bg-red-500/20 text-red-600 dark:text-red-400 border-red-500/30'
+          }`}>{ep.method}</span>
           <code className="text-xs font-mono text-gray-800 dark:text-gray-200 truncate">{ep.path}</code>
         </div>
         {open ? <ChevronDown size={14} className="text-gray-400 flex-shrink-0" /> : <ChevronRight size={14} className="text-gray-400 flex-shrink-0" />}
@@ -251,27 +518,31 @@ function EndpointDoc({ ep, index }) {
       {open && (
         <div className="px-4 pb-4 border-t border-gray-100 dark:border-gray-700 space-y-4">
           <p className="text-xs text-gray-600 dark:text-gray-400 pt-3">{ep.description}</p>
-          <div>
-            <p className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Parameters</p>
-            <div className="space-y-1">
-              {ep.params.map((p) => (
-                <div key={p.name} className="flex items-start gap-3 text-xs text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 rounded-lg p-2.5">
-                  <code className="font-mono text-emerald-600 dark:text-emerald-400 whitespace-nowrap">{p.name}</code>
-                  <span className="text-gray-400">({p.type})</span>
-                  {p.required && <span className="text-red-400 text-[10px]">required</span>}
-                  <span>{p.desc}</span>
-                </div>
-              ))}
+          {ep.params.length > 0 && (
+            <div>
+              <p className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Parameters</p>
+              <div className="space-y-1">
+                {ep.params.map((p) => (
+                  <div key={p.name} className="flex items-start gap-3 text-xs text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 rounded-lg p-2.5">
+                    <code className="font-mono text-emerald-600 dark:text-emerald-400 whitespace-nowrap">{p.name}</code>
+                    <span className="text-gray-400">({p.type})</span>
+                    {p.required && <span className="text-red-400 text-[10px]">required</span>}
+                    <span>{p.desc}</span>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-          <div>
-            <p className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Detectable Classes</p>
-            <div className="flex flex-wrap gap-1">
-              {ep.classes.map((c) => (
-                <span key={c} className="px-2 py-0.5 text-[10px] rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400">{c}</span>
-              ))}
+          )}
+          {ep.classes.length > 0 && (
+            <div>
+              <p className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-2">Detectable Classes</p>
+              <div className="flex flex-wrap gap-1">
+                {ep.classes.map((c) => (
+                  <span key={c} className="px-2 py-0.5 text-[10px] rounded-full bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400">{c}</span>
+                ))}
+              </div>
             </div>
-          </div>
+          )}
           <div>
             <div className="flex items-center justify-between mb-2">
               <p className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Example Request</p>
@@ -340,7 +611,7 @@ export default function ApiDocs() {
           <div className="mt-12 p-5 rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
             <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-3">Common Response Format</h3>
             <p className="text-xs text-gray-600 dark:text-gray-400 mb-3">
-              All API endpoints return a consistent JSON response structure:
+              All detection endpoints return a consistent JSON response structure:
             </p>
             <pre className="text-xs text-gray-200 bg-gray-900 dark:bg-black rounded-xl p-4 overflow-x-auto"><code>{JSON.stringify({
   prediction: 'string — detected disease or identified item name',

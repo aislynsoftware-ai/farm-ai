@@ -3,6 +3,10 @@
     {
       "source": "/api/:path*",
       "destination": "https://aislynajay-product-development.hf.space/:path*"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ],
   "headers": [
