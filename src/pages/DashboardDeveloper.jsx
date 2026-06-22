@@ -74,12 +74,14 @@ export default function DashboardDeveloper() {
   };
 
   const limit = PLAN_LIMITS[plan] || 10;
+  const used = usage.total_requests || 0;
+  const remaining = Math.max(limit - used, 0);
 
   const stats = [
     { icon: Key, label: 'Active Keys', value: keys.length, color: 'from-emerald-500 to-teal-500' },
-    { icon: Activity, label: 'Total Requests', value: usage.total_requests || 0, color: 'from-blue-500 to-cyan-500' },
+    { icon: Activity, label: 'Total Requests', value: used, color: 'from-blue-500 to-cyan-500' },
     { icon: Calendar, label: 'Requests Today', value: usage.requests_today || 0, color: 'from-purple-500 to-violet-500' },
-    { icon: TrendingUp, label: 'Total Usage', value: usage.total_requests || 0, sub: `of ${limit} limit`, color: 'from-orange-500 to-red-500' },
+    { icon: TrendingUp, label: 'Remaining', value: remaining, sub: `of ${limit} limit`, color: 'from-orange-500 to-red-500' },
   ];
 
   const endpoints = usage.endpoints?.length > 0
@@ -125,7 +127,7 @@ export default function DashboardDeveloper() {
                   <span className="text-[10px] text-emerald-100/70">coins</span>
                 </div>
                 <div className="px-3 py-1.5 rounded-xl bg-white/15 backdrop-blur text-[11px] font-medium text-emerald-100">
-                  {plan ? plan.toUpperCase() : 'FREE'} · {limit} total
+                  {plan ? plan.toUpperCase() : 'FREE'} · {remaining} remaining
                 </div>
               </div>
             </div>
