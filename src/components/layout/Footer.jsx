@@ -162,12 +162,7 @@ export default function Footer() {
                 <span className="absolute -bottom-0.5 left-0 w-full h-0.5 bg-emerald-400 rounded-full scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
               </span>
             </Link>
-            <Link to="/support" className="group relative hover:text-emerald-300 transition-colors duration-200">
-              <span className="relative">
-                Support
-                <span className="absolute -bottom-0.5 left-0 w-full h-0.5 bg-emerald-400 rounded-full scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-              </span>
-            </Link>
+           
           </div>
         </div>
       </div>
