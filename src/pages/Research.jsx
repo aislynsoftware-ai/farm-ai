@@ -1,5 +1,5 @@
 import SEO from '../components/common/SEO';
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import INITIAL_DATA from './catalog_data';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
