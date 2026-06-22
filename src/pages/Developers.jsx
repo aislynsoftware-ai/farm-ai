@@ -14,16 +14,19 @@ const LANGUAGES = ['cURL', 'Python', 'JavaScript', 'PHP'];
 const CODE_SAMPLES = {
   cURL: `curl -X POST ${API_BASE}/leafs/tomato \\
   -H "Authorization: Bearer YOUR_API_KEY" \\
+  -F "user_id=YOUR_USER_ID" \\
   -F "image=@tomato_leaf.jpg"`,
   Python: `import requests
 
 url = "${API_BASE}/leafs/tomato"
 headers = {"Authorization": "Bearer YOUR_API_KEY"}
+data = {"user_id": "YOUR_USER_ID"}
 files = {"image": open("tomato_leaf.jpg", "rb")}
 
-response = requests.post(url, headers=headers, files=files)
+response = requests.post(url, headers=headers, data=data, files=files)
 print(response.json())`,
   JavaScript: `const formData = new FormData();
+formData.append('user_id', 'YOUR_USER_ID');
 formData.append('image', fileInput.files[0]);
 
 fetch('${API_BASE}/leafs/tomato', {
@@ -40,6 +43,7 @@ curl_setopt($ch, CURLOPT_HTTPHEADER, [
   "Authorization: Bearer YOUR_API_KEY"
 ]);
 curl_setopt($ch, CURLOPT_POSTFIELDS, [
+  "user_id" => "YOUR_USER_ID",
   "image" => new CURLFile("tomato_leaf.jpg")
 ]);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
