@@ -7,9 +7,9 @@ import PageHeader from '../components/layout/PageHeader';
 import api from '../services/api';
 
 const PLANS = {
-  BASIC: { price: 99, requests: '150 Requests', features: ['150 API requests per month', 'All detection models', 'Standard response time', 'Email support', 'Basic analytics'] },
-  STANDARD: { price: 299, requests: '500 Requests', features: ['500 API requests per month', 'All detection models', 'Priority response time', 'Priority support', 'Advanced analytics', 'API key management'] },
-  PRO: { price: 499, requests: '1000 Requests', features: ['1000 API requests per month', 'All detection models', 'Priority response time', 'Dedicated support', 'Advanced analytics', 'API key management', 'Custom integrations'] },
+  BASIC: { price: 99, requests: '150 Requests', features: ['150 API requests total', 'All detection models', 'Standard response time', 'Email support', 'Basic analytics'] },
+  STANDARD: { price: 299, requests: '500 Requests', features: ['500 API requests total', 'All detection models', 'Priority response time', 'Priority support', 'Advanced analytics', 'API key management'] },
+  PRO: { price: 499, requests: '1000 Requests', features: ['1000 API requests total', 'All detection models', 'Priority response time', 'Dedicated support', 'Advanced analytics', 'API key management', 'Custom integrations'] },
 };
 
 const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_placeholder';
@@ -125,7 +125,7 @@ export default function PlanCheckout() {
                 </div>
                 <div className="flex items-baseline gap-1 mb-1">
                   <span className="text-3xl font-extrabold text-gray-900 dark:text-white">₹{plan.price}</span>
-                  <span className="text-xs text-gray-500 dark:text-gray-400">/mo</span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400"> total</span>
                 </div>
                 <p className="text-xs text-gray-500 dark:text-gray-400">{plan.requests}</p>
               </div>
