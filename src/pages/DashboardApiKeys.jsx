@@ -119,7 +119,16 @@ export default function DashboardApiKeys() {
               <div className="flex-1">
                 <h2 className="text-lg font-bold text-white">API Keys</h2>
                 <p className="text-emerald-100/80 text-xs mt-0.5">Manage your API keys for programmatic access</p>
-                {user && <p className="text-emerald-100/60 text-[10px] mt-1">User ID: {user.user_id}</p>}
+                {user && (
+                  <button
+                    onClick={() => { navigator.clipboard.writeText(user.user_id); }}
+                    className="text-emerald-100/60 text-[10px] mt-1 hover:text-emerald-100 transition-colors cursor-pointer flex items-center gap-1"
+                    title="Click to copy"
+                  >
+                    User ID: {user.user_id}
+                    <Copy size={9} className="opacity-60" />
+                  </button>
+                )}
               </div>
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/15 backdrop-blur">

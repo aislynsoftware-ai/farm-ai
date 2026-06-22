@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Menu, User, Mail, Phone, Camera, Save, AlertCircle, Loader, CheckCircle, Coins } from 'lucide-react';
+import { Menu, User, Mail, Phone, Camera, Save, AlertCircle, Loader, CheckCircle, Coins, Copy } from 'lucide-react';
 import SEO from '../components/common/SEO';
 import Button from '../components/common/Button';
 import Sidebar from '../components/dashboard/Sidebar';
