@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Key, Copy, Check, RefreshCw, XCircle, Plus, Eye, EyeOff, Clock, ShieldAlert, ArrowUpCircle } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Key, Copy, Check, RefreshCw, XCircle, Plus, Eye, EyeOff, Clock } from 'lucide-react';
 import SEO from '../components/common/SEO';
 import api from '../services/api';
 
@@ -100,8 +99,6 @@ export default function DashboardApiKeys() {
     }
   };
 
-  const isFreePlan = plan === 'free';
-
   return (
     <div className="p-4 sm:p-6">
       <SEO title="API Keys" url="/dashboard/api-keys" />
@@ -109,18 +106,16 @@ export default function DashboardApiKeys() {
         <div className="flex items-center justify-between mb-6">
           <div>
             <h1 className="text-lg font-bold text-gray-900 dark:text-white">API Keys</h1>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Manage your API keys for programmatic access</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">Manage your API keys for programmatic access{plan === 'free' ? ' (10 requests/month)' : ''}</p>
           </div>
-          {!isFreePlan && (
-            <button
-              onClick={createKey}
-              disabled={creating}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-xs font-semibold hover:from-emerald-600 hover:to-teal-600 shadow-md hover:shadow-lg hover:shadow-emerald-500/25 disabled:opacity-50 transition-all duration-200 cursor-pointer"
-            >
-              <Plus size={14} />
-              {creating ? 'Creating...' : 'Create New API Key'}
-            </button>
-          )}
+          <button
+            onClick={createKey}
+            disabled={creating}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-xs font-semibold hover:from-emerald-600 hover:to-teal-600 shadow-md hover:shadow-lg hover:shadow-emerald-500/25 disabled:opacity-50 transition-all duration-200 cursor-pointer"
+          >
+            <Plus size={14} />
+            {creating ? 'Creating...' : 'Create New API Key'}
+          </button>
         </div>
 
         {error && (
@@ -129,22 +124,7 @@ export default function DashboardApiKeys() {
           </div>
         )}
 
-        {isFreePlan ? (
-          <div className="text-center py-12 rounded-2xl bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700">
-            <ShieldAlert size={32} className="mx-auto text-gray-300 dark:text-gray-600 mb-3" />
-            <p className="text-sm font-semibold text-gray-900 dark:text-white mb-1">Upgrade to Create API Keys</p>
-            <p className="text-xs text-gray-500 dark:text-gray-400 mb-4 max-w-md mx-auto">
-              API keys are available on paid plans. Upgrade to get programmatic access to Farmlyt AI models.
-            </p>
-            <Link
-              to="/pricing"
-              className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-xs font-semibold hover:from-emerald-600 hover:to-teal-600 shadow-md hover:shadow-lg hover:shadow-emerald-500/25 transition-all duration-200"
-            >
-              <ArrowUpCircle size={14} />
-              View Plans
-            </Link>
-          </div>
-        ) : loading ? (
+        {loading ? (
           <div className="space-y-3">
             {[1, 2].map((i) => (
               <div key={i} className="h-20 rounded-xl bg-gray-100 dark:bg-gray-800 animate-pulse" />
