@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import {
   Copy, Check, Code, BookOpen, Key, Globe,
@@ -74,39 +74,6 @@ const SECTIONS = [
   },
 ];
 
-const ENDPOINTS = [
-  { method: 'POST', path: '/leafs/tomato', desc: 'Detect diseases in tomato leaves' },
-  { method: 'POST', path: '/leafs/potato', desc: 'Detect diseases in potato leaves' },
-  { method: 'POST', path: '/leafs/brinjal', desc: 'Detect diseases in brinjal leaves' },
-  { method: 'POST', path: '/leafs/chili', desc: 'Detect diseases in chili leaves' },
-  { method: 'POST', path: '/leafs/ladyfinger', desc: 'Detect diseases in ladyfinger leaves' },
-  { method: 'POST', path: '/vegtables/brinjal', desc: 'Analyze brinjal vegetable conditions' },
-  { method: 'POST', path: '/vegtables/cauliflower', desc: 'Analyze cauliflower conditions' },
-  { method: 'POST', path: '/vegtables/cucumber', desc: 'Analyze cucumber conditions' },
-  { method: 'POST', path: '/vegtables/ridge', desc: 'Analyze ridge gourd conditions' },
-  { method: 'POST', path: '/vegtables/bitter_gourd', desc: 'Analyze bitter gourd conditions' },
-  { method: 'POST', path: '/fruits/custard_apple', desc: 'Analyze custard apple conditions' },
-  { method: 'POST', path: '/fruits/guava', desc: 'Analyze guava conditions' },
-  { method: 'POST', path: '/fruits/pomegranate', desc: 'Analyze pomegranate conditions' },
-  { method: 'POST', path: '/fruits/lemon', desc: 'Analyze lemon conditions' },
-  { method: 'POST', path: '/fruits/tomato', desc: 'Analyze tomato fruit conditions' },
-  { method: 'POST', path: '/flowers/jasmine', desc: 'Analyze jasmine flower conditions' },
-  { method: 'POST', path: '/flowers/rose', desc: 'Analyze rose flower conditions' },
-  { method: 'POST', path: '/flowers/marigold', desc: 'Analyze marigold flower conditions' },
-  { method: 'POST', path: '/flowers/chrysanthemums', desc: 'Analyze chrysanthemum conditions' },
-  { method: 'POST', path: '/potted_plant', desc: 'Identify potted plant diseases' },
-  { method: 'POST', path: '/plant_idetification', desc: 'Identify plant species from image' },
-  { method: 'POST', path: '/food_identification', desc: 'Identify food grains from image' },
-  { method: 'POST', path: '/vegetable-spinach-identification', desc: 'Identify vegetables and spinach' },
-  { method: 'GET', path: '/get_leaf_predictions?user_id=', desc: 'Get prediction history for a user' },
-  { method: 'GET', path: '/user/wallet/', desc: 'Get user coin balance' },
-  { method: 'POST', path: '/api-keys/create', desc: 'Create a new API key' },
-  { method: 'GET', path: '/api-keys', desc: 'List all API keys' },
-  { method: 'POST', path: '/api-keys/regenerate', desc: 'Regenerate an API key' },
-  { method: 'POST', path: '/api-keys/revoke', desc: 'Revoke an API key' },
-  { method: 'GET', path: '/user/plan', desc: 'Get current plan info' },
-];
-
 const ERROR_CODES = [
   { code: 400, desc: 'Bad Request — Missing or invalid parameters' },
   { code: 401, desc: 'Unauthorized — Invalid or missing API key' },
@@ -148,22 +115,17 @@ function CodeBlock({ code, language }) {
   );
 }
 
-function EndpointBadge({ method }) {
-  const colors = {
-    POST: 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30',
-    GET: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-  };
-  return (
-    <span className={`inline-flex items-center px-2 py-0.5 text-[10px] font-bold rounded border ${colors[method] || colors.GET}`}>
-      {method}
-    </span>
-  );
-}
-
 export default function Developers() {
   const [lang, setLang] = useState('cURL');
   const [expandedSection, setExpandedSection] = useState(0);
-  const [expandedEndpoint, setExpandedEndpoint] = useState(null);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('user');
+      if (stored) setUser(JSON.parse(stored));
+    } catch {}
+  }, []);
 
   return (
     <main>
@@ -178,6 +140,28 @@ export default function Developers() {
       />
       <section className="py-12 bg-white dark:bg-gray-900">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* User ID Banner */}
+          {user?.user_id && (
+            <div className="mb-6 p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-700 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Key size={14} className="text-emerald-500" />
+                <span className="text-xs text-emerald-700 dark:text-emerald-300">
+                  Your User ID:
+                </span>
+                <code className="text-xs font-mono text-emerald-600 dark:text-emerald-400 bg-white dark:bg-gray-800 px-2 py-0.5 rounded border border-emerald-200 dark:border-emerald-700">
+                  {user.user_id}
+                </code>
+              </div>
+              <button
+                onClick={() => { navigator.clipboard.writeText(user.user_id); }}
+                className="flex items-center gap-1 px-2 py-1 rounded-lg text-xs text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 transition-all cursor-pointer"
+                title="Copy User ID"
+              >
+                <Copy size={11} />
+                Copy
+              </button>
+            </div>
+          )}
           {/* Documentation Sections */}
           <div className="mb-12 space-y-2">
             {SECTIONS.map((s, i) => (
@@ -207,64 +191,6 @@ export default function Developers() {
                     ) : (
                       <p className="text-xs text-gray-600 dark:text-gray-400 leading-relaxed">{s.content}</p>
                     )}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-
-          {/* Endpoints */}
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-4">API Endpoints</h2>
-          <div className="space-y-2 mb-12">
-            {ENDPOINTS.map((ep) => (
-              <div
-                key={ep.path}
-                className="rounded-xl border border-gray-100 dark:border-gray-700 overflow-hidden"
-              >
-                <button
-                  onClick={() => setExpandedEndpoint(expandedEndpoint === ep.path ? null : ep.path)}
-                  className="w-full flex items-center justify-between p-4 text-left bg-white dark:bg-gray-800 hover:bg-emerald-50/50 dark:hover:bg-emerald-950/20 transition-colors cursor-pointer"
-                >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <EndpointBadge method={ep.method} />
-                    <code className="text-xs font-mono text-gray-700 dark:text-gray-300 truncate">{ep.path}</code>
-                    <span className="text-[11px] text-gray-500 dark:text-gray-400 hidden sm:inline truncate">{ep.desc}</span>
-                  </div>
-                  {expandedEndpoint === ep.path ? <ChevronDown size={14} className="text-gray-400 flex-shrink-0" /> : <ChevronRight size={14} className="text-gray-400 flex-shrink-0" />}
-                </button>
-                {expandedEndpoint === ep.path && (
-                  <div className="px-4 pb-4 border-t border-gray-100 dark:border-gray-700">
-                    <div className="pt-3 space-y-3">
-                      <div>
-                        <p className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Full URL</p>
-                        <code className="text-xs font-mono bg-gray-100 dark:bg-gray-800 rounded-lg px-3 py-1.5 text-emerald-600 dark:text-emerald-400 select-all">
-                          {API_BASE}{ep.path}
-                        </code>
-                      </div>
-                      <div>
-                        <p className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Parameters</p>
-                        <div className="text-xs text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-800/50 rounded-lg p-3">
-                          <code className="font-mono">image</code> (required) — Image file (JPEG/PNG)
-                          {ep.method === 'POST' && !ep.path.includes('api-keys') && (
-                            <>
-                              <br />
-                              <code className="font-mono">user_id</code> (required for coin-based endpoints) — User identifier
-                            </>
-                          )}
-                        </div>
-                      </div>
-                      <div>
-                        <p className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Response</p>
-                        <pre className="text-xs text-gray-200 bg-gray-900 dark:bg-black rounded-xl p-3 overflow-x-auto">
-                          <code>{JSON.stringify({
-                            prediction: 'Disease or item name',
-                            confidence: 95.5,
-                            original_image: 'https://...',
-                            predicted_image: 'https://...',
-                          }, null, 2)}</code>
-                        </pre>
-                      </div>
-                    </div>
                   </div>
                 )}
               </div>

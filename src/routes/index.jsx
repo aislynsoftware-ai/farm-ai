@@ -71,14 +71,20 @@ export default function createAppRouter(isDark, toggleTheme) {
         { path: 'developers', element: <Developers /> },
         { path: 'api-docs', element: <ApiDocs /> },
         { path: 'enterprise', element: <Enterprise /> },
-        { path: 'dashboard/api-keys', element: <DashboardApiKeys /> },
-        { path: 'dashboard/developer', element: <DashboardDeveloper /> },
         { path: 'plan-checkout', element: <PlanCheckout /> },
       ],
     },
     {
       path: '/dashboard',
       element: <Dashboard />,
+    },
+    {
+      path: '/dashboard/api-keys',
+      element: <DashboardApiKeys />,
+    },
+    {
+      path: '/dashboard/developer',
+      element: <DashboardDeveloper />,
     },
     {
       path: '/profile',
