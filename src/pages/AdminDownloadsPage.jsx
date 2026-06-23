@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Download, FolderOpen, ChevronDown, ChevronRight, Loader, AlertCircle } from 'lucide-react';
+import { Download as DownloadIcon, FolderOpen, ChevronDown, ChevronRight, Loader, AlertCircle } from 'lucide-react';
 import api from '../services/api';
 
 export default function AdminDownloadsPage() {
@@ -12,15 +12,11 @@ export default function AdminDownloadsPage() {
     api.admin.getPredictionsTree().then(setTree).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
-  const download = (crop, disease) => {
+  const download = (crop, disease, type = 'all') => {
     const label = disease ? `${crop}/${disease}` : crop;
-    setDownloading(label);
-    const url = api.admin.getDownloadUrl(crop, disease);
-    const a = document.createElement('a');
-    a.href = url;
+    setDownloading(`${label}_${type}`);
+    const url = api.admin.getDownloadUrl(crop, disease, type);
     const token = localStorage.getItem('admin_token');
-    if (token) a.href = url + (url.includes('?') ? '&' : '?') + `token=${token}`;
-    // Use fetch with auth header
     fetch(url, { headers: { Authorization: `Bearer ${token}` } })
       .then((res) => {
         if (!res.ok) throw new Error('Download failed');
@@ -30,7 +26,7 @@ export default function AdminDownloadsPage() {
         const blobUrl = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = blobUrl;
-        a.download = `predictions_${crop}_${disease || 'all'}.zip`;
+        a.download = `predictions_${crop}_${disease || 'all'}_${type}.zip`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -38,6 +34,21 @@ export default function AdminDownloadsPage() {
       })
       .catch((err) => alert(err.message))
       .finally(() => setDownloading(null));
+  };
+
+  const DownloadBtn = ({ crop, disease, type, label, icon }) => {
+    const key = disease ? `${crop}/${disease}_${type}` : `${crop}_${type}`;
+    return (
+      <button
+        onClick={() => download(crop, disease, type)}
+        disabled={downloading === key}
+        className="px-2 py-1 rounded bg-gray-700 text-gray-300 text-[10px] hover:bg-emerald-600 hover:text-white disabled:opacity-50 flex items-center gap-1 cursor-pointer transition-all"
+        title={`Download ${label}`}
+      >
+        {downloading === key ? <Loader size={10} className="animate-spin" /> : icon}
+        {label}
+      </button>
+    );
   };
 
   if (loading) return (
@@ -61,14 +72,11 @@ export default function AdminDownloadsPage() {
                 <span className="text-sm font-medium text-white capitalize">{item.crop}</span>
                 <span className="text-xs text-gray-500">({item.total} images)</span>
               </div>
-              <button
-                onClick={(e) => { e.stopPropagation(); download(item.crop); }}
-                disabled={downloading === item.crop}
-                className="px-3 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-medium hover:bg-emerald-500 disabled:opacity-50 flex items-center gap-1.5 cursor-pointer"
-              >
-                {downloading === item.crop ? <Loader size={12} className="animate-spin" /> : <Download size={12} />}
-                All
-              </button>
+              <div className="flex items-center gap-1.5">
+                <DownloadBtn crop={item.crop} type="original" label="Orig" icon={<DownloadIcon size={10} />} />
+                <DownloadBtn crop={item.crop} type="predicted" label="Pred" icon={<DownloadIcon size={10} />} />
+                <DownloadBtn crop={item.crop} type="all" label="All" icon={<DownloadIcon size={10} />} />
+              </div>
             </div>
 
             {expanded[item.crop] && (
@@ -79,14 +87,11 @@ export default function AdminDownloadsPage() {
                       <span className="text-xs text-gray-300 capitalize">{d.disease.replace(/_/g, ' ')}</span>
                       <span className="text-[10px] text-gray-500">({d.count} images)</span>
                     </div>
-                    <button
-                      onClick={() => download(item.crop, d.disease)}
-                      disabled={downloading === `${item.crop}/${d.disease}`}
-                      className="px-2.5 py-1 rounded-lg bg-gray-700 text-gray-300 text-xs hover:bg-emerald-600 hover:text-white disabled:opacity-50 flex items-center gap-1.5 cursor-pointer transition-all"
-                    >
-                      {downloading === `${item.crop}/${d.disease}` ? <Loader size={11} className="animate-spin" /> : <Download size={11} />}
-                      ZIP
-                    </button>
+                    <div className="flex items-center gap-1">
+                      <DownloadBtn crop={item.crop} disease={d.disease} type="original" label="Orig" icon={<DownloadIcon size={10} />} />
+                      <DownloadBtn crop={item.crop} disease={d.disease} type="predicted" label="Pred" icon={<DownloadIcon size={10} />} />
+                      <DownloadBtn crop={item.crop} disease={d.disease} type="all" label="ZIP" icon={<DownloadIcon size={10} />} />
+                    </div>
                   </div>
                 ))}
               </div>
