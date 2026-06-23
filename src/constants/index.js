@@ -41,6 +41,7 @@ export const ROUTES = {
   ADMIN_ORDERS: '/admin/orders',
   ADMIN_PREDICTIONS: '/admin/predictions',
   ADMIN_PLANS: '/admin/plans',
+  ADMIN_DOWNLOADS: '/admin/downloads',
 };
 
 export const NAV_LINKS = [

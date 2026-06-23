@@ -132,6 +132,14 @@ const api = {
       adminRequest(`/admin/leaf-predictions/${id}`, { method: 'DELETE' }),
     getUserPlans: () =>
       adminRequest('/admin/user-plans'),
+    getPredictionsTree: () =>
+      adminRequest('/admin/predictions/tree'),
+    getDownloadUrl: (crop, disease) => {
+      const params = new URLSearchParams();
+      if (crop) params.set('crop', crop);
+      if (disease) params.set('disease', disease);
+      return `${BASE_URL}/admin/predictions/download?${params.toString()}`;
+    },
     deleteProduct: (id) =>
       adminRequest(`/admin/delete-product/${id}`, { method: 'DELETE' }),
     updateProduct: (id, formData) =>
