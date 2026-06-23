@@ -145,6 +145,8 @@ const api = {
       adminRequest(`/admin/delete-product/${id}`, { method: 'DELETE' }),
     updateProduct: (id, formData) =>
       adminRequest(`/update_product/${id}`, { method: 'POST', body: formData, headers: {} }),
+    addProduct: (formData) =>
+      adminRequest('/add_product', { method: 'POST', body: formData, headers: {} }),
     // Agri titles
     addAgriTitle: (title, file) => {
       const fd = new FormData();
