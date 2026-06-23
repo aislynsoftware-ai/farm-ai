@@ -69,7 +69,7 @@ export const DASHBOARD_SIDEBAR = [
 ];
 
 export const HERO = {
-  title: 'AI-Powered Smart Agriculture Platform',
+  title: 'Farmlyt AI - AI-Powered Smart Agriculture Platform',
   description:
     'Detect plant diseases, identify crops, analyze food items, and gain intelligent agricultural insights using advanced artificial intelligence.',
   primaryBtn: 'Get Started',
