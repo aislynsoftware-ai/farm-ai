@@ -105,15 +105,17 @@ export default function DashboardDeveloper() {
           >
             <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-400/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-400/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
-            <div className="relative flex items-center gap-4">
-              <div className="w-14 h-14 rounded-xl bg-white/15 backdrop-blur flex items-center justify-center">
-                <BarChart3 size={24} className="text-white" />
+            <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <div className="flex items-center gap-4 w-full sm:w-auto">
+                <div className="w-14 h-14 rounded-xl bg-white/15 backdrop-blur flex items-center justify-center shrink-0">
+                  <BarChart3 size={24} className="text-white" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h2 className="text-lg font-bold text-white">Developer Dashboard</h2>
+                  <p className="text-emerald-100/80 text-xs mt-0.5">Monitor your API usage and performance</p>
+                </div>
               </div>
-              <div className="flex-1">
-                <h2 className="text-lg font-bold text-white">Developer Dashboard</h2>
-                <p className="text-emerald-100/80 text-xs mt-0.5">Monitor your API usage and performance</p>
-              </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto">
                 <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/15 backdrop-blur">
                   <Coins size={14} className="text-yellow-300" />
                   <span className="text-sm font-bold text-white">{coins !== null ? coins : '...'}</span>
@@ -142,8 +144,8 @@ export default function DashboardDeveloper() {
               </h3>
               <div className="space-y-1">
                 {endpoints.map((ep) => (
-                  <div key={ep.path} className="flex items-center gap-3 py-1.5">
-                    <code className="text-[10px] font-mono text-gray-600 dark:text-gray-400 w-32 truncate">{ep.path}</code>
+                  <div key={ep.path} className="flex items-center gap-3 py-1.5 min-w-0">
+                    <code className="text-[10px] font-mono text-gray-600 dark:text-gray-400 w-24 sm:w-32 truncate shrink-0">{ep.path}</code>
                     <div className="flex-1 h-1.5 rounded-full bg-gray-100 dark:bg-gray-700 overflow-hidden">
                       <motion.div
                         className="h-full rounded-full bg-emerald-500"
