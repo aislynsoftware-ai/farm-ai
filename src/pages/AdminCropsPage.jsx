@@ -12,6 +12,7 @@ export default function AdminCropsPage() {
   const [title, setTitle] = useState('');
   const [agriId, setAgriId] = useState('');
   const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState('');
   const fileRef = useRef(null);
 
   const load = () => {
@@ -20,6 +21,20 @@ export default function AdminCropsPage() {
   };
 
   useEffect(() => { load(); }, []);
+
+  const handleFile = (e) => {
+    const f = e.target.files?.[0] || null;
+    setImage(f);
+    if (f) {
+      const reader = new FileReader();
+      reader.onload = (ev) => setPreview(ev.target.result);
+      reader.readAsDataURL(f);
+    } else {
+      setPreview('');
+    }
+  };
+
+  const resetForm = () => { setEdit(null); setTitle(''); setAgriId(''); setImage(null); setPreview(''); };
 
   const show = (msg) => { setFormSuccess(msg); setTimeout(() => setFormSuccess(''), 3000); };
 
@@ -36,7 +51,7 @@ export default function AdminCropsPage() {
         await api.admin.addCrop(title, agriId, image);
       }
       show(edit ? 'Updated' : 'Added');
-      setEdit(null); setTitle(''); setAgriId(''); setImage(null);
+      resetForm();
       load();
     } catch (err) { setFormError(err.message); }
     finally { setFormLoading(false); }
@@ -71,15 +86,16 @@ export default function AdminCropsPage() {
         </div>
         <div>
           <label className="block text-xs text-gray-400 mb-1">Image</label>
-          <input type="file" accept="image/*" ref={fileRef} className="hidden" onChange={(e) => setImage(e.target.files?.[0] || null)} />
+          <input type="file" accept="image/*" ref={fileRef} className="hidden" onChange={handleFile} />
           <button type="button" onClick={() => fileRef.current?.click()} className="px-3 py-2 rounded-lg bg-gray-700 text-white text-sm hover:bg-gray-600 cursor-pointer">
             {image ? image.name : 'Choose'}
           </button>
         </div>
+        {preview && <img src={preview} alt="" className="w-12 h-12 rounded-lg object-cover" />}
         <button type="submit" disabled={formLoading} className="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-500 disabled:opacity-50 cursor-pointer">
           {formLoading ? <Loader size={14} className="animate-spin" /> : edit ? 'Update' : 'Add'}
         </button>
-        {edit && <button type="button" onClick={() => { setEdit(null); setTitle(''); setAgriId(''); setImage(null); }} className="px-3 py-2 rounded-lg bg-gray-700 text-gray-300 text-sm hover:bg-gray-600 cursor-pointer">Cancel</button>}
+        {edit && <button type="button" onClick={resetForm} className="px-3 py-2 rounded-lg bg-gray-700 text-gray-300 text-sm hover:bg-gray-600 cursor-pointer">Cancel</button>}
       </form>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">

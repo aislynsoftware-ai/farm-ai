@@ -117,6 +117,13 @@ const api = {
       adminRequest('/admin/verify', { method: 'POST' }),
     getUsers: () =>
       adminRequest('/admin/users'),
+    updateUser: (userId, data) =>
+      adminRequest(`/admin/users/${userId}`, {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      }),
+    deleteUser: (userId) =>
+      adminRequest(`/admin/users/${userId}`, { method: 'DELETE' }),
     getPayments: () =>
       adminRequest('/admin/payments'),
     getLeafPredictions: () =>
@@ -127,6 +134,8 @@ const api = {
       adminRequest('/admin/user-plans'),
     deleteProduct: (id) =>
       adminRequest(`/admin/delete-product/${id}`, { method: 'DELETE' }),
+    updateProduct: (id, formData) =>
+      adminRequest(`/update_product/${id}`, { method: 'POST', body: formData, headers: {} }),
     // Agri titles
     addAgriTitle: (title, file) => {
       const fd = new FormData();
