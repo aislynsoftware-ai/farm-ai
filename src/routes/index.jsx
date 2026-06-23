@@ -38,6 +38,8 @@ import AdminCropsPage from '../pages/AdminCropsPage';
 import AdminSubCropsPage from '../pages/AdminSubCropsPage';
 import AdminProductsPage from '../pages/AdminProductsPage';
 import AdminOrdersPage from '../pages/AdminOrdersPage';
+import AdminPredictionsPage from '../pages/AdminPredictionsPage';
+import AdminPlansPage from '../pages/AdminPlansPage';
 
 function ErrorPage() {
   return (
@@ -123,6 +125,8 @@ export default function createAppRouter(isDark, toggleTheme) {
         { path: 'sub-crops', element: <AdminSubCropsPage /> },
         { path: 'products', element: <AdminProductsPage /> },
         { path: 'orders', element: <AdminOrdersPage /> },
+        { path: 'predictions', element: <AdminPredictionsPage /> },
+        { path: 'plans', element: <AdminPlansPage /> },
       ],
     },
   ]);

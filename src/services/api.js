@@ -119,6 +119,12 @@ const api = {
       adminRequest('/admin/users'),
     getPayments: () =>
       adminRequest('/admin/payments'),
+    getLeafPredictions: () =>
+      adminRequest('/admin/leaf-predictions'),
+    deleteLeafPrediction: (id) =>
+      adminRequest(`/admin/leaf-predictions/${id}`, { method: 'DELETE' }),
+    getUserPlans: () =>
+      adminRequest('/admin/user-plans'),
     deleteProduct: (id) =>
       adminRequest(`/admin/delete-product/${id}`, { method: 'DELETE' }),
     // Agri titles
