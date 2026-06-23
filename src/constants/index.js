@@ -31,6 +31,8 @@ export const ROUTES = {
   ENTERPRISE: '/enterprise',
   DASHBOARD_API_KEYS: '/dashboard/api-keys',
   DASHBOARD_DEVELOPER: '/dashboard/developer',
+  ADMIN_LOGIN: '/admin/login',
+  ADMIN_DASHBOARD: '/admin/dashboard',
 };
 
 export const NAV_LINKS = [

@@ -29,6 +29,8 @@ import Enterprise from '../pages/Enterprise';
 import DashboardApiKeys from '../pages/DashboardApiKeys';
 import DashboardDeveloper from '../pages/DashboardDeveloper';
 import PlanCheckout from '../pages/PlanCheckout';
+import AdminLogin from '../pages/AdminLogin';
+import AdminDashboard from '../pages/AdminDashboard';
 
 function ErrorPage() {
   return (
@@ -97,6 +99,14 @@ export default function createAppRouter(isDark, toggleTheme) {
     {
       path: '/wallet',
       element: <Wallet />,
+    },
+    {
+      path: '/admin/login',
+      element: <AdminLogin />,
+    },
+    {
+      path: '/admin/dashboard',
+      element: <AdminDashboard />,
     },
   ]);
 }
