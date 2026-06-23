@@ -134,10 +134,11 @@ const api = {
       adminRequest('/admin/user-plans'),
     getPredictionsTree: () =>
       adminRequest('/admin/predictions/tree'),
-    getDownloadUrl: (crop, disease) => {
+    getDownloadUrl: (crop, disease, type = 'all') => {
       const params = new URLSearchParams();
       if (crop) params.set('crop', crop);
       if (disease) params.set('disease', disease);
+      params.set('type', type);
       return `${BASE_URL}/admin/predictions/download?${params.toString()}`;
     },
     deleteProduct: (id) =>
