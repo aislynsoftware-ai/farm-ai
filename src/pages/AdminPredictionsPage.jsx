@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Trash2, Download, AlertCircle, CheckCircle, ExternalLink, ImageIcon, Search } from 'lucide-react';
+import Skeleton from '../components/common/Skeleton';
 import api from '../services/api';
 
 const CATEGORIES = ['All', 'leaf', 'vegetable', 'fruit', 'flower', 'potted_plant', 'plant_id', 'food'];
 
 export default function AdminPredictionsPage() {
   const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [filtered, setFiltered] = useState([]);
   const [category, setCategory] = useState('All');
   const [search, setSearch] = useState('');
@@ -16,7 +18,7 @@ export default function AdminPredictionsPage() {
   const load = () => api.admin.getLeafPredictions().then((data) => {
     setItems(data);
     setFiltered(data);
-  }).catch(() => {});
+  }).catch(() => {}).finally(() => setLoading(false));
 
   useEffect(() => { load(); }, []);
 
@@ -89,7 +91,7 @@ export default function AdminPredictionsPage() {
 
       {/* Cards */}
       <div className="space-y-3">
-        {filtered.map((p) => (
+        {loading ? [1,2,3,4].map(i => <Skeleton key={i} className="h-36" />) : filtered.map((p) => (
           <div key={p.id} className="rounded-xl bg-gray-800/80 border border-gray-700 overflow-hidden">
             <div className="p-4 flex flex-col sm:flex-row gap-4">
               {/* Images */}
@@ -145,7 +147,7 @@ export default function AdminPredictionsPage() {
             </div>
           </div>
         ))}
-        {filtered.length === 0 && <div className="p-6 text-center text-gray-500 rounded-xl bg-gray-800/80 border border-gray-700">No predictions found</div>}
+        {!loading && filtered.length === 0 && <div className="p-6 text-center text-gray-500 rounded-xl bg-gray-800/80 border border-gray-700">No predictions found</div>}
       </div>
     </div>
   );

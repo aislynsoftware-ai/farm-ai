@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { Edit2, Trash2, Loader, AlertCircle, CheckCircle } from 'lucide-react';
+import { SkeletonCard } from '../components/common/Skeleton';
 import api from '../services/api';
 
 export default function AdminSubCropsPage() {
   const [items, setItems] = useState([]);
   const [crops, setCrops] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [formError, setFormError] = useState('');
   const [formSuccess, setFormSuccess] = useState('');
   const [formLoading, setFormLoading] = useState(false);
@@ -16,8 +18,11 @@ export default function AdminSubCropsPage() {
   const fileRef = useRef(null);
 
   const load = () => {
-    api.farming.crops().then(setItems).catch(() => {});
-    api.farming.allCrops().then(setCrops).catch(() => {});
+    setLoading(true);
+    Promise.all([
+      api.farming.crops().then(setItems).catch(() => {}),
+      api.farming.allCrops().then(setCrops).catch(() => {}),
+    ]).finally(() => setLoading(false));
   };
 
   useEffect(() => { load(); }, []);
@@ -99,14 +104,14 @@ export default function AdminSubCropsPage() {
       </form>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-        {items.map((s) => (
+        {loading ? [1,2,3,4].map(i => <SkeletonCard key={i} />) : items.map((s) => (
           <div key={s.id} className="rounded-xl bg-gray-800/80 border border-gray-700 overflow-hidden group">
             {s.image_url && <img src={s.image_url} alt="" className="w-full h-28 object-cover" />}
             <div className="p-3">
               <p className="text-sm font-medium text-white truncate">{s.title}</p>
               <p className="text-xs text-gray-400 truncate">{s.crop_name || ''}</p>
               <div className="flex gap-1 mt-2">
-                <button onClick={() => { setEdit(s); setTitle(s.title); setCropId(s.crop_id || ''); setImage(null); }} className="p-1.5 rounded bg-gray-700 text-blue-400 hover:bg-gray-600 cursor-pointer"><Edit2 size={12} /></button>
+                <button onClick={() => { setEdit(s); setTitle(s.title); setCropId(s.crop_id || ''); setImage(null); setPreview(s.image_url || ''); }} className="p-1.5 rounded bg-gray-700 text-blue-400 hover:bg-gray-600 cursor-pointer"><Edit2 size={12} /></button>
                 <button onClick={() => handleDelete(s.id)} className="p-1.5 rounded bg-gray-700 text-red-400 hover:bg-gray-600 cursor-pointer"><Trash2 size={12} /></button>
               </div>
             </div>

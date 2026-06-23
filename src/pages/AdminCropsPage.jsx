@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { Edit2, Trash2, Loader, AlertCircle, CheckCircle } from 'lucide-react';
+import { SkeletonCard } from '../components/common/Skeleton';
 import api from '../services/api';
 
 export default function AdminCropsPage() {
   const [items, setItems] = useState([]);
   const [agriTitles, setAgriTitles] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [formError, setFormError] = useState('');
   const [formSuccess, setFormSuccess] = useState('');
   const [formLoading, setFormLoading] = useState(false);
@@ -16,8 +18,11 @@ export default function AdminCropsPage() {
   const fileRef = useRef(null);
 
   const load = () => {
-    api.farming.allCrops().then(setItems).catch(() => {});
-    api.farming.agriTitles().then(setAgriTitles).catch(() => {});
+    setLoading(true);
+    Promise.all([
+      api.farming.allCrops().then(setItems).catch(() => {}),
+      api.farming.agriTitles().then(setAgriTitles).catch(() => {}),
+    ]).finally(() => setLoading(false));
   };
 
   useEffect(() => { load(); }, []);
@@ -99,14 +104,14 @@ export default function AdminCropsPage() {
       </form>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-        {items.map((c) => (
+        {loading ? [1,2,3,4].map(i => <SkeletonCard key={i} />) : items.map((c) => (
           <div key={c.id} className="rounded-xl bg-gray-800/80 border border-gray-700 overflow-hidden group">
             {c.image_url && <img src={c.image_url} alt="" className="w-full h-28 object-cover" />}
             <div className="p-3">
               <p className="text-sm font-medium text-white truncate">{c.title}</p>
               <p className="text-xs text-gray-400 truncate">{c.agri_title || ''}</p>
               <div className="flex gap-1 mt-2">
-                <button onClick={() => { setEdit(c); setTitle(c.title); setAgriId(c.agri_id || ''); setImage(null); }} className="p-1.5 rounded bg-gray-700 text-blue-400 hover:bg-gray-600 cursor-pointer"><Edit2 size={12} /></button>
+                <button onClick={() => { setEdit(c); setTitle(c.title); setAgriId(c.agri_id || ''); setImage(null); setPreview(c.image_url || ''); }} className="p-1.5 rounded bg-gray-700 text-blue-400 hover:bg-gray-600 cursor-pointer"><Edit2 size={12} /></button>
                 <button onClick={() => handleDelete(c.id)} className="p-1.5 rounded bg-gray-700 text-red-400 hover:bg-gray-600 cursor-pointer"><Trash2 size={12} /></button>
               </div>
             </div>

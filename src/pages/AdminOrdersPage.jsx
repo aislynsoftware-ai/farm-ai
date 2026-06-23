@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
+import Skeleton, { SkeletonRow } from '../components/common/Skeleton';
 import api from '../services/api';
 
 export default function AdminOrdersPage() {
   const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.admin.getPayments().then(setOrders).catch(() => {});
+    api.admin.getPayments().then(setOrders).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
   const statusClass = (status) => {
@@ -30,7 +32,7 @@ export default function AdminOrdersPage() {
             </tr>
           </thead>
           <tbody>
-            {orders.map((p) => (
+            {loading ? [1,2,3,4,5].map(i => <SkeletonRow key={i} cols={6} />) : orders.map((p) => (
               <tr key={p.id} className="border-b border-gray-700/50 text-gray-300 hover:bg-gray-700/30">
                 <td className="p-3">{p.id}</td>
                 <td className="p-3 font-mono text-xs">{p.user_id}</td>
@@ -40,7 +42,7 @@ export default function AdminOrdersPage() {
                 <td className="p-3 text-xs">{p.created_at || '-'}</td>
               </tr>
             ))}
-            {orders.length === 0 && <tr><td colSpan={6} className="p-6 text-center text-gray-500">No orders</td></tr>}
+            {!loading && orders.length === 0 && <tr><td colSpan={6} className="p-6 text-center text-gray-500">No orders</td></tr>}
           </tbody>
         </table>
       </div>

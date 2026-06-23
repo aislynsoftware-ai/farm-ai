@@ -1,15 +1,18 @@
 import { useState, useEffect, useRef } from 'react';
 import { Plus, Trash2, Edit2, AlertCircle, CheckCircle, ExternalLink, ImageIcon, Loader, X } from 'lucide-react';
+import Skeleton, { SkeletonCard } from '../components/common/Skeleton';
 import api from '../services/api';
 
 export default function AdminProductsPage() {
   const [items, setItems] = useState([]);
   const [subCrops, setSubCrops] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [formError, setFormError] = useState('');
   const [formSuccess, setFormSuccess] = useState('');
   const [editModal, setEditModal] = useState(null);
   const [showAdd, setShowAdd] = useState(false);
   const [formLoading, setFormLoading] = useState(false);
+  const [prodPreviews, setProdPreviews] = useState([]);
   const fileRefs = [useRef(null), useRef(null), useRef(null), useRef(null)];
 
   const emptyForm = (cropSubId = '') => ({
@@ -25,8 +28,11 @@ export default function AdminProductsPage() {
   const [form, setForm] = useState(emptyForm());
 
   const load = () => {
-    api.farming.cropWithProducts().then(setItems).catch(() => {});
-    api.farming.crops().then(setSubCrops).catch(() => {});
+    setLoading(true);
+    Promise.all([
+      api.farming.cropWithProducts().then(setItems).catch(() => {}),
+      api.farming.crops().then(setSubCrops).catch(() => {}),
+    ]).finally(() => setLoading(false));
   };
   useEffect(() => { load(); }, []);
 
@@ -38,8 +44,35 @@ export default function AdminProductsPage() {
     catch (err) { setFormError(err.message); }
   };
 
+  const handleProductFile = (i, e) => {
+    const f = e.target.files?.[0] || null;
+    setForm((p) => ({ ...p, [`product${i}_image`]: f }));
+    if (f) {
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const next = [...prodPreviews];
+        next[i - 1] = ev.target.result;
+        setProdPreviews(next);
+      };
+      reader.readAsDataURL(f);
+    }
+  };
+
+  const openAdd = () => {
+    setShowAdd(true);
+    setForm(emptyForm());
+    setProdPreviews(['', '', '', '']);
+    setFormError('');
+  };
+
   const openEdit = (disease) => {
     setEditModal(disease);
+    setProdPreviews([
+      disease.products?.[0]?.product_image || '',
+      disease.products?.[1]?.product_image || '',
+      disease.products?.[2]?.product_image || '',
+      disease.products?.[3]?.product_image || '',
+    ]);
     setForm({
       crop_sub_id: '',
       disease_name: disease.disease_name || '',
@@ -144,9 +177,9 @@ export default function AdminProductsPage() {
                 <input value={form[`product${i}_name`]} onChange={(e) => setForm((p) => ({ ...p, [`product${i}_name`]: e.target.value }))} placeholder="Name" className="w-full px-2.5 py-1.5 rounded-lg bg-gray-700/50 border border-gray-600 focus:border-emerald-500 outline-none text-white text-xs" />
                 <input value={form[`product${i}_url`]} onChange={(e) => setForm((p) => ({ ...p, [`product${i}_url`]: e.target.value }))} placeholder="URL" className="w-full px-2.5 py-1.5 rounded-lg bg-gray-700/50 border border-gray-600 focus:border-emerald-500 outline-none text-white text-xs" />
                 <div className="flex items-center gap-2">
-                  <input type="file" accept="image/*" ref={fileRefs[i - 1]} className="hidden" onChange={(e) => setForm((p) => ({ ...p, [`product${i}_image`]: e.target.files?.[0] || null }))} />
+                  <input type="file" accept="image/*" ref={fileRefs[i - 1]} className="hidden" onChange={(e) => handleProductFile(i, e)} />
                   <button type="button" onClick={() => fileRefs[i - 1].current?.click()} className="px-2 py-1.5 rounded bg-gray-700 text-white text-xs hover:bg-gray-600 cursor-pointer">Image</button>
-                  {form[`product${i}_image`] && <span className="text-xs text-emerald-400 truncate">{form[`product${i}_image`].name}</span>}
+                  {prodPreviews[i - 1] && <img src={prodPreviews[i - 1]} alt="" className="w-8 h-8 rounded object-cover" />}
                 </div>
               </div>
             </div>
@@ -173,7 +206,7 @@ export default function AdminProductsPage() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-bold text-white">Products (crop_products)</h2>
-        <button onClick={() => { setShowAdd(true); setForm(emptyForm()); setFormError(''); }} className="px-3 py-2 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-500 flex items-center gap-1.5 cursor-pointer">
+        <button onClick={openAdd} className="px-3 py-2 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-500 flex items-center gap-1.5 cursor-pointer">
           <Plus size={14} /> Add Product
         </button>
       </div>
@@ -184,7 +217,7 @@ export default function AdminProductsPage() {
       {showAdd && <Modal title="Add Product" onSubmit={handleAdd} />}
       {editModal && <Modal title={`Edit Product #${editModal.product_id}`} onSubmit={handleSaveEdit} />}
 
-      {items.map((crop) => (
+      {loading ? [1,2,3].map(i => <Skeleton key={i} className="h-44" />) : items.map((crop) => (
         <div key={crop.id} className="rounded-xl bg-gray-800/80 border border-gray-700 overflow-hidden">
           <div className="p-4 border-b border-gray-700 flex items-center gap-3">
             {crop.image_url && <img src={crop.image_url} alt="" className="w-10 h-10 rounded-lg object-cover" />}
@@ -233,7 +266,7 @@ export default function AdminProductsPage() {
           )}
         </div>
       ))}
-      {items.length === 0 && <div className="p-6 text-center text-gray-500 rounded-xl bg-gray-800/80 border border-gray-700">No products found</div>}
+      {!loading && items.length === 0 && <div className="p-6 text-center text-gray-500 rounded-xl bg-gray-800/80 border border-gray-700">No products found</div>}
     </div>
   );
 }
