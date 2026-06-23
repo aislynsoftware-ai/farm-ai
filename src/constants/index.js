@@ -33,6 +33,12 @@ export const ROUTES = {
   DASHBOARD_DEVELOPER: '/dashboard/developer',
   ADMIN_LOGIN: '/admin/login',
   ADMIN_DASHBOARD: '/admin/dashboard',
+  ADMIN_USERS: '/admin/users',
+  ADMIN_AGRI_TITLES: '/admin/agri-titles',
+  ADMIN_CROPS: '/admin/crops',
+  ADMIN_SUB_CROPS: '/admin/sub-crops',
+  ADMIN_PRODUCTS: '/admin/products',
+  ADMIN_ORDERS: '/admin/orders',
 };
 
 export const NAV_LINKS = [

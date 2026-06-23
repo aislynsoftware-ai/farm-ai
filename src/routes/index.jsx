@@ -1,5 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import RootLayout from '../layouts/RootLayout';
+import AdminLayout from '../layouts/AdminLayout';
 import Home from '../pages/Home';
 import About from '../pages/About';
 import Services from '../pages/Services';
@@ -31,6 +32,12 @@ import DashboardDeveloper from '../pages/DashboardDeveloper';
 import PlanCheckout from '../pages/PlanCheckout';
 import AdminLogin from '../pages/AdminLogin';
 import AdminDashboard from '../pages/AdminDashboard';
+import AdminUsersPage from '../pages/AdminUsersPage';
+import AdminAgriTitlesPage from '../pages/AdminAgriTitlesPage';
+import AdminCropsPage from '../pages/AdminCropsPage';
+import AdminSubCropsPage from '../pages/AdminSubCropsPage';
+import AdminProductsPage from '../pages/AdminProductsPage';
+import AdminOrdersPage from '../pages/AdminOrdersPage';
 
 function ErrorPage() {
   return (
@@ -105,8 +112,18 @@ export default function createAppRouter(isDark, toggleTheme) {
       element: <AdminLogin />,
     },
     {
-      path: '/admin/dashboard',
-      element: <AdminDashboard />,
+      path: '/admin',
+      element: <AdminLayout />,
+      children: [
+        { index: true, element: <AdminDashboard /> },
+        { path: 'dashboard', element: <AdminDashboard /> },
+        { path: 'users', element: <AdminUsersPage /> },
+        { path: 'agri-titles', element: <AdminAgriTitlesPage /> },
+        { path: 'crops', element: <AdminCropsPage /> },
+        { path: 'sub-crops', element: <AdminSubCropsPage /> },
+        { path: 'products', element: <AdminProductsPage /> },
+        { path: 'orders', element: <AdminOrdersPage /> },
+      ],
     },
   ]);
 }
