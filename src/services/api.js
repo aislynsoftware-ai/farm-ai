@@ -46,6 +46,20 @@ async function request(endpoint, options = {}) {
   return data;
 }
 
+async function adminRequest(endpoint, options = {}) {
+  const token = localStorage.getItem('admin_token');
+  const isFormData = options.body instanceof FormData;
+  const headers = {
+    ...(isFormData ? {} : { 'Content-Type': 'application/json' }),
+    ...(token && { Authorization: `Bearer ${token}` }),
+    ...options.headers,
+  };
+  const res = await fetch(`${BASE_URL}${endpoint}`, { ...options, headers });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || data.detail || data.error || 'Request failed');
+  return data;
+}
+
 function extractOtp(res) {
   return res?.otp || res?.data?.otp || res?.otp_code || res?.data?.otp_code || res?.code || null;
 }
@@ -94,24 +108,37 @@ const api = {
     },
   },
   admin: {
+    login: (email, password) =>
+      adminRequest('/admin/login', {
+        method: 'POST',
+        body: JSON.stringify({ email, password }),
+      }),
+    verify: () =>
+      adminRequest('/admin/verify', { method: 'POST' }),
+    getUsers: () =>
+      adminRequest('/admin/users'),
+    getPayments: () =>
+      adminRequest('/admin/payments'),
+    deleteProduct: (id) =>
+      adminRequest(`/admin/delete-product/${id}`, { method: 'DELETE' }),
     // Agri titles
     addAgriTitle: (title, file) => {
       const fd = new FormData();
       fd.append('title', title);
       fd.append('image', file);
-      return request('/add_agri_title', { method: 'POST', body: fd, headers: {} });
+      return adminRequest('/add_agri_title', { method: 'POST', body: fd, headers: {} });
     },
     updateAgriTitle: (id, title, file) => {
       const fd = new FormData();
       fd.append('id', id);
       fd.append('title', title);
       if (file) fd.append('image', file);
-      return request('/update_agri_title', { method: 'POST', body: fd, headers: {} });
+      return adminRequest('/update_agri_title', { method: 'POST', body: fd, headers: {} });
     },
     deleteAgriTitle: (id) => {
       const fd = new FormData();
       fd.append('id', id);
-      return request('/delete_agri_title', { method: 'POST', body: fd, headers: {} });
+      return adminRequest('/delete_agri_title', { method: 'POST', body: fd, headers: {} });
     },
     // Crops
     addCrop: (title, agriId, file) => {
@@ -119,32 +146,32 @@ const api = {
       fd.append('title', title);
       fd.append('agri_id', agriId);
       fd.append('image', file);
-      return request('/add_crop', { method: 'POST', body: fd, headers: {} });
+      return adminRequest('/add_crop', { method: 'POST', body: fd, headers: {} });
     },
     updateCrop: (id, title, agriId, file) => {
       const fd = new FormData();
       fd.append('title', title);
       fd.append('agri_id', agriId);
       if (file) fd.append('image', file);
-      return request(`/update_crop/${id}`, { method: 'PUT', body: fd, headers: {} });
+      return adminRequest(`/update_crop/${id}`, { method: 'PUT', body: fd, headers: {} });
     },
-    deleteCrop: (id) => request(`/delete_crop/${id}`, { method: 'DELETE' }),
+    deleteCrop: (id) => adminRequest(`/delete_crop/${id}`, { method: 'DELETE' }),
     // Sub-crops
     addSubCrop: (cropId, title, file) => {
       const fd = new FormData();
       fd.append('crop_id', cropId);
       fd.append('title', title);
       fd.append('image', file);
-      return request('/add_crop_sub', { method: 'POST', body: fd, headers: {} });
+      return adminRequest('/add_crop_sub', { method: 'POST', body: fd, headers: {} });
     },
     updateSubCrop: (id, cropId, title, file) => {
       const fd = new FormData();
       fd.append('crop_id', cropId);
       fd.append('title', title);
       if (file) fd.append('image', file);
-      return request(`/update_crop_sub/${id}`, { method: 'POST', body: fd, headers: {} });
+      return adminRequest(`/update_crop_sub/${id}`, { method: 'POST', body: fd, headers: {} });
     },
-    deleteSubCrop: (id) => request(`/delete_crop_sub/${id}`, { method: 'DELETE' }),
+    deleteSubCrop: (id) => adminRequest(`/delete_crop_sub/${id}`, { method: 'DELETE' }),
   },
   predict: {
     tomato: (userId, file) => { const fd = new FormData(); fd.append('user_id', userId); fd.append('image', file); return request('/leafs/tomato', { method: 'POST', body: fd, headers: {} }); },
