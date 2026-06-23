@@ -39,6 +39,8 @@ export const ROUTES = {
   ADMIN_SUB_CROPS: '/admin/sub-crops',
   ADMIN_PRODUCTS: '/admin/products',
   ADMIN_ORDERS: '/admin/orders',
+  ADMIN_PREDICTIONS: '/admin/predictions',
+  ADMIN_PLANS: '/admin/plans',
 };
 
 export const NAV_LINKS = [
