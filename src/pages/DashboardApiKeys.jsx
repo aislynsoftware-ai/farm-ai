@@ -119,25 +119,27 @@ export default function DashboardApiKeys() {
           >
             <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-400/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
             <div className="absolute bottom-0 left-0 w-48 h-48 bg-blue-400/10 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
-            <div className="relative flex items-center gap-4">
-              <div className="w-14 h-14 rounded-xl bg-white/15 backdrop-blur flex items-center justify-center">
-                <Key size={24} className="text-white" />
+            <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <div className="flex items-center gap-4 w-full sm:w-auto">
+                <div className="w-14 h-14 rounded-xl bg-white/15 backdrop-blur flex items-center justify-center shrink-0">
+                  <Key size={24} className="text-white" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h2 className="text-lg font-bold text-white">API Keys</h2>
+                  <p className="text-emerald-100/80 text-xs mt-0.5">Manage your API keys for programmatic access</p>
+                  {user && (
+                    <button
+                      onClick={() => { navigator.clipboard.writeText(user.user_id); }}
+                      className="text-emerald-100/60 text-[10px] mt-1 hover:text-emerald-100 transition-colors cursor-pointer flex items-center gap-1 truncate max-w-[200px]"
+                      title="Click to copy"
+                    >
+                      User ID: {user.user_id}
+                      <Copy size={9} className="opacity-60 shrink-0" />
+                    </button>
+                  )}
+                </div>
               </div>
-              <div className="flex-1">
-                <h2 className="text-lg font-bold text-white">API Keys</h2>
-                <p className="text-emerald-100/80 text-xs mt-0.5">Manage your API keys for programmatic access</p>
-                {user && (
-                  <button
-                    onClick={() => { navigator.clipboard.writeText(user.user_id); }}
-                    className="text-emerald-100/60 text-[10px] mt-1 hover:text-emerald-100 transition-colors cursor-pointer flex items-center gap-1"
-                    title="Click to copy"
-                  >
-                    User ID: {user.user_id}
-                    <Copy size={9} className="opacity-60" />
-                  </button>
-                )}
-              </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap w-full sm:w-auto">
                 <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/15 backdrop-blur">
                   <Coins size={14} className="text-yellow-300" />
                   <span className="text-sm font-bold text-white">{coins !== null ? coins : '...'}</span>
@@ -242,8 +244,8 @@ export default function DashboardApiKeys() {
                         )}
                       </div>
                     </div>
-                    <div className="flex items-center gap-2 mb-2">
-                      <code className="flex-1 text-xs font-mono bg-gray-50 dark:bg-gray-900 rounded-lg px-3 py-2 text-gray-800 dark:text-gray-200 border border-gray-100 dark:border-gray-700 select-all">
+                    <div className="flex items-center gap-2 mb-2 min-w-0 overflow-hidden">
+                      <code className="flex-1 text-xs font-mono bg-gray-50 dark:bg-gray-900 rounded-lg px-3 py-2 text-gray-800 dark:text-gray-200 border border-gray-100 dark:border-gray-700 select-all truncate">
                         {revealedIdx === idx ? k.api_key : maskKey(k.api_key)}
                       </code>
                       <button
