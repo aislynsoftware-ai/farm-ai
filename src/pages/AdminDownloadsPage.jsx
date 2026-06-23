@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Download as DownloadIcon, FolderOpen, ChevronDown, ChevronRight, Loader, AlertCircle } from 'lucide-react';
+import Skeleton from '../components/common/Skeleton';
 import api from '../services/api';
 
 export default function AdminDownloadsPage() {
@@ -52,8 +53,8 @@ export default function AdminDownloadsPage() {
   };
 
   if (loading) return (
-    <div className="flex items-center justify-center py-20">
-      <Loader size={24} className="animate-spin text-emerald-500" />
+    <div className="space-y-3">
+      {[1,2,3].map(i => <Skeleton key={i} className="h-16" />)}
     </div>
   );
 
@@ -98,7 +99,7 @@ export default function AdminDownloadsPage() {
             )}
           </div>
         ))}
-        {tree.length === 0 && <div className="p-6 text-center text-gray-500 rounded-xl bg-gray-800/80 border border-gray-700">No predictions found</div>}
+        {!loading && tree.length === 0 && <div className="p-6 text-center text-gray-500 rounded-xl bg-gray-800/80 border border-gray-700">No predictions found</div>}
       </div>
     </div>
   );

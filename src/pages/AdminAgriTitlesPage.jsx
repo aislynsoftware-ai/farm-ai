@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { Edit2, Trash2, Loader, AlertCircle, CheckCircle } from 'lucide-react';
+import Skeleton, { SkeletonCard } from '../components/common/Skeleton';
 import api from '../services/api';
 
 export default function AdminAgriTitlesPage() {
   const [items, setItems] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [formError, setFormError] = useState('');
   const [formSuccess, setFormSuccess] = useState('');
   const [formLoading, setFormLoading] = useState(false);
@@ -13,7 +15,7 @@ export default function AdminAgriTitlesPage() {
   const [preview, setPreview] = useState('');
   const fileRef = useRef(null);
 
-  const load = () => api.farming.agriTitles().then(setItems).catch(() => {});
+  const load = () => { setLoading(true); api.farming.agriTitles().then(setItems).catch(() => {}).finally(() => setLoading(false)); };
 
   useEffect(() => { load(); }, []);
 
@@ -87,13 +89,13 @@ export default function AdminAgriTitlesPage() {
       </form>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-        {items.map((a) => (
+        {loading ? [1,2,3,4].map(i => <SkeletonCard key={i} />) : items.map((a) => (
           <div key={a.id} className="rounded-xl bg-gray-800/80 border border-gray-700 overflow-hidden group">
             {a.image_url && <img src={a.image_url} alt="" className="w-full h-28 object-cover" />}
             <div className="p-3 flex items-center justify-between">
               <span className="text-sm text-white truncate">{a.title}</span>
               <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                <button onClick={() => { setEdit(a); setTitle(a.title); setImage(null); }} className="p-1.5 rounded bg-gray-700 text-blue-400 hover:bg-gray-600 cursor-pointer"><Edit2 size={12} /></button>
+                <button onClick={() => { setEdit(a); setTitle(a.title); setImage(null); setPreview(a.image_url || ''); }} className="p-1.5 rounded bg-gray-700 text-blue-400 hover:bg-gray-600 cursor-pointer"><Edit2 size={12} /></button>
                 <button onClick={() => handleDelete(a.id)} className="p-1.5 rounded bg-gray-700 text-red-400 hover:bg-gray-600 cursor-pointer"><Trash2 size={12} /></button>
               </div>
             </div>

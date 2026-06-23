@@ -1,16 +1,18 @@
 import { useState, useEffect } from 'react';
 import { Edit2, Trash2, CheckCircle, XCircle, Loader, AlertCircle, CheckCircle as CheckIcon } from 'lucide-react';
+import Skeleton, { SkeletonRow } from '../components/common/Skeleton';
 import api from '../services/api';
 
 export default function AdminUsersPage() {
   const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [formError, setFormError] = useState('');
   const [formSuccess, setFormSuccess] = useState('');
   const [formLoading, setFormLoading] = useState(false);
   const [editUser, setEditUser] = useState(null);
   const [editForm, setEditForm] = useState({ name: '', email: '', phone: '', coins: '', is_verified: true });
 
-  const load = () => api.admin.getUsers().then(setUsers).catch(() => {});
+  const load = () => { setLoading(true); api.admin.getUsers().then(setUsers).catch(() => {}).finally(() => setLoading(false)); };
   useEffect(() => { load(); }, []);
 
   const show = (msg) => { setFormSuccess(msg); setTimeout(() => setFormSuccess(''), 3000); };
@@ -93,7 +95,7 @@ export default function AdminUsersPage() {
             </tr>
           </thead>
           <tbody>
-            {users.map((u) => (
+            {loading ? [1,2,3,4,5].map(i => <SkeletonRow key={i} cols={7} />) : users.length === 0 ? <tr><td colSpan={7} className="p-6 text-center text-gray-500">No users found</td></tr> : users.map((u) => (
               <tr key={u.user_id} className="border-b border-gray-700/50 text-gray-300 hover:bg-gray-700/30">
                 <td className="p-3 font-mono text-xs">{u.user_id}</td>
                 <td className="p-3">{u.name || '-'}</td>

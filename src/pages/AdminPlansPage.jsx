@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
+import Skeleton, { SkeletonRow } from '../components/common/Skeleton';
 import api from '../services/api';
 
 export default function AdminPlansPage() {
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.admin.getUserPlans().then(setData).catch(() => {});
+    api.admin.getUserPlans().then(setData).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
   const planColor = (plan) => {
@@ -35,7 +37,7 @@ export default function AdminPlansPage() {
             </tr>
           </thead>
           <tbody>
-            {data.map((u) => (
+            {loading ? [1,2,3,4,5].map(i => <SkeletonRow key={i} cols={7} />) : data.map((u) => (
               <tr key={u.user_id} className="border-b border-gray-700/50 text-gray-300 hover:bg-gray-700/30">
                 <td className="p-3 font-mono text-xs">{u.user_id}</td>
                 <td className="p-3">{u.name || '-'}</td>
@@ -46,7 +48,7 @@ export default function AdminPlansPage() {
                 <td className="p-3 text-xs">{u.plan_updated || '-'}</td>
               </tr>
             ))}
-            {data.length === 0 && <tr><td colSpan={7} className="p-6 text-center text-gray-500">No data</td></tr>}
+            {!loading && data.length === 0 && <tr><td colSpan={7} className="p-6 text-center text-gray-500">No data</td></tr>}
           </tbody>
         </table>
       </div>

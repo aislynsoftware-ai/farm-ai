@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { Users, CreditCard, Leaf, ShoppingBag } from 'lucide-react';
+import Skeleton from '../components/common/Skeleton';
 import api from '../services/api';
 
 export default function AdminDashboard() {
-  const [stats, setStats] = useState({ users: 0, payments: 0, agriTitles: 0, products: 0 });
+  const [stats, setStats] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     Promise.all([
@@ -13,8 +15,14 @@ export default function AdminDashboard() {
       api.farming.cropWithProducts().catch(() => []),
     ]).then(([u, p, a, pr]) => {
       setStats({ users: u.length, payments: p.length, agriTitles: a.length, products: pr.length });
-    });
+    }).finally(() => setLoading(false));
   }, []);
+
+  if (loading) return (
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      {[1,2,3,4].map(i => <Skeleton key={i} className="h-32" />)}
+    </div>
+  );
 
   const cards = [
     { label: 'Total Users', value: stats.users, icon: Users, color: 'text-emerald-400' },
