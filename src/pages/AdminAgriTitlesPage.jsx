@@ -68,31 +68,31 @@ export default function AdminAgriTitlesPage() {
     catch (err) { setFormError(err.message); }
   };
 
-  const inputClass = "w-full px-3 py-2 rounded-lg bg-white dark:bg-emerald-900/40 border border-emerald-200 dark:border-emerald-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none text-emerald-900 dark:text-white placeholder-emerald-500 text-sm";
+  const inputClass = "w-full px-3 py-2 rounded-lg bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none text-gray-900 dark:text-white placeholder-gray-400 text-sm";
 
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-bold text-emerald-900 dark:text-white">Agri Titles</h2>
+      <h2 className="text-lg font-bold text-gray-900 dark:text-white">Agri Titles</h2>
 
       {formSuccess && <div className="flex items-center gap-2 p-3 rounded-xl bg-emerald-950/30 border border-emerald-800"><CheckCircle size={14} className="text-emerald-400" /><p className="text-xs text-emerald-400">{formSuccess}</p></div>}
       {formError && <div className="flex items-center gap-2 p-3 rounded-xl bg-red-950/30 border border-red-800"><AlertCircle size={14} className="text-red-400" /><p className="text-xs text-red-400">{formError}</p></div>}
 
-      <form onSubmit={handleSave} className="rounded-xl bg-white dark:bg-emerald-900 border border-emerald-100 dark:border-emerald-700 p-4 flex flex-wrap items-end gap-3">
+      <form onSubmit={handleSave} className="rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-4 flex flex-wrap items-end gap-3">
         <div className="flex-1 min-w-[200px]">
-          <label className="block text-xs text-emerald-600 dark:text-emerald-400 mb-1">Title</label>
+          <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">Title</label>
           <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Agri title name" className={inputClass} />
         </div>
         <div>
-          <label className="block text-xs text-emerald-600 dark:text-emerald-400 mb-1">AI Service</label>
+          <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">AI Service</label>
           <select value={aiServiceId} onChange={(e) => setAiServiceId(e.target.value)} className={inputClass}>
             <option value="">Select service</option>
             {services.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
           </select>
         </div>
         <div>
-          <label className="block text-xs text-emerald-600 dark:text-emerald-400 mb-1">Image</label>
+          <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">Image</label>
           <input type="file" accept="image/*" ref={fileRef} className="hidden" onChange={handleFile} />
-          <button type="button" onClick={() => fileRef.current?.click()} className="px-3 py-2 rounded-lg bg-emerald-50 dark:bg-emerald-800 text-emerald-900 dark:text-white text-sm hover:bg-emerald-100 dark:hover:bg-emerald-700 cursor-pointer">
+          <button type="button" onClick={() => fileRef.current?.click()} className="px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white text-sm hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer">
             {image ? image.name : 'Choose'}
           </button>
         </div>
@@ -100,18 +100,18 @@ export default function AdminAgriTitlesPage() {
         <button type="submit" disabled={formLoading} className="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-500 disabled:opacity-50 cursor-pointer">
           {formLoading ? <Loader size={14} className="animate-spin" /> : edit ? 'Update' : 'Add'}
         </button>
-        {edit && <button type="button" onClick={resetForm} className="px-3 py-2 rounded-lg bg-emerald-50 dark:bg-emerald-800 text-emerald-800 dark:text-emerald-200 text-sm hover:bg-emerald-100 dark:hover:bg-emerald-700 cursor-pointer">Cancel</button>}
+        {edit && <button type="button" onClick={resetForm} className="px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-sm hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer">Cancel</button>}
       </form>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
         {loading ? [1,2,3,4].map(i => <SkeletonCard key={i} />) : items.map((a) => (
-          <div key={a.id} className="rounded-xl bg-white dark:bg-emerald-900 border border-emerald-100 dark:border-emerald-700 overflow-hidden group">
+          <div key={a.id} className="rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden group">
             {a.image_url && <img src={a.image_url} alt="" className="w-full h-28 object-cover" />}
             <div className="p-3 flex items-center justify-between">
-              <span className="text-sm text-emerald-900 dark:text-white truncate">{a.title}</span>
+              <span className="text-sm text-gray-900 dark:text-white truncate">{a.title}</span>
               <div className="flex gap-1">
-                <button onClick={() => { setEdit(a); setTitle(a.title); setAiServiceId(a.ai_service_id || ''); setImage(null); setPreview(a.image_url || ''); }} className="p-1.5 rounded bg-emerald-50 dark:bg-emerald-800 text-blue-400 hover:bg-emerald-100 dark:hover:bg-emerald-700 cursor-pointer"><Edit2 size={12} /></button>
-                <button onClick={() => handleDelete(a.id)} className="p-1.5 rounded bg-emerald-50 dark:bg-emerald-800 text-red-400 hover:bg-emerald-100 dark:hover:bg-emerald-700 cursor-pointer"><Trash2 size={12} /></button>
+                <button onClick={() => { setEdit(a); setTitle(a.title); setAiServiceId(a.ai_service_id || ''); setImage(null); setPreview(a.image_url || ''); }} className="p-1.5 rounded bg-gray-100 dark:bg-gray-700 text-blue-400 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer"><Edit2 size={12} /></button>
+                <button onClick={() => handleDelete(a.id)} className="p-1.5 rounded bg-gray-100 dark:bg-gray-700 text-red-400 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer"><Trash2 size={12} /></button>
               </div>
             </div>
           </div>
