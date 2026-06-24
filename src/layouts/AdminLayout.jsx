@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, Leaf, Sprout, ShoppingBag, CreditCard, Menu, X, LogOut, Brain, Crown, Download } from 'lucide-react';
+import { LayoutDashboard, Users, Leaf, Sprout, ShoppingBag, CreditCard, Menu, X, LogOut, Brain, Crown, Download, Cpu } from 'lucide-react';
 import api from '../services/api';
 
 const SIDEBAR = [
   { path: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { path: '/admin/users', label: 'Users', icon: Users },
   { path: '/admin/plans', label: 'Plans', icon: Crown },
+  { path: '/admin/ai-services', label: 'AI Services', icon: Cpu },
   { path: '/admin/agri-titles', label: 'Agri Titles', icon: Leaf },
   { path: '/admin/crops', label: 'Crops', icon: Sprout },
   { path: '/admin/sub-crops', label: 'Sub Crops', icon: Sprout },
@@ -14,7 +15,6 @@ const SIDEBAR = [
   { path: '/admin/orders', label: 'Orders', icon: CreditCard },
   { path: '/admin/predictions', label: 'Predictions', icon: Brain },
   { path: '/admin/downloads', label: 'Downloads', icon: Download },
-  { path: '/admin/plans', label: 'Plans', icon: Crown },
 ];
 
 export default function AdminLayout() {

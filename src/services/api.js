@@ -147,18 +147,29 @@ const api = {
       adminRequest(`/update_product/${id}`, { method: 'POST', body: formData, headers: {} }),
     addProduct: (formData) =>
       adminRequest('/add_product', { method: 'POST', body: formData, headers: {} }),
+    // AI Services
+    getAIServices: () =>
+      adminRequest('/admin/ai-services'),
+    addAIService: (data) =>
+      adminRequest('/admin/ai-services/add', { method: 'POST', body: JSON.stringify(data) }),
+    updateAIService: (id, data) =>
+      adminRequest(`/admin/ai-services/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+    deleteAIService: (id) =>
+      adminRequest(`/admin/ai-services/${id}`, { method: 'DELETE' }),
     // Agri titles
-    addAgriTitle: (title, file) => {
+    addAgriTitle: (title, file, aiServiceId) => {
       const fd = new FormData();
       fd.append('title', title);
       fd.append('image', file);
+      if (aiServiceId) fd.append('ai_service_id', aiServiceId);
       return adminRequest('/add_agri_title', { method: 'POST', body: fd, headers: {} });
     },
-    updateAgriTitle: (id, title, file) => {
+    updateAgriTitle: (id, title, file, aiServiceId) => {
       const fd = new FormData();
       fd.append('id', id);
       fd.append('title', title);
       if (file) fd.append('image', file);
+      if (aiServiceId) fd.append('ai_service_id', aiServiceId);
       return adminRequest('/update_agri_title', { method: 'POST', body: fd, headers: {} });
     },
     deleteAgriTitle: (id) => {
