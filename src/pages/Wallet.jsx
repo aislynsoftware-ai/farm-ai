@@ -177,11 +177,11 @@ export default function Wallet() {
       <Sidebar mobileOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <main className="flex-1 overflow-x-hidden">
         <SEO title="Wallet" description="Manage your Farmlyt AI wallet and coins." url="/wallet" noindex />
-        <div className="sticky top-0 z-30 lg:hidden bg-white/80 dark:bg-emerald-950/80 backdrop-blur border-b border-emerald-100 dark:border-emerald-800 px-4 py-3 flex items-center gap-3">
-          <button onClick={() => setSidebarOpen(true)} className="p-1.5 rounded-lg text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900 cursor-pointer">
+        <div className="sticky top-0 z-30 lg:hidden bg-white/80 dark:bg-gray-900/80 backdrop-blur border-b border-gray-100 dark:border-gray-800 px-4 py-3 flex items-center gap-3">
+          <button onClick={() => setSidebarOpen(true)} className="p-1.5 rounded-lg text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer">
             <Menu size={20} />
           </button>
-          <span className="text-sm font-semibold text-emerald-900 dark:text-white">Wallet</span>
+          <span className="text-sm font-semibold text-gray-900 dark:text-white">Wallet</span>
         </div>
         <h1 className="sr-only">Wallet</h1>
 
@@ -210,13 +210,13 @@ export default function Wallet() {
 
           {/* Plan Cards */}
           <motion.div
-            className="rounded-2xl bg-white dark:bg-emerald-900 border border-emerald-200 dark:border-emerald-700 p-6"
+            className="rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
             <div className="flex items-center gap-2 mb-5">
               <Crown size={16} className="text-emerald-500" />
-              <h3 className="text-sm font-bold text-emerald-900 dark:text-white">Choose a Plan</h3>
+              <h3 className="text-sm font-bold text-gray-900 dark:text-white">Choose a Plan</h3>
             </div>
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -231,8 +231,8 @@ export default function Wallet() {
                     disabled={buyingPlan === plan.id || (active && plan.id !== 'FREE')}
                     className={`relative rounded-xl border-2 p-4 text-left transition-all cursor-pointer ${
                       active
-                        ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-800/50'
-                        : 'border-emerald-200 dark:border-emerald-700 hover:border-emerald-400 bg-white dark:bg-emerald-900/50'
+                        ? 'border-emerald-500 bg-emerald-50 dark:bg-gray-700'
+                        : 'border-gray-200 dark:border-gray-600 hover:border-emerald-400 bg-white dark:bg-gray-800'
                     } disabled:opacity-60`}
                   >
                     {active && (
@@ -241,18 +241,18 @@ export default function Wallet() {
                       </span>
                     )}
                     <Icon size={20} className={`mb-2 ${active ? 'text-emerald-600 dark:text-emerald-400' : 'text-emerald-500'}`} />
-                    <p className={`text-xs font-bold mb-0.5 ${active ? 'text-emerald-900 dark:text-white' : 'text-emerald-900 dark:text-white'}`}>
+                    <p className="text-xs font-bold text-gray-900 dark:text-white mb-0.5">
                       {plan.label}
                     </p>
-                    <p className="text-lg font-bold text-emerald-700 dark:text-emerald-300">
+                    <p className="text-lg font-bold text-gray-900 dark:text-white">
                       ₹{plan.price}
                     </p>
-                    <p className="text-[10px] text-emerald-600 dark:text-emerald-400 mt-1">
+                    <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-1">
                       {coinsAmount} coins
                     </p>
-                    <p className="text-[10px] text-emerald-500 dark:text-emerald-500 mt-0.5">{plan.desc}</p>
+                    <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-0.5">{plan.desc}</p>
                     {buyingPlan === plan.id && (
-                      <div className="absolute inset-0 rounded-xl bg-white/60 dark:bg-emerald-900/60 flex items-center justify-center">
+                      <div className="absolute inset-0 rounded-xl bg-white/60 dark:bg-gray-900/60 flex items-center justify-center">
                         <Loader size={20} className="animate-spin text-emerald-500" />
                       </div>
                     )}
@@ -264,7 +264,7 @@ export default function Wallet() {
 
           {/* Error */}
           {error && (
-            <div className="flex items-center gap-2 p-3 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800">
+            <div className="flex items-center gap-2 p-3 rounded-xl bg-red-50 dark:bg-gray-800 border border-red-200 dark:border-red-700">
               <AlertCircle size={14} className="text-red-500 flex-shrink-0" />
               <p className="text-xs text-red-600 dark:text-red-400">{error}</p>
             </div>
@@ -272,18 +272,18 @@ export default function Wallet() {
 
           {/* Add Coins Card */}
           <motion.div
-            className="rounded-2xl bg-white dark:bg-emerald-900 border border-emerald-200 dark:border-emerald-700 p-6"
+            className="rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
             <div className="flex items-center gap-2 mb-4">
               <CreditCard size={16} className="text-emerald-500" />
-              <h3 className="text-sm font-bold text-emerald-900 dark:text-white">Add Coins</h3>
+              <h3 className="text-sm font-bold text-gray-900 dark:text-white">Add Coins</h3>
             </div>
 
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-medium text-emerald-700 dark:text-emerald-300 mb-2">Quick Select</label>
+                <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-2">Quick Select</label>
                 <div className="flex flex-wrap gap-2">
                   {[10, 50, 100, 200, 500].map((amt) => (
                     <button
@@ -292,7 +292,7 @@ export default function Wallet() {
                       className={`px-4 py-2 rounded-xl text-xs font-medium border transition-colors cursor-pointer ${
                         rechargeAmount === amt
                           ? 'bg-emerald-600 text-white border-emerald-600'
-                          : 'bg-white dark:bg-emerald-800 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-600 hover:border-emerald-400'
+                          : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:border-emerald-300'
                       }`}
                     >
                       ₹{amt}
@@ -302,15 +302,15 @@ export default function Wallet() {
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-emerald-700 dark:text-emerald-300 mb-1.5">Custom Amount</label>
+                <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">Custom Amount</label>
                 <div className="flex items-center gap-2">
-                  <span className="text-sm text-emerald-600">₹</span>
+                  <span className="text-sm text-gray-500">₹</span>
                   <input
                     type="number"
                     min="1"
                     value={rechargeAmount}
                     onChange={(e) => setRechargeAmount(Math.max(1, parseInt(e.target.value) || 1))}
-                    className="w-32 px-3 py-2 rounded-xl bg-white dark:bg-emerald-800 border border-emerald-200 dark:border-emerald-600 text-sm text-emerald-900 dark:text-white outline-none focus:border-emerald-500"
+                    className="w-32 px-3 py-2 rounded-xl bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-sm text-gray-900 dark:text-white outline-none focus:border-emerald-500"
                   />
                 </div>
               </div>
@@ -328,15 +328,15 @@ export default function Wallet() {
 
           {/* Info Card */}
           <motion.div
-            className="rounded-2xl bg-white dark:bg-emerald-900 border border-emerald-200 dark:border-emerald-700 p-5"
+            className="rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-5"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
             <div className="flex items-center gap-2 mb-3">
               <Sprout size={16} className="text-emerald-500" />
-              <h3 className="text-sm font-bold text-emerald-900 dark:text-white">About Coins</h3>
+              <h3 className="text-sm font-bold text-gray-900 dark:text-white">About Coins</h3>
             </div>
-            <ul className="space-y-2 text-xs text-emerald-700 dark:text-emerald-300">
+            <ul className="space-y-2 text-xs text-gray-600 dark:text-gray-300">
               <li className="flex items-start gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0" />
                 Each AI detection costs 2 coins per scan
