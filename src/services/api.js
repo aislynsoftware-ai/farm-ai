@@ -295,6 +295,28 @@ const api = {
         body: JSON.stringify(data),
       }),
   },
+  plants: {
+    list: (userId) => request(`/user/plants?user_id=${encodeURIComponent(userId)}`),
+    add: (userId, plantName, file, wateringTime, intervalDays) => {
+      const fd = new FormData();
+      fd.append('user_id', userId);
+      fd.append('plant_name', plantName);
+      fd.append('watering_time', wateringTime);
+      fd.append('interval_days', String(intervalDays));
+      if (file) fd.append('image', file);
+      return request('/user/plants/add', { method: 'POST', body: fd, headers: {} });
+    },
+    update: (id, data) => {
+      const fd = new FormData();
+      if (data.plant_name) fd.append('plant_name', data.plant_name);
+      if (data.watering_time) fd.append('watering_time', data.watering_time);
+      if (data.interval_days) fd.append('interval_days', String(data.interval_days));
+      if (data.image) fd.append('image', data.image);
+      return request(`/user/plants/${id}`, { method: 'PUT', body: fd, headers: {} });
+    },
+    delete: (id) => request(`/user/plants/${id}`, { method: 'DELETE' }),
+    water: (id) => request(`/user/plants/${id}/water`, { method: 'POST' }),
+  },
 };
 
 export default api;
