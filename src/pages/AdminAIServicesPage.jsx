@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Plus, Trash2, Edit2, AlertCircle, CheckCircle, Loader, X } from 'lucide-react';
 import Skeleton from '../components/common/Skeleton';
 import api from '../services/api';
 
-const emptyForm = () => ({ name: '', description: '', image_url: '' });
+const emptyForm = () => ({ name: '', description: '', image: null });
 
 export default function AdminAIServicesPage() {
   const [items, setItems] = useState([]);
@@ -14,15 +14,30 @@ export default function AdminAIServicesPage() {
   const [edit, setEdit] = useState(null);
   const [showAdd, setShowAdd] = useState(false);
   const [form, setForm] = useState(emptyForm());
+  const [preview, setPreview] = useState('');
+  const fileRef = useRef(null);
 
   const load = () => { setLoading(true); api.admin.getAIServices().then(setItems).catch(() => {}).finally(() => setLoading(false)); };
   useEffect(() => { load(); }, []);
 
   const show = (msg) => { setFormSuccess(msg); setTimeout(() => setFormSuccess(''), 3000); };
 
-  const openEdit = (item) => { setEdit(item); setForm({ name: item.name, description: item.description || '', image_url: item.image_url || '' }); };
+  const handleFile = (e) => {
+    const f = e.target.files[0];
+    if (!f) return;
+    setForm((p) => ({ ...p, image: f }));
+    const reader = new FileReader();
+    reader.onload = (ev) => setPreview(ev.target.result);
+    reader.readAsDataURL(f);
+  };
 
-  const resetForm = () => { setEdit(null); setForm(emptyForm()); setShowAdd(false); };
+  const openEdit = (item) => {
+    setEdit(item);
+    setForm({ name: item.name, description: item.description || '', image: null });
+    setPreview(item.image_url || '');
+  };
+
+  const resetForm = () => { setEdit(null); setForm(emptyForm()); setPreview(''); setShowAdd(false); };
 
   const handleSave = async (e) => {
     e.preventDefault(); setFormError('');
@@ -33,6 +48,7 @@ export default function AdminAIServicesPage() {
         await api.admin.updateAIService(edit.id, form);
         show('Updated');
       } else {
+        if (!form.image) { setFormError('Image is required'); setFormLoading(false); return; }
         await api.admin.addAIService(form);
         show('Added');
       }
@@ -53,7 +69,7 @@ export default function AdminAIServicesPage() {
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="text-lg font-bold text-white">AI Services</h2>
-        <button onClick={() => { setShowAdd(true); setEdit(null); setForm(emptyForm()); }} className="px-3 py-2 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-500 flex items-center gap-1.5 cursor-pointer">
+        <button onClick={() => { setShowAdd(true); setEdit(null); setForm(emptyForm()); setPreview(''); }} className="px-3 py-2 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-500 flex items-center gap-1.5 cursor-pointer">
           <Plus size={14} /> Add Service
         </button>
       </div>
@@ -79,9 +95,13 @@ export default function AdminAIServicesPage() {
                 <textarea value={form.description} onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))} rows={2} className={inputClass} />
               </div>
               <div>
-                <label className="block text-xs text-gray-400 mb-1">Image URL</label>
-                <input value={form.image_url} onChange={(e) => setForm((p) => ({ ...p, image_url: e.target.value }))} placeholder="https://..." className={inputClass} />
+                <label className="block text-xs text-gray-400 mb-1">Image</label>
+                <input type="file" accept="image/*" ref={fileRef} className="hidden" onChange={handleFile} />
+                <button type="button" onClick={() => fileRef.current?.click()} className="px-3 py-2 rounded-lg bg-gray-700 text-white text-sm hover:bg-gray-600 cursor-pointer">
+                  {form.image ? form.image.name : 'Choose'}
+                </button>
               </div>
+              {preview && <img src={preview} alt="" className="w-24 h-24 rounded-lg object-cover" />}
               <div className="flex gap-2 pt-2">
                 <button type="submit" disabled={formLoading} className="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-500 disabled:opacity-50 cursor-pointer">
                   {formLoading ? <Loader size={14} className="animate-spin" /> : 'Save'}
@@ -98,6 +118,7 @@ export default function AdminAIServicesPage() {
           <thead>
             <tr className="border-b border-gray-700 text-gray-400 text-left">
               <th className="p-3 font-medium">ID</th>
+              <th className="p-3 font-medium">Image</th>
               <th className="p-3 font-medium">Name</th>
               <th className="p-3 font-medium">Description</th>
               <th className="p-3 font-medium">Actions</th>
@@ -105,12 +126,13 @@ export default function AdminAIServicesPage() {
           </thead>
           <tbody>
             {loading ? [1,2,3].map(i => (
-              <tr key={i} className="border-b border-gray-700/50"><td colSpan={4} className="p-3"><Skeleton className="h-6 w-full" /></td></tr>
+              <tr key={i} className="border-b border-gray-700/50"><td colSpan={5} className="p-3"><Skeleton className="h-6 w-full" /></td></tr>
             )) : items.length === 0 ? (
-              <tr><td colSpan={4} className="p-6 text-center text-gray-500">No services yet</td></tr>
+              <tr><td colSpan={5} className="p-6 text-center text-gray-500">No services yet</td></tr>
             ) : items.map((s) => (
               <tr key={s.id} className="border-b border-gray-700/50 text-gray-300 hover:bg-gray-700/30">
                 <td className="p-3">{s.id}</td>
+                <td className="p-3">{s.image_url ? <img src={s.image_url} alt="" className="w-10 h-10 rounded-lg object-cover" /> : '-'}</td>
                 <td className="p-3 font-medium text-white">{s.name}</td>
                 <td className="p-3 text-xs text-gray-400 max-w-xs truncate">{s.description || '-'}</td>
                 <td className="p-3">
