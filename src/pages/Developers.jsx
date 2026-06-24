@@ -13,13 +13,13 @@ const LANGUAGES = ['cURL', 'Python', 'JavaScript', 'PHP'];
 
 const CODE_SAMPLES = {
   cURL: `curl -X POST ${API_BASE}/leafs/tomato \\
-  -H "Authorization: Bearer YOUR_API_KEY" \\
+  -H "X-API-Key: YOUR_API_KEY" \\
   -F "user_id=YOUR_USER_ID" \\
   -F "image=@tomato_leaf.jpg"`,
   Python: `import requests
 
 url = "${API_BASE}/leafs/tomato"
-headers = {"Authorization": "Bearer YOUR_API_KEY"}
+headers = {"X-API-Key": "YOUR_API_KEY"}
 data = {"user_id": "YOUR_USER_ID"}
 files = {"image": open("tomato_leaf.jpg", "rb")}
 
@@ -31,7 +31,7 @@ formData.append('image', fileInput.files[0]);
 
 fetch('${API_BASE}/leafs/tomato', {
   method: 'POST',
-  headers: { 'Authorization': 'Bearer YOUR_API_KEY' },
+  headers: { 'X-API-Key': 'YOUR_API_KEY' },
   body: formData
 })
 .then(res => res.json())
@@ -40,7 +40,7 @@ fetch('${API_BASE}/leafs/tomato', {
 curl_setopt($ch, CURLOPT_URL, "${API_BASE}/leafs/tomato");
 curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_HTTPHEADER, [
-  "Authorization: Bearer YOUR_API_KEY"
+  "X-API-Key: YOUR_API_KEY"
 ]);
 curl_setopt($ch, CURLOPT_POSTFIELDS, [
   "user_id" => "YOUR_USER_ID",
@@ -63,7 +63,7 @@ const SECTIONS = [
     title: 'Authentication',
     icon: Key,
     content:
-      'All API requests require authentication via an API key passed in the Authorization header. Generate and manage your API keys from the Developer Dashboard. Format: Authorization: Bearer YOUR_API_KEY',
+      'All API requests require authentication via an API key. Pass it as X-API-Key header (recommended) or Authorization: Bearer header. Generate and manage your API keys from the Developer Dashboard.',
   },
   {
     title: 'Base URL',
