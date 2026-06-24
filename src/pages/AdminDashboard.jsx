@@ -33,13 +33,13 @@ export default function AdminDashboard() {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-bold text-white">Dashboard Overview</h2>
+      <h2 className="text-lg font-bold text-emerald-900 dark:text-white">Dashboard Overview</h2>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {cards.map((c) => (
-          <div key={c.label} className="rounded-xl bg-gray-800/80 border border-gray-700 p-5">
+          <div key={c.label} className="rounded-xl bg-white dark:bg-emerald-900 border border-emerald-100 dark:border-emerald-700 p-5">
             <c.icon className={`w-6 h-6 ${c.color} mb-2`} />
-            <p className="text-2xl font-bold text-white">{c.value}</p>
-            <p className="text-xs text-gray-400">{c.label}</p>
+            <p className="text-2xl font-bold text-emerald-900 dark:text-white">{c.value}</p>
+            <p className="text-xs text-emerald-600 dark:text-emerald-400">{c.label}</p>
           </div>
         ))}
       </div>
