@@ -126,37 +126,44 @@ export default function MyPlants() {
 
           {(showAdd || edit) && (
             <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60" onClick={resetForm}>
-              <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 w-full max-w-md mx-4 shadow-xl" onClick={(e) => e.stopPropagation()}>
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-bold text-gray-900 dark:text-white">{edit ? 'Edit Plant' : 'Add Plant'}</h3>
+              <div className="bg-white dark:bg-gray-800 rounded-2xl border border-emerald-200 dark:border-emerald-700 p-6 w-full max-w-md mx-4 shadow-xl" onClick={(e) => e.stopPropagation()}>
+                <div className="flex items-center justify-between mb-5">
+                  <div>
+                    <h3 className="text-sm font-bold text-gray-900 dark:text-white">{edit ? 'Edit Plant' : 'Add New Plant'}</h3>
+                    <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-0.5">Set a watering schedule so you never miss a day</p>
+                  </div>
                   <button onClick={resetForm} className="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 cursor-pointer"><X size={18} /></button>
                 </div>
                 <form onSubmit={handleSave} className="space-y-4">
                   <div>
-                    <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">Plant Name</label>
-                    <input value={form.plant_name} onChange={(e) => setForm((p) => ({ ...p, plant_name: e.target.value }))} placeholder="e.g. Rose" className={inputClass} />
+                    <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">Plant Name</label>
+                    <input value={form.plant_name} onChange={(e) => setForm((p) => ({ ...p, plant_name: e.target.value }))} placeholder="e.g. Rose, Tulsi, Money Plant" className={inputClass} />
                   </div>
                   <div className="flex gap-3">
                     <div className="flex-1">
-                      <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">Watering Time</label>
+                      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">Watering Time</label>
                       <input type="time" value={form.watering_time} onChange={(e) => setForm((p) => ({ ...p, watering_time: e.target.value }))} className={inputClass} />
                     </div>
                     <div className="flex-1">
-                      <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">Interval (days)</label>
+                      <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">Every (days)</label>
                       <input type="number" min="1" value={form.interval_days} onChange={(e) => setForm((p) => ({ ...p, interval_days: parseInt(e.target.value) || 1 }))} className={inputClass} />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">Image</label>
+                    <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">Photo (optional)</label>
+                    <div className="flex items-center gap-3">
+                      <button type="button" onClick={() => fileRef.current?.click()} className="px-3 py-2 rounded-lg border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
+                        {form.image ? form.image.name : 'Choose Image'}
+                      </button>
+                      {preview && <img src={preview} alt="" className="w-10 h-10 rounded-lg object-cover" />}
+                    </div>
                     <input type="file" accept="image/*" ref={fileRef} className="hidden" onChange={handleFile} />
-                    <button type="button" onClick={() => fileRef.current?.click()} className="px-3 py-2 rounded-lg bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm hover:bg-gray-50 dark:hover:bg-gray-600 cursor-pointer">
-                      {form.image ? form.image.name : 'Choose'}
-                    </button>
                   </div>
-                  {preview && <img src={preview} alt="" className="w-20 h-20 rounded-lg object-cover" />}
-                  <div className="flex gap-2 pt-2">
-                    <button type="submit" className="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-500 cursor-pointer">Save</button>
-                    <button type="button" onClick={resetForm} className="px-4 py-2 rounded-lg border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">Cancel</button>
+                  <div className="flex gap-2 pt-3">
+                    <button type="submit" className="flex-1 py-2.5 rounded-xl bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-500 cursor-pointer">
+                      {edit ? 'Save Changes' : 'Add Plant'}
+                    </button>
+                    <button type="button" onClick={resetForm} className="px-5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-300 text-sm hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">Cancel</button>
                   </div>
                 </form>
               </div>

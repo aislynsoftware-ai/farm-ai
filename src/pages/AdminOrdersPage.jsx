@@ -19,10 +19,10 @@ export default function AdminOrdersPage() {
   return (
     <div className="space-y-4">
       <h2 className="text-lg font-bold text-gray-900 dark:text-white">Orders</h2>
-      <div className="overflow-x-auto rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+      <div className="overflow-x-auto rounded-xl bg-white dark:bg-gray-800 border border-emerald-200 dark:border-emerald-700">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 text-left">
+            <tr className="border-b border-emerald-200 dark:border-emerald-700 text-gray-600 dark:text-gray-400 text-left">
               <th className="p-3 font-medium">ID</th>
               <th className="p-3 font-medium">User ID</th>
               <th className="p-3 font-medium">Order ID</th>
@@ -33,7 +33,7 @@ export default function AdminOrdersPage() {
           </thead>
           <tbody>
             {loading ? [1,2,3,4,5].map(i => <SkeletonRow key={i} cols={6} />) : orders.map((p) => (
-              <tr key={p.id} className="border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/30">
+              <tr key={p.id} className="border-b border-emerald-200 dark:border-emerald-700 text-gray-800 dark:text-gray-200 hover:bg-emerald-50 dark:hover:bg-gray-700/50">
                 <td className="p-3">{p.id}</td>
                 <td className="p-3 font-mono text-xs">{p.user_id}</td>
                 <td className="p-3 font-mono text-xs">{p.order_id}</td>

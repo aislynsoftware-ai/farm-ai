@@ -77,7 +77,7 @@ export default function AdminPredictionsPage() {
             <button
               key={c}
               onClick={() => setCategory(c)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${category === c ? 'bg-emerald-600 text-white' : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700/30'}`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${category === c ? 'bg-emerald-600 text-white' : 'bg-white dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-emerald-50 dark:hover:bg-gray-700/50'}`}
             >
               {c === 'All' ? 'All' : c.charAt(0).toUpperCase() + c.slice(1)}
             </button>
@@ -89,7 +89,7 @@ export default function AdminPredictionsPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search crop, disease, user..."
-            className="w-full pl-9 pr-3 py-2 rounded-lg bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none text-gray-900 dark:text-white placeholder-gray-400 text-sm"
+            className="w-full pl-9 pr-3 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none text-gray-900 dark:text-white placeholder-gray-400 text-sm"
           />
         </div>
         <span className="text-xs text-gray-600 dark:text-gray-400">{filtered.length} results</span>
@@ -98,7 +98,7 @@ export default function AdminPredictionsPage() {
       {/* Cards */}
       <div className="space-y-3">
         {loading ? [1,2,3,4].map(i => <Skeleton key={i} className="h-36" />) : filtered.map((p) => (
-          <div key={p.id} className="rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <div key={p.id} className="rounded-xl bg-white dark:bg-gray-800 border border-emerald-200 dark:border-emerald-700 overflow-hidden">
             <div className="p-4 flex flex-col sm:flex-row gap-4">
               {/* Images */}
               <div className="flex gap-3">
@@ -153,7 +153,7 @@ export default function AdminPredictionsPage() {
             </div>
           </div>
         ))}
-        {!loading && filtered.length === 0 && <div className="p-6 text-center text-emerald-500 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">No predictions found</div>}
+        {!loading && filtered.length === 0 && <div className="p-6 text-center text-emerald-500 rounded-xl bg-white dark:bg-gray-800 border border-emerald-200 dark:border-emerald-700">No predictions found</div>}
       </div>
     </div>
   );

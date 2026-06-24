@@ -40,7 +40,7 @@ export default function AdminLogin() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <div className="rounded-2xl bg-gray-800/80 backdrop-blur border border-gray-700 p-6 lg:p-8">
+        <div className="rounded-2xl bg-gray-800/80 backdrop-blur border border-emerald-700 p-6 lg:p-8">
           <div className="text-center mb-6">
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-500/20">
               <Shield className="w-7 h-7 text-white" />

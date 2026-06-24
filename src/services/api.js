@@ -292,6 +292,7 @@ const api = {
   },
   plan: {
     get: (userId) => request(`/user/plan?user_id=${encodeURIComponent(userId)}`),
+    list: () => request('/plans'),
     createOrder: (userId, plan) =>
       request('/buy-plan/create-order', {
         method: 'POST',

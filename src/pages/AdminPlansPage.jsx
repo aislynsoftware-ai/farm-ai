@@ -61,7 +61,7 @@ export default function AdminPlansPage() {
     return 'bg-emerald-100 dark:bg-emerald-800 text-emerald-700 dark:text-emerald-400';
   };
 
-  const inputClass = "w-full px-3 py-2 rounded-lg bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none text-emerald-900 dark:text-gray-100 placeholder-gray-400 text-sm";
+  const inputClass = "w-full px-3 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none text-gray-900 dark:text-white placeholder-gray-400 text-sm";
 
   return (
     <div className="space-y-4">
@@ -84,23 +84,23 @@ export default function AdminPlansPage() {
       {/* Add/Edit Modal */}
       {(showAdd || edit) && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60" onClick={resetForm}>
-          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 w-full max-w-md mx-4 shadow-lg" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-emerald-200 dark:border-emerald-700 p-6 w-full max-w-md mx-4 shadow-lg" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm font-bold text-gray-900 dark:text-white">{edit ? 'Edit Plan' : 'Add Plan'}</h3>
               <button onClick={resetForm} className="text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-200 cursor-pointer"><X size={18} /></button>
             </div>
             <form onSubmit={handleSave} className="space-y-4">
               <div>
-                <label className="block text-xs text-gray-700 dark:text-gray-300 mb-1">Plan Name</label>
+                <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">Plan Name</label>
                 <input value={form.name} onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))} placeholder="e.g. PREMIUM" className={inputClass} />
               </div>
               <div className="flex gap-3">
                 <div className="flex-1">
-                  <label className="block text-xs text-gray-700 dark:text-gray-300 mb-1">Price (₹)</label>
+                  <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">Price (₹)</label>
                   <input type="number" min="0" value={form.price} onChange={(e) => setForm((p) => ({ ...p, price: parseInt(e.target.value) || 0 }))} className={inputClass} />
                 </div>
                 <div className="flex-1">
-                  <label className="block text-xs text-gray-700 dark:text-gray-300 mb-1">Coins</label>
+                  <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">Coins</label>
                   <input type="number" min="0" value={form.coins} onChange={(e) => setForm((p) => ({ ...p, coins: parseInt(e.target.value) || 0 }))} className={inputClass} />
                 </div>
               </div>
@@ -119,10 +119,10 @@ export default function AdminPlansPage() {
         <div className="space-y-3">{tab === 'plans' ? [1,2,3].map(i => <Skeleton key={i} className="h-12" />) : [1,2,3].map(i => <SkeletonRow key={i} cols={7} />)}</div>
       ) : tab === 'plans' ? (
         /* Plans Table */
-        <div className="overflow-x-auto rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+        <div className="overflow-x-auto rounded-xl bg-white dark:bg-gray-800 border border-emerald-200 dark:border-emerald-700">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 text-left">
+              <tr className="border-b border-emerald-200 dark:border-emerald-700 text-gray-600 dark:text-gray-400 text-left">
                 <th className="p-3 font-medium">ID</th>
                 <th className="p-3 font-medium">Name</th>
                 <th className="p-3 font-medium">Price</th>
@@ -135,7 +135,7 @@ export default function AdminPlansPage() {
               {plans.length === 0 ? (
                 <tr><td colSpan={6} className="p-6 text-center text-emerald-500">No plans yet</td></tr>
               ) : plans.map((p) => (
-                <tr key={p.id} className="border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                <tr key={p.id} className="border-b border-emerald-200 dark:border-emerald-700 text-gray-800 dark:text-gray-200 hover:bg-emerald-50 dark:hover:bg-gray-700/50">
                   <td className="p-3">{p.id}</td>
                   <td className="p-3 font-medium text-gray-900 dark:text-white">{p.name}</td>
                   <td className="p-3">₹{p.price}</td>
@@ -154,10 +154,10 @@ export default function AdminPlansPage() {
         </div>
       ) : (
         /* Users Table */
-        <div className="overflow-x-auto rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+        <div className="overflow-x-auto rounded-xl bg-white dark:bg-gray-800 border border-emerald-200 dark:border-emerald-700">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 text-left">
+              <tr className="border-b border-emerald-200 dark:border-emerald-700 text-gray-600 dark:text-gray-400 text-left">
                 <th className="p-3 font-medium">User ID</th>
                 <th className="p-3 font-medium">Name</th>
                 <th className="p-3 font-medium">Email</th>
@@ -170,7 +170,7 @@ export default function AdminPlansPage() {
               {users.length === 0 ? (
                 <tr><td colSpan={6} className="p-6 text-center text-emerald-500">No data</td></tr>
               ) : users.map((u) => (
-                <tr key={u.user_id} className="border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/30">
+                <tr key={u.user_id} className="border-b border-emerald-200 dark:border-emerald-700 text-gray-800 dark:text-gray-200 hover:bg-emerald-50 dark:hover:bg-gray-700/50">
                   <td className="p-3 font-mono text-xs">{u.user_id}</td>
                   <td className="p-3">{u.name || '-'}</td>
                   <td className="p-3">{u.email || '-'}</td>
