@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Users, CreditCard, Leaf, ShoppingBag } from 'lucide-react';
+import { Users, CreditCard, Leaf, ShoppingBag, Cpu, Sprout, Layers, IndianRupee } from 'lucide-react';
 import Skeleton from '../components/common/Skeleton';
 import api from '../services/api';
 
@@ -8,27 +8,24 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([
-      api.admin.getUsers().catch(() => []),
-      api.admin.getPayments().catch(() => []),
-      api.farming.agriTitles().catch(() => []),
-      api.farming.cropWithProducts().catch(() => []),
-    ]).then(([u, p, a, pr]) => {
-      setStats({ users: u.length, payments: p.length, agriTitles: a.length, products: pr.length });
-    }).finally(() => setLoading(false));
+    api.admin.getDashboardStats().then(setStats).catch(() => {}).finally(() => setLoading(false));
   }, []);
 
   if (loading) return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-      {[1,2,3,4].map(i => <Skeleton key={i} className="h-32" />)}
+      {[1,2,3,4,5,6,7,8].map(i => <Skeleton key={i} className="h-32" />)}
     </div>
   );
 
   const cards = [
-    { label: 'Total Users', value: stats.users, icon: Users, color: 'text-emerald-400' },
-    { label: 'Total Orders', value: stats.payments, icon: CreditCard, color: 'text-blue-400' },
-    { label: 'Agri Titles', value: stats.agriTitles, icon: Leaf, color: 'text-green-400' },
-    { label: 'Products', value: stats.products, icon: ShoppingBag, color: 'text-yellow-400' },
+    { label: 'Total Users', value: stats.users, icon: Users, color: 'text-emerald-500' },
+    { label: 'Revenue', value: '₹' + (stats.revenue || 0), icon: IndianRupee, color: 'text-emerald-500' },
+    { label: 'AI Services', value: stats.ai_services, icon: Cpu, color: 'text-emerald-500' },
+    { label: 'Agri Titles', value: stats.agri_titles, icon: Leaf, color: 'text-emerald-500' },
+    { label: 'Crops', value: stats.crops, icon: Sprout, color: 'text-emerald-500' },
+    { label: 'Sub Crops', value: stats.sub_crops, icon: Layers, color: 'text-emerald-500' },
+    { label: 'Products', value: stats.products, icon: ShoppingBag, color: 'text-emerald-500' },
+    { label: 'Orders', value: stats.payments, icon: CreditCard, color: 'text-emerald-500' },
   ];
 
   return (

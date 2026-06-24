@@ -140,6 +140,8 @@ const api = {
       adminRequest(`/admin/plans/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
     deletePlan: (id) =>
       adminRequest(`/admin/plans/${id}`, { method: 'DELETE' }),
+    getDashboardStats: () =>
+      adminRequest('/admin/dashboard-stats'),
     getPredictionsTree: () =>
       adminRequest('/admin/predictions/tree'),
     getDownloadUrl: (crop, disease, type = 'all') => {
