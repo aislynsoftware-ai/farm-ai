@@ -3,7 +3,7 @@ import { Plus, Trash2, Edit2, AlertCircle, CheckCircle, Loader, X } from 'lucide
 import Skeleton from '../components/common/Skeleton';
 import api from '../services/api';
 
-const emptyForm = () => ({ name: '', description: '', image: null });
+const emptyForm = () => ({ name: '', image: null });
 
 export default function AdminAIServicesPage() {
   const [items, setItems] = useState([]);
@@ -33,7 +33,7 @@ export default function AdminAIServicesPage() {
 
   const openEdit = (item) => {
     setEdit(item);
-    setForm({ name: item.name, description: item.description || '', image: null });
+    setForm({ name: item.name, image: null });
     setPreview(item.image_url || '');
   };
 
@@ -91,10 +91,6 @@ export default function AdminAIServicesPage() {
                 <input value={form.name} onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))} placeholder="e.g. AI Plant Diagnosis" className={inputClass} />
               </div>
               <div>
-                <label className="block text-xs text-gray-400 mb-1">Description</label>
-                <textarea value={form.description} onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))} rows={2} className={inputClass} />
-              </div>
-              <div>
                 <label className="block text-xs text-gray-400 mb-1">Image</label>
                 <input type="file" accept="image/*" ref={fileRef} className="hidden" onChange={handleFile} />
                 <button type="button" onClick={() => fileRef.current?.click()} className="px-3 py-2 rounded-lg bg-gray-700 text-white text-sm hover:bg-gray-600 cursor-pointer">
@@ -120,21 +116,19 @@ export default function AdminAIServicesPage() {
               <th className="p-3 font-medium">ID</th>
               <th className="p-3 font-medium">Image</th>
               <th className="p-3 font-medium">Name</th>
-              <th className="p-3 font-medium">Description</th>
               <th className="p-3 font-medium">Actions</th>
             </tr>
           </thead>
           <tbody>
             {loading ? [1,2,3].map(i => (
-              <tr key={i} className="border-b border-gray-700/50"><td colSpan={5} className="p-3"><Skeleton className="h-6 w-full" /></td></tr>
+              <tr key={i} className="border-b border-gray-700/50"><td colSpan={4} className="p-3"><Skeleton className="h-6 w-full" /></td></tr>
             )) : items.length === 0 ? (
-              <tr><td colSpan={5} className="p-6 text-center text-gray-500">No services yet</td></tr>
+              <tr><td colSpan={4} className="p-6 text-center text-gray-500">No services yet</td></tr>
             ) : items.map((s) => (
               <tr key={s.id} className="border-b border-gray-700/50 text-gray-300 hover:bg-gray-700/30">
                 <td className="p-3">{s.id}</td>
                 <td className="p-3">{s.image_url ? <img src={s.image_url} alt="" className="w-10 h-10 rounded-lg object-cover" /> : '-'}</td>
                 <td className="p-3 font-medium text-white">{s.name}</td>
-                <td className="p-3 text-xs text-gray-400 max-w-xs truncate">{s.description || '-'}</td>
                 <td className="p-3">
                   <div className="flex gap-1">
                     <button onClick={() => openEdit(s)} className="p-1.5 rounded bg-gray-700 text-blue-400 hover:bg-gray-600 cursor-pointer"><Edit2 size={12} /></button>

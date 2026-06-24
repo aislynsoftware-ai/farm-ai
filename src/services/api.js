@@ -153,14 +153,12 @@ const api = {
     addAIService: (data) => {
       const fd = new FormData();
       fd.append('name', data.name);
-      fd.append('description', data.description);
       if (data.image) fd.append('image', data.image);
       return adminRequest('/admin/ai-services/add', { method: 'POST', body: fd, headers: {} });
     },
     updateAIService: (id, data) => {
       const fd = new FormData();
       fd.append('name', data.name);
-      fd.append('description', data.description);
       if (data.image) fd.append('image', data.image);
       return adminRequest(`/admin/ai-services/${id}`, { method: 'PUT', body: fd, headers: {} });
     },
