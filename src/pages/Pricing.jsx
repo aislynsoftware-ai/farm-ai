@@ -4,90 +4,7 @@ import { Check, Sparkles, HelpCircle } from 'lucide-react';
 import SEO from '../components/common/SEO';
 import PageHeader from '../components/layout/PageHeader';
 import { Link } from 'react-router-dom';
-
-const PLANS = [
-  {
-    name: 'FREE',
-    price: '₹0',
-    requests: '10 Requests',
-    popular: false,
-    features: [
-      '10 API requests total',
-      'Basic disease detection',
-      'Standard response time',
-      'Email support',
-      'Community access',
-    ],
-    btnText: 'Get Started',
-    btnLink: '/register',
-  },
-  {
-    name: 'BASIC',
-    price: '₹99',
-    requests: '150 Requests',
-    popular: false,
-    features: [
-      '150 API requests total',
-      'All detection models',
-      'Standard response time',
-      'Email support',
-      'Basic analytics',
-    ],
-    btnText: 'Buy Now',
-    btnLink: '/register',
-  },
-  {
-    name: 'STANDARD',
-    price: '₹299',
-    requests: '500 Requests',
-    popular: true,
-    features: [
-      '500 API requests total',
-      'All detection models',
-      'Priority response time',
-      'Priority support',
-      'Advanced analytics',
-      'API key management',
-    ],
-    btnText: 'Buy Now',
-    btnLink: '/register',
-  },
-  {
-    name: 'PRO',
-    price: '₹499',
-    requests: '1000 Requests',
-    popular: false,
-    features: [
-      '1000 API requests total',
-      'All detection models',
-      'Priority response time',
-      'Dedicated support',
-      'Advanced analytics',
-      'API key management',
-      'Custom integrations',
-    ],
-    btnText: 'Buy Now',
-    btnLink: '/register',
-  },
-  {
-    name: 'ENTERPRISE',
-    price: 'Custom',
-    requests: 'Unlimited',
-    popular: false,
-    features: [
-      'Unlimited API requests',
-      'All detection models',
-      'Real-time priority',
-      'Dedicated account manager',
-      'White label solution',
-      'Custom integrations',
-      'SLA guarantee',
-      'On-premise deployment',
-    ],
-    btnText: 'Contact Sales',
-    btnLink: '/enterprise',
-  },
-];
+import api from '../services/api';
 
 const container = {
   hidden: { opacity: 0 },
@@ -103,9 +20,11 @@ const item = {
 };
 
 export default function Pricing() {
+  const [plans, setPlans] = useState([]);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
+    api.plan.pricing().then(setPlans).catch(() => {});
     const stored = localStorage.getItem('user');
     if (stored) {
       try { setUser(JSON.parse(stored)); } catch {}
@@ -115,16 +34,18 @@ export default function Pricing() {
   const isLoggedIn = !!user;
 
   const getPlanLink = (plan) => {
-    if (plan.name === 'ENTERPRISE') return '/enterprise';
-    if (!isLoggedIn) return plan.btnLink;
-    if (plan.name === 'FREE') return '/dashboard';
-    return `/plan-checkout?plan=${plan.name}`;
+    const n = plan.name.toUpperCase();
+    if (n === 'ENTERPRISE') return '/enterprise';
+    if (!isLoggedIn) return '/register';
+    if (n === 'FREE') return '/dashboard';
+    return `/plan-checkout?plan=${n}`;
   };
 
   const getPlanText = (plan) => {
-    if (plan.name === 'ENTERPRISE') return plan.btnText;
-    if (!isLoggedIn) return plan.btnText;
-    if (plan.name === 'FREE') return 'Go to Dashboard';
+    const n = plan.name.toUpperCase();
+    if (n === 'ENTERPRISE') return 'Contact Sales';
+    if (!isLoggedIn) return 'Get Started';
+    if (n === 'FREE') return 'Go to Dashboard';
     return 'Purchase Plan';
   };
 
@@ -147,7 +68,9 @@ export default function Pricing() {
             animate="show"
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4"
           >
-            {PLANS.map((plan) => (
+            {plans.concat([
+              { name: 'ENTERPRISE', price: 'Custom', requests: 'Unlimited', popular: false, features: ['Unlimited API requests', 'All detection models', 'Real-time priority', 'Dedicated account manager', 'White label solution', 'Custom integrations', 'SLA guarantee', 'On-premise deployment'] }
+            ]).map((plan) => (
               <motion.div
                 key={plan.name}
                 variants={item}
@@ -174,7 +97,7 @@ export default function Pricing() {
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{plan.requests}</p>
                 </div>
                 <ul className="space-y-2 mb-6 flex-1">
-                  {plan.features.map((f) => (
+                  {(plan.features || []).map((f) => (
                     <li key={f} className="flex items-start gap-2 text-xs text-gray-600 dark:text-gray-300">
                       <Check size={13} className="mt-0.5 text-emerald-500 flex-shrink-0" />
                       {f}

@@ -41,6 +41,7 @@ import AdminProductsPage from '../pages/AdminProductsPage';
 import AdminOrdersPage from '../pages/AdminOrdersPage';
 import AdminPredictionsPage from '../pages/AdminPredictionsPage';
 import AdminPlansPage from '../pages/AdminPlansPage';
+import AdminApiPlansPage from '../pages/AdminApiPlansPage';
 import AdminDownloadsPage from '../pages/AdminDownloadsPage';
 import AdminAIServicesPage from '../pages/AdminAIServicesPage';
 
@@ -134,6 +135,7 @@ export default function createAppRouter(isDark, toggleTheme) {
         { path: 'orders', element: <AdminOrdersPage /> },
         { path: 'predictions', element: <AdminPredictionsPage /> },
         { path: 'plans', element: <AdminPlansPage /> },
+        { path: 'api-plans', element: <AdminApiPlansPage /> },
         { path: 'downloads', element: <AdminDownloadsPage /> },
         { path: 'ai-services', element: <AdminAIServicesPage /> },
       ],

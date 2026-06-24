@@ -142,6 +142,14 @@ const api = {
       adminRequest(`/admin/plans/${id}`, { method: 'DELETE' }),
     getDashboardStats: () =>
       adminRequest('/admin/dashboard-stats'),
+    getApiPlans: () =>
+      adminRequest('/admin/api-plans'),
+    addApiPlan: (data) =>
+      adminRequest('/admin/api-plans/add', { method: 'POST', body: JSON.stringify(data) }),
+    updateApiPlan: (id, data) =>
+      adminRequest(`/admin/api-plans/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+    deleteApiPlan: (id) =>
+      adminRequest(`/admin/api-plans/${id}`, { method: 'DELETE' }),
     getPredictionsTree: () =>
       adminRequest('/admin/predictions/tree'),
     getDownloadUrl: (crop, disease, type = 'all') => {
@@ -295,6 +303,7 @@ const api = {
   plan: {
     get: (userId) => request(`/user/plan?user_id=${encodeURIComponent(userId)}`),
     list: () => request('/plans'),
+    pricing: () => request('/api-plans'),
     createOrder: (userId, plan) =>
       request('/buy-plan/create-order', {
         method: 'POST',
