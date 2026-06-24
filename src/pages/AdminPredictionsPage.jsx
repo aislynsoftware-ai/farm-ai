@@ -47,14 +47,20 @@ export default function AdminPredictionsPage() {
     catch (err) { setFormError(err.message); }
   };
 
-  const downloadImage = (url, filename) => {
+  const downloadImage = async (url, filename) => {
     if (!url) return;
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename || 'image';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    try {
+      const res = await fetch(url);
+      const blob = await res.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = filename || 'image';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(blobUrl);
+    } catch {}
   };
 
   return (
