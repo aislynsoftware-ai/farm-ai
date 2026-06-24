@@ -30,6 +30,7 @@ import Enterprise from '../pages/Enterprise';
 import DashboardApiKeys from '../pages/DashboardApiKeys';
 import DashboardDeveloper from '../pages/DashboardDeveloper';
 import PlanCheckout from '../pages/PlanCheckout';
+import MyPlants from '../pages/MyPlants';
 import AdminLogin from '../pages/AdminLogin';
 import AdminDashboard from '../pages/AdminDashboard';
 import AdminUsersPage from '../pages/AdminUsersPage';
@@ -110,6 +111,10 @@ export default function createAppRouter(isDark, toggleTheme) {
     {
       path: '/wallet',
       element: <Wallet />,
+    },
+    {
+      path: '/my-plants',
+      element: <MyPlants />,
     },
     {
       path: '/admin/login',
