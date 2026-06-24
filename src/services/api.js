@@ -294,6 +294,11 @@ const api = {
         method: 'POST',
         body: JSON.stringify(data),
       }),
+    activate: (userId, plan) =>
+      request('/buy-plan/activate', {
+        method: 'POST',
+        body: JSON.stringify({ user_id: userId, plan }),
+      }),
   },
   plants: {
     list: (userId) => request(`/user/plants?user_id=${encodeURIComponent(userId)}`),
