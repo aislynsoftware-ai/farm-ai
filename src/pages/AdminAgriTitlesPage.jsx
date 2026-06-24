@@ -94,7 +94,7 @@ export default function AdminAgriTitlesPage() {
             {a.image_url && <img src={a.image_url} alt="" className="w-full h-28 object-cover" />}
             <div className="p-3 flex items-center justify-between">
               <span className="text-sm text-white truncate">{a.title}</span>
-              <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="flex gap-1">
                 <button onClick={() => { setEdit(a); setTitle(a.title); setImage(null); setPreview(a.image_url || ''); }} className="p-1.5 rounded bg-gray-700 text-blue-400 hover:bg-gray-600 cursor-pointer"><Edit2 size={12} /></button>
                 <button onClick={() => handleDelete(a.id)} className="p-1.5 rounded bg-gray-700 text-red-400 hover:bg-gray-600 cursor-pointer"><Trash2 size={12} /></button>
               </div>
