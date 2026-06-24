@@ -43,7 +43,7 @@ export default function AdminDownloadsPage() {
       <button
         onClick={() => download(crop, disease, type)}
         disabled={downloading === key}
-        className="px-2 py-1 rounded bg-emerald-50 text-emerald-700 text-[10px] hover:bg-emerald-600 hover:text-white disabled:opacity-50 flex items-center gap-1 cursor-pointer transition-all"
+        className="px-2 py-1 rounded bg-emerald-50 dark:bg-emerald-800 text-emerald-700 dark:text-emerald-200 text-[10px] hover:bg-emerald-600 hover:text-white disabled:opacity-50 flex items-center gap-1 cursor-pointer transition-all"
         title={`Download ${label}`}
       >
         {downloading === key ? <Loader size={10} className="animate-spin" /> : icon}
@@ -60,17 +60,17 @@ export default function AdminDownloadsPage() {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-bold text-white">Download Predictions</h2>
-      <p className="text-xs text-emerald-200">Download original & predicted images grouped by crop → disease</p>
+      <h2 className="text-lg font-bold text-emerald-900 dark:text-white">Download Predictions</h2>
+      <p className="text-xs text-emerald-600 dark:text-emerald-400">Download original & predicted images grouped by crop → disease</p>
 
       <div className="space-y-3">
         {tree.map((item) => (
-          <div key={item.crop} className="rounded-xl bg-white border border-emerald-100 overflow-hidden">
-            <div className="flex items-center justify-between p-4 cursor-pointer hover:bg-emerald-50 transition-colors" onClick={() => setExpanded((p) => ({ ...p, [item.crop]: !p[item.crop] }))}>
+          <div key={item.crop} className="rounded-xl bg-white dark:bg-emerald-900 border border-emerald-100 dark:border-emerald-700 overflow-hidden">
+            <div className="flex items-center justify-between p-4 cursor-pointer hover:bg-emerald-50 dark:hover:bg-emerald-800/50 transition-colors" onClick={() => setExpanded((p) => ({ ...p, [item.crop]: !p[item.crop] }))}>
               <div className="flex items-center gap-3">
                 {expanded[item.crop] ? <ChevronDown size={16} className="text-emerald-400" /> : <ChevronRight size={16} className="text-emerald-400" />}
                 <FolderOpen size={18} className="text-emerald-500" />
-                <span className="text-sm font-medium text-emerald-900 capitalize">{item.crop}</span>
+                <span className="text-sm font-medium text-emerald-900 dark:text-white capitalize">{item.crop}</span>
                 <span className="text-xs text-emerald-400">({item.total} images)</span>
               </div>
               <div className="flex items-center gap-1.5">
@@ -81,11 +81,11 @@ export default function AdminDownloadsPage() {
             </div>
 
             {expanded[item.crop] && (
-              <div className="border-t border-emerald-100 divide-y divide-emerald-100">
+              <div className="border-t border-emerald-100 dark:border-emerald-700 divide-y divide-emerald-100 dark:divide-emerald-700">
                 {item.diseases.map((d) => (
-                  <div key={d.disease} className="flex items-center justify-between px-4 py-3 pl-12 hover:bg-emerald-50 transition-colors">
+                  <div key={d.disease} className="flex items-center justify-between px-4 py-3 pl-12 hover:bg-emerald-50 dark:hover:bg-emerald-800/30 transition-colors">
                     <div className="flex items-center gap-2">
-                      <span className="text-xs text-emerald-800 capitalize">{d.disease.replace(/_/g, ' ')}</span>
+                      <span className="text-xs text-emerald-800 dark:text-emerald-200 capitalize">{d.disease.replace(/_/g, ' ')}</span>
                       <span className="text-[10px] text-emerald-400">({d.count} images)</span>
                     </div>
                     <div className="flex items-center gap-1">
@@ -99,7 +99,7 @@ export default function AdminDownloadsPage() {
             )}
           </div>
         ))}
-        {!loading && tree.length === 0 && <div className="p-6 text-center text-emerald-400 rounded-xl bg-white border border-emerald-100">No predictions found</div>}
+        {!loading && tree.length === 0 && <div className="p-6 text-center text-emerald-400 rounded-xl bg-white dark:bg-emerald-900 border border-emerald-100 dark:border-emerald-700">No predictions found</div>}
       </div>
     </div>
   );
