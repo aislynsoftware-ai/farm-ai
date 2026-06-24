@@ -150,10 +150,20 @@ const api = {
     // AI Services
     getAIServices: () =>
       adminRequest('/admin/ai-services'),
-    addAIService: (data) =>
-      adminRequest('/admin/ai-services/add', { method: 'POST', body: JSON.stringify(data) }),
-    updateAIService: (id, data) =>
-      adminRequest(`/admin/ai-services/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+    addAIService: (data) => {
+      const fd = new FormData();
+      fd.append('name', data.name);
+      fd.append('description', data.description);
+      if (data.image) fd.append('image', data.image);
+      return adminRequest('/admin/ai-services/add', { method: 'POST', body: fd, headers: {} });
+    },
+    updateAIService: (id, data) => {
+      const fd = new FormData();
+      fd.append('name', data.name);
+      fd.append('description', data.description);
+      if (data.image) fd.append('image', data.image);
+      return adminRequest(`/admin/ai-services/${id}`, { method: 'PUT', body: fd, headers: {} });
+    },
     deleteAIService: (id) =>
       adminRequest(`/admin/ai-services/${id}`, { method: 'DELETE' }),
     // Agri titles
