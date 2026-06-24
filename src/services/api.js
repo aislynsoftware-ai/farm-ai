@@ -132,6 +132,14 @@ const api = {
       adminRequest(`/admin/leaf-predictions/${id}`, { method: 'DELETE' }),
     getUserPlans: () =>
       adminRequest('/admin/user-plans'),
+    getPlans: () =>
+      adminRequest('/admin/plans'),
+    addPlan: (data) =>
+      adminRequest('/admin/plans/add', { method: 'POST', body: JSON.stringify(data) }),
+    updatePlan: (id, data) =>
+      adminRequest(`/admin/plans/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+    deletePlan: (id) =>
+      adminRequest(`/admin/plans/${id}`, { method: 'DELETE' }),
     getPredictionsTree: () =>
       adminRequest('/admin/predictions/tree'),
     getDownloadUrl: (crop, disease, type = 'all') => {
