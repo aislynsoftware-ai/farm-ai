@@ -47,7 +47,7 @@ export default function AdminUsersPage() {
     catch (err) { setFormError(err.message); }
   };
 
-  const inputClass = "w-full px-3 py-2 rounded-lg bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none text-gray-900 dark:text-white placeholder-gray-400 text-sm";
+  const inputClass = "w-full px-3 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none text-gray-900 dark:text-white placeholder-gray-400 text-sm";
 
   return (
     <div className="space-y-4">
@@ -59,7 +59,7 @@ export default function AdminUsersPage() {
       {/* Edit Modal */}
       {editUser && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60" onClick={() => setEditUser(null)}>
-          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 w-full max-w-md mx-4" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-white dark:bg-gray-800 rounded-2xl border border-emerald-200 dark:border-emerald-700 p-6 w-full max-w-md mx-4" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-4">Edit User — {editUser}</h3>
             <form onSubmit={handleSave} className="space-y-3">
               <input value={editForm.name} onChange={(e) => setEditForm((p) => ({ ...p, name: e.target.value }))} placeholder="Name" className={inputClass} />
@@ -81,10 +81,10 @@ export default function AdminUsersPage() {
         </div>
       )}
 
-      <div className="overflow-x-auto rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+      <div className="overflow-x-auto rounded-xl bg-white dark:bg-gray-800 border border-emerald-200 dark:border-emerald-700">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 text-left">
+            <tr className="border-b border-emerald-200 dark:border-emerald-700 text-gray-600 dark:text-gray-400 text-left">
               <th className="p-3 font-medium">User ID</th>
               <th className="p-3 font-medium">Name</th>
               <th className="p-3 font-medium">Email</th>
@@ -96,7 +96,7 @@ export default function AdminUsersPage() {
           </thead>
           <tbody>
             {loading ? [1,2,3,4,5].map(i => <SkeletonRow key={i} cols={7} />) : users.length === 0 ? <tr><td colSpan={7} className="p-6 text-center text-gray-500">No users found</td></tr> : users.map((u) => (
-              <tr key={u.user_id} className="border-b border-gray-200 dark:border-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700/50">
+              <tr key={u.user_id} className="border-b border-emerald-200 dark:border-emerald-700 text-gray-800 dark:text-gray-200 hover:bg-emerald-50 dark:hover:bg-gray-700/50">
                 <td className="p-3 font-mono text-xs">{u.user_id}</td>
                 <td className="p-3">{u.name || '-'}</td>
                 <td className="p-3">{u.email || '-'}</td>

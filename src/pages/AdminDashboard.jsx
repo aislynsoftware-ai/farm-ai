@@ -36,7 +36,7 @@ export default function AdminDashboard() {
       <h2 className="text-lg font-bold text-gray-900 dark:text-white">Dashboard Overview</h2>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {cards.map((c) => (
-          <div key={c.label} className="rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-5">
+          <div key={c.label} className="rounded-xl bg-white dark:bg-gray-800 border border-emerald-200 dark:border-emerald-700 p-5">
             <c.icon className={`w-6 h-6 ${c.color} mb-2`} />
             <p className="text-2xl font-bold text-gray-900 dark:text-white">{c.value}</p>
             <p className="text-xs text-gray-600 dark:text-gray-400">{c.label}</p>

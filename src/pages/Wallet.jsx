@@ -10,12 +10,7 @@ import api from '../services/api';
 
 const RAZORPAY_KEY_ID = import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_placeholder';
 
-const PLANS = [
-  { id: 'FREE',  price: 0,   label: 'Free',        icon: Sprout,  desc: 'Get started' },
-  { id: 'BASIC', price: 99,  label: 'Basic',        icon: Zap,     desc: 'For regular users' },
-  { id: 'STANDARD', price: 299, label: 'Standard',  icon: Star,    desc: 'For power users' },
-  { id: 'PRO',   price: 499, label: 'Professional', icon: Crown,   desc: 'Unlimited access' },
-];
+const PLAN_ICONS = { FREE: Sprout, BASIC: Zap, STANDARD: Star, PRO: Crown };
 
 export default function Wallet() {
   const navigate = useNavigate();
@@ -23,6 +18,7 @@ export default function Wallet() {
   const [user, setUser] = useState(null);
   const [coins, setCoins] = useState(null);
   const [currentPlan, setCurrentPlan] = useState('free');
+  const [plans, setPlans] = useState([]);
   const [rechargeAmount, setRechargeAmount] = useState(50);
   const [recharging, setRecharging] = useState(false);
   const [buyingPlan, setBuyingPlan] = useState(null);
@@ -38,6 +34,7 @@ export default function Wallet() {
         fetchPlan(u.user_id);
       } catch {}
     }
+    api.plan.list().then(setPlans).catch(() => {});
   }, []);
 
   const fetchCoins = async (uid) => {
@@ -220,43 +217,52 @@ export default function Wallet() {
             </div>
 
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-              {PLANS.map((plan) => {
-                const Icon = plan.icon;
-                const coinsAmount = plan.price * 2 || 50;
-                const active = isActive(plan.id);
+              {plans.map((plan) => {
+                const Icon = PLAN_ICONS[plan.name] || Sprout;
+                const active = currentPlan === plan.name.toLowerCase();
                 return (
-                  <button
+                  <div
                     key={plan.id}
-                    onClick={() => handleBuyPlan(plan.id)}
-                    disabled={buyingPlan === plan.id || (active && plan.id !== 'FREE')}
-                    className={`relative rounded-xl border-2 p-4 text-left transition-all cursor-pointer ${
+                    className={`relative rounded-xl border-2 p-4 text-left ${
                       active
                         ? 'border-emerald-500 bg-emerald-50 dark:bg-gray-700'
-                        : 'border-gray-200 dark:border-gray-600 hover:border-emerald-400 bg-white dark:bg-gray-800'
-                    } disabled:opacity-60`}
+                        : 'border-emerald-200 dark:border-emerald-700 bg-white dark:bg-gray-800'
+                    }`}
                   >
                     {active && (
                       <span className="absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-500 flex items-center justify-center">
                         <Check size={12} className="text-white" />
                       </span>
                     )}
-                    <Icon size={20} className={`mb-2 ${active ? 'text-emerald-600 dark:text-emerald-400' : 'text-emerald-500'}`} />
-                    <p className="text-xs font-bold text-gray-900 dark:text-white mb-0.5">
-                      {plan.label}
-                    </p>
-                    <p className="text-lg font-bold text-gray-900 dark:text-white">
-                      ₹{plan.price}
-                    </p>
-                    <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-1">
-                      {coinsAmount} coins
-                    </p>
-                    <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-0.5">{plan.desc}</p>
-                    {buyingPlan === plan.id && (
+                    <Icon size={20} className={`mb-2 ${active ? 'text-emerald-600' : 'text-emerald-500'}`} />
+                    <p className="text-xs font-bold text-gray-900 dark:text-white mb-0.5">{plan.name}</p>
+                    <p className="text-lg font-bold text-gray-900 dark:text-white">₹{plan.price}</p>
+                    <p className="text-[10px] text-gray-500 dark:text-gray-400 mt-1">{plan.coins} coins</p>
+                    <button
+                      onClick={() => handleBuyPlan(plan.name)}
+                      disabled={buyingPlan === plan.name || (active && plan.name !== 'FREE')}
+                      className={`mt-3 w-full py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer disabled:opacity-50 ${
+                        active
+                          ? 'bg-emerald-100 dark:bg-gray-600 text-emerald-700 dark:text-gray-300'
+                          : 'bg-emerald-600 text-white hover:bg-emerald-500'
+                      }`}
+                    >
+                      {buyingPlan === plan.name ? (
+                        <Loader size={12} className="animate-spin mx-auto" />
+                      ) : active ? (
+                        'Active'
+                      ) : plan.price === 0 ? (
+                        'Get Free'
+                      ) : (
+                        'Buy Now'
+                      )}
+                    </button>
+                    {buyingPlan === plan.name && (
                       <div className="absolute inset-0 rounded-xl bg-white/60 dark:bg-gray-900/60 flex items-center justify-center">
                         <Loader size={20} className="animate-spin text-emerald-500" />
                       </div>
                     )}
-                  </button>
+                  </div>
                 );
               })}
             </div>

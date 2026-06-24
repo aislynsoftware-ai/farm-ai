@@ -68,7 +68,7 @@ export default function AdminAgriTitlesPage() {
     catch (err) { setFormError(err.message); }
   };
 
-  const inputClass = "w-full px-3 py-2 rounded-lg bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none text-gray-900 dark:text-white placeholder-gray-400 text-sm";
+  const inputClass = "w-full px-3 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none text-gray-900 dark:text-white placeholder-gray-400 text-sm";
 
   return (
     <div className="space-y-4">
@@ -77,7 +77,7 @@ export default function AdminAgriTitlesPage() {
       {formSuccess && <div className="flex items-center gap-2 p-3 rounded-xl bg-emerald-950/30 border border-emerald-800"><CheckCircle size={14} className="text-emerald-400" /><p className="text-xs text-emerald-400">{formSuccess}</p></div>}
       {formError && <div className="flex items-center gap-2 p-3 rounded-xl bg-red-950/30 border border-red-800"><AlertCircle size={14} className="text-red-400" /><p className="text-xs text-red-400">{formError}</p></div>}
 
-      <form onSubmit={handleSave} className="rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-4 flex flex-wrap items-end gap-3">
+      <form onSubmit={handleSave} className="rounded-xl bg-white dark:bg-gray-800 border border-emerald-200 dark:border-emerald-700 p-4 flex flex-wrap items-end gap-3">
         <div className="flex-1 min-w-[200px]">
           <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">Title</label>
           <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Agri title name" className={inputClass} />
@@ -105,7 +105,7 @@ export default function AdminAgriTitlesPage() {
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
         {loading ? [1,2,3,4].map(i => <SkeletonCard key={i} />) : items.map((a) => (
-          <div key={a.id} className="rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 overflow-hidden group">
+          <div key={a.id} className="rounded-xl bg-white dark:bg-gray-800 border border-emerald-200 dark:border-emerald-700 overflow-hidden group">
             {a.image_url && <img src={a.image_url} alt="" className="w-full h-28 object-cover" />}
             <div className="p-3 flex items-center justify-between">
               <span className="text-sm text-gray-900 dark:text-white truncate">{a.title}</span>
