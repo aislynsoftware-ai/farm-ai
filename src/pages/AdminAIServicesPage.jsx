@@ -3,7 +3,7 @@ import { Plus, Trash2, Edit2, AlertCircle, CheckCircle, Loader, X } from 'lucide
 import Skeleton from '../components/common/Skeleton';
 import api from '../services/api';
 
-const emptyForm = () => ({ name: '', description: '', image_url: '', sort_order: 0 });
+const emptyForm = () => ({ name: '', description: '', image_url: '' });
 
 export default function AdminAIServicesPage() {
   const [items, setItems] = useState([]);
@@ -20,7 +20,7 @@ export default function AdminAIServicesPage() {
 
   const show = (msg) => { setFormSuccess(msg); setTimeout(() => setFormSuccess(''), 3000); };
 
-  const openEdit = (item) => { setEdit(item); setForm({ name: item.name, description: item.description || '', image_url: item.image_url || '', sort_order: item.sort_order || 0 }); };
+  const openEdit = (item) => { setEdit(item); setForm({ name: item.name, description: item.description || '', image_url: item.image_url || '' }); };
 
   const resetForm = () => { setEdit(null); setForm(emptyForm()); setShowAdd(false); };
 
@@ -82,10 +82,6 @@ export default function AdminAIServicesPage() {
                 <label className="block text-xs text-gray-400 mb-1">Image URL</label>
                 <input value={form.image_url} onChange={(e) => setForm((p) => ({ ...p, image_url: e.target.value }))} placeholder="https://..." className={inputClass} />
               </div>
-              <div>
-                <label className="block text-xs text-gray-400 mb-1">Sort Order</label>
-                <input type="number" value={form.sort_order} onChange={(e) => setForm((p) => ({ ...p, sort_order: parseInt(e.target.value) || 0 }))} className={inputClass} />
-              </div>
               <div className="flex gap-2 pt-2">
                 <button type="submit" disabled={formLoading} className="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-500 disabled:opacity-50 cursor-pointer">
                   {formLoading ? <Loader size={14} className="animate-spin" /> : 'Save'}
@@ -104,21 +100,19 @@ export default function AdminAIServicesPage() {
               <th className="p-3 font-medium">ID</th>
               <th className="p-3 font-medium">Name</th>
               <th className="p-3 font-medium">Description</th>
-              <th className="p-3 font-medium">Sort</th>
               <th className="p-3 font-medium">Actions</th>
             </tr>
           </thead>
           <tbody>
             {loading ? [1,2,3].map(i => (
-              <tr key={i} className="border-b border-gray-700/50"><td colSpan={5} className="p-3"><Skeleton className="h-6 w-full" /></td></tr>
+              <tr key={i} className="border-b border-gray-700/50"><td colSpan={4} className="p-3"><Skeleton className="h-6 w-full" /></td></tr>
             )) : items.length === 0 ? (
-              <tr><td colSpan={5} className="p-6 text-center text-gray-500">No services yet</td></tr>
+              <tr><td colSpan={4} className="p-6 text-center text-gray-500">No services yet</td></tr>
             ) : items.map((s) => (
               <tr key={s.id} className="border-b border-gray-700/50 text-gray-300 hover:bg-gray-700/30">
                 <td className="p-3">{s.id}</td>
                 <td className="p-3 font-medium text-white">{s.name}</td>
                 <td className="p-3 text-xs text-gray-400 max-w-xs truncate">{s.description || '-'}</td>
-                <td className="p-3">{s.sort_order}</td>
                 <td className="p-3">
                   <div className="flex gap-1">
                     <button onClick={() => openEdit(s)} className="p-1.5 rounded bg-gray-700 text-blue-400 hover:bg-gray-600 cursor-pointer"><Edit2 size={12} /></button>
