@@ -98,7 +98,7 @@ export default function DashboardApiKeys() {
   const requestLimit = planLimit;
 
   return (
-    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900 mt-0">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
       <Sidebar mobileOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <main className="flex-1 overflow-x-hidden">
         <SEO title="API Keys" url="/dashboard/api-keys" />

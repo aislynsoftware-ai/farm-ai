@@ -65,7 +65,7 @@ export default function AdminPredictionsPage() {
 
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-bold text-white">Predictions</h2>
+      <h2 className="text-lg font-bold text-emerald-900 dark:text-white">Predictions</h2>
 
       {formSuccess && <div className="flex items-center gap-2 p-3 rounded-xl bg-emerald-950/30 border border-emerald-800"><CheckCircle size={14} className="text-emerald-400" /><p className="text-xs text-emerald-400">{formSuccess}</p></div>}
       {formError && <div className="flex items-center gap-2 p-3 rounded-xl bg-red-950/30 border border-red-800"><AlertCircle size={14} className="text-red-400" /><p className="text-xs text-red-400">{formError}</p></div>}
@@ -77,28 +77,28 @@ export default function AdminPredictionsPage() {
             <button
               key={c}
               onClick={() => setCategory(c)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${category === c ? 'bg-emerald-600 text-white' : 'bg-gray-700/50 text-gray-400 hover:bg-gray-700'}`}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all cursor-pointer ${category === c ? 'bg-emerald-600 text-white' : 'bg-white dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-800/30'}`}
             >
               {c === 'All' ? 'All' : c.charAt(0).toUpperCase() + c.slice(1)}
             </button>
           ))}
         </div>
         <div className="relative flex-1 min-w-[200px]">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-emerald-600 dark:text-emerald-400" />
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search crop, disease, user..."
-            className="w-full pl-9 pr-3 py-2 rounded-lg bg-gray-700/50 border border-gray-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none text-white placeholder-gray-500 text-sm"
+            className="w-full pl-9 pr-3 py-2 rounded-lg bg-white dark:bg-emerald-900/40 border border-emerald-200 dark:border-emerald-700 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none text-emerald-900 dark:text-white placeholder-emerald-500 text-sm"
           />
         </div>
-        <span className="text-xs text-gray-400">{filtered.length} results</span>
+        <span className="text-xs text-emerald-600 dark:text-emerald-400">{filtered.length} results</span>
       </div>
 
       {/* Cards */}
       <div className="space-y-3">
         {loading ? [1,2,3,4].map(i => <Skeleton key={i} className="h-36" />) : filtered.map((p) => (
-          <div key={p.id} className="rounded-xl bg-gray-800/80 border border-gray-700 overflow-hidden">
+          <div key={p.id} className="rounded-xl bg-white dark:bg-emerald-900 border border-emerald-100 dark:border-emerald-700 overflow-hidden">
             <div className="p-4 flex flex-col sm:flex-row gap-4">
               {/* Images */}
               <div className="flex gap-3">
@@ -106,7 +106,7 @@ export default function AdminPredictionsPage() {
                   {p.original_image ? (
                     <img src={p.original_image} alt="" className="w-28 h-28 rounded-lg object-cover" />
                   ) : (
-                    <div className="w-28 h-28 rounded-lg bg-gray-700 flex items-center justify-center"><ImageIcon size={24} className="text-gray-500" /></div>
+                    <div className="w-28 h-28 rounded-lg bg-emerald-50 dark:bg-emerald-800 flex items-center justify-center"><ImageIcon size={24} className="text-emerald-500" /></div>
                   )}
                   <button onClick={() => downloadImage(p.original_image, `original_${p.id}`)} className="absolute top-1 right-1 p-1 rounded bg-black/50 text-white hover:bg-black/70 cursor-pointer"><Download size={12} /></button>
                   <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/50 text-[10px] text-white">Original</span>
@@ -115,7 +115,7 @@ export default function AdminPredictionsPage() {
                   {p.predicted_image ? (
                     <img src={p.predicted_image} alt="" className="w-28 h-28 rounded-lg object-cover" />
                   ) : (
-                    <div className="w-28 h-28 rounded-lg bg-gray-700 flex items-center justify-center"><ImageIcon size={24} className="text-gray-500" /></div>
+                    <div className="w-28 h-28 rounded-lg bg-emerald-50 dark:bg-emerald-800 flex items-center justify-center"><ImageIcon size={24} className="text-emerald-500" /></div>
                   )}
                   <button onClick={() => downloadImage(p.predicted_image, `predicted_${p.id}`)} className="absolute top-1 right-1 p-1 rounded bg-black/50 text-white hover:bg-black/70 cursor-pointer"><Download size={12} /></button>
                   <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded bg-black/50 text-[10px] text-white">Predicted</span>
@@ -125,15 +125,15 @@ export default function AdminPredictionsPage() {
               <div className="flex-1 min-w-0">
                 <div className="flex items-start justify-between gap-2">
                   <div>
-                    <p className="text-sm font-medium text-white capitalize">{p.crop || 'Unknown'}</p>
-                    <p className="text-xs text-gray-400 mt-0.5">
+                    <p className="text-sm font-medium text-emerald-900 dark:text-white capitalize">{p.crop || 'Unknown'}</p>
+                    <p className="text-xs text-emerald-600 dark:text-emerald-400 mt-0.5">
                       {p.user_id && <span className="font-mono">{p.user_id}</span>}
                       {p.created_at && <span className="ml-2">{p.created_at}</span>}
                     </p>
                   </div>
                   <div className="flex gap-1 shrink-0">
-                    <button onClick={() => handleDelete(p.id)} className="p-1.5 rounded bg-gray-700 text-red-400 hover:bg-gray-600 cursor-pointer"><Trash2 size={12} /></button>
-                    <button onClick={() => setExpanded(expanded === p.id ? null : p.id)} className="p-1.5 rounded bg-gray-700 text-gray-400 hover:bg-gray-600 cursor-pointer text-xs">{(expanded === p.id ? 'Less' : 'More')}</button>
+                    <button onClick={() => handleDelete(p.id)} className="p-1.5 rounded bg-emerald-50 dark:bg-emerald-800 text-red-400 hover:bg-emerald-100 dark:hover:bg-emerald-700 cursor-pointer"><Trash2 size={12} /></button>
+                    <button onClick={() => setExpanded(expanded === p.id ? null : p.id)} className="p-1.5 rounded bg-emerald-50 dark:bg-emerald-800 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-700 cursor-pointer text-xs">{(expanded === p.id ? 'Less' : 'More')}</button>
                   </div>
                 </div>
                 {p.prediction && (
@@ -142,18 +142,18 @@ export default function AdminPredictionsPage() {
                   </span>
                 )}
                 {expanded === p.id && (
-                  <div className="mt-3 space-y-2 text-xs text-gray-400">
-                    {p.disease && <p><span className="text-gray-500">Disease:</span> {p.disease}</p>}
-                    {p.fertilizers?.length > 0 && <p><span className="text-gray-500">Fertilizers:</span> {p.fertilizers.join(', ')}</p>}
-                    {p.pesticides?.length > 0 && <p><span className="text-gray-500">Pesticides:</span> {p.pesticides.join(', ')}</p>}
-                    {p.care_points?.length > 0 && <p><span className="text-gray-500">Care:</span> {p.care_points.join(', ')}</p>}
+                  <div className="mt-3 space-y-2 text-xs text-emerald-600 dark:text-emerald-400">
+                    {p.disease && <p><span className="text-emerald-500">Disease:</span> {p.disease}</p>}
+                    {p.fertilizers?.length > 0 && <p><span className="text-emerald-500">Fertilizers:</span> {p.fertilizers.join(', ')}</p>}
+                    {p.pesticides?.length > 0 && <p><span className="text-emerald-500">Pesticides:</span> {p.pesticides.join(', ')}</p>}
+                    {p.care_points?.length > 0 && <p><span className="text-emerald-500">Care:</span> {p.care_points.join(', ')}</p>}
                   </div>
                 )}
               </div>
             </div>
           </div>
         ))}
-        {!loading && filtered.length === 0 && <div className="p-6 text-center text-gray-500 rounded-xl bg-gray-800/80 border border-gray-700">No predictions found</div>}
+        {!loading && filtered.length === 0 && <div className="p-6 text-center text-emerald-500 rounded-xl bg-white dark:bg-emerald-900 border border-emerald-100 dark:border-emerald-700">No predictions found</div>}
       </div>
     </div>
   );
