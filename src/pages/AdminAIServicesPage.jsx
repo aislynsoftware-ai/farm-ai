@@ -63,7 +63,7 @@ export default function AdminAIServicesPage() {
     catch (err) { setFormError(err.message); }
   };
 
-  const inputClass = "w-full px-3 py-2 rounded-lg bg-gray-700/50 border border-gray-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none text-white placeholder-gray-500 text-sm";
+  const inputClass = "w-full px-3 py-2 rounded-lg border border-emerald-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none text-emerald-900 placeholder-emerald-400 text-sm";
 
   return (
     <div className="space-y-4">
@@ -74,26 +74,25 @@ export default function AdminAIServicesPage() {
         </button>
       </div>
 
-      {formSuccess && <div className="flex items-center gap-2 p-3 rounded-xl bg-emerald-950/30 border border-emerald-800"><CheckCircle size={14} className="text-emerald-400" /><p className="text-xs text-emerald-400">{formSuccess}</p></div>}
-      {formError && <div className="flex items-center gap-2 p-3 rounded-xl bg-red-950/30 border border-red-800"><AlertCircle size={14} className="text-red-400" /><p className="text-xs text-red-400">{formError}</p></div>}
+      {formSuccess && <div className="flex items-center gap-2 p-3 rounded-xl bg-emerald-50 border border-emerald-200"><CheckCircle size={14} className="text-emerald-600" /><p className="text-xs text-emerald-700">{formSuccess}</p></div>}
+      {formError && <div className="flex items-center gap-2 p-3 rounded-xl bg-red-50 border border-red-200"><AlertCircle size={14} className="text-red-600" /><p className="text-xs text-red-700">{formError}</p></div>}
 
-      {/* Modal */}
       {(showAdd || edit) && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60" onClick={resetForm}>
-          <div className="bg-gray-800 rounded-2xl border border-gray-700 p-6 w-full max-w-lg mx-4" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-white rounded-2xl border border-emerald-100 p-6 w-full max-w-lg mx-4 shadow-lg" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-bold text-white">{edit ? 'Edit Service' : 'Add Service'}</h3>
-              <button onClick={resetForm} className="text-gray-400 hover:text-white cursor-pointer"><X size={18} /></button>
+              <h3 className="text-sm font-bold text-emerald-900">{edit ? 'Edit Service' : 'Add Service'}</h3>
+              <button onClick={resetForm} className="text-emerald-400 hover:text-emerald-600 cursor-pointer"><X size={18} /></button>
             </div>
             <form onSubmit={handleSave} className="space-y-4">
               <div>
-                <label className="block text-xs text-gray-400 mb-1">Name</label>
+                <label className="block text-xs text-emerald-700 mb-1">Name</label>
                 <input value={form.name} onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))} placeholder="e.g. AI Plant Diagnosis" className={inputClass} />
               </div>
               <div>
-                <label className="block text-xs text-gray-400 mb-1">Image</label>
+                <label className="block text-xs text-emerald-700 mb-1">Image</label>
                 <input type="file" accept="image/*" ref={fileRef} className="hidden" onChange={handleFile} />
-                <button type="button" onClick={() => fileRef.current?.click()} className="px-3 py-2 rounded-lg bg-gray-700 text-white text-sm hover:bg-gray-600 cursor-pointer">
+                <button type="button" onClick={() => fileRef.current?.click()} className="px-3 py-2 rounded-lg bg-emerald-50 text-emerald-700 text-sm hover:bg-emerald-100 cursor-pointer">
                   {form.image ? form.image.name : 'Choose'}
                 </button>
               </div>
@@ -102,17 +101,17 @@ export default function AdminAIServicesPage() {
                 <button type="submit" disabled={formLoading} className="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-500 disabled:opacity-50 cursor-pointer">
                   {formLoading ? <Loader size={14} className="animate-spin" /> : 'Save'}
                 </button>
-                <button type="button" onClick={resetForm} className="px-4 py-2 rounded-lg bg-gray-700 text-gray-300 text-sm hover:bg-gray-600 cursor-pointer">Cancel</button>
+                <button type="button" onClick={resetForm} className="px-4 py-2 rounded-lg bg-emerald-50 text-emerald-700 text-sm hover:bg-emerald-100 cursor-pointer">Cancel</button>
               </div>
             </form>
           </div>
         </div>
       )}
 
-      <div className="overflow-x-auto rounded-xl bg-gray-800/80 border border-gray-700">
+      <div className="overflow-x-auto rounded-xl bg-white border border-emerald-100">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-gray-700 text-gray-400 text-left">
+            <tr className="border-b border-emerald-100 text-emerald-600 text-left">
               <th className="p-3 font-medium">ID</th>
               <th className="p-3 font-medium">Image</th>
               <th className="p-3 font-medium">Name</th>
@@ -121,18 +120,18 @@ export default function AdminAIServicesPage() {
           </thead>
           <tbody>
             {loading ? [1,2,3].map(i => (
-              <tr key={i} className="border-b border-gray-700/50"><td colSpan={4} className="p-3"><Skeleton className="h-6 w-full" /></td></tr>
+              <tr key={i} className="border-b border-emerald-100"><td colSpan={4} className="p-3"><Skeleton className="h-6 w-full" /></td></tr>
             )) : items.length === 0 ? (
-              <tr><td colSpan={4} className="p-6 text-center text-gray-500">No services yet</td></tr>
+              <tr><td colSpan={4} className="p-6 text-center text-emerald-400">No services yet</td></tr>
             ) : items.map((s) => (
-              <tr key={s.id} className="border-b border-gray-700/50 text-gray-300 hover:bg-gray-700/30">
+              <tr key={s.id} className="border-b border-emerald-100 text-emerald-800 hover:bg-emerald-50">
                 <td className="p-3">{s.id}</td>
                 <td className="p-3">{s.image_url ? <img src={s.image_url} alt="" className="w-10 h-10 rounded-lg object-cover" /> : '-'}</td>
-                <td className="p-3 font-medium text-white">{s.name}</td>
+                <td className="p-3 font-medium text-emerald-900">{s.name}</td>
                 <td className="p-3">
                   <div className="flex gap-1">
-                    <button onClick={() => openEdit(s)} className="p-1.5 rounded bg-gray-700 text-blue-400 hover:bg-gray-600 cursor-pointer"><Edit2 size={12} /></button>
-                    <button onClick={() => handleDelete(s.id)} className="p-1.5 rounded bg-gray-700 text-red-400 hover:bg-gray-600 cursor-pointer"><Trash2 size={12} /></button>
+                    <button onClick={() => openEdit(s)} className="p-1.5 rounded bg-emerald-50 text-blue-600 hover:bg-emerald-100 cursor-pointer"><Edit2 size={12} /></button>
+                    <button onClick={() => handleDelete(s.id)} className="p-1.5 rounded bg-emerald-50 text-red-500 hover:bg-emerald-100 cursor-pointer"><Trash2 size={12} /></button>
                   </div>
                 </td>
               </tr>
