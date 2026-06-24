@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { Menu, Sprout, FileText, Leaf, Apple, Bug, Search, Coins, User, ChevronRight, ArrowRight, ChevronDown, ChevronUp, Droplets, Plus, Trash2, Clock, X, AlertCircle, CheckCircle, Camera } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Menu, Sprout, FileText, Leaf, Apple, Bug, Search, Coins, User, ChevronRight, ArrowRight, ChevronDown, ChevronUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import SEO from '../components/common/SEO';
@@ -300,8 +300,6 @@ export default function Dashboard() {
               </Link>
             </div>
           </motion.div>
-
-          {user?.user_id && <PlantWateringWidget userId={user.user_id} />}
 
           {resources.length > 0 && (
             <motion.div
