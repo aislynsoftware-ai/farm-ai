@@ -122,7 +122,7 @@ export default function createAppRouter(isDark, toggleTheme) {
     },
     {
       path: '/admin',
-      element: <AdminLayout />,
+      element: <AdminLayout isDark={isDark} toggleTheme={toggleTheme} />,
       children: [
         { index: true, element: <AdminDashboard /> },
         { path: 'dashboard', element: <AdminDashboard /> },
