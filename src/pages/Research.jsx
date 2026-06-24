@@ -302,8 +302,14 @@ function CategorySection({ catName, crops, stageKey }) {
 
 function AdditionalCard({ name, data, index }) {
   const [expanded, setExpanded] = useState(false);
-  const entries = Object.entries(data).filter(([k]) => k !== 'totalImages');
+  const [renderError, setRenderError] = useState(null);
+  const entries = Object.entries(data || {}).filter(([k]) => k !== 'totalImages');
   const isFlat = name === 'Dracaena_Plant';
+
+  const safeRender = (fn) => {
+    try { return fn(); }
+    catch (e) { setRenderError(e.message || 'Render error'); return null; }
+  };
 
   return (
     <motion.div
@@ -312,7 +318,7 @@ function AdditionalCard({ name, data, index }) {
       transition={{ duration: 0.3, delay: index * 0.04 }}
     >
       <button
-        onClick={() => setExpanded(!expanded)}
+        onClick={() => { setExpanded(!expanded); setRenderError(null); }}
         className="w-full flex items-center justify-between p-3.5 text-left bg-white dark:bg-gray-800/80 rounded-xl border border-gray-100 dark:border-gray-700 hover:border-blue-200 dark:hover:border-blue-700 hover:shadow-md hover:shadow-blue-500/5 transition-all duration-200 group"
       >
         <div className="flex items-center gap-3 min-w-0">
@@ -320,8 +326,8 @@ function AdditionalCard({ name, data, index }) {
             <Database size={16} className="text-white" />
           </div>
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{name.replace(/_/g, ' ')}</p>
-            <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">{data.totalImages?.toLocaleString() || 0} images</p>
+            <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{name?.replace(/_/g, ' ') || name}</p>
+            <p className="text-[11px] text-gray-500 dark:text-gray-400 mt-0.5">{data?.totalImages?.toLocaleString() || 0} images</p>
           </div>
         </div>
         <div className="flex items-center gap-2 shrink-0">
@@ -340,26 +346,28 @@ function AdditionalCard({ name, data, index }) {
             className="overflow-hidden"
           >
             <div className="mx-2 px-4 py-4 bg-gray-50/50 dark:bg-gray-800/30 rounded-b-xl border-x border-b border-gray-100 dark:border-gray-700 space-y-3">
-              {entries.map(([key, val]) => (
+              {renderError ? (
+                <p className="text-xs text-red-500">Error displaying data</p>
+              ) : safeRender(() => entries.map(([key, val]) => (
                 <div key={key}>
                   <p className="text-[10px] font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-1.5">
-                    {key} {val.totalImages ? `(${val.totalImages.toLocaleString()} images)` : ''}
+                    {key} {val?.totalImages ? `(${val.totalImages.toLocaleString()} images)` : ''}
                   </p>
                   <div className="flex flex-wrap gap-1">
                     {isFlat
-                      ? Object.entries(val).map(([cls, count]) => (
+                      ? Object.entries(val || {}).map(([cls, count]) => (
                           <span key={cls} className="px-2 py-0.5 text-[10px] rounded-full bg-gray-50 dark:bg-gray-700/50 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600">
                             {cls} ({count})
                           </span>
                         ))
                       : (Array.isArray(val?.classes) ? val.classes : Object.keys(val?.classes || {})).map((cls) => (
                           <span key={cls} className="px-2 py-0.5 text-[10px] rounded-full bg-gray-50 dark:bg-gray-700/50 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-600">
-                            {typeof cls === 'string' ? cls : `${cls} (${val.classes[cls] || 0})`}
+                            {typeof cls === 'string' ? cls : `${cls} (${val?.classes?.[cls] || 0})`}
                           </span>
                         ))}
                   </div>
                 </div>
-              ))}
+              )))}
             </div>
           </motion.div>
         )}
@@ -455,7 +463,7 @@ export default function Research() {
         Object.values(cat).forEach(sumCrop)
       );
     });
-    Object.values(data.additional).forEach((v) => {
+    Object.values(data.additional || {}).forEach((v) => {
       if (!v || typeof v !== 'object') return;
       Object.values(v).forEach((sub) => {
         if (sub && typeof sub === 'object' && sub.classCountsDetail) {
