@@ -342,6 +342,30 @@ const api = {
     delete: (id) => request(`/user/plants/${id}`, { method: 'DELETE' }),
     water: (id) => request(`/user/plants/${id}/water`, { method: 'POST' }),
   },
+  community: {
+    posts: () => request('/community/posts'),
+    addPost: (userId, data) => {
+      const fd = new FormData();
+      fd.append('user_id', userId);
+      if (data.title) fd.append('title', data.title);
+      if (data.content) fd.append('content', data.content);
+      if (data.image) fd.append('image', data.image);
+      if (data.video) fd.append('video', data.video);
+      if (data.voice) fd.append('voice', data.voice);
+      return request('/community/posts/add', { method: 'POST', body: fd, headers: {} });
+    },
+    deletePost: (postId, userId) => request(`/community/posts/${postId}?user_id=${encodeURIComponent(userId)}`, { method: 'DELETE' }),
+    replies: (postId) => request(`/community/posts/${postId}/replies`),
+    addReply: (postId, userId, data) => {
+      const fd = new FormData();
+      fd.append('user_id', userId);
+      if (data.content) fd.append('content', data.content);
+      if (data.voice) fd.append('voice', data.voice);
+      if (data.video) fd.append('video', data.video);
+      return request(`/community/posts/${postId}/reply`, { method: 'POST', body: fd, headers: {} });
+    },
+    deleteReply: (replyId, userId) => request(`/community/replies/${replyId}?user_id=${encodeURIComponent(userId)}`, { method: 'DELETE' }),
+  },
 };
 
 export default api;
