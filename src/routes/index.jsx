@@ -50,6 +50,8 @@ import AdminApiPlansPage from '../pages/AdminApiPlansPage';
 import AdminDownloadsPage from '../pages/AdminDownloadsPage';
 import AdminAIServicesPage from '../pages/AdminAIServicesPage';
 import AdminDailyTipsPage from '../pages/AdminDailyTipsPage';
+import PlantGuide from '../pages/PlantGuide';
+import AdminPlantRecommendationsPage from '../pages/AdminPlantRecommendationsPage';
 
 function ErrorPage() {
   return (
@@ -133,6 +135,10 @@ export default function createAppRouter(isDark, toggleTheme) {
       element: <Notifications />,
     },
     {
+      path: '/plant-guide',
+      element: <PlantGuide />,
+    },
+    {
       path: '/my-shop',
       element: <ShopOwnerDashboard />,
     },
@@ -159,6 +165,7 @@ export default function createAppRouter(isDark, toggleTheme) {
         { path: 'ai-services', element: <AdminAIServicesPage /> },
         { path: 'daily-tips', element: <AdminDailyTipsPage /> },
         { path: 'shops', element: <AdminShopsPage /> },
+        { path: 'plant-recommendations', element: <AdminPlantRecommendationsPage /> },
       ],
     },
   ]);
