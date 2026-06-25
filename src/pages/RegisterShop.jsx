@@ -1,35 +1,50 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Store, MapPin, Phone, Mail, Image, Loader, CheckCircle, AlertCircle } from 'lucide-react';
+import { Store, MapPin, Phone, Mail, Image, Loader, CheckCircle, Search } from 'lucide-react';
 import api from '../services/api';
+
+const OWM_KEY = '6914d2cb3f280b711105801779b3ca7f';
 
 export default function RegisterShop() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
   const [form, setForm] = useState({
-    shop_name: '', description: '',
-    address: '', latitude: '', longitude: '', shop_phone: '', photo: null,
+    name: '', email: '', phone: '', shop_name: '', description: '',
+    address: '', city: '', latitude: '', longitude: '', shop_phone: '', photo: null,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [done, setDone] = useState(false);
+  const [citySuggestions, setCitySuggestions] = useState([]);
+  const [cityLoading, setCityLoading] = useState(false);
 
   useEffect(() => {
-    const u = localStorage.getItem('user');
-    const t = localStorage.getItem('token');
-    if (!u || !t) { navigate('/login'); return; }
-    try { setUser(JSON.parse(u)); } catch { navigate('/login'); }
-  }, [navigate]);
+    if (!form.city || form.city.length < 2) { setCitySuggestions([]); return; }
+    const timer = setTimeout(async () => {
+      setCityLoading(true);
+      try {
+        const res = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(form.city)}&limit=5&appid=${OWM_KEY}`);
+        const data = await res.json();
+        setCitySuggestions(data || []);
+      } catch { setCitySuggestions([]); }
+      setCityLoading(false);
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [form.city]);
+
+  const selectCity = (c) => {
+    setForm((p) => ({ ...p, city: c.name, latitude: c.lat, longitude: c.lon }));
+    setCitySuggestions([]);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.shop_name) { setError('Shop name is required'); return; }
+    if (!form.name) { setError('Your name is required'); return; }
     setLoading(true); setError('');
     try {
-      await api.shops.register(form);
-      const updatedUser = JSON.parse(localStorage.getItem('user') || '{}');
-      updatedUser.role = 'shop_owner';
-      localStorage.setItem('user', JSON.stringify(updatedUser));
+      const res = await api.shops.register(form);
+      localStorage.setItem('token', res.token);
+      localStorage.setItem('user', JSON.stringify({ user_id: res.user_id, name: form.name, role: 'shop_owner' }));
       setDone(true);
       setTimeout(() => navigate('/my-shop'), 2000);
     } catch (err) { setError(err.message); }
@@ -68,18 +83,21 @@ export default function RegisterShop() {
         <form onSubmit={handleSubmit} className="space-y-4 bg-white dark:bg-gray-800 rounded-2xl border border-emerald-200 dark:border-emerald-700 p-6">
           {error && <p className="text-xs text-red-500 bg-red-50 dark:bg-red-900/30 p-2 rounded-lg">{error}</p>}
 
-          {user && (
-            <div className="flex items-center gap-3 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-700">
-              <div className="w-10 h-10 rounded-full bg-emerald-200 dark:bg-emerald-800 flex items-center justify-center text-emerald-700 dark:text-emerald-400 font-bold text-sm">
-                {user.name?.charAt(0)?.toUpperCase() || 'U'}
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-gray-900 dark:text-white">{user.name || 'User'}</p>
-                <p className="text-[11px] text-gray-500 dark:text-gray-400">{user.email || user.phone || ''}</p>
-              </div>
-              <CheckCircle size={16} className="text-emerald-500 ml-auto shrink-0" />
+          <div>
+            <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">Your Name *</label>
+            <input value={form.name} onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))} placeholder="John Doe" className={inputClass} />
+          </div>
+
+          <div className="flex gap-3">
+            <div className="flex-1">
+              <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1"><Mail size={12} className="inline mr-1" />Email</label>
+              <input type="email" value={form.email} onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))} placeholder="shop@example.com" className={inputClass} />
             </div>
-          )}
+            <div className="flex-1">
+              <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1"><Phone size={12} className="inline mr-1" />Phone</label>
+              <input value={form.phone} onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))} placeholder="+91 9876543210" className={inputClass} />
+            </div>
+          </div>
 
           <div>
             <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1"><Store size={12} className="inline mr-1" />Shop Name *</label>
@@ -97,12 +115,22 @@ export default function RegisterShop() {
           </div>
 
           <div>
-            <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1"><MapPin size={12} className="inline mr-1" />Location Coordinates</label>
-            <div className="flex gap-2">
-              <input type="number" step="any" value={form.latitude} onChange={(e) => setForm((p) => ({ ...p, latitude: e.target.value }))} placeholder="Latitude" className={inputClass} />
-              <input type="number" step="any" value={form.longitude} onChange={(e) => setForm((p) => ({ ...p, longitude: e.target.value }))} placeholder="Longitude" className={inputClass} />
-              <button type="button" onClick={getLocation} className="px-3 py-2 rounded-lg bg-emerald-600 text-white text-xs hover:bg-emerald-500 whitespace-nowrap cursor-pointer">Get Location</button>
+            <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1"><Search size={12} className="inline mr-1" />City / Location</label>
+            <div className="relative">
+              <input value={form.city} onChange={(e) => setForm((p) => ({ ...p, city: e.target.value }))} placeholder="Search your city..." className={inputClass} />
+              {cityLoading && <Loader size={14} className="absolute right-3 top-3 animate-spin text-gray-400" />}
+              {citySuggestions.length > 0 && (
+                <div className="absolute z-10 top-full mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg overflow-hidden">
+                  {citySuggestions.map((c, i) => (
+                    <button type="button" key={i} onClick={() => selectCity(c)}
+                      className="w-full text-left px-3 py-2 text-xs text-gray-700 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 cursor-pointer border-b border-gray-100 dark:border-gray-700 last:border-0">
+                      {c.name}, {c.state || ''} {c.country}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
+            <button type="button" onClick={getLocation} className="mt-2 w-full px-3 py-2 rounded-lg bg-emerald-600 text-white text-xs hover:bg-emerald-500 cursor-pointer"><MapPin size={12} className="inline mr-1" />Use Current Location (GPS)</button>
           </div>
 
           <div>
