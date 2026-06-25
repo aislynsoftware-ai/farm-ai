@@ -9,10 +9,7 @@ export default function AdminPlantRecommendationsPage() {
   const [edit, setEdit] = useState(null);
   const [form, setForm] = useState({ category: '', plant_name: '', scientific_name: '', description: '', benefits: '', care_tips: '', image: null, image_url: '' });
 
-  const fetch = () => {
-    setLoading(true);
-    api.plantRecs.admin.list().then(setPlants).catch(() => {}).finally(() => setLoading(false));
-  };
+  const fetch = () => { api.plantRecs.admin.list().then(setPlants).catch(() => {}); };
 
   useEffect(() => { fetch(); }, []);
 
@@ -44,7 +41,7 @@ export default function AdminPlantRecommendationsPage() {
         </button>
       </div>
 
-      {loading ? <p className="text-xs text-gray-400">Loading...</p> : plants.length === 0 ? (
+      {plants.length === 0 ? (
         <p className="text-xs text-gray-400">No plants yet.</p>
       ) : (
         <div className="space-y-2">
