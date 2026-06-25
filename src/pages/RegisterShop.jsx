@@ -72,13 +72,13 @@ export default function RegisterShop() {
   const inputClass = "w-full px-3 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none text-gray-900 dark:text-white placeholder-gray-400 text-sm";
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4">
-      <div className="w-full max-w-lg">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 mt-10">
+      <div className="w-full max-w-lg space-y-6">
        
 
         <form onSubmit={handleSubmit} className="space-y-4 bg-white dark:bg-gray-800 rounded-2xl border border-emerald-200 dark:border-emerald-700 p-6">
           {error && <p className="text-xs text-red-500 bg-red-50 dark:bg-red-900/30 p-2 rounded-lg">{error}</p>}
- <div className="text-center mb-6">
+ <div className="text-center mb-6 ">
           <Store size={36} className="text-emerald-500 mx-auto mb-2" />
           <h1 className="text-xl font-bold text-gray-900 dark:text-white">Register Your Shop</h1>
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Create a shop owner account for your fertilizer business</p>
