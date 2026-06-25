@@ -7,18 +7,19 @@ import api from '../services/api';
 const SIDEBAR = [
   { path: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { path: '/admin/users', label: 'Users', icon: Users },
+   { path: '/admin/shops', label: 'Shops', icon: Store },
   { path: '/admin/plans', label: 'Plans', icon: Crown },
   { path: '/admin/api-plans', label: 'API Plans', icon: DollarSign },
   { path: '/admin/ai-services', label: 'AI Services', icon: Cpu },
-  { path: '/admin/daily-tips', label: 'Daily Tips', icon: Lightbulb },
   { path: '/admin/agri-titles', label: 'Agri Titles', icon: Leaf },
   { path: '/admin/crops', label: 'Crops', icon: Sprout },
   { path: '/admin/sub-crops', label: 'Sub Crops', icon: Sprout },
   { path: '/admin/products', label: 'Products', icon: ShoppingBag },
+  { path: '/admin/daily-tips', label: 'Daily Tips', icon: Lightbulb },
   { path: '/admin/orders', label: 'Orders', icon: CreditCard },
   { path: '/admin/predictions', label: 'Predictions', icon: Brain },
   { path: '/admin/downloads', label: 'Downloads', icon: Download },
-  { path: '/admin/shops', label: 'Shops', icon: Store },
+ 
 ];
 
 export default function AdminLayout({ isDark, toggleTheme }) {
