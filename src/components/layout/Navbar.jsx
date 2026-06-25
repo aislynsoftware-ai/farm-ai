@@ -315,7 +315,7 @@ export default function Navbar({ isDark, toggleTheme }) {
                             className="flex items-center gap-2 px-3.5 py-2.5 text-xs text-gray-600 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
                           >
                             <User size={13} />
-                            Register as User
+                            Register
                           </Link>
                           <Link to="/register-shop" onClick={() => setOpenDropdown(null)}
                             className="flex items-center gap-2 px-3.5 py-2.5 text-xs text-gray-600 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
