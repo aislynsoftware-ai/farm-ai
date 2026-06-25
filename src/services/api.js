@@ -370,6 +370,9 @@ const api = {
   shops: {
     register: (data) => {
       const fd = new FormData();
+      fd.append('name', data.name);
+      if (data.email) fd.append('email', data.email);
+      if (data.phone) fd.append('phone', data.phone);
       fd.append('shop_name', data.shop_name);
       if (data.description) fd.append('description', data.description);
       if (data.address) fd.append('address', data.address);
