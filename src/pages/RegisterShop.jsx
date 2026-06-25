@@ -1,0 +1,128 @@
+import { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { Store, MapPin, Phone, Mail, Image, Loader, CheckCircle } from 'lucide-react';
+import api from '../services/api';
+
+export default function RegisterShop() {
+  const navigate = useNavigate();
+  const [form, setForm] = useState({
+    name: '', email: '', phone: '', shop_name: '', description: '',
+    address: '', latitude: '', longitude: '', shop_phone: '', photo: null,
+  });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [done, setDone] = useState(false);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!form.shop_name) { setError('Shop name is required'); return; }
+    if (!form.name) { setError('Your name is required'); return; }
+    setLoading(true); setError('');
+    try {
+      const res = await api.shops.register(form);
+      localStorage.setItem('token', res.token);
+      localStorage.setItem('user', JSON.stringify({ user_id: res.user_id, name: form.name, role: 'shop_owner' }));
+      setDone(true);
+      setTimeout(() => navigate('/my-shop'), 2000);
+    } catch (err) { setError(err.message); }
+    setLoading(false);
+  };
+
+  const getLocation = () => {
+    if (!navigator.geolocation) { alert('Geolocation not supported'); return; }
+    navigator.geolocation.getCurrentPosition(
+      (pos) => setForm((p) => ({ ...p, latitude: pos.coords.latitude, longitude: pos.coords.longitude })),
+      () => alert('Could not get location')
+    );
+  };
+
+  if (done) return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+      <div className="text-center p-8 max-w-md">
+        <CheckCircle size={48} className="text-emerald-500 mx-auto mb-4" />
+        <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Registration Successful!</h2>
+        <p className="text-sm text-gray-600 dark:text-gray-400">Your shop is pending admin approval. Redirecting...</p>
+      </div>
+    </div>
+  );
+
+  const inputClass = "w-full px-3 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none text-gray-900 dark:text-white placeholder-gray-400 text-sm";
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4">
+      <div className="w-full max-w-lg">
+        <div className="text-center mb-6">
+          <Store size={36} className="text-emerald-500 mx-auto mb-2" />
+          <h1 className="text-xl font-bold text-gray-900 dark:text-white">Register Your Shop</h1>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Create a shop owner account for your fertilizer business</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="space-y-4 bg-white dark:bg-gray-800 rounded-2xl border border-emerald-200 dark:border-emerald-700 p-6">
+          {error && <p className="text-xs text-red-500 bg-red-50 dark:bg-red-900/30 p-2 rounded-lg">{error}</p>}
+
+          <div>
+            <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">Your Name *</label>
+            <input value={form.name} onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))} placeholder="John Doe" className={inputClass} />
+          </div>
+
+          <div className="flex gap-3">
+            <div className="flex-1">
+              <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1"><Mail size={12} className="inline mr-1" />Email</label>
+              <input type="email" value={form.email} onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))} placeholder="shop@example.com" className={inputClass} />
+            </div>
+            <div className="flex-1">
+              <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1"><Phone size={12} className="inline mr-1" />Phone</label>
+              <input value={form.phone} onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))} placeholder="+91 9876543210" className={inputClass} />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1"><Store size={12} className="inline mr-1" />Shop Name *</label>
+            <input value={form.shop_name} onChange={(e) => setForm((p) => ({ ...p, shop_name: e.target.value }))} placeholder="Green Fertilizers" className={inputClass} />
+          </div>
+
+          <div>
+            <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">Description</label>
+            <textarea value={form.description} onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))} placeholder="About your shop..." rows={2} className={`${inputClass} resize-none`} />
+          </div>
+
+          <div>
+            <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">Address</label>
+            <textarea value={form.address} onChange={(e) => setForm((p) => ({ ...p, address: e.target.value }))} placeholder="Shop address..." rows={2} className={`${inputClass} resize-none`} />
+          </div>
+
+          <div>
+            <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1"><MapPin size={12} className="inline mr-1" />Location Coordinates</label>
+            <div className="flex gap-2">
+              <input type="number" step="any" value={form.latitude} onChange={(e) => setForm((p) => ({ ...p, latitude: e.target.value }))} placeholder="Latitude" className={inputClass} />
+              <input type="number" step="any" value={form.longitude} onChange={(e) => setForm((p) => ({ ...p, longitude: e.target.value }))} placeholder="Longitude" className={inputClass} />
+              <button type="button" onClick={getLocation} className="px-3 py-2 rounded-lg bg-emerald-600 text-white text-xs hover:bg-emerald-500 whitespace-nowrap cursor-pointer">Get Location</button>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1"><Phone size={12} className="inline mr-1" />Shop Phone</label>
+            <input value={form.shop_phone} onChange={(e) => setForm((p) => ({ ...p, shop_phone: e.target.value }))} placeholder="Shop contact number" className={inputClass} />
+          </div>
+
+          <div>
+            <label className="flex items-center gap-2 px-3 py-2 rounded-lg border border-dashed border-gray-300 dark:border-gray-600 text-xs text-gray-500 hover:border-emerald-400 cursor-pointer">
+              <Image size={16} className="text-emerald-500" />
+              {form.photo ? form.photo.name : 'Upload shop photo'}
+              <input type="file" accept="image/*" onChange={(e) => setForm((p) => ({ ...p, photo: e.target.files[0] || null }))} className="hidden" />
+            </label>
+          </div>
+
+          <button type="submit" disabled={loading} className="w-full py-2.5 rounded-xl bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-500 disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer">
+            {loading ? <Loader size={16} className="animate-spin" /> : <Store size={16} />}
+            {loading ? 'Registering...' : 'Register Shop'}
+          </button>
+
+          <p className="text-center text-xs text-gray-500 dark:text-gray-400">
+            Already have an account? <Link to="/login" className="text-emerald-600 dark:text-emerald-400 hover:underline">Login</Link>
+          </p>
+        </form>
+      </div>
+    </div>
+  );
+}

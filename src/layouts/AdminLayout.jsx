@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, Leaf, Sprout, ShoppingBag, CreditCard, Menu, X, LogOut, Brain, Crown, Download, Cpu, Sun, Moon, DollarSign } from 'lucide-react';
+import { LayoutDashboard, Users, Leaf, Sprout, ShoppingBag, CreditCard, Menu, X, LogOut, Brain, Crown, Download, Cpu, Sun, Moon, DollarSign, Store } from 'lucide-react';
 import ThemeToggle from '../components/common/ThemeToggle';
 import api from '../services/api';
 
@@ -17,6 +17,7 @@ const SIDEBAR = [
   { path: '/admin/orders', label: 'Orders', icon: CreditCard },
   { path: '/admin/predictions', label: 'Predictions', icon: Brain },
   { path: '/admin/downloads', label: 'Downloads', icon: Download },
+  { path: '/admin/shops', label: 'Shops', icon: Store },
 ];
 
 export default function AdminLayout({ isDark, toggleTheme }) {

@@ -162,9 +162,9 @@ export default function CropDetail() {
                             to={authLink(`/crop/${sub.id}`)}
                             className="group block rounded-xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden hover:shadow-lg hover:border-emerald-400 dark:hover:border-emerald-400 hover:-translate-y-0.5 hover:bg-emerald-50/80 dark:hover:bg-emerald-950/40 transition-all duration-300"
                           >
-                            <div className="relative overflow-hidden">
+                            <div className="relative">
                               {sub.image_url ? (
-                                <img src={sub.image_url} alt={sub.title} className="w-full h-32 object-cover object-center transition-transform duration-500 group-hover:scale-105" />
+                                <img src={sub.image_url} alt={sub.title} className="w-full h-32 object-contain mt-2 mb-2 rounded-[20px] bg-emerald-50/30 dark:bg-emerald-950 transition-transform duration-500 group-hover:scale-105" />
                               ) : (
                                 <div className="w-full h-32 flex items-center justify-center bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-950/30 dark:to-green-950/30">
                                   <Sprout size={32} className="text-emerald-400" />
@@ -201,9 +201,9 @@ export default function CropDetail() {
                   to={authLink(`/crop/${sub.id}`)}
                   className="group block h-full rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden hover:shadow-xl hover:border-emerald-400 dark:hover:border-emerald-400 hover:-translate-y-1 hover:bg-emerald-50/80 dark:hover:bg-emerald-950/40 transition-all duration-300"
                 >
-                  <div className="relative overflow-hidden">
+                  <div className="relative">
                     {sub.image_url ? (
-                      <img src={sub.image_url} alt={sub.title} className="w-full h-36 object-cover object-center transition-transform duration-500 group-hover:scale-105" />
+                      <img src={sub.image_url} alt={sub.title} className="w-full h-36 object-contain mt-2 mb-2 rounded-[20px] bg-emerald-50/30 dark:bg-emerald-950 transition-transform duration-500 group-hover:scale-105" />
                     ) : (
                       <div className="w-full h-36 flex items-center justify-center bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-950/30 dark:to-green-950/30">
                         <Sprout size={36} className="text-emerald-400" />

@@ -367,6 +367,42 @@ const api = {
     },
     deleteReply: (replyId, userId) => request(`/community/replies/${replyId}?user_id=${encodeURIComponent(userId)}`, { method: 'DELETE' }),
   },
+  shops: {
+    register: (data) => {
+      const fd = new FormData();
+      fd.append('name', data.name);
+      if (data.email) fd.append('email', data.email);
+      if (data.phone) fd.append('phone', data.phone);
+      fd.append('shop_name', data.shop_name);
+      if (data.description) fd.append('description', data.description);
+      if (data.address) fd.append('address', data.address);
+      if (data.latitude) fd.append('latitude', data.latitude);
+      if (data.longitude) fd.append('longitude', data.longitude);
+      if (data.shop_phone) fd.append('shop_phone', data.shop_phone);
+      if (data.photo) fd.append('photo', data.photo);
+      return request('/auth/register-shop', { method: 'POST', body: fd, headers: {} });
+    },
+    nearby: (lat, lng) => request(`/shops/nearby?lat=${lat}&lng=${lng}`),
+    detail: (id) => request(`/shops/${id}`),
+    myShop: (userId) => request(`/my-shop?user_id=${encodeURIComponent(userId)}`),
+    update: (data) => {
+      const fd = new FormData();
+      fd.append('user_id', data.user_id);
+      if (data.shop_name) fd.append('shop_name', data.shop_name);
+      if (data.description) fd.append('description', data.description);
+      if (data.address) fd.append('address', data.address);
+      if (data.latitude) fd.append('latitude', data.latitude);
+      if (data.longitude) fd.append('longitude', data.longitude);
+      if (data.shop_phone) fd.append('shop_phone', data.shop_phone);
+      if (data.photo) fd.append('photo', data.photo);
+      return request('/my-shop/update', { method: 'POST', body: fd, headers: {} });
+    },
+    admin: {
+      list: () => adminRequest('/admin/shops'),
+      approve: (id) => adminRequest(`/admin/shops/${id}/approve`, { method: 'POST' }),
+      reject: (id) => adminRequest(`/admin/shops/${id}/reject`, { method: 'POST' }),
+    },
+  },
 };
 
 export default api;

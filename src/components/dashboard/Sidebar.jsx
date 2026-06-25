@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Bug, Leaf, Apple, FileText, User, LogOut,
-  ChevronLeft, ChevronRight, Sprout, X, Camera, History, Coins, Key, Code, Droplets, MessageSquare
+  ChevronLeft, ChevronRight, Sprout, X, Camera, History, Coins, Key, Code, Droplets, MessageSquare, Store
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { ROUTES } from '../../constants';
@@ -14,6 +14,7 @@ const menuItems = [
   { label: 'Wallet', path: '/wallet', icon: Coins },
   { label: 'My Plants', path: '/my-plants', icon: Droplets },
   { label: 'Community', path: '/community', icon: MessageSquare },
+  { label: 'My Shop', path: '/my-shop', icon: Store },
   { label: 'Profile', path: '/profile', icon: User },
   { label: 'API Keys', path: '/dashboard/api-keys', icon: Key },
   { label: 'Developer', path: '/dashboard/developer', icon: Code },
