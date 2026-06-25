@@ -331,7 +331,6 @@ export default function Community() {
               </div>
             </div>
           )}
-          </div>
         </div>
       </main>
     </div>
