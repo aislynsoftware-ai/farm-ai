@@ -32,7 +32,7 @@ export default function Login() {
     setLoading(true);
     try {
       const payload = tab === 'email' ? email.trim() : phone.trim();
-      const res = await api.auth.login(payload);
+      const res = await api.auth.login(payload, tab === 'phone');
       if (res.user_id) sessionStorage.setItem('pending_user_id', res.user_id);
       if (res.name || res.email) {
         sessionStorage.setItem('pending_user', JSON.stringify({
