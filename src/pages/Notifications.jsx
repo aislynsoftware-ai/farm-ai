@@ -1,0 +1,170 @@
+import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
+import { Lightbulb, Sparkles, Sun, CloudRain, Bell, ChevronRight, AlertTriangle, Snowflake, Droplets, X, Loader } from 'lucide-react';
+import api from '../services/api';
+import Skeleton from '../components/common/Skeleton';
+import SEO from '../components/common/SEO';
+
+const tipCategories = [
+  { key: 'tip_of_day', label: 'Tip of the Day', icon: Lightbulb },
+  { key: 'plant_hack', label: 'Plant Hacks', icon: Sparkles },
+  { key: 'seasonal', label: 'Seasonal Alerts', icon: Sun },
+];
+
+const tipIcons = { tip_of_day: Lightbulb, plant_hack: Sparkles, seasonal: Sun };
+
+const weatherIcons = { 'cloud-rain': CloudRain, 'sun': Sun, 'snowflake': Snowflake, 'droplets': Droplets };
+
+const tabs = [
+  { key: 'tips', label: 'Daily Tips', icon: Lightbulb },
+  { key: 'weather', label: 'Weather Alerts', icon: CloudRain },
+];
+
+export default function Notifications() {
+  const [tab, setTab] = useState('tips');
+  const [tips, setTips] = useState([]);
+  const [tipsLoading, setTipsLoading] = useState(true);
+  const [tipCategory, setTipCategory] = useState('');
+  const [weather, setWeather] = useState(null);
+  const [weatherLoading, setWeatherLoading] = useState(false);
+  const [weatherError, setWeatherError] = useState('');
+
+  useEffect(() => {
+    if (tab !== 'tips') return;
+    setTipsLoading(true);
+    api.dailyTips.list(tipCategory || undefined)
+      .then(setTips)
+      .catch(() => setTips([]))
+      .finally(() => setTipsLoading(false));
+  }, [tab, tipCategory]);
+
+  const fetchWeather = () => {
+    if (!navigator.geolocation) { setWeatherError('Location not available'); return; }
+    setWeatherLoading(true);
+    setWeatherError('');
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        api.weather.alert(pos.coords.latitude, pos.coords.longitude)
+          .then((data) => {
+            if (data?.alerts?.length) setWeather(data);
+            else setWeatherError('No weather alerts for your area');
+          })
+          .catch(() => setWeatherError('Failed to fetch weather'))
+          .finally(() => setWeatherLoading(false));
+      },
+      () => { setWeatherError('Location access denied'); setWeatherLoading(false); },
+      { timeout: 5000 }
+    );
+  };
+
+  useEffect(() => {
+    if (tab === 'weather') fetchWeather();
+  }, [tab]);
+
+  return (
+    <main className="min-h-screen bg-gray-50 dark:bg-gray-900 mt-14">
+      <SEO title="Notifications" description="Daily farming tips, plant care hacks, and weather alerts." url="/notifications" />
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <div className="flex items-center gap-2 mb-1">
+          <div className="w-1 h-6 rounded-full bg-emerald-500" />
+          <h1 className="text-lg font-bold text-gray-900 dark:text-white">Notifications</h1>
+        </div>
+        <p className="text-xs text-gray-500 dark:text-gray-400 mb-6">Daily tips, plant hacks, seasonal alerts, and weather-based warnings.</p>
+
+        <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
+          {tabs.map((t) => (
+            <button key={t.key} onClick={() => setTab(t.key)} className={`shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-medium transition-colors cursor-pointer ${tab === t.key ? 'bg-emerald-600 text-white shadow-md' : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-gray-700 hover:bg-emerald-50 dark:hover:bg-emerald-950/30'}`}>
+              <t.icon size={14} />
+              {t.label}
+            </button>
+          ))}
+        </div>
+
+        {tab === 'tips' && (
+          <>
+            <div className="flex gap-2 mb-4 overflow-x-auto pb-1">
+              <button onClick={() => setTipCategory('')} className={`shrink-0 px-3 py-1.5 rounded-lg text-[11px] font-medium transition-colors cursor-pointer ${!tipCategory ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400' : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:bg-emerald-50 dark:hover:bg-emerald-950/30'}`}>All</button>
+              {tipCategories.map((c) => (
+                <button key={c.key} onClick={() => setTipCategory(c.key)} className={`shrink-0 flex items-center gap-1 px-3 py-1.5 rounded-lg text-[11px] font-medium transition-colors cursor-pointer ${tipCategory === c.key ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400' : 'bg-white dark:bg-gray-800 text-gray-500 dark:text-gray-400 border border-gray-200 dark:border-gray-700 hover:bg-emerald-50 dark:hover:bg-emerald-950/30'}`}>
+                  <c.icon size={12} /> {c.label}
+                </button>
+              ))}
+            </div>
+
+            {tipsLoading ? (
+              <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-4"><Skeleton className="w-24 h-3 mb-2" /><Skeleton className="w-3/4 h-4 mb-2" /><Skeleton className="w-full h-3" /></div>)}</div>
+            ) : tips.length === 0 ? (
+              <div className="text-center py-16"><Lightbulb size={40} className="text-gray-300 dark:text-gray-600 mx-auto mb-3" /><p className="text-sm text-gray-500 dark:text-gray-400">No tips found</p></div>
+            ) : (
+              <div className="space-y-3">
+                {tips.map((tip, i) => {
+                  const Icon = tipIcons[tip.category] || Lightbulb;
+                  return (
+                    <motion.div key={tip.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: i * 0.04 }} className="rounded-2xl bg-white dark:bg-gray-800 border border-emerald-200 dark:border-emerald-700 overflow-hidden hover:shadow-md transition-shadow">
+                      <div className="p-4">
+                        <div className="flex items-start gap-3">
+                          <div className="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-950/40 flex items-center justify-center shrink-0 mt-0.5"><Icon size={16} className="text-emerald-600 dark:text-emerald-400" /></div>
+                          <div className="flex-1 min-w-0">
+                            <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-medium mb-1.5 ${tip.category === 'tip_of_day' ? 'bg-amber-100 dark:bg-amber-950/40 text-amber-700 dark:text-amber-400' : tip.category === 'plant_hack' ? 'bg-purple-100 dark:bg-purple-950/40 text-purple-700 dark:text-purple-400' : 'bg-blue-100 dark:bg-blue-950/40 text-blue-700 dark:text-blue-400'}`}>
+                              {tip.category === 'tip_of_day' ? 'Tip of the Day' : tip.category === 'plant_hack' ? 'Plant Hack' : 'Seasonal Alert'}
+                            </span>
+                            <h3 className="text-sm font-bold text-gray-900 dark:text-white">{tip.title}</h3>
+                            {tip.content && <p className="text-xs text-gray-600 dark:text-gray-400 mt-1">{tip.content}</p>}
+                          </div>
+                          <ChevronRight size={16} className="text-gray-300 dark:text-gray-600 shrink-0 mt-1" />
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            )}
+          </>
+        )}
+
+        {tab === 'weather' && (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <p className="text-xs text-gray-500 dark:text-gray-400">Auto-detects your location to show relevant weather alerts for your plants.</p>
+              <button onClick={fetchWeather} disabled={weatherLoading} className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 text-[11px] font-medium hover:bg-emerald-200 dark:hover:bg-emerald-800 transition-colors cursor-pointer disabled:opacity-50">
+                {weatherLoading ? <Loader size={12} className="animate-spin" /> : <CloudRain size={12} />}
+                Refresh
+              </button>
+            </div>
+
+            {weatherLoading ? (
+              <div className="rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 text-center"><Loader size={20} className="animate-spin text-emerald-500 mx-auto" /><p className="text-xs text-gray-400 mt-2">Checking weather...</p></div>
+            ) : weatherError ? (
+              <div className="rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 text-center">
+                <Sun size={32} className="text-gray-300 dark:text-gray-600 mx-auto mb-2" />
+                <p className="text-sm text-gray-500 dark:text-gray-400">{weatherError}</p>
+              </div>
+            ) : weather ? (
+              <div className="space-y-3">
+                <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mb-1">
+                  <Sun size={12} /> {weather.location} · {weather.temp}°C · Humidity {weather.humidity}%
+                </div>
+                {weather.alerts.map((a, i) => {
+                  const Icon = weatherIcons[a.icon] || AlertTriangle;
+                  return (
+                    <div key={i} className={`rounded-2xl border p-4 ${a.type === 'rain' ? 'bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800' : a.type === 'heat' ? 'bg-orange-50 dark:bg-orange-950/30 border-orange-200 dark:border-orange-800' : a.type === 'cold' ? 'bg-cyan-50 dark:bg-cyan-950/30 border-cyan-200 dark:border-cyan-800' : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700'}`}>
+                      <div className="flex items-start gap-3">
+                        <Icon size={20} className={`shrink-0 mt-0.5 ${a.type === 'rain' ? 'text-blue-500' : a.type === 'heat' ? 'text-orange-500' : a.type === 'cold' ? 'text-cyan-500' : 'text-gray-500'}`} />
+                        <p className="text-sm text-gray-700 dark:text-gray-300">{a.message}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 text-center">
+                <Bell size={28} className="text-gray-300 dark:text-gray-600 mx-auto mb-2" />
+                <p className="text-sm text-gray-500 dark:text-gray-400">No weather alerts at this time</p>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+    </main>
+  );
+}
