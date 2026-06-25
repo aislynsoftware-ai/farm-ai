@@ -423,8 +423,29 @@ const api = {
     detail: (id) => request(`/plant-recommendations/${id}`),
     admin: {
       list: () => adminRequest('/admin/plant-recommendations'),
-      add: (data) => adminRequest('/admin/plant-recommendations/add', { method: 'POST', body: JSON.stringify(data), headers: {'Content-Type': 'application/json'} }),
-      update: (id, data) => adminRequest(`/admin/plant-recommendations/${id}`, { method: 'PUT', body: JSON.stringify(data), headers: {'Content-Type': 'application/json'} }),
+      add: (data) => {
+        const fd = new FormData();
+        fd.append('category', data.category);
+        fd.append('plant_name', data.plant_name);
+        if (data.scientific_name) fd.append('scientific_name', data.scientific_name);
+        if (data.description) fd.append('description', data.description);
+        if (data.benefits) fd.append('benefits', data.benefits);
+        if (data.care_tips) fd.append('care_tips', data.care_tips);
+        if (data.image) fd.append('image', data.image);
+        return adminRequest('/admin/plant-recommendations/add', { method: 'POST', body: fd, headers: {} });
+      },
+      update: (id, data) => {
+        const fd = new FormData();
+        fd.append('category', data.category);
+        fd.append('plant_name', data.plant_name);
+        if (data.scientific_name) fd.append('scientific_name', data.scientific_name);
+        if (data.description) fd.append('description', data.description);
+        if (data.benefits) fd.append('benefits', data.benefits);
+        if (data.care_tips) fd.append('care_tips', data.care_tips);
+        if (data.image_url) fd.append('image_url', data.image_url);
+        if (data.image) fd.append('image', data.image);
+        return adminRequest(`/admin/plant-recommendations/${id}`, { method: 'PUT', body: fd, headers: {} });
+      },
       delete: (id) => adminRequest(`/admin/plant-recommendations/${id}`, { method: 'DELETE' }),
     },
   },

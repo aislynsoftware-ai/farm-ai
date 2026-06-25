@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit3, Trash2, X, Leaf } from 'lucide-react';
+import { Plus, Edit3, Trash2, X, Leaf, Image } from 'lucide-react';
 import api from '../services/api';
 
 export default function AdminPlantRecommendationsPage() {
@@ -7,7 +7,7 @@ export default function AdminPlantRecommendationsPage() {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [edit, setEdit] = useState(null);
-  const [form, setForm] = useState({ category: '', plant_name: '', scientific_name: '', description: '', benefits: '', care_tips: '', image_url: '' });
+  const [form, setForm] = useState({ category: '', plant_name: '', scientific_name: '', description: '', benefits: '', care_tips: '', image: null, image_url: '' });
 
   const fetch = () => {
     setLoading(true);
@@ -16,8 +16,8 @@ export default function AdminPlantRecommendationsPage() {
 
   useEffect(() => { fetch(); }, []);
 
-  const openAdd = () => { setEdit(null); setForm({ category: '', plant_name: '', scientific_name: '', description: '', benefits: '', care_tips: '', image_url: '' }); setShowModal(true); };
-  const openEdit = (p) => { setEdit(p); setForm({ category: p.category, plant_name: p.plant_name, scientific_name: p.scientific_name || '', description: p.description || '', benefits: p.benefits || '', care_tips: p.care_tips || '', image_url: p.image_url || '' }); setShowModal(true); };
+  const openAdd = () => { setEdit(null); setForm({ category: '', plant_name: '', scientific_name: '', description: '', benefits: '', care_tips: '', image: null, image_url: '' }); setShowModal(true); };
+  const openEdit = (p) => { setEdit(p); setForm({ category: p.category, plant_name: p.plant_name, scientific_name: p.scientific_name || '', description: p.description || '', benefits: p.benefits || '', care_tips: p.care_tips || '', image: null, image_url: p.image_url || '' }); setShowModal(true); };
 
   const handleSave = async () => {
     if (!form.category.trim() || !form.plant_name.trim()) return;
@@ -82,7 +82,15 @@ export default function AdminPlantRecommendationsPage() {
               <textarea value={form.description} onChange={(e) => setForm(p => ({ ...p, description: e.target.value }))} placeholder="Description" rows={2} className={`${inputClass} resize-none`} />
               <textarea value={form.benefits} onChange={(e) => setForm(p => ({ ...p, benefits: e.target.value }))} placeholder="Benefits (comma separated or short text)" rows={2} className={`${inputClass} resize-none`} />
               <textarea value={form.care_tips} onChange={(e) => setForm(p => ({ ...p, care_tips: e.target.value }))} placeholder="Care tips (comma separated or short text)" rows={2} className={`${inputClass} resize-none`} />
-              <input value={form.image_url} onChange={(e) => setForm(p => ({ ...p, image_url: e.target.value }))} placeholder="Image URL (optional)" className={inputClass} />
+              <div>
+                <label className="flex items-center gap-2 px-3 py-2 rounded-lg border border-dashed border-gray-300 dark:border-gray-600 text-xs text-gray-500 hover:border-emerald-400 cursor-pointer">
+                  <Image size={14} className="text-emerald-500" />
+                  {form.image ? form.image.name : form.image_url ? 'Change image' : 'Upload plant image'}
+                  <input type="file" accept="image/*" onChange={(e) => setForm(p => ({ ...p, image: e.target.files[0] || null }))} className="hidden" />
+                </label>
+                {form.image && <p className="text-[10px] text-emerald-600 mt-1">{form.image.name}</p>}
+                {form.image_url && !form.image && <p className="text-[10px] text-gray-400 mt-1">Current: {form.image_url.split('/').pop()}</p>}
+              </div>
               <button onClick={handleSave} className="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium cursor-pointer">
                 {edit ? 'Update' : 'Add'} Plant
               </button>
