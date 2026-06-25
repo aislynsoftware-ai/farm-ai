@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Plus, Edit3, Trash2, X, Leaf, Image } from 'lucide-react';
+import Skeleton from '../components/common/Skeleton';
 import api from '../services/api';
 
 export default function AdminPlantRecommendationsPage() {
@@ -9,7 +10,7 @@ export default function AdminPlantRecommendationsPage() {
   const [edit, setEdit] = useState(null);
   const [form, setForm] = useState({ category: '', plant_name: '', scientific_name: '', description: '', benefits: '', care_tips: '', image: null, image_url: '' });
 
-  const fetch = () => { api.plantRecs.admin.list().then(setPlants).catch(() => {}); };
+  const fetch = () => { setLoading(true); api.plantRecs.admin.list().then(setPlants).catch(() => {}).finally(() => setLoading(false)); };
 
   useEffect(() => { fetch(); }, []);
 
@@ -41,7 +42,9 @@ export default function AdminPlantRecommendationsPage() {
         </button>
       </div>
 
-      {plants.length === 0 ? (
+      {loading ? (
+        <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-4"><Skeleton className="w-24 h-3 mb-2" /><Skeleton className="w-3/4 h-4 mb-2" /><Skeleton className="w-full h-3" /></div>)}</div>
+      ) : plants.length === 0 ? (
         <p className="text-xs text-gray-400">No plants yet.</p>
       ) : (
         <div className="space-y-2">
