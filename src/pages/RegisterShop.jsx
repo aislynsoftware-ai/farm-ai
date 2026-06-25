@@ -1,27 +1,35 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Store, MapPin, Phone, Mail, Image, Loader, CheckCircle } from 'lucide-react';
+import { Store, MapPin, Phone, Mail, Image, Loader, CheckCircle, AlertCircle } from 'lucide-react';
 import api from '../services/api';
 
 export default function RegisterShop() {
   const navigate = useNavigate();
+  const [user, setUser] = useState(null);
   const [form, setForm] = useState({
-    name: '', email: '', phone: '', shop_name: '', description: '',
+    shop_name: '', description: '',
     address: '', latitude: '', longitude: '', shop_phone: '', photo: null,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [done, setDone] = useState(false);
 
+  useEffect(() => {
+    const u = localStorage.getItem('user');
+    const t = localStorage.getItem('token');
+    if (!u || !t) { navigate('/login'); return; }
+    try { setUser(JSON.parse(u)); } catch { navigate('/login'); }
+  }, [navigate]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!form.shop_name) { setError('Shop name is required'); return; }
-    if (!form.name) { setError('Your name is required'); return; }
     setLoading(true); setError('');
     try {
-      const res = await api.shops.register(form);
-      localStorage.setItem('token', res.token);
-      localStorage.setItem('user', JSON.stringify({ user_id: res.user_id, name: form.name, role: 'shop_owner' }));
+      await api.shops.register(form);
+      const updatedUser = JSON.parse(localStorage.getItem('user') || '{}');
+      updatedUser.role = 'shop_owner';
+      localStorage.setItem('user', JSON.stringify(updatedUser));
       setDone(true);
       setTimeout(() => navigate('/my-shop'), 2000);
     } catch (err) { setError(err.message); }
@@ -60,21 +68,18 @@ export default function RegisterShop() {
         <form onSubmit={handleSubmit} className="space-y-4 bg-white dark:bg-gray-800 rounded-2xl border border-emerald-200 dark:border-emerald-700 p-6">
           {error && <p className="text-xs text-red-500 bg-red-50 dark:bg-red-900/30 p-2 rounded-lg">{error}</p>}
 
-          <div>
-            <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">Your Name *</label>
-            <input value={form.name} onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))} placeholder="John Doe" className={inputClass} />
-          </div>
-
-          <div className="flex gap-3">
-            <div className="flex-1">
-              <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1"><Mail size={12} className="inline mr-1" />Email</label>
-              <input type="email" value={form.email} onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))} placeholder="shop@example.com" className={inputClass} />
+          {user && (
+            <div className="flex items-center gap-3 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-700">
+              <div className="w-10 h-10 rounded-full bg-emerald-200 dark:bg-emerald-800 flex items-center justify-center text-emerald-700 dark:text-emerald-400 font-bold text-sm">
+                {user.name?.charAt(0)?.toUpperCase() || 'U'}
+              </div>
+              <div>
+                <p className="text-sm font-semibold text-gray-900 dark:text-white">{user.name || 'User'}</p>
+                <p className="text-[11px] text-gray-500 dark:text-gray-400">{user.email || user.phone || ''}</p>
+              </div>
+              <CheckCircle size={16} className="text-emerald-500 ml-auto shrink-0" />
             </div>
-            <div className="flex-1">
-              <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1"><Phone size={12} className="inline mr-1" />Phone</label>
-              <input value={form.phone} onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))} placeholder="+91 9876543210" className={inputClass} />
-            </div>
-          </div>
+          )}
 
           <div>
             <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1"><Store size={12} className="inline mr-1" />Shop Name *</label>
