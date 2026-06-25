@@ -85,7 +85,17 @@ export default function Register() {
   const getLocation = () => {
     if (!navigator.geolocation) { setApiError('Geolocation not supported'); return; }
     navigator.geolocation.getCurrentPosition(
-      (pos) => setForm((p) => ({ ...p, latitude: pos.coords.latitude, longitude: pos.coords.longitude })),
+      async (pos) => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        try {
+          const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`, { headers: { 'User-Agent': 'FarmlytAI/1.0' } });
+          const data = await res.json();
+          setForm((p) => ({ ...p, address: data.display_name || '', latitude: lat, longitude: lng }));
+        } catch {
+          setForm((p) => ({ ...p, latitude: lat, longitude: lng }));
+        }
+      },
       () => setApiError('Could not get location')
     );
   };
