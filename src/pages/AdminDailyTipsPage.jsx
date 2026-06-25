@@ -14,14 +14,14 @@ export default function AdminDailyTipsPage() {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [edit, setEdit] = useState(null);
-  const [form, setForm] = useState({ category: 'tip_of_day', title: '', content: '', image_url: '' });
+  const [form, setForm] = useState({ category: 'tip_of_day', title: '', content: '' });
 
   const fetchTips = () => { setLoading(true); api.dailyTips.admin.list().then(setTips).catch(() => {}).finally(() => setLoading(false)); };
 
   useEffect(() => { fetchTips(); }, []);
 
-  const openAdd = () => { setEdit(null); setForm({ category: 'tip_of_day', title: '', content: '', image_url: '' }); setShowModal(true); };
-  const openEdit = (tip) => { setEdit(tip); setForm({ category: tip.category, title: tip.title, content: tip.content || '', image_url: tip.image_url || '' }); setShowModal(true); };
+  const openAdd = () => { setEdit(null); setForm({ category: 'tip_of_day', title: '', content: '' }); setShowModal(true); };
+  const openEdit = (tip) => { setEdit(tip); setForm({ category: tip.category, title: tip.title, content: tip.content || '' }); setShowModal(true); };
 
   const handleSave = async () => {
     if (!form.title.trim()) return;
@@ -93,7 +93,6 @@ export default function AdminDailyTipsPage() {
               </select>
               <input value={form.title} onChange={(e) => setForm(p => ({ ...p, title: e.target.value }))} placeholder="Title" className="w-full px-3 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-xs text-gray-900 dark:text-white outline-none" />
               <textarea value={form.content} onChange={(e) => setForm(p => ({ ...p, content: e.target.value }))} placeholder="Content" rows={3} className="w-full px-3 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-xs text-gray-900 dark:text-white outline-none resize-none" />
-              <input value={form.image_url} onChange={(e) => setForm(p => ({ ...p, image_url: e.target.value }))} placeholder="Image URL (optional)" className="w-full px-3 py-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-xs text-gray-900 dark:text-white outline-none" />
               <button onClick={handleSave} className="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium transition-colors cursor-pointer">
                 {edit ? 'Update' : 'Add'} Tip
               </button>
