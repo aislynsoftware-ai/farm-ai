@@ -57,7 +57,7 @@ function useRecorder(type) {
   return { recording, blob, url, start, stop, reset };
 }
 
-function RecorderButton({ type, blob, url, recording, onStart, onStop, onReset }) {
+function RecorderButton({ type, blob, url, recording, start: onStart, stop: onStop, reset: onReset }) {
   return (
     <div className="flex items-center gap-2">
       {!recording && !blob && (
