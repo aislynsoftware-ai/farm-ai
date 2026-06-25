@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Lightbulb, Sparkles, Sun, CloudRain, Bell, ChevronRight, AlertTriangle, Snowflake, Droplets, X, Loader } from 'lucide-react';
+import { Menu, Lightbulb, Sparkles, Sun, CloudRain, Bell, ChevronRight, AlertTriangle, Snowflake, Droplets, X, Loader } from 'lucide-react';
 import api from '../services/api';
 import Skeleton from '../components/common/Skeleton';
 import SEO from '../components/common/SEO';
+import Sidebar from '../components/dashboard/Sidebar';
 
 const tipCategories = [
   { key: 'tip_of_day', label: 'Tip of the Day', icon: Lightbulb },
@@ -21,6 +22,7 @@ const tabs = [
 ];
 
 export default function Notifications() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [tab, setTab] = useState('tips');
   const [tips, setTips] = useState([]);
   const [tipsLoading, setTipsLoading] = useState(true);
@@ -62,9 +64,15 @@ export default function Notifications() {
   }, [tab]);
 
   return (
-    <main className="min-h-screen bg-gray-50 dark:bg-gray-900 mt-14">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
+      <button onClick={() => setSidebarOpen(true)} className="lg:hidden fixed top-20 left-4 z-40 p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg cursor-pointer">
+        <Menu size={18} className="text-gray-700 dark:text-gray-300" />
+      </button>
+      <Sidebar mobileOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <main className="flex-1 overflow-x-hidden mt-14">
+
       <SEO title="Notifications" description="Daily farming tips, plant care hacks, and weather alerts." url="/notifications" />
-      <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="p-4 lg:p-6 space-y-5 max-w-7xl mx-auto">
         <div className="flex items-center gap-2 mb-1">
           <div className="w-1 h-6 rounded-full bg-emerald-500" />
           <h1 className="text-lg font-bold text-gray-900 dark:text-white">Notifications</h1>
@@ -165,6 +173,7 @@ export default function Notifications() {
           </div>
         )}
       </div>
-    </main>
+      </main>
+    </div>
   );
 }

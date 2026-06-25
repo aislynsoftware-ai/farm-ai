@@ -93,6 +93,7 @@ export default function createAppRouter(isDark, toggleTheme) {
         { path: 'api-docs', element: <ApiDocs /> },
         { path: 'enterprise', element: <Enterprise /> },
         { path: 'plan-checkout', element: <PlanCheckout /> },
+        { path: 'register-shop', element: <RegisterShop /> },
       ],
     },
     {
@@ -130,10 +131,6 @@ export default function createAppRouter(isDark, toggleTheme) {
     {
       path: '/notifications',
       element: <Notifications />,
-    },
-    {
-      path: '/register-shop',
-      element: <RegisterShop />,
     },
     {
       path: '/my-shop',
