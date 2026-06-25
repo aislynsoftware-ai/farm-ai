@@ -16,6 +16,7 @@ export default function RegisterShop() {
   const [done, setDone] = useState(false);
   const [citySuggestions, setCitySuggestions] = useState([]);
   const [cityLoading, setCityLoading] = useState(false);
+  const [gpsError, setGpsError] = useState('');
 
   useEffect(() => {
     if (!form.city || form.city.length < 2) { setCitySuggestions([]); return; }
@@ -52,10 +53,19 @@ export default function RegisterShop() {
   };
 
   const getLocation = () => {
-    if (!navigator.geolocation) { alert('Geolocation not supported'); return; }
+    setGpsError('');
+    if (!navigator.geolocation) { setGpsError('Geolocation not supported in this browser'); return; }
     navigator.geolocation.getCurrentPosition(
-      (pos) => setForm((p) => ({ ...p, latitude: pos.coords.latitude, longitude: pos.coords.longitude })),
-      () => alert('Could not get location')
+      (pos) => { setForm((p) => ({ ...p, latitude: pos.coords.latitude, longitude: pos.coords.longitude })); setGpsError(''); },
+      (err) => {
+        const msgs = {
+          1: 'Permission denied — allow location access in browser settings',
+          2: 'Location unavailable — try again or search city instead',
+          3: 'GPS request timed out — try again',
+        };
+        setGpsError(msgs[err.code] || 'Could not get location');
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
     );
   };
 
@@ -131,6 +141,7 @@ export default function RegisterShop() {
               )}
             </div>
             <button type="button" onClick={getLocation} className="mt-2 w-full px-3 py-2 rounded-lg bg-emerald-600 text-white text-xs hover:bg-emerald-500 cursor-pointer"><MapPin size={12} className="inline mr-1" />Use Current Location (GPS)</button>
+            {gpsError && <p className="text-xs text-red-500 mt-1">{gpsError}</p>}
           </div>
 
           <div>
