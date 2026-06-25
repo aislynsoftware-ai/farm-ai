@@ -119,29 +119,20 @@ export default function RegisterShop() {
           </div>
 
           <div className="relative">
-            <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1"><MapPin size={12} className="inline mr-1" />Address (type to get coordinates)</label>
+            <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1"><MapPin size={12} className="inline mr-1" />Address (type to get location)</label>
             <textarea value={form.address} onChange={(e) => setForm((p) => ({ ...p, address: e.target.value }))} placeholder="Full address, village, street or landmark..." rows={2} className={`${inputClass} resize-none`} />
             {coordsLoading && <Loader size={14} className="absolute right-3 top-8 animate-spin text-gray-400" />}
             {coordsSuggestions.length > 0 && (
               <div className="absolute z-10 top-full mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg overflow-hidden">
                 {coordsSuggestions.map((c, i) => (
                   <button type="button" key={i} onClick={() => selectSuggestion(c)}
-                    className="w-full text-left px-3 py-2 text-xs text-gray-700 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 cursor-pointer border-b border-gray-100 dark:border-gray-700 last:border-0 flex items-center justify-between">
-                    <span>{c.name}{c.state ? `, ${c.state}` : ''}, {c.country}</span>
-                    <span className="text-gray-400 text-[10px]">{c.lat.toFixed(4)}, {c.lon.toFixed(4)}</span>
+                    className="w-full text-left px-3 py-2 text-xs text-gray-700 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 cursor-pointer border-b border-gray-100 dark:border-gray-700 last:border-0">
+                    {c.name}{c.state ? `, ${c.state}` : ''}, {c.country}
                   </button>
                 ))}
               </div>
             )}
-            {form.latitude && form.longitude && (
-              <p className="text-[10px] text-emerald-600 mt-1">
-                Coordinates set: {parseFloat(form.latitude).toFixed(4)}, {parseFloat(form.longitude).toFixed(4)}
-              </p>
-            )}
-            <div className="flex gap-2 mt-2">
-              <button type="button" onClick={getLocation} className="flex-1 px-3 py-2 rounded-lg bg-emerald-600 text-white text-xs hover:bg-emerald-500 cursor-pointer"><MapPin size={12} className="inline mr-1" />Use GPS</button>
-              <button type="button" onClick={() => setForm((p) => ({ ...p, latitude: '', longitude: '' }))} className="px-3 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400 text-xs hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer">Clear</button>
-            </div>
+            <button type="button" onClick={getLocation} className="mt-1.5 text-[11px] text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer"><MapPin size={10} className="inline mr-0.5" />Use GPS</button>
             {gpsError && <p className="text-xs text-red-500 mt-1">{gpsError}</p>}
           </div>
 
