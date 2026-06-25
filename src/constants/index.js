@@ -66,7 +66,6 @@ export const NAV_LINKS = [
       { label: 'Enterprise', path: ROUTES.ENTERPRISE },
       { label: 'API Docs', path: ROUTES.API_DOCS },
       { label: 'Developers', path: ROUTES.DEVELOPERS },
-      { label: 'Register as a Shop', path: ROUTES.REGISTER_SHOP },
     ],
   },
   { label: 'Contact', path: ROUTES.CONTACT },
