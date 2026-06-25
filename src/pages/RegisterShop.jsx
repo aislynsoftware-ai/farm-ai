@@ -85,23 +85,23 @@ export default function RegisterShop() {
         </div>
           <div>
             <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">Your Name *</label>
-            <input value={form.name} onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))} placeholder="John Doe" className={inputClass} />
+            <input value={form.name} onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))} placeholder="Enter your name" className={inputClass} />
           </div>
 
           <div className="flex gap-3">
             <div className="flex-1">
               <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1"><Mail size={12} className="inline mr-1" />Email</label>
-              <input type="email" value={form.email} onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))} placeholder="shop@example.com" className={inputClass} />
+              <input type="email" value={form.email} onChange={(e) => setForm((p) => ({ ...p, email: e.target.value }))} placeholder="Enter your email" className={inputClass} />
             </div>
             <div className="flex-1">
               <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1"><Phone size={12} className="inline mr-1" />Phone</label>
-              <input value={form.phone} onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))} placeholder="+91 9876543210" className={inputClass} />
+              <input value={form.phone} onChange={(e) => setForm((p) => ({ ...p, phone: e.target.value }))} placeholder="Enter your phone number" className={inputClass} />
             </div>
           </div>
 
           <div>
             <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1"><Store size={12} className="inline mr-1" />Shop Name *</label>
-            <input value={form.shop_name} onChange={(e) => setForm((p) => ({ ...p, shop_name: e.target.value }))} placeholder="Green Fertilizers" className={inputClass} />
+            <input value={form.shop_name} onChange={(e) => setForm((p) => ({ ...p, shop_name: e.target.value }))} placeholder="Enter your shop name" className={inputClass} />
           </div>
 
           <div>
