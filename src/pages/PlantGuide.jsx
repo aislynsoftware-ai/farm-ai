@@ -48,6 +48,9 @@ export default function PlantGuide() {
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {plants.map((p) => (
               <div key={p.id} className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+                {p.image_url && (
+                  <img src={p.image_url} alt={p.plant_name} className="w-full h-36 object-cover" />
+                )}
                 <div className="p-4">
                   <h3 className="text-sm font-bold text-gray-900 dark:text-white">{p.plant_name}</h3>
                   {p.scientific_name && <p className="text-[11px] text-gray-400 italic mt-0.5">{p.scientific_name}</p>}

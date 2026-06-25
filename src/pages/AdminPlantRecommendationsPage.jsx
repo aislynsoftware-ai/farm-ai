@@ -50,8 +50,8 @@ export default function AdminPlantRecommendationsPage() {
         <div className="space-y-2">
           {plants.map((p) => (
             <div key={p.id} className="flex items-start gap-3 p-3 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-              <div className="w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-950/40 flex items-center justify-center shrink-0">
-                <Leaf size={18} className="text-emerald-600" />
+              <div className="w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-950/40 flex items-center justify-center shrink-0 overflow-hidden">
+                {p.image_url ? <img src={p.image_url} alt="" className="w-full h-full object-cover" /> : <Leaf size={18} className="text-emerald-600" />}
               </div>
               <div className="flex-1 min-w-0">
                 <span className="inline-block px-2 py-0.5 rounded-full text-[10px] font-medium bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300 mb-1">{p.category}</span>
