@@ -240,7 +240,7 @@ export default function Community() {
     if (!user) return alert('Login required');
     setCreating(true);
     try {
-      const data = { title: form.title, content: form.content, image: form.image, video: form.video, voice: form.voice };
+      const data = { title: form.title, content: form.content, image: form.image, video: postVideoRecorder?.blob, voice: postVoiceRecorder?.blob };
       await api.community.addPost(user.user_id, data);
       setShowCreate(false);
       setForm({ title: '', content: '', image: null, video: null, voice: null });
