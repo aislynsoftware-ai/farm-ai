@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Plus, Edit3, Trash2, X, Lightbulb, Sparkles, Sun } from 'lucide-react';
+import Skeleton from '../components/common/Skeleton';
 import api from '../services/api';
 
 const categories = [
@@ -15,7 +16,7 @@ export default function AdminDailyTipsPage() {
   const [edit, setEdit] = useState(null);
   const [form, setForm] = useState({ category: 'tip_of_day', title: '', content: '', image_url: '' });
 
-  const fetchTips = () => { api.dailyTips.admin.list().then(setTips).catch(() => {}); };
+  const fetchTips = () => { setLoading(true); api.dailyTips.admin.list().then(setTips).catch(() => {}).finally(() => setLoading(false)); };
 
   useEffect(() => { fetchTips(); }, []);
 
@@ -51,7 +52,9 @@ export default function AdminDailyTipsPage() {
         </button>
       </div>
 
-      {tips.length === 0 ? (
+      {loading ? (
+        <div className="space-y-3">{[1,2,3].map(i => <div key={i} className="rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-4"><Skeleton className="w-24 h-3 mb-2" /><Skeleton className="w-3/4 h-4 mb-2" /><Skeleton className="w-full h-3" /></div>)}</div>
+      ) : tips.length === 0 ? (
         <p className="text-xs text-gray-400">No tips yet.</p>
       ) : (
         <div className="space-y-2">
