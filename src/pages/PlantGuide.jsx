@@ -56,7 +56,7 @@ export default function PlantGuide() {
             {plants.map((p) => (
               <div key={p.id} className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 overflow-hidden">
                 {p.image_url && (
-                  <img src={p.image_url} alt={p.plant_name} className="w-full h-36 object-cover" />
+                  <img src={p.image_url} alt={p.plant_name} className="w-full h-48 object-contain bg-emerald-50 dark:bg-emerald-950/20" />
                 )}
                 <div className="p-4">
                   <h3 className="text-sm font-bold text-gray-900 dark:text-white">{p.plant_name}</h3>
