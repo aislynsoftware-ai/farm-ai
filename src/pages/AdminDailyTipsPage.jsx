@@ -15,10 +15,7 @@ export default function AdminDailyTipsPage() {
   const [edit, setEdit] = useState(null);
   const [form, setForm] = useState({ category: 'tip_of_day', title: '', content: '', image_url: '' });
 
-  const fetchTips = () => {
-    setLoading(true);
-    api.dailyTips.admin.list().then(setTips).catch(() => {}).finally(() => setLoading(false));
-  };
+  const fetchTips = () => { api.dailyTips.admin.list().then(setTips).catch(() => {}); };
 
   useEffect(() => { fetchTips(); }, []);
 
@@ -54,9 +51,7 @@ export default function AdminDailyTipsPage() {
         </button>
       </div>
 
-      {loading ? (
-        <p className="text-xs text-gray-400">Loading...</p>
-      ) : tips.length === 0 ? (
+      {tips.length === 0 ? (
         <p className="text-xs text-gray-400">No tips yet.</p>
       ) : (
         <div className="space-y-2">
