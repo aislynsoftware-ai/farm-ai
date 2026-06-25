@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Store, MapPin, Phone, Mail, Image, Loader, CheckCircle } from 'lucide-react';
+import { Store, MapPin, Phone, Mail, Image, Loader, CheckCircle, X } from 'lucide-react';
 import api from '../services/api';
 
 const OWM_KEY = '6914d2cb3f280b711105801779b3ca7f';
@@ -9,7 +9,7 @@ export default function RegisterShop() {
   const navigate = useNavigate();
   const [form, setForm] = useState({
     name: '', email: '', phone: '', shop_name: '', description: '',
-    address: '', latitude: '', longitude: '', shop_phone: '', photo: null,
+    address: '', latitude: '', longitude: '', shop_phone: '', photos: [],
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -149,11 +149,27 @@ export default function RegisterShop() {
           </div>
 
           <div>
-            <label className="flex items-center gap-2 px-3 py-2 rounded-lg border border-dashed border-gray-300 dark:border-gray-600 text-xs text-gray-500 hover:border-emerald-400 cursor-pointer">
-              <Image size={16} className="text-emerald-500" />
-              {form.photo ? form.photo.name : 'Upload shop photo'}
-              <input type="file" accept="image/*" onChange={(e) => setForm((p) => ({ ...p, photo: e.target.files[0] || null }))} className="hidden" />
-            </label>
+            <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1.5">Shop Photos (up to 4)</label>
+            <div className="flex flex-wrap gap-2">
+              {form.photos.map((file, i) => (
+                <div key={i} className="relative w-16 h-16 rounded-lg overflow-hidden border border-gray-200 dark:border-gray-600">
+                  <img src={URL.createObjectURL(file)} alt="" className="w-full h-full object-cover" />
+                  <button type="button" onClick={() => setForm((p) => ({ ...p, photos: p.photos.filter((_, j) => j !== i) }))}
+                    className="absolute top-0.5 right-0.5 w-4 h-4 bg-red-500 text-white rounded-full flex items-center justify-center cursor-pointer">
+                    <X size={10} />
+                  </button>
+                </div>
+              ))}
+              {form.photos.length < 4 && (
+                <label className="w-16 h-16 rounded-lg border border-dashed border-gray-300 dark:border-gray-600 flex items-center justify-center text-gray-400 hover:border-emerald-400 cursor-pointer">
+                  <Image size={18} />
+                  <input type="file" accept="image/*" multiple onChange={(e) => {
+                    const files = Array.from(e.target.files || []);
+                    setForm((p) => ({ ...p, photos: [...p.photos, ...files].slice(0, 4) }));
+                  }} className="hidden" />
+                </label>
+              )}
+            </div>
           </div>
 
           <button type="submit" disabled={loading} className="w-full py-2.5 rounded-xl bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-500 disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer">
