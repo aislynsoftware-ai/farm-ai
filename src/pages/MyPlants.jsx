@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Droplets, Plus, Trash2, Clock, X, Sprout, AlertCircle, CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import SEO from '../components/common/SEO';
+import WeatherAlert from '../components/common/WeatherAlert';
 import Sidebar from '../components/dashboard/Sidebar';
 import Skeleton from '../components/common/Skeleton';
 import api from '../services/api';
@@ -120,6 +121,8 @@ export default function MyPlants() {
               </button>
             </div>
           </motion.div>
+
+          <WeatherAlert />
 
           {success && <div className="flex items-center gap-2 p-3 rounded-xl bg-emerald-50 dark:bg-gray-800 border border-emerald-200 dark:border-emerald-700"><CheckCircle size={14} className="text-emerald-600" /><p className="text-xs text-emerald-700">{success}</p></div>}
           {error && <div className="flex items-center gap-2 p-3 rounded-xl bg-red-50 dark:bg-gray-800 border border-red-200 dark:border-red-700"><AlertCircle size={14} className="text-red-600" /><p className="text-xs text-red-700">{error}</p></div>}

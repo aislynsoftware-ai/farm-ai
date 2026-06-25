@@ -403,6 +403,19 @@ const api = {
       reject: (id) => adminRequest(`/admin/shops/${id}/reject`, { method: 'POST' }),
     },
   },
+  dailyTips: {
+    list: (category) => request(`/daily-tips${category ? `?category=${encodeURIComponent(category)}` : ''}`),
+    today: () => request('/daily-tips/today'),
+    admin: {
+      list: () => adminRequest('/admin/daily-tips'),
+      add: (data) => adminRequest('/admin/daily-tips/add', { method: 'POST', body: JSON.stringify(data), headers: {'Content-Type': 'application/json'} }),
+      update: (id, data) => adminRequest(`/admin/daily-tips/${id}`, { method: 'PUT', body: JSON.stringify(data), headers: {'Content-Type': 'application/json'} }),
+      delete: (id) => adminRequest(`/admin/daily-tips/${id}`, { method: 'DELETE' }),
+    },
+  },
+  weather: {
+    alert: (lat, lng) => request(`/weather-alert?lat=${lat}&lng=${lng}`),
+  },
 };
 
 export default api;

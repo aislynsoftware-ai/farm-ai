@@ -31,6 +31,7 @@ import DashboardApiKeys from '../pages/DashboardApiKeys';
 import DashboardDeveloper from '../pages/DashboardDeveloper';
 import PlanCheckout from '../pages/PlanCheckout';
 import MyPlants from '../pages/MyPlants';
+import DailyTips from '../pages/DailyTips';
 import Community from '../pages/Community';
 import RegisterShop from '../pages/RegisterShop';
 import ShopOwnerDashboard from '../pages/ShopOwnerDashboard';
@@ -124,6 +125,10 @@ export default function createAppRouter(isDark, toggleTheme) {
     {
       path: '/community',
       element: <Community />,
+    },
+    {
+      path: '/daily-tips',
+      element: <DailyTips />,
     },
     {
       path: '/register-shop',
