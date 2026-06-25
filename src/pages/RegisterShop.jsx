@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Store, MapPin, Phone, Mail, Image, Loader, CheckCircle, Search } from 'lucide-react';
+import { Store, MapPin, Phone, Mail, Image, Loader, CheckCircle } from 'lucide-react';
 import api from '../services/api';
 
 const OWM_KEY = '6914d2cb3f280b711105801779b3ca7f';
@@ -9,32 +9,32 @@ export default function RegisterShop() {
   const navigate = useNavigate();
   const [form, setForm] = useState({
     name: '', email: '', phone: '', shop_name: '', description: '',
-    address: '', city: '', latitude: '', longitude: '', shop_phone: '', photo: null,
+    address: '', latitude: '', longitude: '', shop_phone: '', photo: null,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [done, setDone] = useState(false);
-  const [citySuggestions, setCitySuggestions] = useState([]);
-  const [cityLoading, setCityLoading] = useState(false);
+  const [coordsSuggestions, setCoordsSuggestions] = useState([]);
+  const [coordsLoading, setCoordsLoading] = useState(false);
   const [gpsError, setGpsError] = useState('');
 
   useEffect(() => {
-    if (!form.city || form.city.length < 2) { setCitySuggestions([]); return; }
+    if (!form.address || form.address.length < 3) { setCoordsSuggestions([]); return; }
     const timer = setTimeout(async () => {
-      setCityLoading(true);
+      setCoordsLoading(true);
       try {
-        const res = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(form.city)}&limit=5&appid=${OWM_KEY}`);
+        const res = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(form.address)}&limit=5&appid=${OWM_KEY}`);
         const data = await res.json();
-        setCitySuggestions(data || []);
-      } catch { setCitySuggestions([]); }
-      setCityLoading(false);
-    }, 400);
+        setCoordsSuggestions(data || []);
+      } catch { setCoordsSuggestions([]); }
+      setCoordsLoading(false);
+    }, 500);
     return () => clearTimeout(timer);
-  }, [form.city]);
+  }, [form.address]);
 
-  const selectCity = (c) => {
-    setForm((p) => ({ ...p, city: c.name, latitude: c.lat, longitude: c.lon }));
-    setCitySuggestions([]);
+  const selectSuggestion = (c) => {
+    setForm((p) => ({ ...p, latitude: c.lat, longitude: c.lon }));
+    setCoordsSuggestions([]);
   };
 
   const handleSubmit = async (e) => {
@@ -60,7 +60,7 @@ export default function RegisterShop() {
       (err) => {
         const msgs = {
           1: 'Permission denied — allow location access in browser settings',
-          2: 'Location unavailable — try again or search city instead',
+          2: 'Location unavailable — try again',
           3: 'GPS request timed out — try again',
         };
         setGpsError(msgs[err.code] || 'Could not get location');
@@ -84,15 +84,14 @@ export default function RegisterShop() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 mt-10">
       <div className="w-full max-w-lg space-y-6">
-       
-
         <form onSubmit={handleSubmit} className="space-y-4 bg-white dark:bg-gray-800 rounded-2xl border border-emerald-200 dark:border-emerald-700 p-6">
           {error && <p className="text-xs text-red-500 bg-red-50 dark:bg-red-900/30 p-2 rounded-lg">{error}</p>}
- <div className="text-center mb-6 ">
-          <Store size={36} className="text-emerald-500 mx-auto mb-2" />
-          <h1 className="text-xl font-bold text-gray-900 dark:text-white">Register Your Shop</h1>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Create a shop owner account for your fertilizer business</p>
-        </div>
+          <div className="text-center mb-6">
+            <Store size={36} className="text-emerald-500 mx-auto mb-2" />
+            <h1 className="text-xl font-bold text-gray-900 dark:text-white">Register Your Shop</h1>
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Create a shop owner account for your fertilizer business</p>
+          </div>
+
           <div>
             <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">Your Name *</label>
             <input value={form.name} onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))} placeholder="Enter your name" className={inputClass} />
@@ -119,28 +118,30 @@ export default function RegisterShop() {
             <textarea value={form.description} onChange={(e) => setForm((p) => ({ ...p, description: e.target.value }))} placeholder="About your shop..." rows={2} className={`${inputClass} resize-none`} />
           </div>
 
-          <div>
-            <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">Address</label>
-            <textarea value={form.address} onChange={(e) => setForm((p) => ({ ...p, address: e.target.value }))} placeholder="Shop address..." rows={2} className={`${inputClass} resize-none`} />
-          </div>
-
-          <div>
-            <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1"><Search size={12} className="inline mr-1" />City / Location</label>
-            <div className="relative">
-              <input value={form.city} onChange={(e) => setForm((p) => ({ ...p, city: e.target.value }))} placeholder="Search your city..." className={inputClass} />
-              {cityLoading && <Loader size={14} className="absolute right-3 top-3 animate-spin text-gray-400" />}
-              {citySuggestions.length > 0 && (
-                <div className="absolute z-10 top-full mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg overflow-hidden">
-                  {citySuggestions.map((c, i) => (
-                    <button type="button" key={i} onClick={() => selectCity(c)}
-                      className="w-full text-left px-3 py-2 text-xs text-gray-700 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 cursor-pointer border-b border-gray-100 dark:border-gray-700 last:border-0">
-                      {c.name}, {c.state || ''} {c.country}
-                    </button>
-                  ))}
-                </div>
-              )}
+          <div className="relative">
+            <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1"><MapPin size={12} className="inline mr-1" />Address (type to get coordinates)</label>
+            <textarea value={form.address} onChange={(e) => setForm((p) => ({ ...p, address: e.target.value }))} placeholder="Full address, village, street or landmark..." rows={2} className={`${inputClass} resize-none`} />
+            {coordsLoading && <Loader size={14} className="absolute right-3 top-8 animate-spin text-gray-400" />}
+            {coordsSuggestions.length > 0 && (
+              <div className="absolute z-10 top-full mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg overflow-hidden">
+                {coordsSuggestions.map((c, i) => (
+                  <button type="button" key={i} onClick={() => selectSuggestion(c)}
+                    className="w-full text-left px-3 py-2 text-xs text-gray-700 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 cursor-pointer border-b border-gray-100 dark:border-gray-700 last:border-0 flex items-center justify-between">
+                    <span>{c.name}{c.state ? `, ${c.state}` : ''}, {c.country}</span>
+                    <span className="text-gray-400 text-[10px]">{c.lat.toFixed(4)}, {c.lon.toFixed(4)}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+            {form.latitude && form.longitude && (
+              <p className="text-[10px] text-emerald-600 mt-1">
+                Coordinates set: {parseFloat(form.latitude).toFixed(4)}, {parseFloat(form.longitude).toFixed(4)}
+              </p>
+            )}
+            <div className="flex gap-2 mt-2">
+              <button type="button" onClick={getLocation} className="flex-1 px-3 py-2 rounded-lg bg-emerald-600 text-white text-xs hover:bg-emerald-500 cursor-pointer"><MapPin size={12} className="inline mr-1" />Use GPS</button>
+              <button type="button" onClick={() => setForm((p) => ({ ...p, latitude: '', longitude: '' }))} className="px-3 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400 text-xs hover:bg-gray-300 dark:hover:bg-gray-600 cursor-pointer">Clear</button>
             </div>
-            <button type="button" onClick={getLocation} className="mt-2 w-full px-3 py-2 rounded-lg bg-emerald-600 text-white text-xs hover:bg-emerald-500 cursor-pointer"><MapPin size={12} className="inline mr-1" />Use Current Location (GPS)</button>
             {gpsError && <p className="text-xs text-red-500 mt-1">{gpsError}</p>}
           </div>
 
