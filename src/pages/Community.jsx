@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { MessageSquare, Plus, Image, Mic, Video, Send, Trash2, Loader, X, Play, Pause, Camera, ChevronDown, ChevronUp } from 'lucide-react';
+import { MessageSquare, Plus, Image, Mic, Video, Send, Trash2, Loader, X, Play, Pause, Camera, ChevronDown, ChevronUp, Menu } from 'lucide-react';
 import SEO from '../components/common/SEO';
 import PageHeader from '../components/layout/PageHeader';
+import Sidebar from '../components/dashboard/Sidebar';
 import api from '../services/api';
 
 function useRecorder(type) {
@@ -138,8 +139,8 @@ function PostCard({ post, currentUser, onDelete, onReplyAdded }) {
         </div>
         {currentUser && post.user_id === currentUser.user_id && (
           <button onClick={() => onDelete(post.id)} className="p-1 rounded text-gray-400 hover:text-red-500 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer"><Trash2 size={14} /></button>
-        )}
-      </div>
+          )}
+        </div>
 
       {/* Post Content */}
       {post.title && <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-1">{post.title}</h3>}
@@ -213,6 +214,7 @@ function ReplyRecorder({ type, onBlob, recorderRef }) {
 }
 
 export default function Community() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -256,11 +258,17 @@ export default function Community() {
   };
 
   return (
-    <main>
-      <SEO title="Community" description="Post leaf images and discuss with farmers" url="/community" />
-      <PageHeader title="Community" description="Post leaf images and ask other farmers about disease and fertilizer recommendations" />
-      <section className="py-8 bg-gray-50 dark:bg-gray-900 min-h-screen">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="flex min-h-screen bg-emerald-50/30 dark:bg-emerald-950">
+      <Sidebar mobileOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <main className="flex-1 overflow-x-hidden">
+        <SEO title="Community" description="Post leaf images and discuss with farmers" url="/community" />
+        <div className="sticky top-0 z-30 lg:hidden bg-white/80 dark:bg-emerald-950/80 backdrop-blur border-b border-emerald-100 dark:border-emerald-800 px-4 py-3 flex items-center gap-3">
+          <button onClick={() => setSidebarOpen(true)} className="p-1.5 rounded-lg text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900 cursor-pointer">
+            <Menu size={20} />
+          </button>
+          <span className="text-sm font-semibold text-gray-900 dark:text-white">Community</span>
+        </div>
+        <div className="p-4 lg:p-6 max-w-4xl mx-auto">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-lg font-bold text-gray-900 dark:text-white">Posts</h2>
             {user && (
@@ -323,9 +331,10 @@ export default function Community() {
               </div>
             </div>
           )}
+          </div>
         </div>
-      </section>
-    </main>
+      </main>
+    </div>
   );
 }
 
