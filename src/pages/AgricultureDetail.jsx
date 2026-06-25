@@ -7,7 +7,7 @@ import Skeleton, { DetailHeaderSkeleton, GridCardSkeleton } from '../components/
 import PredictionProgress from '../components/common/PredictionProgress';
 import SEO from '../components/common/SEO';
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
+const BASE_URL = 'https://aislynajay-product-development.hf.space';
 
 const titleEndpoint = {
   'tomato': '/leafs/tomato',
@@ -257,9 +257,9 @@ export default function AgricultureDetail() {
                       to={`/agriculture/${id}/crop/${crop.id}`}
                       className="group block h-full rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden hover:shadow-xl hover:border-emerald-400 dark:hover:border-emerald-400 hover:-translate-y-1 hover:bg-emerald-50/80 dark:hover:bg-emerald-950/40 transition-all duration-300"
                     >
-                      <div className="relative overflow-hidden">
+                      <div className="relative mt-2 mb-2 rounded-[20px] mb-4">
                         {crop.image_url ? (
-                          <img src={crop.image_url} alt={crop.title} className="w-full h-40 object-cover object-center transition-transform duration-500 group-hover:scale-105" />
+                          <img src={crop.image_url} alt={crop.title} className="w-full h-40 object-contain rounded-[20px] bg-emerald-50/30 dark:bg-emerald-950 transition-transform duration-500 group-hover:scale-105" />
                         ) : (
                           <div className="w-full h-40 flex items-center justify-center bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-950/30 dark:to-green-950/30">
                             <Sprout size={40} className="text-emerald-400" />
@@ -288,9 +288,9 @@ export default function AgricultureDetail() {
                       to={authLink('/predict')}
                       className="group block h-full rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden hover:shadow-xl hover:border-emerald-400 dark:hover:border-emerald-400 hover:-translate-y-1 hover:bg-emerald-50/80 dark:hover:bg-emerald-950/40 transition-all duration-300"
                     >
-                      <div className="relative overflow-hidden">
+                      <div className="relative">
                         {crop.image_url ? (
-                          <img src={crop.image_url} alt={crop.title} className="w-full h-40 object-cover object-center transition-transform duration-500 group-hover:scale-105" />
+                          <img src={crop.image_url} alt={crop.title} className="w-full h-40 object-contain mt-2 mb-2 rounded-[20px] bg-emerald-50/30 dark:bg-emerald-950 transition-transform duration-500 group-hover:scale-105" />
                         ) : (
                           <div className="w-full h-40 flex items-center justify-center bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-950/30 dark:to-green-950/30">
                             <Sprout size={40} className="text-emerald-400" />
@@ -313,15 +313,6 @@ export default function AgricultureDetail() {
             })}
           </div>
         )}
-
-        {/* {crops.length === 0 && (
-          <div className="text-center py-12">
-            <div className="w-20 h-20 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 flex items-center justify-center mx-auto mb-4">
-              <Sprout size={40} className="text-emerald-400" />
-            </div>
-            <p className="text-xs text-emerald-600 dark:text-emerald-400">No crops listed. Use the detection panel below.</p>
-          </div>
-        )} */}
 
         <div className="mt-8 rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 p-5">
           <p className="text-xs font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">

@@ -32,6 +32,9 @@ import DashboardDeveloper from '../pages/DashboardDeveloper';
 import PlanCheckout from '../pages/PlanCheckout';
 import MyPlants from '../pages/MyPlants';
 import Community from '../pages/Community';
+import RegisterShop from '../pages/RegisterShop';
+import ShopOwnerDashboard from '../pages/ShopOwnerDashboard';
+import AdminShopsPage from '../pages/AdminShopsPage';
 import AdminLogin from '../pages/AdminLogin';
 import AdminDashboard from '../pages/AdminDashboard';
 import AdminUsersPage from '../pages/AdminUsersPage';
@@ -123,6 +126,14 @@ export default function createAppRouter(isDark, toggleTheme) {
       element: <Community />,
     },
     {
+      path: '/register-shop',
+      element: <RegisterShop />,
+    },
+    {
+      path: '/my-shop',
+      element: <ShopOwnerDashboard />,
+    },
+    {
       path: '/admin/login',
       element: <AdminLogin />,
     },
@@ -143,6 +154,7 @@ export default function createAppRouter(isDark, toggleTheme) {
         { path: 'api-plans', element: <AdminApiPlansPage /> },
         { path: 'downloads', element: <AdminDownloadsPage /> },
         { path: 'ai-services', element: <AdminAIServicesPage /> },
+        { path: 'shops', element: <AdminShopsPage /> },
       ],
     },
   ]);

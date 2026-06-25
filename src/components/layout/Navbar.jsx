@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Sprout, LogIn, UserPlus, LayoutDashboard, ChevronDown, LogOut, ChevronRight } from 'lucide-react';
+import { Menu, X, Sprout, LogIn, UserPlus, LayoutDashboard, ChevronDown, LogOut, ChevronRight, Store } from 'lucide-react';
 import { NAV_LINKS, ROUTES, APP_NAME } from '../../constants';
 import ThemeToggle from '../common/ThemeToggle';
 import Button from '../common/Button';
@@ -268,6 +268,16 @@ export default function Navbar({ isDark, toggleTheme }) {
                         <LayoutDashboard size={13} />
                         Dashboard
                       </Link>
+                      {user?.role === 'shop_owner' && (
+                        <Link
+                          to="/my-shop"
+                          onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-2 px-3 py-2 text-xs text-gray-600 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-colors"
+                        >
+                          <Store size={13} />
+                          My Shop
+                        </Link>
+                      )}
                       <button
                         onClick={() => { setUserMenuOpen(false); handleLogout(); }}
                         className="w-full flex items-center gap-2 px-3 py-2 text-xs text-red-500 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/30 transition-colors"
