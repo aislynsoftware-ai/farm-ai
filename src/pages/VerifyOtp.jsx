@@ -86,6 +86,9 @@ export default function VerifyOtp() {
           name: res.name || '',
           email: res.email || '',
           profile_image: res.profile_image || '',
+          address: res.address || '',
+          latitude: res.latitude || '',
+          longitude: res.longitude || '',
         }));
       }
       setTimer(30);

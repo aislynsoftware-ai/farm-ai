@@ -1,19 +1,23 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
-import { Sprout, Mail, User, Phone, UserPlus, AlertCircle, Loader } from 'lucide-react';
+import { Sprout, Mail, User, Phone, UserPlus, AlertCircle, Loader, MapPin, Search } from 'lucide-react';
 import Button from '../components/common/Button';
 import SEO from '../components/common/SEO';
 import { ROUTES, APP_NAME } from '../constants';
 import api from '../services/api';
 
+const OWM_KEY = '6914d2cb3f280b711105801779b3ca7f';
+
 export default function Register() {
   const navigate = useNavigate();
   const [tab, setTab] = useState('email');
-  const [form, setForm] = useState({ name: '', email: '', phone: '', terms: false });
+  const [form, setForm] = useState({ name: '', email: '', phone: '', address: '', latitude: '', longitude: '', terms: false });
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState('');
+  const [addrSuggestions, setAddrSuggestions] = useState([]);
+  const [addrLoading, setAddrLoading] = useState(false);
 
   const validate = () => {
     const errs = {};
@@ -38,7 +42,7 @@ export default function Register() {
 
     setLoading(true);
     try {
-      const res = await api.auth.register(form.name, form.email, form.phone);
+      const res = await api.auth.register(form.name, form.email, form.phone, form.address, form.latitude, form.longitude);
       if (res.user_id) sessionStorage.setItem('pending_user_id', res.user_id);
       if (form.name || form.email) {
         sessionStorage.setItem('pending_user', JSON.stringify({
@@ -46,6 +50,9 @@ export default function Register() {
           name: form.name,
           email: form.email,
           phone: form.phone,
+          address: form.address,
+          latitude: form.latitude,
+          longitude: form.longitude,
         }));
       }
       navigate(`${ROUTES.VERIFY}?email=${encodeURIComponent(form.email)}`);
@@ -54,6 +61,33 @@ export default function Register() {
     } finally {
       setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    if (!form.address || form.address.length < 3) { setAddrSuggestions([]); return; }
+    const timer = setTimeout(async () => {
+      setAddrLoading(true);
+      try {
+        const res = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(form.address)}&limit=5&appid=${OWM_KEY}`);
+        const data = await res.json();
+        setAddrSuggestions(data || []);
+      } catch { setAddrSuggestions([]); }
+      setAddrLoading(false);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [form.address]);
+
+  const selectAddress = (c) => {
+    setForm((p) => ({ ...p, address: `${c.name}${c.state ? `, ${c.state}` : ''}, ${c.country}`, latitude: c.lat, longitude: c.lon }));
+    setAddrSuggestions([]);
+  };
+
+  const getLocation = () => {
+    if (!navigator.geolocation) { setApiError('Geolocation not supported'); return; }
+    navigator.geolocation.getCurrentPosition(
+      (pos) => setForm((p) => ({ ...p, latitude: pos.coords.latitude, longitude: pos.coords.longitude })),
+      () => setApiError('Could not get location')
+    );
   };
 
   const handleChange = (e) => {
@@ -130,6 +164,23 @@ export default function Register() {
                 {errors.phone && <p className="input-error mt-1"><AlertCircle size={12} />{errors.phone}</p>}
               </div>
             )}
+
+            <div className="relative">
+              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5"><MapPin size={12} className="inline mr-1" />Your Village / Town</label>
+              <input value={form.address} onChange={(e) => setForm((p) => ({ ...p, address: e.target.value }))} placeholder="Type your village, town or city..." className={`${inputClass('address')} pr-8`} />
+              {addrLoading && <Loader size={14} className="absolute right-3 top-8 animate-spin text-gray-400" />}
+              {addrSuggestions.length > 0 && (
+                <div className="absolute z-10 top-full mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg overflow-hidden">
+                  {addrSuggestions.map((c, i) => (
+                    <button type="button" key={i} onClick={() => selectAddress(c)}
+                      className="w-full text-left px-3 py-2 text-xs text-gray-700 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 cursor-pointer border-b border-gray-100 dark:border-gray-700 last:border-0">
+                      {c.name}{c.state ? `, ${c.state}` : ''}, {c.country}
+                    </button>
+                  ))}
+                </div>
+              )}
+              <button type="button" onClick={getLocation} className="mt-1.5 text-[11px] text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer"><MapPin size={10} className="inline mr-0.5" />Use GPS</button>
+            </div>
 
             <label className="flex items-start gap-2 cursor-pointer">
               <input type="checkbox" name="terms" checked={form.terms} onChange={handleChange} className="mt-0.5 w-4 h-4 rounded border-gray-300 dark:border-gray-600 text-emerald-600 focus:ring-emerald-500" />
