@@ -176,8 +176,8 @@ export default function Register() {
             )}
 
             <div className="relative">
-              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5"><MapPin size={12} className="inline mr-1" />Your Village / Town</label>
-              <input value={form.address} onChange={(e) => setForm((p) => ({ ...p, address: e.target.value }))} placeholder="Type your village, town or city..." className={`${inputClass('address')} pr-8`} />
+              <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5"><MapPin size={12} className="inline mr-1" />Your Address (type to get location)</label>
+              <input value={form.address} onChange={(e) => setForm((p) => ({ ...p, address: e.target.value }))} placeholder="Full address, village, street or landmark..." className={`${inputClass('address')} pr-8`} />
               {addrLoading && <Loader size={14} className="absolute right-3 top-8 animate-spin text-gray-400" />}
               {addrSuggestions.length > 0 && (
                 <div className="absolute z-10 top-full mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 rounded-lg shadow-lg overflow-hidden">
