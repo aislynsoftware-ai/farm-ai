@@ -268,7 +268,7 @@ export default function Navbar({ isDark, toggleTheme }) {
                         <LayoutDashboard size={13} />
                         Dashboard
                       </Link>
-                      {user?.role === 'shop_owner' && (
+                      {user?.role === 'shop_owner' ? (
                         <Link
                           to="/my-shop"
                           onClick={() => setUserMenuOpen(false)}
@@ -276,6 +276,15 @@ export default function Navbar({ isDark, toggleTheme }) {
                         >
                           <Store size={13} />
                           My Shop
+                        </Link>
+                      ) : (
+                        <Link
+                          to="/register-shop"
+                          onClick={() => setUserMenuOpen(false)}
+                          className="flex items-center gap-2 px-3 py-2 text-xs text-gray-600 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-colors"
+                        >
+                          <Store size={13} />
+                          Register Your Shop
                         </Link>
                       )}
                       <button

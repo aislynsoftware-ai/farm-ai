@@ -5,6 +5,7 @@ import { Sprout, ArrowLeft, ChevronRight, Search, ArrowRight, Upload, Leaf, Appl
 import api from '../services/api';
 import Skeleton, { DetailHeaderSkeleton, GridCardSkeleton } from '../components/common/Skeleton';
 import PredictionProgress from '../components/common/PredictionProgress';
+import NearbyShops from '../components/common/NearbyShops';
 import SEO from '../components/common/SEO';
 
 const BASE_URL = 'https://aislynajay-product-development.hf.space';
@@ -442,6 +443,7 @@ export default function AgricultureDetail() {
                   )}
                 </motion.div>
               )}
+              <NearbyShops />
             </div>
           )}
         </div>
