@@ -268,6 +268,7 @@ const api = {
     getLeafPredictions: () => cachedRequest('/get_leaf_predictions'),
     cropWithProducts: () => cachedRequest('/get_crop_with_products'),
     wallet: (userId) => cachedRequest(`/user/wallet/${userId}`),
+    aiServices: () => request('/ai-services'),
   },
   payment: {
     createOrder: (userId, amount) =>

@@ -257,9 +257,9 @@ export default function AgricultureDetail() {
                       to={`/agriculture/${id}/crop/${crop.id}`}
                       className="group block h-full rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden hover:shadow-xl hover:border-emerald-400 dark:hover:border-emerald-400 hover:-translate-y-1 hover:bg-emerald-50/80 dark:hover:bg-emerald-950/40 transition-all duration-300"
                     >
-                      <div className="relative mt-2 mb-2 rounded-[20px] mb-4">
+                      <div className="relative overflow-hidden">
                         {crop.image_url ? (
-                          <img src={crop.image_url} alt={crop.title} className="w-full h-40 object-contain rounded-[20px] bg-emerald-50/30 dark:bg-emerald-950 transition-transform duration-500 group-hover:scale-105" />
+                          <img src={crop.image_url} alt={crop.title} className="w-full h-40 object-cover object-center transition-transform duration-500 group-hover:scale-105" />
                         ) : (
                           <div className="w-full h-40 flex items-center justify-center bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-950/30 dark:to-green-950/30">
                             <Sprout size={40} className="text-emerald-400" />
@@ -288,9 +288,9 @@ export default function AgricultureDetail() {
                       to={authLink('/predict')}
                       className="group block h-full rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden hover:shadow-xl hover:border-emerald-400 dark:hover:border-emerald-400 hover:-translate-y-1 hover:bg-emerald-50/80 dark:hover:bg-emerald-950/40 transition-all duration-300"
                     >
-                      <div className="relative">
+                      <div className="relative overflow-hidden">
                         {crop.image_url ? (
-                          <img src={crop.image_url} alt={crop.title} className="w-full h-40 object-contain mt-2 mb-2 rounded-[20px] bg-emerald-50/30 dark:bg-emerald-950 transition-transform duration-500 group-hover:scale-105" />
+                          <img src={crop.image_url} alt={crop.title} className="w-full h-40 object-cover object-center transition-transform duration-500 group-hover:scale-105" />
                         ) : (
                           <div className="w-full h-40 flex items-center justify-center bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-950/30 dark:to-green-950/30">
                             <Sprout size={40} className="text-emerald-400" />
