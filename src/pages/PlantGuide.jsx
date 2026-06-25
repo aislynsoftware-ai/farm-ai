@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Leaf, Droplets, Sun, Shield, ChevronRight, Loader } from 'lucide-react';
+import { Leaf, Droplets, Sun, Shield, ChevronRight, Loader, Menu } from 'lucide-react';
 import api from '../services/api';
+import Sidebar from '../components/dashboard/Sidebar';
 
 export default function PlantGuide() {
   const [categories, setCategories] = useState([]);
@@ -8,6 +9,7 @@ export default function PlantGuide() {
   const [plants, setPlants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState(null);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     api.plantRecs.categories().then((cats) => {
@@ -23,13 +25,18 @@ export default function PlantGuide() {
   }, [activeCat]);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <div className="max-w-5xl mx-auto px-4 py-8">
-        <div className="text-center mb-8">
-          <Leaf size={36} className="text-emerald-500 mx-auto mb-2" />
-          <h1 className="text-xl font-bold text-gray-900 dark:text-white">Plant Guide</h1>
-          <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Find the best plants for your home, office, or specific needs</p>
-        </div>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex">
+      <button onClick={() => setSidebarOpen(true)} className="lg:hidden fixed top-20 left-4 z-40 p-2 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg cursor-pointer">
+        <Menu size={18} className="text-gray-600 dark:text-gray-400" />
+      </button>
+      <Sidebar mobileOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <div className="flex-1 min-h-screen p-4 lg:p-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-8">
+            <Leaf size={36} className="text-emerald-500 mx-auto mb-2" />
+            <h1 className="text-xl font-bold text-gray-900 dark:text-white">Plant Guide</h1>
+            <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">Find the best plants for your home, office, or specific needs</p>
+          </div>
 
         <div className="flex gap-2 overflow-x-auto pb-2 mb-6">
           {categories.map((cat) => (
@@ -94,5 +101,6 @@ export default function PlantGuide() {
         )}
       </div>
     </div>
+  </div>
   );
 }
