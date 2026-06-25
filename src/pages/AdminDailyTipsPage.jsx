@@ -62,8 +62,8 @@ export default function AdminDailyTipsPage() {
         <div className="space-y-2">
           {tips.map((tip) => (
             <div key={tip.id} className="flex items-start gap-3 p-3 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
-              <div className="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-950/40 flex items-center justify-center shrink-0">
-                {(categories.find(c => c.key === tip.category)?.icon || Lightbulb)({ size: 14, className: 'text-emerald-600' })}
+              <div className="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-950/40 flex items-center justify-center shrink-0 text-emerald-600">
+                {(() => { const Icon = categories.find(c => c.key === tip.category)?.icon || Lightbulb; return <Icon size={14} />; })()}
               </div>
               <div className="flex-1 min-w-0">
                 <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-medium mb-1 ${
