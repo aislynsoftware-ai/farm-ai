@@ -66,10 +66,11 @@ function extractOtp(res) {
 
 const api = {
   auth: {
-    login: async (email) => {
+    login: async (credential, isPhone = false) => {
+      const body = isPhone ? { phone: credential } : { email: credential };
       const res = await request('/auth/login', {
         method: 'POST',
-        body: JSON.stringify({ email }),
+        body: JSON.stringify(body),
       });
       const otp = extractOtp(res);
       if (otp) res.otp = otp;
@@ -91,10 +92,10 @@ const api = {
       });
       return res;
     },
-    updateProfile: (userId, name, phone) =>
+    updateProfile: (userId, name, phone, address, latitude, longitude) =>
       request('/auth/update-profile', {
         method: 'POST',
-        body: JSON.stringify({ user_id: userId, name, phone }),
+        body: JSON.stringify({ user_id: userId, name, phone, address, latitude, longitude }),
       }),
     updateProfilePic: (userId, file) => {
       const formData = new FormData();

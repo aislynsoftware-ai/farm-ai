@@ -1,24 +1,27 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Menu, User, Mail, Phone, Camera, Save, AlertCircle, Loader, CheckCircle, Coins, Copy } from 'lucide-react';
+import { Menu, User, Mail, Phone, Camera, Save, AlertCircle, Loader, CheckCircle, Coins, Copy, MapPin } from 'lucide-react';
 import SEO from '../components/common/SEO';
 import Button from '../components/common/Button';
 import Sidebar from '../components/dashboard/Sidebar';
 import { ROUTES, APP_NAME } from '../constants';
 import api from '../services/api';
 
+const OWM_KEY = '6914d2cb3f280b711105801779b3ca7f';
+
 export default function Profile() {
   const navigate = useNavigate();
   const fileRef = useRef(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [form, setForm] = useState({ name: '', email: '', phone: '' });
+  const [form, setForm] = useState({ name: '', email: '', phone: '', address: '', latitude: '', longitude: '' });
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState('');
   const [coins, setCoins] = useState(null);
+  const [addrSuggestions, setAddrSuggestions] = useState([]);
 
   useEffect(() => {
     const stored = localStorage.getItem('user');
@@ -26,11 +29,42 @@ export default function Profile() {
       try {
         const u = JSON.parse(stored);
         setUser(u);
-        setForm({ name: u.name || '', email: u.email || '', phone: u.phone || '' });
+        setForm({ name: u.name || '', email: u.email || '', phone: u.phone || '', address: u.address || '', latitude: u.latitude || '', longitude: u.longitude || '' });
         fetchCoins(u.user_id);
       } catch {}
     }
   }, []);
+
+  useEffect(() => {
+    if (!form.address || form.address.length < 3) { setAddrSuggestions([]); return; }
+    const t = setTimeout(async () => {
+      try {
+        const res = await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${encodeURIComponent(form.address)}&limit=5&appid=${OWM_KEY}`);
+        const data = await res.json();
+        setAddrSuggestions(data?.length ? data : []);
+      } catch { setAddrSuggestions([]); }
+    }, 400);
+    return () => clearTimeout(t);
+  }, [form.address]);
+
+  const selectAddr = (c) => {
+    setForm((p) => ({ ...p, address: `${c.name}${c.state ? `, ${c.state}` : ''}, ${c.country}`, latitude: c.lat, longitude: c.lon }));
+    setAddrSuggestions([]);
+  };
+
+  const getLocation = () => {
+    if (!navigator.geolocation) return;
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      const { latitude: lat, longitude: lng } = pos.coords;
+      try {
+        const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`, { headers: { 'User-Agent': 'FarmlytAI/1.0' } });
+        const data = await res.json();
+        setForm((p) => ({ ...p, address: data.display_name || '', latitude: lat, longitude: lng }));
+      } catch {
+        setForm((p) => ({ ...p, latitude: lat, longitude: lng }));
+      }
+    });
+  };
 
   const fetchCoins = async (uid) => {
     if (!uid) return;
@@ -51,8 +85,8 @@ export default function Profile() {
     setLoading(true);
     try {
       const userId = getUserId();
-      await api.auth.updateProfile(userId, form.name, form.phone);
-      const updated = { ...(JSON.parse(localStorage.getItem('user') || '{}')), name: form.name, phone: form.phone };
+      await api.auth.updateProfile(userId, form.name, form.phone, form.address, form.latitude, form.longitude);
+      const updated = { ...(JSON.parse(localStorage.getItem('user') || '{}')), name: form.name, phone: form.phone, address: form.address, latitude: form.latitude, longitude: form.longitude };
       localStorage.setItem('user', JSON.stringify(updated));
       setUser(updated);
       setSaved(true);
@@ -201,6 +235,26 @@ export default function Profile() {
                     <Phone size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input type="tel" name="phone" value={form.phone} onChange={handleChange} placeholder="+1 555..." className={`${inputClass} pl-10`} />
                   </div>
+                </div>
+
+                <div className="relative">
+                  <label className="block text-xs font-medium text-gray-700 dark:text-gray-300 mb-1.5">Your Address <span className="text-gray-400 font-normal">(type to get location)</span></label>
+                  <div className="relative">
+                    <MapPin size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 z-10" />
+                    <input value={form.address} onChange={(e) => setForm((p) => ({ ...p, address: e.target.value }))} placeholder="Full address, village, street or landmark..." className={`${inputClass} pl-10 pr-8`} />
+                    {form.address && <button type="button" onClick={() => { setForm((p) => ({ ...p, address: '' })); setAddrSuggestions([]); }} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 text-sm cursor-pointer">&times;</button>}
+                  </div>
+                  {addrSuggestions.length > 0 && (
+                    <div className="absolute z-20 w-full mt-1 rounded-xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 shadow-lg overflow-hidden">
+                      {addrSuggestions.map((c, i) => (
+                        <button key={i} type="button" onClick={() => selectAddr(c)} className="w-full text-left px-3 py-2 text-xs text-gray-700 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 border-b border-gray-100 dark:border-gray-700 last:border-0 cursor-pointer">
+                          {c.name}{c.state ? `, ${c.state}` : ''}, {c.country}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                  <button type="button" onClick={getLocation} className="mt-1.5 text-[11px] text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer"><MapPin size={10} className="inline mr-0.5" />Use GPS</button>
+                  {form.latitude && form.longitude && <span className="ml-3 text-[10px] text-gray-400">({form.latitude}, {form.longitude})</span>}
                 </div>
 
                 <div className="flex items-center gap-3 pt-2">
