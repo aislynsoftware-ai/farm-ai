@@ -417,6 +417,17 @@ const api = {
   weather: {
     alert: (lat, lng) => request(`/weather-alert?lat=${lat}&lng=${lng}`),
   },
+  plantRecs: {
+    list: (category) => request(`/plant-recommendations${category ? `?category=${encodeURIComponent(category)}` : ''}`),
+    categories: () => request('/plant-recommendations/categories'),
+    detail: (id) => request(`/plant-recommendations/${id}`),
+    admin: {
+      list: () => adminRequest('/admin/plant-recommendations'),
+      add: (data) => adminRequest('/admin/plant-recommendations/add', { method: 'POST', body: JSON.stringify(data), headers: {'Content-Type': 'application/json'} }),
+      update: (id, data) => adminRequest(`/admin/plant-recommendations/${id}`, { method: 'PUT', body: JSON.stringify(data), headers: {'Content-Type': 'application/json'} }),
+      delete: (id) => adminRequest(`/admin/plant-recommendations/${id}`, { method: 'DELETE' }),
+    },
+  },
 };
 
 export default api;
