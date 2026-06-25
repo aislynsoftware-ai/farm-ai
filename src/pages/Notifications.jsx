@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Menu, Lightbulb, Sparkles, Sun, CloudRain, Bell, ChevronRight, AlertTriangle, Snowflake, Droplets, X, Loader } from 'lucide-react';
+import { Menu, Lightbulb, Sparkles, Sun, CloudRain, Bell, ChevronRight, AlertTriangle, Snowflake, Droplets, X, Loader, CheckCircle, MapPin } from 'lucide-react';
 import api from '../services/api';
 import Skeleton from '../components/common/Skeleton';
 import SEO from '../components/common/SEO';
@@ -30,6 +30,8 @@ export default function Notifications() {
   const [weather, setWeather] = useState(null);
   const [weatherLoading, setWeatherLoading] = useState(false);
   const [weatherError, setWeatherError] = useState('');
+  const [manualLat, setManualLat] = useState('');
+  const [manualLng, setManualLng] = useState('');
 
   useEffect(() => {
     if (tab !== 'tips') return;
@@ -40,27 +42,38 @@ export default function Notifications() {
       .finally(() => setTipsLoading(false));
   }, [tab, tipCategory]);
 
-  const fetchWeather = () => {
-    if (!navigator.geolocation) { setWeatherError('Location not available'); return; }
+  const fetchWeather = (lat, lng) => {
+    setWeatherLoading(true);
+    setWeatherError('');
+    setWeather(null);
+    api.weather.alert(lat, lng)
+      .then((data) => {
+        setWeather(data);
+      })
+      .catch(() => setWeatherError('Failed to fetch weather'))
+      .finally(() => setWeatherLoading(false));
+  };
+
+  const fetchByGeo = () => {
+    if (!navigator.geolocation) { setWeatherError('Location not available. Enter coordinates manually below.'); return; }
     setWeatherLoading(true);
     setWeatherError('');
     navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        api.weather.alert(pos.coords.latitude, pos.coords.longitude)
-          .then((data) => {
-            if (data?.alerts?.length) setWeather(data);
-            else setWeatherError('No weather alerts for your area');
-          })
-          .catch(() => setWeatherError('Failed to fetch weather'))
-          .finally(() => setWeatherLoading(false));
-      },
-      () => { setWeatherError('Location access denied'); setWeatherLoading(false); },
+      (pos) => fetchWeather(pos.coords.latitude, pos.coords.longitude),
+      () => { setWeatherError('Location access denied. Enter coordinates manually below.'); setWeatherLoading(false); },
       { timeout: 5000 }
     );
   };
 
+  const fetchManual = () => {
+    const lat = parseFloat(manualLat);
+    const lng = parseFloat(manualLng);
+    if (isNaN(lat) || isNaN(lng)) { setWeatherError('Enter valid latitude and longitude'); return; }
+    fetchWeather(lat, lng);
+  };
+
   useEffect(() => {
-    if (tab === 'weather') fetchWeather();
+    if (tab === 'weather') fetchByGeo();
   }, [tab]);
 
   return (
@@ -133,26 +146,21 @@ export default function Notifications() {
         {tab === 'weather' && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <p className="text-xs text-gray-500 dark:text-gray-400">Auto-detects your location to show relevant weather alerts for your plants.</p>
-              <button onClick={fetchWeather} disabled={weatherLoading} className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 text-[11px] font-medium hover:bg-emerald-200 dark:hover:bg-emerald-800 transition-colors cursor-pointer disabled:opacity-50">
+              <p className="text-xs text-gray-500 dark:text-gray-400">Weather-based plant care alerts for your location.</p>
+              <button onClick={fetchByGeo} disabled={weatherLoading} className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 text-[11px] font-medium hover:bg-emerald-200 dark:hover:bg-emerald-800 transition-colors cursor-pointer disabled:opacity-50">
                 {weatherLoading ? <Loader size={12} className="animate-spin" /> : <CloudRain size={12} />}
-                Refresh
+                Detect Location
               </button>
             </div>
 
             {weatherLoading ? (
               <div className="rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 text-center"><Loader size={20} className="animate-spin text-emerald-500 mx-auto" /><p className="text-xs text-gray-400 mt-2">Checking weather...</p></div>
-            ) : weatherError ? (
-              <div className="rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 text-center">
-                <Sun size={32} className="text-gray-300 dark:text-gray-600 mx-auto mb-2" />
-                <p className="text-sm text-gray-500 dark:text-gray-400">{weatherError}</p>
-              </div>
             ) : weather ? (
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mb-1">
                   <Sun size={12} /> {weather.location} · {weather.temp}°C · Humidity {weather.humidity}%
                 </div>
-                {weather.alerts.map((a, i) => {
+                {weather.alerts?.length > 0 ? weather.alerts.map((a, i) => {
                   const Icon = weatherIcons[a.icon] || AlertTriangle;
                   return (
                     <div key={i} className={`rounded-2xl border p-4 ${a.type === 'rain' ? 'bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800' : a.type === 'heat' ? 'bg-orange-50 dark:bg-orange-950/30 border-orange-200 dark:border-orange-800' : a.type === 'cold' ? 'bg-cyan-50 dark:bg-cyan-950/30 border-cyan-200 dark:border-cyan-800' : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700'}`}>
@@ -162,12 +170,23 @@ export default function Notifications() {
                       </div>
                     </div>
                   );
-                })}
+                }) : (
+                  <div className="rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-700 p-4 text-center">
+                    <CheckCircle size={24} className="text-emerald-500 mx-auto mb-1" />
+                    <p className="text-sm text-emerald-700 dark:text-emerald-400 font-medium">All clear!</p>
+                    <p className="text-xs text-emerald-600 dark:text-emerald-500 mt-0.5">No weather alerts for your area right now.</p>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 text-center">
-                <Bell size={28} className="text-gray-300 dark:text-gray-600 mx-auto mb-2" />
-                <p className="text-sm text-gray-500 dark:text-gray-400">No weather alerts at this time</p>
+                <MapPin size={28} className="text-gray-300 dark:text-gray-600 mx-auto mb-2" />
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">{weatherError || 'Click "Detect Location" to check weather alerts for your area.'}</p>
+                <div className="flex items-center gap-2 max-w-xs mx-auto">
+                  <input value={manualLat} onChange={(e) => setManualLat(e.target.value)} placeholder="Latitude" className="flex-1 px-3 py-1.5 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-xs text-gray-900 dark:text-white outline-none" />
+                  <input value={manualLng} onChange={(e) => setManualLng(e.target.value)} placeholder="Longitude" className="flex-1 px-3 py-1.5 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-xs text-gray-900 dark:text-white outline-none" />
+                  <button onClick={fetchManual} disabled={weatherLoading} className="shrink-0 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium transition-colors cursor-pointer disabled:opacity-50">Go</button>
+                </div>
               </div>
             )}
           </div>
