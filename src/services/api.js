@@ -75,10 +75,10 @@ const api = {
       if (otp) res.otp = otp;
       return res;
     },
-    register: async (name, email, phone) => {
+    register: async (name, email, phone, address, latitude, longitude) => {
       const res = await request('/auth/register', {
         method: 'POST',
-        body: JSON.stringify({ name, email, phone }),
+        body: JSON.stringify({ name, email, phone, address, latitude, longitude }),
       });
       const otp = extractOtp(res);
       if (otp) res.otp = otp;

@@ -4,23 +4,40 @@ import api from '../../services/api';
 
 export default function NearbyShops() {
   const [shops, setShops] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  const fetchShops = (lat, lng) => {
+    api.shops.nearby(lat, lng)
+      .then(setShops)
+      .catch(() => setError('Could not fetch nearby shops'))
+      .finally(() => setLoading(false));
+  };
+
   useEffect(() => {
-    if (!navigator.geolocation) { setError('Geolocation not available'); return; }
-    setLoading(true);
-    navigator.geolocation.getCurrentPosition(
-      async (pos) => {
-        try {
-          const data = await api.shops.nearby(pos.coords.latitude, pos.coords.longitude);
-          setShops(data);
-        } catch { setError('Could not fetch nearby shops'); }
-        setLoading(false);
-      },
-      () => { setError('Location access denied'); setLoading(false); },
-      { timeout: 10000 }
-    );
+    const userStr = localStorage.getItem('user');
+    let lat, lng;
+
+    if (userStr) {
+      try {
+        const user = JSON.parse(userStr);
+        lat = parseFloat(user.latitude);
+        lng = parseFloat(user.longitude);
+      } catch {}
+    }
+
+    if (lat && lng) {
+      fetchShops(lat, lng);
+    } else if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => fetchShops(pos.coords.latitude, pos.coords.longitude),
+        () => { setError('Location unavailable'); setLoading(false); },
+        { timeout: 10000 }
+      );
+    } else {
+      setError('Location not available');
+      setLoading(false);
+    }
   }, []);
 
   if (loading) return (
@@ -29,9 +46,7 @@ export default function NearbyShops() {
     </div>
   );
 
-  if (error) return null;
-
-  if (shops.length === 0) return null;
+  if (error || shops.length === 0) return null;
 
   return (
     <div className="mt-4 rounded-xl bg-white dark:bg-gray-800 border border-emerald-200 dark:border-emerald-700 overflow-hidden">
