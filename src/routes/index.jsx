@@ -31,7 +31,7 @@ import DashboardApiKeys from '../pages/DashboardApiKeys';
 import DashboardDeveloper from '../pages/DashboardDeveloper';
 import PlanCheckout from '../pages/PlanCheckout';
 import MyPlants from '../pages/MyPlants';
-import DailyTips from '../pages/DailyTips';
+import Notifications from '../pages/Notifications';
 import Community from '../pages/Community';
 import RegisterShop from '../pages/RegisterShop';
 import ShopOwnerDashboard from '../pages/ShopOwnerDashboard';
@@ -49,6 +49,7 @@ import AdminPlansPage from '../pages/AdminPlansPage';
 import AdminApiPlansPage from '../pages/AdminApiPlansPage';
 import AdminDownloadsPage from '../pages/AdminDownloadsPage';
 import AdminAIServicesPage from '../pages/AdminAIServicesPage';
+import AdminDailyTipsPage from '../pages/AdminDailyTipsPage';
 
 function ErrorPage() {
   return (
@@ -127,8 +128,8 @@ export default function createAppRouter(isDark, toggleTheme) {
       element: <Community />,
     },
     {
-      path: '/daily-tips',
-      element: <DailyTips />,
+      path: '/notifications',
+      element: <Notifications />,
     },
     {
       path: '/register-shop',
@@ -159,6 +160,7 @@ export default function createAppRouter(isDark, toggleTheme) {
         { path: 'api-plans', element: <AdminApiPlansPage /> },
         { path: 'downloads', element: <AdminDownloadsPage /> },
         { path: 'ai-services', element: <AdminAIServicesPage /> },
+        { path: 'daily-tips', element: <AdminDailyTipsPage /> },
         { path: 'shops', element: <AdminShopsPage /> },
       ],
     },
