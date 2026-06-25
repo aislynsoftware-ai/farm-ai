@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Sprout, LogIn, UserPlus, LayoutDashboard, ChevronDown, LogOut, ChevronRight, Store } from 'lucide-react';
+import { Menu, X, Sprout, LogIn, UserPlus, LayoutDashboard, ChevronDown, LogOut, ChevronRight, Store, User, ShoppingBag } from 'lucide-react';
 import { NAV_LINKS, ROUTES, APP_NAME } from '../../constants';
 import ThemeToggle from '../common/ThemeToggle';
 import Button from '../common/Button';
@@ -268,7 +268,7 @@ export default function Navbar({ isDark, toggleTheme }) {
                         <LayoutDashboard size={13} />
                         Dashboard
                       </Link>
-                      {user?.role === 'shop_owner' ? (
+                      {user?.role === 'shop_owner' && (
                         <Link
                           to="/my-shop"
                           onClick={() => setUserMenuOpen(false)}
@@ -276,15 +276,6 @@ export default function Navbar({ isDark, toggleTheme }) {
                         >
                           <Store size={13} />
                           My Shop
-                        </Link>
-                      ) : (
-                        <Link
-                          to="/register-shop"
-                          onClick={() => setUserMenuOpen(false)}
-                          className="flex items-center gap-2 px-3 py-2 text-xs text-gray-600 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-colors"
-                        >
-                          <Store size={13} />
-                          Register Your Shop
                         </Link>
                       )}
                       <button
@@ -302,9 +293,40 @@ export default function Navbar({ isDark, toggleTheme }) {
                   <Link to={ROUTES.LOGIN}>
                     <Button variant="ghost" size="sm" icon={LogIn}>Login</Button>
                   </Link>
-                  <Link to={ROUTES.REGISTER}>
-                    <Button size="sm" icon={UserPlus}>Register</Button>
-                  </Link>
+                  <div className="relative" ref={(el) => { dropdownRefs.current['Register'] = el; }}>
+                    <button
+                      onClick={() => setOpenDropdown(openDropdown === 'Register' ? null : 'Register')}
+                      className="flex items-center gap-1 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300 bg-emerald-100 dark:bg-emerald-800/40 hover:bg-emerald-200 dark:hover:bg-emerald-800 cursor-pointer"
+                    >
+                      <UserPlus size={14} />
+                      Register
+                      <ChevronDown size={12} className={`transition-transform duration-200 ${openDropdown === 'Register' ? 'rotate-180' : ''}`} />
+                    </button>
+                    <AnimatePresence>
+                      {openDropdown === 'Register' && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 6 }}
+                          transition={{ duration: 0.15 }}
+                          className="absolute right-0 top-full mt-1 w-48 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg shadow-black/5 dark:shadow-black/20 z-[9999] overflow-hidden"
+                        >
+                          <Link to={ROUTES.REGISTER} onClick={() => setOpenDropdown(null)}
+                            className="flex items-center gap-2 px-3.5 py-2.5 text-xs text-gray-600 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                          >
+                            <User size={13} />
+                            Register as User
+                          </Link>
+                          <Link to="/register-shop" onClick={() => setOpenDropdown(null)}
+                            className="flex items-center gap-2 px-3.5 py-2.5 text-xs text-gray-600 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors"
+                          >
+                            <Store size={13} />
+                            Register as Shop
+                          </Link>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 </>
               )}
             </div>
@@ -348,12 +370,18 @@ export default function Navbar({ isDark, toggleTheme }) {
                   </>
                 ) : (
                   <>
-                    <Link to={ROUTES.LOGIN} className="block">
-                      <Button variant="outline" size="sm" icon={LogIn} className="w-full justify-center">Login</Button>
-                    </Link>
-                    <Link to={ROUTES.REGISTER} className="block">
-                      <Button size="sm" icon={UserPlus} className="w-full justify-center">Register</Button>
-                    </Link>
+                    <div className="space-y-1">
+                      <Link to={ROUTES.LOGIN} className="block">
+                        <Button variant="outline" size="sm" icon={LogIn} className="w-full justify-center">Login</Button>
+                      </Link>
+                      <p className="text-[11px] text-gray-400 dark:text-gray-500 text-center">New here?</p>
+                      <Link to={ROUTES.REGISTER} className="block">
+                        <Button size="sm" icon={User} className="w-full justify-center">Register as User</Button>
+                      </Link>
+                      <Link to="/register-shop" className="block">
+                        <Button size="sm" icon={Store} className="w-full justify-center" variant="outline">Register as Shop</Button>
+                      </Link>
+                    </div>
                   </>
                 )}
               </div>
