@@ -30,8 +30,16 @@ export default function Notifications() {
   const [weather, setWeather] = useState(null);
   const [weatherLoading, setWeatherLoading] = useState(false);
   const [weatherError, setWeatherError] = useState('');
-  const [manualLat, setManualLat] = useState('');
-  const [manualLng, setManualLng] = useState('');
+  const [userLocation, setUserLocation] = useState(null);
+
+  useEffect(() => {
+    try {
+      const u = JSON.parse(localStorage.getItem('user') || '{}');
+      if (u.latitude && u.longitude) {
+        setUserLocation({ lat: u.latitude, lng: u.longitude, address: u.address || '' });
+      }
+    } catch {}
+  }, []);
 
   useEffect(() => {
     if (tab !== 'tips') return;
@@ -47,34 +55,16 @@ export default function Notifications() {
     setWeatherError('');
     setWeather(null);
     api.weather.alert(lat, lng)
-      .then((data) => {
-        setWeather(data);
-      })
+      .then(setWeather)
       .catch(() => setWeatherError('Failed to fetch weather'))
       .finally(() => setWeatherLoading(false));
   };
 
-  const fetchByGeo = () => {
-    if (!navigator.geolocation) { setWeatherError('Location not available. Enter coordinates manually below.'); return; }
-    setWeatherLoading(true);
-    setWeatherError('');
-    navigator.geolocation.getCurrentPosition(
-      (pos) => fetchWeather(pos.coords.latitude, pos.coords.longitude),
-      () => { setWeatherError('Location access denied. Enter coordinates manually below.'); setWeatherLoading(false); },
-      { timeout: 5000 }
-    );
-  };
-
-  const fetchManual = () => {
-    const lat = parseFloat(manualLat);
-    const lng = parseFloat(manualLng);
-    if (isNaN(lat) || isNaN(lng)) { setWeatherError('Enter valid latitude and longitude'); return; }
-    fetchWeather(lat, lng);
-  };
-
   useEffect(() => {
-    if (tab === 'weather') fetchByGeo();
-  }, [tab]);
+    if (tab === 'weather' && userLocation) {
+      fetchWeather(userLocation.lat, userLocation.lng);
+    }
+  }, [tab, userLocation]);
 
   return (
     <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -146,14 +136,21 @@ export default function Notifications() {
         {tab === 'weather' && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <p className="text-xs text-gray-500 dark:text-gray-400">Weather-based plant care alerts for your location.</p>
-              <button onClick={fetchByGeo} disabled={weatherLoading} className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 text-[11px] font-medium hover:bg-emerald-200 dark:hover:bg-emerald-800 transition-colors cursor-pointer disabled:opacity-50">
-                {weatherLoading ? <Loader size={12} className="animate-spin" /> : <CloudRain size={12} />}
-                Detect Location
-              </button>
+              <p className="text-xs text-gray-500 dark:text-gray-400">Weather for your registered location{userLocation?.address ? ` — ${userLocation.address}` : ''}</p>
+              {userLocation && (
+                <button onClick={() => fetchWeather(userLocation.lat, userLocation.lng)} disabled={weatherLoading} className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 text-[11px] font-medium hover:bg-emerald-200 dark:hover:bg-emerald-800 transition-colors cursor-pointer disabled:opacity-50">
+                  <Loader size={12} className={weatherLoading ? 'animate-spin' : ''} />
+                  Refresh
+                </button>
+              )}
             </div>
 
-            {weatherLoading ? (
+            {!userLocation ? (
+              <div className="rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 text-center">
+                <MapPin size={28} className="text-gray-300 dark:text-gray-600 mx-auto mb-2" />
+                <p className="text-sm text-gray-500 dark:text-gray-400">No location saved. Please register with your address to get weather alerts.</p>
+              </div>
+            ) : weatherLoading ? (
               <div className="rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 text-center"><Loader size={20} className="animate-spin text-emerald-500 mx-auto" /><p className="text-xs text-gray-400 mt-2">Checking weather...</p></div>
             ) : weather?.current ? (
               <>
@@ -247,12 +244,7 @@ export default function Notifications() {
             ) : (
               <div className="rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 p-6 text-center">
                 <MapPin size={28} className="text-gray-300 dark:text-gray-600 mx-auto mb-2" />
-                <p className="text-sm text-gray-500 dark:text-gray-400 mb-3">{weatherError || 'Click "Detect Location" to check weather for your area.'}</p>
-                <div className="flex items-center gap-2 max-w-xs mx-auto">
-                  <input value={manualLat} onChange={(e) => setManualLat(e.target.value)} placeholder="Latitude" className="flex-1 px-3 py-1.5 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-xs text-gray-900 dark:text-white outline-none" />
-                  <input value={manualLng} onChange={(e) => setManualLng(e.target.value)} placeholder="Longitude" className="flex-1 px-3 py-1.5 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 text-xs text-gray-900 dark:text-white outline-none" />
-                  <button onClick={fetchManual} disabled={weatherLoading} className="shrink-0 px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-medium transition-colors cursor-pointer disabled:opacity-50">Go</button>
-                </div>
+                <p className="text-sm text-gray-500 dark:text-gray-400">{weatherError || 'Unable to fetch weather data.'}</p>
               </div>
             )}
           </div>
