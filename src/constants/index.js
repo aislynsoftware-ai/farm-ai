@@ -42,6 +42,7 @@ export const ROUTES = {
   ADMIN_PREDICTIONS: '/admin/predictions',
   ADMIN_PLANS: '/admin/plans',
   ADMIN_DOWNLOADS: '/admin/downloads',
+  REGISTER_SHOP: '/register-shop',
 };
 
 export const NAV_LINKS = [
@@ -68,6 +69,7 @@ export const NAV_LINKS = [
     ],
   },
   { label: 'Contact', path: ROUTES.CONTACT },
+  { label: 'Register Shop', path: '/register-shop' },
 ];
 
 export const DASHBOARD_SIDEBAR = [
