@@ -31,6 +31,7 @@ import DashboardApiKeys from '../pages/DashboardApiKeys';
 import DashboardDeveloper from '../pages/DashboardDeveloper';
 import PlanCheckout from '../pages/PlanCheckout';
 import MyPlants from '../pages/MyPlants';
+import Community from '../pages/Community';
 import AdminLogin from '../pages/AdminLogin';
 import AdminDashboard from '../pages/AdminDashboard';
 import AdminUsersPage from '../pages/AdminUsersPage';
@@ -116,6 +117,10 @@ export default function createAppRouter(isDark, toggleTheme) {
     {
       path: '/my-plants',
       element: <MyPlants />,
+    },
+    {
+      path: '/community',
+      element: <Community />,
     },
     {
       path: '/admin/login',
