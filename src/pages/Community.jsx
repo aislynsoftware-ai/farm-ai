@@ -258,7 +258,7 @@ export default function Community() {
   };
 
   return (
-    <div className="flex min-h-screen bg-emerald-50/30 dark:bg-emerald-950">
+    <div className="flex min-h-screen bg-gray-50 dark:bg-gray-900">
       <Sidebar mobileOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
       <main className="flex-1 overflow-x-hidden">
         <SEO title="Community" description="Post leaf images and discuss with farmers" url="/community" />
