@@ -74,15 +74,15 @@ export default function RegisterShop() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4">
       <div className="w-full max-w-lg">
-        <div className="text-center mb-6">
+       
+
+        <form onSubmit={handleSubmit} className="space-y-4 bg-white dark:bg-gray-800 rounded-2xl border border-emerald-200 dark:border-emerald-700 p-6">
+          {error && <p className="text-xs text-red-500 bg-red-50 dark:bg-red-900/30 p-2 rounded-lg">{error}</p>}
+ <div className="text-center mb-6">
           <Store size={36} className="text-emerald-500 mx-auto mb-2" />
           <h1 className="text-xl font-bold text-gray-900 dark:text-white">Register Your Shop</h1>
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">Create a shop owner account for your fertilizer business</p>
         </div>
-
-        <form onSubmit={handleSubmit} className="space-y-4 bg-white dark:bg-gray-800 rounded-2xl border border-emerald-200 dark:border-emerald-700 p-6">
-          {error && <p className="text-xs text-red-500 bg-red-50 dark:bg-red-900/30 p-2 rounded-lg">{error}</p>}
-
           <div>
             <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">Your Name *</label>
             <input value={form.name} onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))} placeholder="John Doe" className={inputClass} />
