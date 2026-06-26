@@ -41,6 +41,7 @@ export default function RegisterShop() {
     e.preventDefault();
     if (!form.shop_name) { setError('Shop name is required'); return; }
     if (!form.name) { setError('Your name is required'); return; }
+    if (!form.latitude || !form.longitude) { setError('Please select your address from suggestions or use GPS'); return; }
     setLoading(true); setError('');
     try {
       const res = await api.shops.register(form);
