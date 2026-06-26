@@ -1,16 +1,35 @@
-import { useState, useEffect, useRef } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Sprout, ChevronLeft, ChevronRight } from 'lucide-react';
-import PageHeader from '../components/layout/PageHeader';
-import ServiceCard from '../components/ui/ServiceCard';
-import SectionTitle from '../components/common/SectionTitle';
-import servicesData from '../data/services';
+import { ChevronRight, ChevronDown, Upload, Leaf, Loader, AlertCircle, CheckCircle } from 'lucide-react';
 import SEO from '../components/common/SEO';
-import Skeleton from '../components/common/Skeleton';
+import PageHeader from '../components/layout/PageHeader';
 import api from '../services/api';
 
-
+const titleEndpoint = {
+  'tomato': '/leafs/tomato',
+  'potato': '/leafs/potato',
+  'brinjal': '/leafs/brinjal',
+  'chilli': '/leafs/chili',
+  'lady finger': '/leafs/ladyfinger',
+  'brinjal veg': '/vegtables/brinjal',
+  'cauliflower': '/vegtables/cauliflower',
+  'cucumber': '/vegtables/cucumber',
+  'ridge gourd': '/vegtables/ridge',
+  'bitter gourd': '/vegtables/bitter_gourd',
+  'custard apple': '/fruits/custard_apple',
+  'guava': '/fruits/guava',
+  'pomegranate': '/fruits/pomegranate',
+  'lemon': '/fruits/lemon',
+  'tomato fruit': '/fruits/tomato',
+  'jasmine': '/flowers/jasmine',
+  'rose': '/flowers/rose',
+  'marigold': '/flowers/marigold',
+  'chrysanthemum': '/flowers/chrysanthemums',
+  'potted plant': '/potted_plant',
+  'plant identification': '/plant_idetification',
+  'food identification': '/food_identification',
+};
 
 export default function Services() {
   const navigate = useNavigate();
@@ -18,7 +37,14 @@ export default function Services() {
   const [agriTitles, setAgriTitles] = useState([]);
   const [crops, setCrops] = useState([]);
   const [subCrops, setSubCrops] = useState([]);
-  const scrollRefs = useRef({});
+  const [selectedAgri, setSelectedAgri] = useState(null);
+  const [selectedCrop, setSelectedCrop] = useState(null);
+  const [selectedSub, setSelectedSub] = useState(null);
+  const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState(null);
+  const [predicting, setPredicting] = useState(false);
+  const [result, setResult] = useState(null);
+  const [predError, setPredError] = useState('');
 
   useEffect(() => {
     Promise.all([
@@ -28,115 +54,119 @@ export default function Services() {
     ]).finally(() => setLoading(false));
   }, []);
 
-  const authLink = (path) => {
-    try { return !!localStorage.getItem('token') ? path : '/login'; } catch { return path; }
+  const filteredCrops = selectedAgri ? crops.filter((c) => c.agri_id === selectedAgri.id) : [];
+  const filteredSubs = selectedCrop ? subCrops.filter((s) => s.crop_id === selectedCrop.id) : [];
+
+  const getEndpoint = (name) => {
+    const key = Object.keys(titleEndpoint).find((k) => name?.toLowerCase().includes(k));
+    return key ? titleEndpoint[key] : null;
   };
 
-  const scroll = (id, dir) => {
-    const el = scrollRefs.current[id];
-    if (!el) return;
-    el.scrollBy({ left: dir * 320, behavior: 'smooth' });
+  const handlePredict = async () => {
+    if (!file) { setPredError('Please select an image'); return; }
+    setPredicting(true); setPredError(''); setResult(null);
+    const userId = (() => { try { return JSON.parse(localStorage.getItem('user') || '{}').user_id; } catch { return ''; } })();
+    if (!userId) { setPredError('Please login first'); setPredicting(false); return; }
+    const name = selectedSub?.title || selectedCrop?.title || '';
+    const ep = getEndpoint(name);
+    if (!ep) { setPredError(`No prediction model for "${name}"`); setPredicting(false); return; }
+    try {
+      const fd = new FormData(); fd.append('user_id', userId); fd.append('image', file);
+      const res = await fetch(ep, { method: 'POST', body: fd });
+      const data = await res.json();
+      setResult(data);
+    } catch (err) { setPredError(err.message); }
+    setPredicting(false);
   };
+
+  const resetSelection = () => { setSelectedCrop(null); setSelectedSub(null); setFile(null); setPreview(null); setResult(null); setPredError(''); };
+
+  const tagClass = (active) => `inline-flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-medium transition-all cursor-pointer border ${active ? 'bg-emerald-600 text-white border-emerald-600 shadow-md' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-gray-600 hover:border-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-400'}`;
 
   return (
     <main>
       <SEO title="Services" description="Explore Farmlyt AI services including crop disease detection, plant identification, food analysis, and smart agriculture solutions." url="/services" />
       <PageHeader title="Our Services" description="Comprehensive AI-powered solutions designed to address every aspect of modern agriculture and farming." />
 
-      <section className="py-12 bg-white dark:bg-black">
+      <section className="py-12 bg-gray-50 dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {loading ? (
-            <div className="space-y-10">{[1,2].map(i => <div key={i}><Skeleton className="w-48 h-6 mb-4" /><div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">{[1,2,3,4].map(j => <Skeleton key={j} className="h-40 rounded-2xl" />)}</div></div>)}</div>
+            <div className="flex flex-wrap gap-3">{[1,2,3,4,5,6].map(i => <div key={i} className="w-28 h-9 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse" />)}</div>
           ) : (
-            agriTitles.map((agri, ai) => {
-              const crs = crops.filter((c) => Number(c.agri_id) === Number(agri.id));
-              return (
-                <motion.div key={agri.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: ai * 0.06 }} className="mb-10">
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="w-1 h-5 rounded-full bg-emerald-500" />
-                    <h2 className="text-base font-bold text-black dark:text-white">{agri.title}</h2>
+            <>
+              {/* Agri Title Tags */}
+              <div className="flex flex-wrap gap-3 mb-6">
+                {agriTitles.map((a) => (
+                  <button key={a.id} onClick={() => { setSelectedAgri(selectedAgri?.id === a.id ? null : a); resetSelection(); }} className={tagClass(selectedAgri?.id === a.id)}>
+                    {a.title} {selectedAgri?.id === a.id ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+                  </button>
+                ))}
+              </div>
+
+              {/* Crops */}
+              {selectedAgri && (
+                <div className="mb-6">
+                  <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">Crops in {selectedAgri.title}</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {filteredCrops.length === 0 && <p className="text-xs text-gray-400">No crops found</p>}
+                    {filteredCrops.map((c) => (
+                      <button key={c.id} onClick={() => { setSelectedCrop(selectedCrop?.id === c.id ? null : c); setSelectedSub(null); setFile(null); setPreview(null); setResult(null); setPredError(''); }} className={tagClass(selectedCrop?.id === c.id)}>
+                        {c.title} {selectedCrop?.id === c.id ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+                      </button>
+                    ))}
                   </div>
-                  {crs.length === 0 ? (
-                    <p className="text-xs text-emerald-600 dark:text-emerald-400 ml-3">No crops available</p>
-                  ) : (
-                    <div className="relative">
-                      {crs.length > 3 && (
-                        <>
-                          <button onClick={() => scroll(agri.id, -1)} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-gray-900 dark:bg-white shadow-lg border border-emerald-300/50 dark:border-emerald-600/50 flex items-center justify-center hover:bg-emerald-500 hover:border-emerald-500 transition-all duration-200 cursor-pointer -ml-4">
-                            <ChevronLeft size={20} className="text-white dark:text-black hover:text-white transition-colors" />
-                          </button>
-                          <button onClick={() => scroll(agri.id, 1)} className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-gray-900 dark:bg-white shadow-lg border border-emerald-300/50 dark:border-emerald-600/50 flex items-center justify-center hover:bg-emerald-500 hover:border-emerald-500 transition-all duration-200 cursor-pointer -mr-4">
-                            <ChevronRight size={20} className="text-white dark:text-black hover:text-white transition-colors" />
-                          </button>
-                        </>
-                      )}
-                      <div ref={(el) => { if (el) scrollRefs.current[agri.id] = el; }} className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                        {crs.map((crop, ci) => {
-                          const subs = subCrops.filter((s) => Number(s.crop_id) === Number(crop.id));
-                          return (
-                            <div key={crop.id} className="flex-shrink-0 w-[280px] snap-start">
-                              <motion.button
-                                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: ci * 0.04 }}
-                                onClick={() => {
-                                  navigate(authLink(`/agriculture/${agri.id}/crop/${crop.id}`));
-                                }}
-                                className="group w-full h-[340px] rounded-2xl bg-white dark:bg-gray-800 border border-emerald-200 dark:border-emerald-700 overflow-hidden hover:border-emerald-400 transition-all duration-300 cursor-pointer"
-                              >
-                                <div className="relative h-55 overflow-hidden">
-                                  {crop.image_url ? (
-                                    <img src={crop.image_url} alt={crop.title} className="w-full h-60 object-cover bg-emerald-50/30 dark:bg-emerald-950" />
-                                  ) : (
-                                    <div className="w-full h-52 flex items-center justify-center bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-950/30 dark:to-green-950/30">
-                                      <Sprout size={40} className="text-emerald-400" />
-                                    </div>
-                                  )}
-                                </div>
-                                <div className="px-3 py-3 text-center flex flex-col items-center justify-center min-h-[80px]">
-                                  <h3 className="text-sm font-bold text-gray-900 dark:text-white line-clamp-2 leading-tight">{crop.title}</h3>
-                                  {subs.length > 0 && <p className="text-[11px] text-gray-400 mt-1">{subs.length} sub type{subs.length > 1 ? 's' : ''}</p>}
-                                  {subs.length === 0 && <p className="text-[11px] text-emerald-500 mt-1 font-medium">Detect Now →</p>}
-                                </div>
-                              </motion.button>
-                            </div>
-                          );
-                        })}
-                      </div>
+                </div>
+              )}
+
+              {/* Sub Crops */}
+              {selectedCrop && filteredSubs.length > 0 && (
+                <div className="mb-6">
+                  <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">Sub Types in {selectedCrop.title}</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {filteredSubs.map((s) => (
+                      <button key={s.id} onClick={() => { setSelectedSub(selectedSub?.id === s.id ? null : s); setFile(null); setPreview(null); setResult(null); setPredError(''); }} className={tagClass(selectedSub?.id === s.id)}>
+                        {s.title}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Predict Section - shown when leaf reached */}
+              {((selectedSub) || (selectedCrop && filteredSubs.length === 0)) && (
+                <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl bg-white dark:bg-gray-800 border border-emerald-200 dark:border-emerald-700 p-6 max-w-xl">
+                  <h4 className="text-sm font-bold text-gray-900 dark:text-white mb-1">
+                    Predict: {selectedSub?.title || selectedCrop?.title}
+                  </h4>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-4">Upload an image to get AI-powered prediction</p>
+
+                  <div className="flex items-center gap-3 mb-4">
+                    <button onClick={() => document.getElementById('svc-file-input')?.click()} className="px-4 py-2 rounded-xl bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 text-sm font-medium hover:bg-emerald-200 dark:hover:bg-emerald-800 cursor-pointer flex items-center gap-1.5">
+                      <Upload size={14} /> {file ? file.name : 'Choose Image'}
+                    </button>
+                    <input id="svc-file-input" type="file" accept="image/*" className="hidden" onChange={(e) => { const f = e.target.files?.[0]; if (f) { setFile(f); const r = new FileReader(); r.onload = (ev) => setPreview(ev.target.result); r.readAsDataURL(f); setPredError(''); } }} />
+                    {preview && <img src={preview} alt="" className="w-12 h-12 rounded-lg object-cover" />}
+                  </div>
+
+                  {file && (
+                    <button onClick={handlePredict} disabled={predicting} className="px-5 py-2.5 rounded-xl bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-500 disabled:opacity-50 cursor-pointer flex items-center gap-1.5">
+                      {predicting ? <Loader size={14} className="animate-spin" /> : null}
+                      {predicting ? 'Predicting...' : 'Predict'}
+                    </button>
+                  )}
+
+                  {predError && <div className="flex items-center gap-2 p-3 mt-3 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800"><AlertCircle size={14} className="text-red-500" /><p className="text-xs text-red-600 dark:text-red-400">{predError}</p></div>}
+
+                  {result && (
+                    <div className="mt-4 p-4 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-700">
+                      <div className="flex items-center gap-2 mb-2"><CheckCircle size={16} className="text-emerald-600" /><p className="text-sm font-bold text-emerald-700 dark:text-emerald-400">Prediction Result</p></div>
+                      <pre className="text-xs text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{JSON.stringify(result, null, 2)}</pre>
                     </div>
                   )}
                 </motion.div>
-              );
-            })
+              )}
+            </>
           )}
-        </div>
-      </section>
-
-      <section className="py-10 lg:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-5">
-            {servicesData.map((service, index) => (
-              <ServiceCard key={service.id} service={service} index={index} />
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-10 lg:py-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <SectionTitle subtitle="Why Our Services" title="Built for Modern Agriculture" description="Each service is crafted with cutting-edge AI technology to deliver accurate, fast, and actionable results." />
-          <div className="grid md:grid-cols-3 gap-4">
-            {[
-              { title: '95% Accuracy', desc: 'Industry-leading AI model accuracy for reliable results you can trust.' },
-              { title: 'Under 5 Seconds', desc: 'Lightning-fast inference delivers results in milliseconds, not minutes.' },
-              { title: '24/7 Availability', desc: 'Our cloud platform ensures your tools are always available when you need them.' },
-            ].map((item, index) => (
-              <motion.div key={index} className="text-center p-5 bg-white dark:bg-gray-800 rounded-2xl border-2 border-emerald-200 dark:border-emerald-700 hover:border-emerald-400 dark:hover:border-emerald-400 hover:bg-emerald-50/60 dark:hover:bg-emerald-950/30 transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
-                initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: '-50px' }} transition={{ duration: 0.35, delay: index * 0.08 }}
-              >
-                <div className="text-2xl md:text-3xl font-bold gradient-text mb-1">{item.title}</div>
-                <p className="text-emerald-700 dark:text-emerald-300 text-xs">{item.desc}</p>
-              </motion.div>
-            ))}
-          </div>
         </div>
       </section>
     </main>
