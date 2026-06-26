@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Users, CreditCard, Leaf, ShoppingBag, Cpu, Sprout, Layers, IndianRupee } from 'lucide-react';
+import { Users, CreditCard, Leaf, ShoppingBag, Sprout, Layers, IndianRupee } from 'lucide-react';
 import Skeleton from '../components/common/Skeleton';
 import api from '../services/api';
 
@@ -15,7 +15,7 @@ export default function AdminDashboard() {
 
   if (loading) return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-      {[1,2,3,4,5,6,7,8].map(i => <Skeleton key={i} className="h-32" />)}
+      {[1,2,3,4,5,6,7].map(i => <Skeleton key={i} className="h-32" />)}
     </div>
   );
 
@@ -23,7 +23,6 @@ export default function AdminDashboard() {
   const cards = [
     { label: 'Total Users', value: s.users ?? 0, icon: Users, color: 'text-emerald-500' },
     { label: 'Revenue', value: '₹' + (s.revenue || 0), icon: IndianRupee, color: 'text-emerald-500' },
-    { label: 'AI Services', value: s.ai_services ?? 0, icon: Cpu, color: 'text-emerald-500' },
     { label: 'Agri Titles', value: s.agri_titles ?? 0, icon: Leaf, color: 'text-emerald-500' },
     { label: 'Crops', value: s.crops ?? 0, icon: Sprout, color: 'text-emerald-500' },
     { label: 'Sub Crops', value: s.sub_crops ?? 0, icon: Layers, color: 'text-emerald-500' },

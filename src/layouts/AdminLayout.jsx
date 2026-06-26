@@ -1,16 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, Leaf, Sprout, ShoppingBag, CreditCard, Menu, X, LogOut, Brain, Crown, Download, Cpu, Sun, Moon, DollarSign, Store, Lightbulb, Flower2 } from 'lucide-react';
+import { LayoutDashboard, Users, Leaf, Sprout, ShoppingBag, CreditCard, Menu, X, LogOut, Brain, Crown, Download, Sun, Moon, DollarSign, Store, Lightbulb, Flower2 } from 'lucide-react';
 import ThemeToggle from '../components/common/ThemeToggle';
 import api from '../services/api';
 
 const SIDEBAR = [
   { path: '/admin/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { path: '/admin/users', label: 'Users', icon: Users },
-   { path: '/admin/shops', label: 'Shops', icon: Store },
+  { path: '/admin/shops', label: 'Shops', icon: Store },
   { path: '/admin/plans', label: 'Plans', icon: Crown },
-  { path: '/admin/api-plans', label: 'API Plans', icon: DollarSign },
-  { path: '/admin/ai-services', label: 'AI Services', icon: Cpu },
   { path: '/admin/agri-titles', label: 'Agri Titles', icon: Leaf },
   { path: '/admin/crops', label: 'Crops', icon: Sprout },
   { path: '/admin/sub-crops', label: 'Sub Crops', icon: Sprout },

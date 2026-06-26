@@ -166,37 +166,18 @@ const api = {
       adminRequest(`/update_product/${id}`, { method: 'POST', body: formData, headers: {} }),
     addProduct: (formData) =>
       adminRequest('/add_product', { method: 'POST', body: formData, headers: {} }),
-    // AI Services
-    getAIServices: () =>
-      adminRequest('/admin/ai-services'),
-    addAIService: (data) => {
-      const fd = new FormData();
-      fd.append('name', data.name);
-      if (data.image) fd.append('image', data.image);
-      return adminRequest('/admin/ai-services/add', { method: 'POST', body: fd, headers: {} });
-    },
-    updateAIService: (id, data) => {
-      const fd = new FormData();
-      fd.append('name', data.name);
-      if (data.image) fd.append('image', data.image);
-      return adminRequest(`/admin/ai-services/${id}`, { method: 'PUT', body: fd, headers: {} });
-    },
-    deleteAIService: (id) =>
-      adminRequest(`/admin/ai-services/${id}`, { method: 'DELETE' }),
     // Agri titles
-    addAgriTitle: (title, file, aiServiceId) => {
+    addAgriTitle: (title, file) => {
       const fd = new FormData();
       fd.append('title', title);
       fd.append('image', file);
-      if (aiServiceId) fd.append('ai_service_id', aiServiceId);
       return adminRequest('/add_agri_title', { method: 'POST', body: fd, headers: {} });
     },
-    updateAgriTitle: (id, title, file, aiServiceId) => {
+    updateAgriTitle: (id, title, file) => {
       const fd = new FormData();
       fd.append('id', id);
       fd.append('title', title);
       if (file) fd.append('image', file);
-      if (aiServiceId) fd.append('ai_service_id', aiServiceId);
       return adminRequest('/update_agri_title', { method: 'POST', body: fd, headers: {} });
     },
     deleteAgriTitle: (id) => {
@@ -269,7 +250,6 @@ const api = {
     getLeafPredictions: () => cachedRequest('/get_leaf_predictions'),
     cropWithProducts: () => cachedRequest('/get_crop_with_products'),
     wallet: (userId) => cachedRequest(`/user/wallet/${userId}`),
-    aiServices: () => request('/ai-services'),
   },
   payment: {
     createOrder: (userId, amount) =>

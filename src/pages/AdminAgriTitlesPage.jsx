@@ -5,24 +5,19 @@ import api from '../services/api';
 
 export default function AdminAgriTitlesPage() {
   const [items, setItems] = useState([]);
-  const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [formError, setFormError] = useState('');
   const [formSuccess, setFormSuccess] = useState('');
   const [formLoading, setFormLoading] = useState(false);
   const [edit, setEdit] = useState(null);
   const [title, setTitle] = useState('');
-  const [aiServiceId, setAiServiceId] = useState('');
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState('');
   const fileRef = useRef(null);
 
   const load = () => {
     setLoading(true);
-    Promise.all([
-      api.farming.agriTitles().then(setItems).catch(() => {}),
-      api.admin.getAIServices().then(setServices).catch(() => {}),
-    ]).finally(() => setLoading(false));
+    api.farming.agriTitles().then(setItems).catch(() => {}).finally(() => setLoading(false));
   };
 
   useEffect(() => { load(); }, []);
@@ -39,7 +34,7 @@ export default function AdminAgriTitlesPage() {
     }
   };
 
-  const resetForm = () => { setEdit(null); setTitle(''); setAiServiceId(''); setImage(null); setPreview(''); };
+  const resetForm = () => { setEdit(null); setTitle(''); setImage(null); setPreview(''); };
 
   const show = (msg) => { setFormSuccess(msg); setTimeout(() => setFormSuccess(''), 3000); };
 
@@ -50,10 +45,10 @@ export default function AdminAgriTitlesPage() {
     setFormLoading(true);
     try {
       if (edit) {
-        await api.admin.updateAgriTitle(edit.id, title, image, aiServiceId || null);
+        await api.admin.updateAgriTitle(edit.id, title, image);
       } else {
         if (!image) { setFormError('Image is required'); setFormLoading(false); return; }
-        await api.admin.addAgriTitle(title, image, aiServiceId || null);
+        await api.admin.addAgriTitle(title, image);
       }
       show(edit ? 'Updated' : 'Added');
       resetForm();
@@ -83,13 +78,6 @@ export default function AdminAgriTitlesPage() {
           <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Agri title name" className={inputClass} />
         </div>
         <div>
-          <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">AI Service</label>
-          <select value={aiServiceId} onChange={(e) => setAiServiceId(e.target.value)} className={inputClass}>
-            <option value="">Select service</option>
-            {services.map((s) => <option key={s.id} value={s.id}>{s.name}</option>)}
-          </select>
-        </div>
-        <div>
           <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1">Image</label>
           <input type="file" accept="image/*" ref={fileRef} className="hidden" onChange={handleFile} />
           <button type="button" onClick={() => fileRef.current?.click()} className="px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white text-sm hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer">
@@ -110,7 +98,7 @@ export default function AdminAgriTitlesPage() {
             <div className="p-3 flex items-center justify-between">
               <span className="text-sm text-gray-900 dark:text-white truncate">{a.title}</span>
               <div className="flex gap-1">
-                <button onClick={() => { setEdit(a); setTitle(a.title); setAiServiceId(a.ai_service_id || ''); setImage(null); setPreview(a.image_url || ''); }} className="p-1.5 rounded bg-gray-100 dark:bg-gray-700 text-blue-400 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer"><Edit2 size={12} /></button>
+                <button onClick={() => { setEdit(a); setTitle(a.title); setImage(null); setPreview(a.image_url || ''); }} className="p-1.5 rounded bg-gray-100 dark:bg-gray-700 text-blue-400 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer"><Edit2 size={12} /></button>
                 <button onClick={() => handleDelete(a.id)} className="p-1.5 rounded bg-gray-100 dark:bg-gray-700 text-red-400 hover:bg-gray-200 dark:hover:bg-gray-600 cursor-pointer"><Trash2 size={12} /></button>
               </div>
             </div>
