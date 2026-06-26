@@ -30,6 +30,7 @@ export default function Register() {
       else if (!/^[6-9]\d{9}$/.test(form.phone)) errs.phone = 'Enter valid 10-digit Indian number';
     }
     if (!form.terms) errs.terms = 'You must agree to the terms';
+    if (!form.latitude || !form.longitude) errs.address = 'Please select your address from suggestions or use GPS';
     return errs;
   };
 
@@ -190,6 +191,7 @@ export default function Register() {
                 </div>
               )}
               <button type="button" onClick={getLocation} className="mt-1.5 text-[11px] text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer"><MapPin size={10} className="inline mr-0.5" />Use GPS</button>
+              {errors.address && <p className="input-error mt-1"><AlertCircle size={12} />{errors.address}</p>}
             </div>
 
             <label className="flex items-start gap-2 cursor-pointer">
