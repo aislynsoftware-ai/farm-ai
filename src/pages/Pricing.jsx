@@ -75,12 +75,12 @@ export default function Pricing() {
                 key={plan.name}
                 variants={item}
                 className={`relative flex flex-col rounded-2xl border-2 p-6 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/5 ${
-                  plan.popular
+                  !!plan.popular
                     ? 'border-emerald-500 bg-white dark:bg-gray-800 shadow-lg shadow-emerald-500/10 scale-[1.02] z-10'
                     : 'border-gray-100 dark:border-gray-700 bg-white/80 dark:bg-gray-800/80 hover:border-emerald-200 dark:hover:border-emerald-700'
                 }`}
               >
-                {plan.popular && (
+                {!!plan.popular && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                     <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 text-white text-[10px] font-bold uppercase tracking-wider shadow-lg">
                       <Sparkles size={11} />
@@ -91,8 +91,10 @@ export default function Pricing() {
                 <div className="mb-4">
                   <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-1">{plan.name}</h3>
                   <div className="flex items-baseline gap-1">
-                    <span className="text-3xl font-extrabold text-gray-900 dark:text-white">{plan.price}</span>
-                    {plan.price !== 'Custom' && <span className="text-xs text-gray-500 dark:text-gray-400"> total</span>}
+                    <span className="text-3xl font-extrabold text-gray-900 dark:text-white">
+                      {plan.name === 'FREE' ? 'Free' : plan.price}
+                    </span>
+                    {plan.price !== 'Custom' && plan.name !== 'FREE' && <span className="text-xs text-gray-500 dark:text-gray-400"> total</span>}
                   </div>
                   <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">{plan.requests}</p>
                 </div>
