@@ -31,7 +31,7 @@ export default function AdminDashboard() {
   ];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 mt-5">
       <h2 className="text-lg font-bold text-gray-900 dark:text-white">Dashboard Overview</h2>
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {cards.map((c) => (

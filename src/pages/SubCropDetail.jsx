@@ -52,6 +52,13 @@ const titleEndpoint = {
   'rose': '/flowers/rose',
   'marigold': '/flowers/marigold',
   'chrysanthemum': '/flowers/chrysanthemums',
+  'potted plant diagnosis': '/potted_plant_diagnosis',
+  'food grain grading': '/food_grain_grading',
+  'fruit grain grading': '/fruit_grain_grading',
+  'offline crop prediction using soil data': '/offline_crop_prediction_using_soil_data',
+  'offline fertilizer recommendation using soil data': '/offline_fertilizer_recommendation_using_soil_data',
+  'real-time crop prediction using soil sensors': '/real-time_crop_prediction_using_soil_sensors',
+  'fertilizer recommendation based soil data real time sensors': '/fertilizer-recommendation-based-soil-data-real-time-sensors',
 };
 
 export default function SubCropDetail() {

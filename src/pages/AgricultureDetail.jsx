@@ -38,6 +38,13 @@ const titleEndpoint = {
   'vegetable & spinach identification': '/vegetable-spinach-identification',
   'vegetable spinach identification': '/vegetable-spinach-identification',
   'vegetable_spinach_identification': '/vegetable-spinach-identification',
+  'potted plant diagnosis': '/potted_plant_diagnosis',
+  'food grain grading': '/food_grain_grading',
+  'fruit grain grading': '/fruit_grain_grading',
+  'offline crop prediction using soil data': '/offline_crop_prediction_using_soil_data',
+  'offline fertilizer recommendation using soil data': '/offline_fertilizer_recommendation_using_soil_data',
+  'real-time crop prediction using soil sensors': '/real-time_crop_prediction_using_soil_sensors',
+  'fertilizer recommendation based soil data real time sensors': '/fertilizer-recommendation-based-soil-data-real-time-sensors',
 };
 
 export default function AgricultureDetail() {
@@ -253,62 +260,32 @@ export default function AgricultureDetail() {
                   transition={{ duration: 0.35, delay: index * 0.06 }}
                   className="h-full"
                 >
-                  {cropSubs.length > 0 ? (
-                    <Link
-                      to={`/agriculture/${id}/crop/${crop.id}`}
-                      className="group block h-full rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden hover:shadow-xl hover:border-emerald-400 dark:hover:border-emerald-400 hover:-translate-y-1 hover:bg-emerald-50/80 dark:hover:bg-emerald-950/40 transition-all duration-300"
-                    >
-                      <div className="relative mt-2 mb-2 rounded-[20px] mb-4">
-                        {crop.image_url ? (
-                          <img src={crop.image_url} alt={crop.title} className="w-full h-40 object-contain rounded-[20px] bg-emerald-50/30 dark:bg-emerald-950 transition-transform duration-500 group-hover:scale-105" />
-                        ) : (
-                          <div className="w-full h-40 flex items-center justify-center bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-950/30 dark:to-green-950/30">
-                            <Sprout size={40} className="text-emerald-400" />
-                          </div>
-                        )}
+                  <Link
+                    to={`/agriculture/${id}/crop/${crop.id}`}
+                    className="group block h-full rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden hover:shadow-xl hover:border-emerald-400 dark:hover:border-emerald-400 hover:-translate-y-1 hover:bg-emerald-50/80 dark:hover:bg-emerald-950/40 transition-all duration-300"
+                  >
+                    <div className="relative">
+                      {crop.image_url ? (
+                        <img src={crop.image_url} alt={crop.title} className="w-full h-64 object-cover bg-emerald-50/30 dark:bg-emerald-950 transition-transform duration-500 group-hover:scale-105" />
+                      ) : (
+                        <div className="w-full h-64 flex items-center justify-center bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-950/30 dark:to-green-950/30">
+                          <Sprout size={48} className="text-emerald-400" />
+                        </div>
+                      )}
+                      {cropSubs.length > 0 && (
                         <div className="absolute top-3 right-3">
                           <span className="px-2.5 py-1 rounded-full text-[10px] font-medium bg-white/90 dark:bg-gray-900/90 text-emerald-600 dark:text-emerald-400 shadow-sm border border-emerald-200 dark:border-emerald-700">
                             {cropSubs.length} {cropSubs.length === 1 ? 'type' : 'types'}
                           </span>
                         </div>
+                      )}
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4 pt-12">
+                        <h3 className="text-sm font-bold text-white text-center">
+                          {crop.title}
+                        </h3>
                       </div>
-                     <div className="p-4">
-  <div className="relative flex items-center justify-center">
-    <h3 className="text-sm font-bold text-gray-900 dark:text-white text-center">
-      {crop.title}
-    </h3>
-    <ArrowRight
-      size={16}
-      className="absolute right-0 text-emerald-500 dark:text-emerald-400 group-hover:text-emerald-600 transition-colors flex-shrink-0"
-    />
-  </div>
-</div>
-                    </Link>
-                  ) : (
-                    <Link
-                      to={authLink('/predict')}
-                      className="group block h-full rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 overflow-hidden hover:shadow-xl hover:border-emerald-400 dark:hover:border-emerald-400 hover:-translate-y-1 hover:bg-emerald-50/80 dark:hover:bg-emerald-950/40 transition-all duration-300"
-                    >
-                      <div className="relative">
-                        {crop.image_url ? (
-                          <img src={crop.image_url} alt={crop.title} className="w-full h-40 object-contain mt-2 mb-2 rounded-[20px] bg-emerald-50/30 dark:bg-emerald-950 transition-transform duration-500 group-hover:scale-105" />
-                        ) : (
-                          <div className="w-full h-40 flex items-center justify-center bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-950/30 dark:to-green-950/30">
-                            <Sprout size={40} className="text-emerald-400" />
-                          </div>
-                        )}
-                        <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          <span className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white text-emerald-600 text-xs font-bold">
-                            <Search size={14} /> Upload & Detect
-                          </span>
-                        </div>
-                      </div>
-                      <div className="p-4">
-                        <h3 className="text-sm font-bold text-gray-900 dark:text-white">{crop.title}</h3>
-                     
-                      </div>
-                    </Link>
-                  )}
+                    </div>
+                  </Link>
                 </motion.div>
               );
             })}
