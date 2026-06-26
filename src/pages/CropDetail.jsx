@@ -89,6 +89,7 @@ export default function CropDetail() {
   const isRealtime = isSoilInput && matchedEndpoint?.includes('real-time');
 
   const handleSoilInputChange = (key, value) => {
+    // console.log('[SOIL INPUT]', key, '=', value);
     setSoilInputs((prev) => ({ ...prev, [key]: value }));
     setResult(null);
     setError('');
@@ -96,9 +97,11 @@ export default function CropDetail() {
 
   const connectBluetooth = async () => {
     if (!navigator.bluetooth) {
+      // console.warn('[BLUETOOTH] Not supported in this browser');
       setError('Bluetooth not supported in this browser');
       return;
     }
+    // console.log('[BLUETOOTH] Requesting device...');
     setBluetoothConnecting(true);
     setError('');
     try {
@@ -106,20 +109,27 @@ export default function CropDetail() {
         acceptAllDevices: true,
         optionalServices: ['0000180a-0000-1000-8000-00805f9b34fb'],
       });
+      // console.log('[BLUETOOTH] Device selected:', device.name || 'Unknown');
       setBluetoothDevice(device);
+      // console.log('[BLUETOOTH] Connecting to GATT server...');
       const server = await device.gatt.connect();
+      // console.log('[BLUETOOTH] GATT connected, auto-populating sensor data');
       setSoilInputs((prev) => ({ ...prev, temperature: '28.5', humidity: '65', ph: '6.8' }));
       device.addEventListener('gattserverdisconnected', () => {
+        // console.log('[BLUETOOTH] Device disconnected');
         setBluetoothDevice(null);
       });
     } catch (err) {
+      // console.error('[BLUETOOTH] Error:', err.name, err.message);
       if (err.name !== 'NotFoundError') setError(err.message);
     } finally {
       setBluetoothConnecting(false);
+      // console.log('[BLUETOOTH] Connection attempt complete');
     }
   };
 
   const disconnectBluetooth = () => {
+    // console.log('[BLUETOOTH] Disconnecting:', bluetoothDevice?.name || 'Unknown');
     if (bluetoothDevice && bluetoothDevice.gatt.connected) {
       bluetoothDevice.gatt.disconnect();
     }
@@ -140,6 +150,7 @@ export default function CropDetail() {
   const handleFileChange = (e) => {
     const f = e.target.files?.[0];
     if (!f) return;
+    // console.log('[FILE] Selected:', f.name, `(${(f.size / 1024).toFixed(1)} KB)`, f.type);
     setFile(f);
     setPreview(URL.createObjectURL(f));
     setResult(null);
@@ -153,16 +164,21 @@ export default function CropDetail() {
   }, [showCamera, cameraStream]);
 
   const startCamera = async () => {
+    // console.log('[CAMERA] Requesting rear camera...');
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment', width: { ideal: 1280 }, height: { ideal: 720 } } });
+      const track = stream.getVideoTracks()[0];
+      // console.log('[CAMERA] Stream started:', track.label, `(${track.getSettings().width}x${track.getSettings().height})`);
       setCameraStream(stream);
       setShowCamera(true);
-    } catch {
+    } catch (err) {
+      // console.error('[CAMERA] Error:', err.message);
       setError('Camera not found or access denied');
     }
   };
 
   const stopCamera = () => {
+    // console.log('[CAMERA] Stopping stream');
     if (cameraStream) {
       cameraStream.getTracks().forEach((t) => t.stop());
       setCameraStream(null);
@@ -173,13 +189,15 @@ export default function CropDetail() {
   const handleCapture = () => {
     const video = videoRef.current;
     if (!video) return;
+    // console.log('[CAMERA] Capturing frame...');
     const canvas = document.createElement('canvas');
     canvas.width = video.videoWidth;
     canvas.height = video.videoHeight;
     canvas.getContext('2d').drawImage(video, 0, 0);
     canvas.toBlob((blob) => {
-      if (!blob) return;
+      if (!blob) { /* console.warn('[CAMERA] Blob creation failed') */ return; }
       const f = new File([blob], 'camera-capture.jpg', { type: 'image/jpeg' });
+      // console.log('[CAMERA] Captured:', f.name, `(${(f.size / 1024).toFixed(1)} KB)`);
       setFile(f);
       setPreview(URL.createObjectURL(f));
       setResult(null);
@@ -195,12 +213,19 @@ export default function CropDetail() {
   const handlePredict = async () => {
     if (isSoilInput) {
       const missing = soilInputFields.find((f) => !soilInputs[f.key]);
-      if (missing) { setError(`Please enter ${missing.label}`); return; }
+      if (missing) { /* console.warn('[VALIDATION] Missing field:', missing.label); */ setError(`Please enter ${missing.label}`); return; }
     } else if (!file) {
+      // console.warn('[VALIDATION] No image file selected');
       setError('Please upload an image');
       return;
     }
     const endpoint = matchedEndpoint || '/plant_idetification';
+    const fullUrl = `${BASE_URL}${endpoint}`;
+    // console.group(`[PREDICT] ${endpoint}`);
+    // console.log('[PREDICT] Full URL:', fullUrl);
+    // console.log('[PREDICT] Crop title:', crop?.title);
+    // console.log('[PREDICT] isSoilInput:', isSoilInput);
+    // console.log('[PREDICT] isRealtime:', isRealtime);
     setPredictLoading(true);
     setPredictStartTime(Date.now());
     setError('');
@@ -211,41 +236,86 @@ export default function CropDetail() {
       let body;
       if (isSoilInput) {
         headers['Content-Type'] = 'application/json';
-        body = JSON.stringify({ ...soilInputs, user_id: getUserId() });
+        const payload = { ...soilInputs, user_id: getUserId() };
+        // console.log('[PREDICT] Request body (JSON):', payload);
+        body = JSON.stringify(payload);
       } else {
         const fd = new FormData();
         const userId = getUserId();
         if (userId) fd.append('user_id', userId);
         fd.append('image', file);
+        // console.log('[PREDICT] Request body (FormData):');
+        for (const [k, v] of fd.entries()) {
+          // console.log(`  ${k}:`, k === 'image' ? `${v.name} (${v.size} bytes, ${v.type})` : v);
+        }
         body = fd;
       }
-      const res = await fetch(`${BASE_URL}${endpoint}`, { method: 'POST', body, headers });
+      // console.log('[PREDICT] Headers:', headers);
+      // console.log('[PREDICT] Sending POST...');
+      const res = await fetch(fullUrl, { method: 'POST', body, headers });
+      // console.log('[PREDICT] Response status:', res.status, res.statusText);
       const data = await res.json();
-      if (!res.ok) throw new Error(data.message || data.detail || data.error || 'Request failed');
+      // console.log('[PREDICT] Response data:', data);
+      if (!res.ok) {
+        const errMsg = data.message || data.detail || data.error || 'Request failed';
+        // console.error('[PREDICT] Error response:', errMsg);
+        throw new Error(errMsg);
+      }
+      // console.log('[PREDICT] Success →', data);
       setResult(data);
     } catch (err) {
+      // console.error('[PREDICT] Catch error:', err.message);
       setError(err.message);
     } finally {
+      // console.log('[PREDICT] Complete');
+      // console.groupEnd();
       setPredictLoading(false);
     }
   };
 
   useEffect(() => {
-    async function fetch() {
+    async function fetchData() {
+      // console.group(`[PAGE LOAD] /agriculture/${agriId}/crop/${cropId}`);
+      // console.log('[API CALL] Fetching agri titles → api.farming.agriTitles()');
       const [agriRes, cropsRes, subsRes] = await Promise.allSettled([
         api.farming.agriTitles(),
         api.farming.allCrops(),
         api.farming.crops(),
       ]);
 
+      if (agriRes.status === 'fulfilled') {
+        // console.log(`[API SUCCESS] agriTitles → ${agriRes.value?.length || 0} items`);
+      } else {
+        // console.error('[API ERROR] agriTitles →', agriRes.reason);
+      }
+
+      if (cropsRes.status === 'fulfilled') {
+        // console.log(`[API SUCCESS] allCrops → ${cropsRes.value?.length || 0} items`);
+      } else {
+        // console.error('[API ERROR] allCrops →', cropsRes.reason);
+      }
+
+      if (subsRes.status === 'fulfilled') {
+        // console.log(`[API SUCCESS] crops (subs) → ${subsRes.value?.length || 0} items`);
+      } else {
+        // console.error('[API ERROR] crops (subs) →', subsRes.reason);
+      }
+
       const allAgri = agriRes.status === 'fulfilled' && Array.isArray(agriRes.value) ? agriRes.value : [];
       const allCrops = cropsRes.status === 'fulfilled' && Array.isArray(cropsRes.value) ? cropsRes.value : [];
       const allSubs = subsRes.status === 'fulfilled' && Array.isArray(subsRes.value) ? subsRes.value : [];
 
-      setAgri(allAgri.find((a) => Number(a.id) === Number(agriId)));
-      setCrop(allCrops.find((c) => Number(c.id) === Number(cropId)));
+      const matchedAgri = allAgri.find((a) => Number(a.id) === Number(agriId));
+      const matchedCrop = allCrops.find((c) => Number(c.id) === Number(cropId));
+      // console.log(`[MATCH] agriId=${agriId} → ${matchedAgri?.title || 'NOT FOUND'}`);
+      // console.log(`[MATCH] cropId=${cropId} → ${matchedCrop?.title || 'NOT FOUND'}`);
+      setAgri(matchedAgri);
+      setCrop(matchedCrop);
+
       const filtered = allSubs.filter((s) => Number(s.crop_id) === Number(cropId));
+      // console.log(`[MATCH] subs for cropId=${cropId} → ${filtered.length} items`);
       setSubs(filtered);
+
       const deriveLabel = (seg) => {
         let s = seg;
         if (s.endsWith('s')) s = s.slice(0, -1);
@@ -262,10 +332,13 @@ export default function CropDetail() {
         groups[label].items.push(sub);
       });
       setGroupedSubs(groups);
+      // console.log('[GROUPS] detection groups built →', Object.keys(groups));
+
       const keys = Object.keys(groups);
       if (keys.length) setExpandedGroups({ [keys[0]]: true });
+      // console.groupEnd();
     }
-    fetch();
+    fetchData();
   }, [agriId, cropId]);
 
   const resultLabel = result?.food_name || result?.identified_plant || result?.disease || result?.prediction || result?.prediction_result;
