@@ -21,7 +21,7 @@ export default function PageHeader({
         </motion.h1>
         {description && (
           <motion.p
-            className="text-sm md:text-base text-gray-600 dark:text-gray-300 leading-relaxed max-w-2xl mx-auto"
+            className="text-sm md:text-base text-black dark:text-white leading-relaxed max-w-2xl mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.15 }}
