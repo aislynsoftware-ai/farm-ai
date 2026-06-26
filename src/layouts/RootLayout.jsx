@@ -4,6 +4,7 @@ import Footer from '../components/layout/Footer';
 import ScrollToTop from '../components/common/ScrollToTop';
 import WhatsAppButton from '../components/common/WhatsAppButton';
 
+
 export default function RootLayout({ isDark, toggleTheme }) {
   return (
     <>

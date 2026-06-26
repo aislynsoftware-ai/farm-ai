@@ -44,7 +44,7 @@ export const ROUTES = {
   ADMIN_PLANS: '/admin/plans',
   ADMIN_DOWNLOADS: '/admin/downloads',
   REGISTER_SHOP: '/register-shop',
-  
+  CHATBOT: '/chatbot',
 };
 
 export const NAV_LINKS = [
@@ -70,7 +70,12 @@ export const NAV_LINKS = [
       { label: 'Developers', path: ROUTES.DEVELOPERS },
     ],
   },
-  { label: 'Contact', path: ROUTES.CONTACT },
+  {
+    label: 'AI Chat',
+    path: ROUTES.CHATBOT,
+    icon: 'Bot',
+    badge: 'Online',
+  },
 ];
 
 export const DASHBOARD_SIDEBAR = [

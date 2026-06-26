@@ -34,6 +34,7 @@ import MyPlants from '../pages/MyPlants';
 import Notifications from '../pages/Notifications';
 import Community from '../pages/Community';
 import RegisterShop from '../pages/RegisterShop';
+import Chatbot from '../pages/Chatbot';
 import ShopOwnerDashboard from '../pages/ShopOwnerDashboard';
 import AdminShopsPage from '../pages/AdminShopsPage';
 import AdminLogin from '../pages/AdminLogin';
@@ -95,6 +96,7 @@ export default function createAppRouter(isDark, toggleTheme) {
         { path: 'enterprise', element: <Enterprise /> },
         { path: 'plan-checkout', element: <PlanCheckout /> },
         { path: 'register-shop', element: <RegisterShop /> },
+        { path: 'chatbot', element: <Chatbot /> },
       ],
     },
     {
