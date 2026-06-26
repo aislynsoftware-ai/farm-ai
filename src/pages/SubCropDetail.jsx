@@ -59,6 +59,7 @@ const titleEndpoint = {
   'offline fertilizer recommendation using soil data': '/offline_fertilizer_recommendation_using_soil_data',
   'real-time crop prediction using soil sensors': '/real-time_crop_prediction_using_soil_sensors',
   'fertilizer recommendation based soil data real time sensors': '/fertilizer-recommendation-based-soil-data-real-time-sensors',
+  'image based soil analysis': '/image_based_soil_analysis',
 };
 
 export default function SubCropDetail() {
