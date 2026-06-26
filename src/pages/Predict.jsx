@@ -33,6 +33,13 @@ const titleEndpoint = {
   'potted plant': '/potted_plant',
   'plant identification': '/plant_idetification',
   'food identification': '/food_identification',
+  'potted plant diagnosis': '/potted_plant_diagnosis',
+  'food grain grading': '/food_grain_grading',
+  'fruit grain grading': '/fruit_grain_grading',
+  'offline crop prediction using soil data': '/offline_crop_prediction_using_soil_data',
+  'offline fertilizer recommendation using soil data': '/offline_fertilizer_recommendation_using_soil_data',
+  'real-time crop prediction using soil sensors': '/real-time_crop_prediction_using_soil_sensors',
+  'fertilizer recommendation based soil data real time sensors': '/fertilizer-recommendation-based-soil-data-real-time-sensors',
 };
 
 export default function Predict() {
