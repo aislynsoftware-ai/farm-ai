@@ -48,7 +48,6 @@ import AdminPredictionsPage from '../pages/AdminPredictionsPage';
 import AdminPlansPage from '../pages/AdminPlansPage';
 import AdminApiPlansPage from '../pages/AdminApiPlansPage';
 import AdminDownloadsPage from '../pages/AdminDownloadsPage';
-import AdminAIServicesPage from '../pages/AdminAIServicesPage';
 import AdminDailyTipsPage from '../pages/AdminDailyTipsPage';
 import PlantGuide from '../pages/PlantGuide';
 import AdminPlantRecommendationsPage from '../pages/AdminPlantRecommendationsPage';
@@ -162,7 +161,6 @@ export default function createAppRouter(isDark, toggleTheme) {
         { path: 'plans', element: <AdminPlansPage /> },
         { path: 'api-plans', element: <AdminApiPlansPage /> },
         { path: 'downloads', element: <AdminDownloadsPage /> },
-        { path: 'ai-services', element: <AdminAIServicesPage /> },
         { path: 'daily-tips', element: <AdminDailyTipsPage /> },
         { path: 'shops', element: <AdminShopsPage /> },
         { path: 'plant-recommendations', element: <AdminPlantRecommendationsPage /> },
