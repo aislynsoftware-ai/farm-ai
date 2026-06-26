@@ -18,6 +18,7 @@ export const ROUTES = {
   TERMS: '/terms',
   COOKIES: '/cookies',
   DASHBOARD: '/dashboard',
+  COMMUNITY: '/community',
   PROFILE: '/profile',
   LOGIN: '/login',
   REGISTER: '/register',
@@ -43,11 +44,12 @@ export const ROUTES = {
   ADMIN_PLANS: '/admin/plans',
   ADMIN_DOWNLOADS: '/admin/downloads',
   REGISTER_SHOP: '/register-shop',
+  
 };
 
 export const NAV_LINKS = [
   { label: 'Home', path: ROUTES.HOME },
-  { label: 'About', path: ROUTES.ABOUT },
+  { label: 'Community', path: ROUTES.COMMUNITY },
   { label: 'Services', path: ROUTES.SERVICES },
   {
     label: 'Research',

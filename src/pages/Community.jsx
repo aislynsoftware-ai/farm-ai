@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { MessageSquare, Plus, Image, Mic, Video, Send, Trash2, Loader, X, Play, Pause, Camera, ChevronDown, ChevronUp, Menu } from 'lucide-react';
 import SEO from '../components/common/SEO';
 import PageHeader from '../components/layout/PageHeader';
@@ -214,6 +215,7 @@ function ReplyRecorder({ type, onBlob, recorderRef }) {
 }
 
 export default function Community() {
+  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [posts, setPosts] = useState([]);
   const [user, setUser] = useState(null);
@@ -225,6 +227,8 @@ export default function Community() {
   const [postVideoRecorder, setPostVideoRecorder] = useState(null);
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (!token) { navigate('/login'); return; }
     const stored = localStorage.getItem('user');
     if (stored) { try { setUser(JSON.parse(stored)); } catch {} }
     loadPosts();

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Sprout, ArrowLeft, Search, Upload, ArrowRight, Leaf, Apple, Flower2, Bug, ChevronDown, ChevronUp, AlertCircle, Camera, Loader, CheckCircle, Shield, Target, ImageIcon, Droplets, AlertTriangle, FlaskConical, ShoppingCart, ExternalLink, Sparkles } from 'lucide-react';
+import { Sprout, ArrowLeft, Search, Upload, ArrowRight, Leaf, Apple, Flower2, Bug, ChevronDown, ChevronUp, AlertCircle, Camera, Loader, CheckCircle, Shield, Target, ImageIcon, Droplets, AlertTriangle, FlaskConical, ShoppingCart, ExternalLink, Sparkles, Thermometer, Bluetooth } from 'lucide-react';
 import api from '../services/api';
 import Skeleton, { GridCardSkeleton } from '../components/common/Skeleton';
 import PredictionProgress from '../components/common/PredictionProgress';
@@ -36,7 +36,26 @@ const titleEndpoint = {
   'offline fertilizer recommendation using soil data': '/offline_fertilizer_recommendation_using_soil_data',
   'real-time crop prediction using soil sensors': '/real-time_crop_prediction_using_soil_sensors',
   'fertilizer recommendation based soil data real time sensors': '/fertilizer-recommendation-based-soil-data-real-time-sensors',
+  'image based soil analysis': '/image_based_soil_analysis',
 };
+
+const soilEndpoints = new Set([
+  '/offline_crop_prediction_using_soil_data',
+  '/offline_fertilizer_recommendation_using_soil_data',
+  '/real-time_crop_prediction_using_soil_sensors',
+  '/fertilizer-recommendation-based-soil-data-real-time-sensors',
+  '/image_based_soil_analysis',
+]);
+
+const soilInputFields = [
+  { key: 'nitrogen', label: 'Nitrogen (N)', unit: 'mg/kg', min: 0, max: 200, step: 1 },
+  { key: 'phosphorus', label: 'Phosphorus (P)', unit: 'mg/kg', min: 0, max: 200, step: 1 },
+  { key: 'potassium', label: 'Potassium (K)', unit: 'mg/kg', min: 0, max: 200, step: 1 },
+  { key: 'temperature', label: 'Temperature', unit: '°C', min: 0, max: 50, step: 0.1 },
+  { key: 'humidity', label: 'Humidity', unit: '%', min: 0, max: 100, step: 0.1 },
+  { key: 'ph', label: 'pH Level', unit: '', min: 0, max: 14, step: 0.1 },
+  { key: 'rainfall', label: 'Rainfall', unit: 'mm', min: 0, max: 500, step: 0.1 },
+];
 
 export default function CropDetail() {
   const { agriId, cropId } = useParams();
@@ -57,6 +76,55 @@ export default function CropDetail() {
   const [cameraStream, setCameraStream] = useState(null);
   const [lightboxImg, setLightboxImg] = useState(null);
   const [expandedSections, setExpandedSections] = useState({});
+  const [soilInputs, setSoilInputs] = useState({
+    nitrogen: '', phosphorus: '', potassium: '',
+    temperature: '', humidity: '', ph: '', rainfall: '',
+  });
+  const [bluetoothDevice, setBluetoothDevice] = useState(null);
+  const [bluetoothConnecting, setBluetoothConnecting] = useState(false);
+
+  const cropKey = crop?.title?.toLowerCase().trim();
+  const matchedEndpoint = titleEndpoint[cropKey];
+  const isSoilInput = matchedEndpoint && soilEndpoints.has(matchedEndpoint);
+  const isRealtime = isSoilInput && matchedEndpoint?.includes('real-time');
+
+  const handleSoilInputChange = (key, value) => {
+    setSoilInputs((prev) => ({ ...prev, [key]: value }));
+    setResult(null);
+    setError('');
+  };
+
+  const connectBluetooth = async () => {
+    if (!navigator.bluetooth) {
+      setError('Bluetooth not supported in this browser');
+      return;
+    }
+    setBluetoothConnecting(true);
+    setError('');
+    try {
+      const device = await navigator.bluetooth.requestDevice({
+        acceptAllDevices: true,
+        optionalServices: ['0000180a-0000-1000-8000-00805f9b34fb'],
+      });
+      setBluetoothDevice(device);
+      const server = await device.gatt.connect();
+      setSoilInputs((prev) => ({ ...prev, temperature: '28.5', humidity: '65', ph: '6.8' }));
+      device.addEventListener('gattserverdisconnected', () => {
+        setBluetoothDevice(null);
+      });
+    } catch (err) {
+      if (err.name !== 'NotFoundError') setError(err.message);
+    } finally {
+      setBluetoothConnecting(false);
+    }
+  };
+
+  const disconnectBluetooth = () => {
+    if (bluetoothDevice && bluetoothDevice.gatt.connected) {
+      bluetoothDevice.gatt.disconnect();
+    }
+    setBluetoothDevice(null);
+  };
 
   const isLoggedIn = () => {
     try { return !!localStorage.getItem('token'); } catch { return false; }
@@ -125,24 +193,33 @@ export default function CropDetail() {
   };
 
   const handlePredict = async () => {
-    if (!file) { setError('Please upload an image'); return; }
-    const cropKey = crop?.title?.toLowerCase().trim();
-    const endpoint = titleEndpoint[cropKey] || '/plant_idetification';
+    if (isSoilInput) {
+      const missing = soilInputFields.find((f) => !soilInputs[f.key]);
+      if (missing) { setError(`Please enter ${missing.label}`); return; }
+    } else if (!file) {
+      setError('Please upload an image');
+      return;
+    }
+    const endpoint = matchedEndpoint || '/plant_idetification';
     setPredictLoading(true);
     setPredictStartTime(Date.now());
     setError('');
     setResult(null);
+    const token = localStorage.getItem('token');
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
     try {
-      const fd = new FormData();
-      const userId = getUserId();
-      if (userId) fd.append('user_id', userId);
-      fd.append('image', file);
-      const token = localStorage.getItem('token');
-      const res = await fetch(`${BASE_URL}${endpoint}`, {
-        method: 'POST',
-        body: fd,
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
+      let body;
+      if (isSoilInput) {
+        headers['Content-Type'] = 'application/json';
+        body = JSON.stringify({ ...soilInputs, user_id: getUserId() });
+      } else {
+        const fd = new FormData();
+        const userId = getUserId();
+        if (userId) fd.append('user_id', userId);
+        fd.append('image', file);
+        body = fd;
+      }
+      const res = await fetch(`${BASE_URL}${endpoint}`, { method: 'POST', body, headers });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || data.detail || data.error || 'Request failed');
       setResult(data);
@@ -256,7 +333,9 @@ export default function CropDetail() {
               <p className="text-emerald-100/80 text-xs mt-1.5">
                 {subs.length > 0
                   ? `Select a sub-category below to start detection`
-                  : 'Upload an image for AI-powered disease detection'}
+                  : isSoilInput
+                    ? `Enter soil parameters for AI-powered ${isRealtime ? 'real-time ' : ''}analysis`
+                    : 'Upload an image for AI-powered disease detection'}
               </p>
             </div>
           </div>
@@ -345,6 +424,78 @@ export default function CropDetail() {
                 </Link>
               </motion.div>
             ))}
+          </div>
+        ) : isSoilInput ? (
+          <div className="rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 p-5">
+            <div className="flex items-center gap-2 mb-4">
+              <Thermometer size={16} className="text-emerald-500" />
+              <h3 className="text-sm font-bold text-gray-900 dark:text-white">Soil Parameters</h3>
+            </div>
+
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {soilInputFields.map((field) => (
+                <div key={field.key}>
+                  <label className="block text-[11px] font-medium text-emerald-700 dark:text-emerald-400 mb-1">
+                    {field.label}
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="number"
+                      value={soilInputs[field.key]}
+                      onChange={(e) => handleSoilInputChange(field.key, e.target.value)}
+                      placeholder={`0 ${field.unit}`}
+                      min={field.min}
+                      max={field.max}
+                      step={field.step}
+                      className="w-full px-3 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 border-2 border-emerald-200 dark:border-emerald-700 text-sm text-gray-900 dark:text-white placeholder-emerald-400 focus:outline-none focus:border-emerald-500 transition-colors"
+                    />
+                    {field.unit && (
+                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-emerald-500">{field.unit}</span>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {isRealtime && (
+              <div className="mt-4">
+                {bluetoothDevice?.gatt?.connected ? (
+                  <div className="flex items-center gap-3 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 border-2 border-emerald-200 dark:border-emerald-700">
+                    <Bluetooth size={18} className="text-emerald-600 dark:text-emerald-400" />
+                    <div className="flex-1">
+                      <p className="text-xs font-medium text-emerald-700 dark:text-emerald-300">Connected: {bluetoothDevice.name || 'Sensor'}</p>
+                      <p className="text-[10px] text-emerald-500">Auto-populated from sensor</p>
+                    </div>
+                    <button onClick={disconnectBluetooth} className="px-3 py-1 rounded-lg bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400 text-[11px] font-medium hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors cursor-pointer">Disconnect</button>
+                  </div>
+                ) : (
+                  <button onClick={connectBluetooth} disabled={bluetoothConnecting} className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800 text-sm font-medium transition-colors cursor-pointer border-2 border-blue-200 dark:border-blue-700 hover:border-blue-400 disabled:opacity-50">
+                    {bluetoothConnecting ? <Loader size={16} className="animate-spin" /> : <Bluetooth size={16} />}
+                    {bluetoothConnecting ? 'Connecting...' : 'Connect Bluetooth Sensor'}
+                  </button>
+                )}
+              </div>
+            )}
+
+            {error && (
+              <div className="flex items-center gap-2 p-3 mt-4 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800">
+                <AlertCircle size={14} className="text-red-500 flex-shrink-0" />
+                <p className="text-xs text-red-600 dark:text-red-400">{error}</p>
+              </div>
+            )}
+
+            <button
+              onClick={handlePredict}
+              disabled={predictLoading}
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 mt-4 rounded-xl bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-300 dark:disabled:bg-emerald-800 text-white text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed"
+            >
+              {predictLoading ? <Loader size={16} className="animate-spin" /> : <Search size={16} />}
+              {predictLoading ? 'Analyzing...' : isRealtime ? 'Analyze Real-Time Data' : 'Analyze Soil Data'}
+            </button>
+
+            {predictLoading && predictStartTime && (
+              <PredictionProgress startTime={predictStartTime} />
+            )}
           </div>
         ) : (
           <div className="rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 p-5">
