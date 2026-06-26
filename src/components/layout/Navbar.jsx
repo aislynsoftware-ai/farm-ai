@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Sprout, LogIn, UserPlus, LayoutDashboard, ChevronDown, LogOut, ChevronRight, Store, User, ShoppingBag } from 'lucide-react';
+import { Menu, X, Sprout, LogIn, UserPlus, LayoutDashboard, ChevronDown, LogOut, ChevronRight, Store, User, ShoppingBag, MessageCircle, Sparkles } from 'lucide-react';
 import { NAV_LINKS, ROUTES, APP_NAME } from '../../constants';
 import ThemeToggle from '../common/ThemeToggle';
 import Button from '../common/Button';
@@ -61,6 +61,25 @@ export default function Navbar({ isDark, toggleTheme }) {
   const isChildActive = (children) => children?.some((c) => location.pathname === c.path);
 
   const renderDesktopLink = (link) => {
+    if (link.path === ROUTES.CHATBOT) {
+      return (
+        <Link
+          key={link.path}
+          to={link.path}
+          className="relative inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500 to-green-600 text-white text-sm font-semibold shadow-lg shadow-emerald-500/30 hover:shadow-emerald-500/50 hover:scale-105 transition-all duration-300 group"
+        >
+          <div className="relative">
+            <MessageCircle size={17} className="drop-shadow-sm" />
+            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-green-400 rounded-full border-2 border-emerald-500 animate-pulse" />
+          </div>
+          <span>AI Chat</span>
+          <span className="hidden group-hover:flex absolute -top-2.5 -right-2.5 items-center gap-1 px-2 py-0.5 rounded-full bg-green-500 text-[9px] font-bold text-white shadow-lg animate-bounce">
+            <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
+            Online
+          </span>
+        </Link>
+      );
+    }
     if (link.children) {
       const active = isActive(link.path) || isChildActive(link.children);
       return (
@@ -156,6 +175,25 @@ export default function Navbar({ isDark, toggleTheme }) {
   };
 
   const renderMobileLink = (link) => {
+    if (link.path === ROUTES.CHATBOT) {
+      return (
+        <Link
+          key={link.path}
+          to={link.path}
+          className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-md"
+        >
+          <div className="relative">
+            <MessageCircle size={18} />
+            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-green-400 rounded-full border-2 border-emerald-500 animate-pulse" />
+          </div>
+          <span>AI Chat</span>
+          <span className="ml-auto flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/20 text-[10px] font-bold">
+            <span className="w-1.5 h-1.5 bg-white rounded-full animate-pulse" />
+            Online
+          </span>
+        </Link>
+      );
+    }
     if (link.children) {
       const expanded = mobileExpanded === link.label;
       const active = isActive(link.path) || isChildActive(link.children);
