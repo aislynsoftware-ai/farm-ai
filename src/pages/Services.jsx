@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Sprout } from 'lucide-react';
+import { Sprout, ChevronLeft, ChevronRight } from 'lucide-react';
 import PageHeader from '../components/layout/PageHeader';
 import ServiceCard from '../components/ui/ServiceCard';
 import SectionTitle from '../components/common/SectionTitle';
@@ -18,6 +18,7 @@ export default function Services() {
   const [agriTitles, setAgriTitles] = useState([]);
   const [crops, setCrops] = useState([]);
   const [subCrops, setSubCrops] = useState([]);
+  const scrollRefs = useRef({});
 
   useEffect(() => {
     Promise.all([
@@ -31,12 +32,18 @@ export default function Services() {
     try { return !!localStorage.getItem('token') ? path : '/login'; } catch { return path; }
   };
 
+  const scroll = (id, dir) => {
+    const el = scrollRefs.current[id];
+    if (!el) return;
+    el.scrollBy({ left: dir * 320, behavior: 'smooth' });
+  };
+
   return (
     <main>
       <SEO title="Services" description="Explore Farmlyt AI services including crop disease detection, plant identification, food analysis, and smart agriculture solutions." url="/services" />
       <PageHeader title="Our Services" description="Comprehensive AI-powered solutions designed to address every aspect of modern agriculture and farming." />
 
-      <section className="py-12 bg-gray-50 dark:bg-gray-900">
+      <section className="py-12 bg-white dark:bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {loading ? (
             <div className="space-y-10">{[1,2].map(i => <div key={i}><Skeleton className="w-48 h-6 mb-4" /><div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">{[1,2,3,4].map(j => <Skeleton key={j} className="h-40 rounded-2xl" />)}</div></div>)}</div>
@@ -47,41 +54,53 @@ export default function Services() {
                 <motion.div key={agri.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: ai * 0.06 }} className="mb-10">
                   <div className="flex items-center gap-2 mb-4">
                     <div className="w-1 h-5 rounded-full bg-emerald-500" />
-                    <h2 className="text-base font-bold text-gray-900 dark:text-white">{agri.title}</h2>
+                    <h2 className="text-base font-bold text-black dark:text-white">{agri.title}</h2>
                   </div>
                   {crs.length === 0 ? (
-                    <p className="text-xs text-gray-400 ml-3">No crops available</p>
+                    <p className="text-xs text-emerald-600 dark:text-emerald-400 ml-3">No crops available</p>
                   ) : (
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                      {crs.map((crop, ci) => {
-                        const subs = subCrops.filter((s) => Number(s.crop_id) === Number(crop.id));
-                        return (
-                          <div key={crop.id}>
-                            <motion.button
-                              initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: ci * 0.04 }}
-                              onClick={() => {
-                                navigate(authLink(`/agriculture/${agri.id}/crop/${crop.id}`));
-                              }}
-                              className="group w-full rounded-2xl bg-white dark:bg-gray-800 border border-emerald-200 dark:border-emerald-700 overflow-hidden hover:shadow-lg hover:border-emerald-400 hover:-translate-y-0.5 transition-all duration-300 cursor-pointer"
-                            >
-                              <div className="relative overflow-hidden">
-                                {crop.image_url ? (
-                                  <img src={crop.image_url} alt={crop.title} className="w-full h-52 object-cover bg-emerald-50/30 dark:bg-emerald-950 transition-transform duration-500 group-hover:scale-105" />
-                                ) : (
-                                  <div className="w-full h-52 flex items-center justify-center bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-950/30 dark:to-green-950/30">
-                                    <Sprout size={40} className="text-emerald-400" />
-                                  </div>
-                                )}
-                              </div>
-                              <div className="px-3 py-3 text-center">
-                                <h3 className="text-sm font-bold text-gray-900 dark:text-white">{crop.title}</h3>
-                                {subs.length > 0 && <p className="text-[11px] text-gray-400 mt-1">{subs.length} sub type{subs.length > 1 ? 's' : ''}</p>}
-                                {subs.length === 0 && <p className="text-[11px] text-emerald-500 mt-1 font-medium">Detect Now →</p>}
-                              </div>
-                            </motion.button>
-                          </div>
-                        );
-                      })}
+                    <div className="relative">
+                      {crs.length > 3 && (
+                        <>
+                          <button onClick={() => scroll(agri.id, -1)} className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-gray-900 dark:bg-white shadow-lg border border-emerald-300/50 dark:border-emerald-600/50 flex items-center justify-center hover:bg-emerald-500 hover:border-emerald-500 transition-all duration-200 cursor-pointer -ml-4">
+                            <ChevronLeft size={20} className="text-white dark:text-black hover:text-white transition-colors" />
+                          </button>
+                          <button onClick={() => scroll(agri.id, 1)} className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-gray-900 dark:bg-white shadow-lg border border-emerald-300/50 dark:border-emerald-600/50 flex items-center justify-center hover:bg-emerald-500 hover:border-emerald-500 transition-all duration-200 cursor-pointer -mr-4">
+                            <ChevronRight size={20} className="text-white dark:text-black hover:text-white transition-colors" />
+                          </button>
+                        </>
+                      )}
+                      <div ref={(el) => { if (el) scrollRefs.current[agri.id] = el; }} className="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                        {crs.map((crop, ci) => {
+                          const subs = subCrops.filter((s) => Number(s.crop_id) === Number(crop.id));
+                          return (
+                            <div key={crop.id} className="flex-shrink-0 w-[280px] snap-start">
+                              <motion.button
+                                initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: ci * 0.04 }}
+                                onClick={() => {
+                                  navigate(authLink(`/agriculture/${agri.id}/crop/${crop.id}`));
+                                }}
+                                className="group w-full h-[340px] rounded-2xl bg-white dark:bg-gray-800 border border-emerald-200 dark:border-emerald-700 overflow-hidden hover:border-emerald-400 transition-all duration-300 cursor-pointer"
+                              >
+                                <div className="relative h-55 overflow-hidden">
+                                  {crop.image_url ? (
+                                    <img src={crop.image_url} alt={crop.title} className="w-full h-60 object-cover bg-emerald-50/30 dark:bg-emerald-950" />
+                                  ) : (
+                                    <div className="w-full h-52 flex items-center justify-center bg-gradient-to-br from-emerald-50 to-green-100 dark:from-emerald-950/30 dark:to-green-950/30">
+                                      <Sprout size={40} className="text-emerald-400" />
+                                    </div>
+                                  )}
+                                </div>
+                                <div className="px-3 py-3 text-center flex flex-col items-center justify-center min-h-[80px]">
+                                  <h3 className="text-sm font-bold text-gray-900 dark:text-white line-clamp-2 leading-tight">{crop.title}</h3>
+                                  {subs.length > 0 && <p className="text-[11px] text-gray-400 mt-1">{subs.length} sub type{subs.length > 1 ? 's' : ''}</p>}
+                                  {subs.length === 0 && <p className="text-[11px] text-emerald-500 mt-1 font-medium">Detect Now →</p>}
+                                </div>
+                              </motion.button>
+                            </div>
+                          );
+                        })}
+                      </div>
                     </div>
                   )}
                 </motion.div>
