@@ -3,16 +3,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import {
-  MessageCircle, Send, Leaf, Sun, CloudRain, Bug, Sprout, Sparkles,
-  Copy, Check, ThumbsUp, ThumbsDown, Bell, Paperclip,
+  Send, Leaf, Sun, CloudRain, Bug, Sprout, Sparkles,
+  Copy, Check, ThumbsUp, ThumbsDown, Paperclip, Bot, User,
+  ChevronDown, X, Minimize2, Maximize2
 } from 'lucide-react';
 
 const suggestions = [
-  { icon: Bug, label: 'Diagnose crop disease' },
-  { icon: Sun, label: 'Best planting season' },
-  { icon: CloudRain, label: 'Irrigation schedule' },
-  { icon: Leaf, label: 'Fertilizer recommendation' },
-  { icon: Sprout, label: 'Tomato care guide' },
+  { icon: Sprout, label: 'Diagnose Disease', emoji: '🪴' },
+  { icon: Leaf, label: 'Fertilizer Advice', emoji: '🌾' },
+  { icon: CloudRain, label: 'Irrigation Schedule', emoji: '💧' },
+  { icon: Sun, label: 'Soil Analysis', emoji: '🌱' },
 ];
 
 const replies = [
@@ -27,30 +27,30 @@ const replies = [
 ];
 
 const md = {
-  p: ({ children }) => <p className="text-[15px] leading-[1.75] text-[#1C1917] dark:text-white/90 mb-3 last:mb-0">{children}</p>,
-  h1: ({ children }) => <h1 className="text-lg font-bold text-[#1C1917] dark:text-white mt-5 mb-2">{children}</h1>,
-  h2: ({ children }) => <h2 className="text-base font-bold text-[#1C1917] dark:text-white mt-4 mb-2">{children}</h2>,
-  h3: ({ children }) => <h3 className="text-[15px] font-semibold text-[#1C1917] dark:text-white mt-3 mb-1.5">{children}</h3>,
+  p: ({ children }) => <p className="text-[14px] leading-[1.6] text-[#1C1917] dark:text-white/90 mb-2.5 last:mb-0">{children}</p>,
+  h1: ({ children }) => <h1 className="text-base font-bold text-[#1C1917] dark:text-white mt-4 mb-2">{children}</h1>,
+  h2: ({ children }) => <h2 className="text-[15px] font-bold text-[#1C1917] dark:text-white mt-3.5 mb-1.5">{children}</h2>,
+  h3: ({ children }) => <h3 className="text-[14px] font-semibold text-[#1C1917] dark:text-white mt-3 mb-1">{children}</h3>,
   strong: ({ children }) => <strong className="font-semibold text-[#1C1917] dark:text-white">{children}</strong>,
   em: ({ children }) => <em className="italic text-[#1C1917] dark:text-white/90">{children}</em>,
-  ul: ({ children }) => <ul className="list-disc pl-5 mb-3 space-y-1 last:mb-0">{children}</ul>,
-  ol: ({ children }) => <ol className="list-decimal pl-5 mb-3 space-y-1 last:mb-0">{children}</ol>,
-  li: ({ children }) => <li className="text-[15px] leading-[1.75] text-[#78716C] dark:text-[#A1A1AA]">{children}</li>,
+  ul: ({ children }) => <ul className="list-disc pl-4 mb-2.5 space-y-0.5 last:mb-0">{children}</ul>,
+  ol: ({ children }) => <ol className="list-decimal pl-4 mb-2.5 space-y-0.5 last:mb-0">{children}</ol>,
+  li: ({ children }) => <li className="text-[14px] leading-[1.6] text-[#78716C] dark:text-[#A1A1AA]">{children}</li>,
   code: ({ inline, className, children, ...props }) =>
     inline ? (
-      <code className="px-1.5 py-0.5 rounded-md bg-[#F5F5F4] dark:bg-[#1C1C1E] text-emerald-600 dark:text-emerald-400 text-[13px] font-mono" {...props}>{children}</code>
+      <code className="px-1.5 py-0.5 rounded bg-[#F5F5F4] dark:bg-[#1C1C1E] text-emerald-600 dark:text-emerald-400 text-[12px] font-mono" {...props}>{children}</code>
     ) : (
-      <pre className="overflow-x-auto rounded-xl bg-[#F5F5F4] dark:bg-[#1C1C1E] border border-[#E7E5E4] dark:border-[#27272A] p-3.5 mb-3 last:mb-0">
-        <code className="text-[13px] leading-relaxed font-mono text-[#1C1917] dark:text-white/90" {...props}>{children}</code>
+      <pre className="overflow-x-auto rounded-lg bg-[#F5F5F4] dark:bg-[#1C1C1E] border border-[#E7E5E4] dark:border-[#27272A] p-3 mb-2.5 last:mb-0">
+        <code className="text-[12px] leading-relaxed font-mono text-[#1C1917] dark:text-white/90" {...props}>{children}</code>
       </pre>
     ),
   pre: ({ children }) => <>{children}</>,
-  table: ({ children }) => <div className="overflow-x-auto mb-3 last:mb-0"><table className="w-full text-[14px] border-collapse">{children}</table></div>,
+  table: ({ children }) => <div className="overflow-x-auto mb-2.5 last:mb-0"><table className="w-full text-[13px] border-collapse">{children}</table></div>,
   thead: ({ children }) => <thead className="bg-[#F5F5F4] dark:bg-[#1C1C1E]">{children}</thead>,
   tbody: ({ children }) => <tbody>{children}</tbody>,
   tr: ({ children }) => <tr className="border-b border-[#E7E5E4] dark:border-[#27272A]">{children}</tr>,
-  th: ({ children }) => <th className="px-3 py-2 text-left text-[13px] font-semibold text-[#1C1917] dark:text-white">{children}</th>,
-  td: ({ children }) => <td className="px-3 py-2 text-[14px] text-[#78716C] dark:text-[#A1A1AA]">{children}</td>,
+  th: ({ children }) => <th className="px-2.5 py-1.5 text-left text-[12px] font-semibold text-[#1C1917] dark:text-white">{children}</th>,
+  td: ({ children }) => <td className="px-2.5 py-1.5 text-[13px] text-[#78716C] dark:text-[#A1A1AA]">{children}</td>,
   a: ({ href, children }) => (
     <a href={href} target="_blank" rel="noopener noreferrer"
       className="text-emerald-600 dark:text-emerald-400 underline decoration-emerald-600/30 dark:decoration-emerald-400/30 hover:decoration-emerald-600 dark:hover:decoration-emerald-400 transition-all">
@@ -58,9 +58,9 @@ const md = {
     </a>
   ),
   img: ({ src, alt }) => <img src={src} alt={alt} className="max-w-full rounded-lg my-2" />,
-  hr: () => <hr className="my-3 border-[#E7E5E4] dark:border-[#27272A]" />,
+  hr: () => <hr className="my-2.5 border-[#E7E5E4] dark:border-[#27272A]" />,
   blockquote: ({ children }) => (
-    <blockquote className="border-l-3 border-emerald-500/40 pl-3.5 italic text-[#78716C] dark:text-[#A1A1AA] mb-3 last:mb-0">{children}</blockquote>
+    <blockquote className="border-l-3 border-emerald-500/40 pl-3 italic text-[#78716C] dark:text-[#A1A1AA] mb-2.5 last:mb-0">{children}</blockquote>
   ),
 };
 
@@ -86,7 +86,7 @@ function StreamText({ text, streaming, done }) {
   return (
     <>
       <ReactMarkdown remarkPlugins={[remarkGfm]} components={md}>{displayed || ' '}</ReactMarkdown>
-      {streaming && displayed !== text && <span className="inline-block w-[2px] h-[17px] bg-emerald-500 animate-pulse ml-0.5 align-text-bottom" />}
+      {streaming && displayed !== text && <span className="inline-block w-[2px] h-[15px] bg-emerald-500 animate-pulse ml-0.5 align-text-bottom" />}
     </>
   );
 }
@@ -101,7 +101,7 @@ export default function Chatbot() {
   const [streamingId, setStreamingId] = useState(null);
   const [copiedId, setCopiedId] = useState(null);
   const [suggestionClicked, setSuggestionClicked] = useState(false);
-  const inputRef = useRef(null);
+  const [isMinimized, setIsMinimized] = useState(false);
   const textRef = useRef(null);
   const scrollRef = useRef(null);
 
@@ -113,7 +113,7 @@ export default function Chatbot() {
 
   const autoResize = useCallback(() => {
     const el = textRef.current;
-    if (el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 120) + 'px'; }
+    if (el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 100) + 'px'; }
   }, []);
 
   const addMessage = useCallback((text) => {
@@ -146,182 +146,235 @@ export default function Chatbot() {
     } catch {}
   }, []);
 
-  const toggleTheme = useCallback(() => {
-    document.documentElement.classList.toggle('dark');
-  }, []);
+  const toggleMinimize = useCallback(() => {
+    setIsMinimized(!isMinimized);
+  }, [isMinimized]);
 
   const showSuggestionCards = !suggestionClicked && messages.length === 1 && !loading;
 
   return (
-    <div className="h-dvh pt-20 flex flex-col bg-[#FAFAF9] dark:bg-[#0B0B0C]">
-      <div ref={scrollRef} className="flex-1 overflow-y-auto min-h-0 scroll-smooth">
-        <div className="sticky top-0 z-20 bg-[#FAFAF9]/80 dark:bg-[#0B0B0C]/80 backdrop-blur-md border-b border-[#E7E5E4] dark:border-[#27272A]">
-          <div className="max-w-[1100px] mx-auto px-3 h-14 flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center shadow-sm">
-                <MessageCircle size={16} className="text-white" />
+    <div className="h-dvh flex flex-col bg-[#f5f7f8] dark:bg-[#0f172a] font-['Inter']">
+      {/* Header - Emerald Gradient */}
+      <header className="flex-shrink-0 bg-gradient-to-r from-emerald-600 to-emerald-500 dark:from-emerald-700 dark:to-emerald-600 shadow-lg">
+        <div className="px-4 sm:px-6 h-[72px] flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            {/* Avatar */}
+            <div className="relative">
+              <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center shadow-lg ring-2 ring-white/30">
+                <Bot size={24} className="text-white" />
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-sm font-semibold text-[#1C1917] dark:text-white">Farmlyt AI</span>
-                <span className="hidden sm:flex items-center gap-1 text-[10px] text-emerald-600 dark:text-emerald-400 font-medium">
-                  <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
-                  Online
-                </span>
-              </div>
+              <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 bg-emerald-400 rounded-full border-2 border-white dark:border-emerald-700 animate-pulse" />
             </div>
-            <div className="flex items-center gap-0.5">
-              <button
-                className="w-7 h-7 rounded-lg flex items-center justify-center text-[#78716C] dark:text-[#A1A1AA] hover:text-[#1C1917] dark:hover:text-white hover:bg-[#F5F5F4] dark:hover:bg-[#1C1C1E] transition-all cursor-pointer relative"
-                aria-label="Notifications"
-              >
-                <Bell size={14} />
-                <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-emerald-500 rounded-full" />
-              </button>
-              <div className="w-7 h-7 rounded-lg bg-[#F5F5F4] dark:bg-[#1C1C1E] flex items-center justify-center text-[10px] font-semibold text-[#78716C] dark:text-[#A1A1AA] border border-[#E7E5E4] dark:border-[#27272A] cursor-pointer hover:border-[#D6D3D1] dark:hover:border-[#3F3F46] transition-all ml-0.5">
-                U
+            
+            <div>
+              <h1 className="text-[17px] font-semibold text-white tracking-tight">Farmlyt AI Assistant</h1>
+              <div className="flex items-center gap-1.5">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-300 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-300"></span>
+                </span>
+                <span className="text-[12px] font-medium text-white/80">Usually replies instantly</span>
               </div>
             </div>
           </div>
-        </div>
 
-        <div className="max-w-[1100px] mx-auto px-4 py-3">
-          <AnimatePresence>
-            {showSuggestionCards && (
-              <motion.div
-                initial={{ opacity: 0, y: 6 }}
+          <div className="flex items-center gap-1">
+            <button 
+              onClick={toggleMinimize}
+              className="w-9 h-9 rounded-xl hover:bg-white/10 flex items-center justify-center transition-colors text-white/80 hover:text-white"
+            >
+              {isMinimized ? <Maximize2 size={18} /> : <Minimize2 size={18} />}
+            </button>
+            <button className="w-9 h-9 rounded-xl hover:bg-white/10 flex items-center justify-center transition-colors text-white/80 hover:text-white">
+              <ChevronDown size={18} />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      {!isMinimized && (
+        <>
+          <div ref={scrollRef} className="flex-1 overflow-y-auto min-h-0 scroll-smooth py-4 px-4 sm:px-6">
+            {/* Welcome State */}
+            {messages.length === 1 && !suggestionClicked && !loading && (
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -4 }}
-                transition={{ duration: 0.15 }}
-                className="mb-4"
+                transition={{ duration: 0.4 }}
+                className="flex flex-col items-center justify-center min-h-[65vh] text-center max-w-2xl mx-auto"
               >
-                <div className="flex items-center gap-1.5 mb-3">
-                  <Sparkles size={12} className="text-emerald-600" />
-                  <span className="text-xs text-[#78716C] dark:text-[#A1A1AA]">Try asking about</span>
-                </div>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                <motion.div 
+                  initial={{ scale: 0.8 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.1, type: "spring", stiffness: 300 }}
+                  className="mb-6"
+                >
+                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-2xl shadow-emerald-500/30">
+                    <Leaf size={36} className="text-white" />
+                  </div>
+                </motion.div>
+                
+                <h2 className="text-2xl font-bold text-[#1C1917] dark:text-white mb-2">🌱 Farmlyt AI</h2>
+                <p className="text-[15px] text-[#78716C] dark:text-[#A1A1AA] mb-8">How can I help your farm today?</p>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
                   {suggestions.map((s, i) => (
                     <motion.button
                       key={i}
-                      initial={{ opacity: 0, y: 6 }}
+                      initial={{ opacity: 0, y: 15 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.15, delay: i * 0.03 }}
+                      transition={{ delay: i * 0.06 }}
+                      whileHover={{ 
+                        scale: 1.02,
+                        transition: { type: "spring", stiffness: 400, damping: 25 }
+                      }}
+                      whileTap={{ scale: 0.97 }}
                       onClick={() => addMessage(s.label)}
-                      className="flex items-center gap-2.5 px-3.5 py-3 rounded-xl bg-white dark:bg-[#161616] border border-[#E7E5E4] dark:border-[#27272A] text-left text-xs text-[#78716C] dark:text-[#A1A1AA] hover:border-emerald-500/40 dark:hover:border-emerald-500/40 hover:text-[#1C1917] dark:hover:text-white hover:shadow-sm hover:-translate-y-0.5 transition-all duration-150 cursor-pointer group"
+                      className="flex items-center gap-3 p-4 rounded-2xl bg-white dark:bg-[#1e293b] shadow-sm hover:shadow-md transition-all duration-200 text-left border border-[#E7E5E4] dark:border-[#334155] hover:border-emerald-400/50 dark:hover:border-emerald-500/30"
                     >
-                      <span className="w-7 h-7 rounded-lg bg-[#F5F5F4] dark:bg-[#1C1C1E] flex items-center justify-center text-emerald-600 dark:text-emerald-400 group-hover:bg-emerald-50 dark:group-hover:bg-emerald-950/30 transition-colors flex-shrink-0">
-                        <s.icon size={13} />
-                      </span>
-                      <span className="text-[13px] leading-tight">{s.label}</span>
+                      <span className="text-2xl">{s.emoji}</span>
+                      <span className="text-[14px] font-medium text-[#1C1917] dark:text-white">{s.label}</span>
                     </motion.button>
                   ))}
                 </div>
               </motion.div>
             )}
-          </AnimatePresence>
 
-          <div className="flex flex-col gap-2">
-            {messages.map((msg, i) => {
-              const isAssistant = msg.role === 'assistant';
-              const isStreaming = streamingId === i;
+            {/* Messages */}
+            <div className="flex flex-col gap-4 max-w-3xl mx-auto">
+              {messages.map((msg, i) => {
+                const isAssistant = msg.role === 'assistant';
+                const isStreaming = streamingId === i;
+                const showAvatar = isAssistant && (i === 0 || messages[i-1]?.role !== 'assistant');
 
-              return (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 4 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.15 }}
-                  className={`flex gap-2.5 ${isAssistant ? '' : 'justify-end'}`}
-                >
-                  {isAssistant && (
-                    <div className="w-7 h-7 rounded-lg bg-emerald-600 flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm">
-                      <MessageCircle size={13} className="text-white" />
-                    </div>
-                  )}
+                return (
+                  <motion.div
+                    key={i}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                    className={`flex items-start gap-2.5 ${!isAssistant ? 'justify-end' : ''}`}
+                  >
+                    {isAssistant && (
+                      <div className="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-md shadow-emerald-500/20">
+                        <Bot size={14} className="text-white" />
+                      </div>
+                    )}
 
-                  {isAssistant ? (
-                    <div className="group max-w-[65%] min-w-0">
-                      <div className="px-4 py-2.5 bg-white dark:bg-[#161616] rounded-xl rounded-bl-sm shadow-sm border border-[#E7E5E4] dark:border-[#27272A]">
-                        {isStreaming ? (
-                          <StreamText text={msg.content} streaming done={() => setStreamingId(null)} />
-                        ) : (
-                          <ReactMarkdown remarkPlugins={[remarkGfm]} components={md}>{msg.content}</ReactMarkdown>
+                    {isAssistant ? (
+                      <div className="group max-w-[85%]">
+                        <div className="px-4 py-3 rounded-2xl rounded-tl-none bg-white dark:bg-[#1e293b] shadow-sm border border-[#E7E5E4] dark:border-[#334155]">
+                          {isStreaming ? (
+                            <StreamText
+                              text={msg.content}
+                              streaming
+                              done={() => setStreamingId(null)}
+                            />
+                          ) : (
+                            <ReactMarkdown
+                              remarkPlugins={[remarkGfm]}
+                              components={md}
+                            >
+                              {msg.content}
+                            </ReactMarkdown>
+                          )}
+                        </div>
+
+                        {!isStreaming && (
+                          <div className="flex gap-0.5 mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+                            <button
+                              onClick={() => handleCopy(msg.content, i)}
+                              className="w-7 h-7 rounded-lg hover:bg-[#F5F5F4] dark:hover:bg-[#1C1C1E] flex items-center justify-center transition-colors"
+                            >
+                              {copiedId === i ? (
+                                <Check size={13} className="text-emerald-500" />
+                              ) : (
+                                <Copy size={13} className="text-[#78716C] dark:text-[#A1A1AA]" />
+                              )}
+                            </button>
+                            <button className="w-7 h-7 rounded-lg hover:bg-[#F5F5F4] dark:hover:bg-[#1C1C1E] flex items-center justify-center transition-colors">
+                              <ThumbsUp size={13} className="text-[#78716C] dark:text-[#A1A1AA]" />
+                            </button>
+                            <button className="w-7 h-7 rounded-lg hover:bg-[#F5F5F4] dark:hover:bg-[#1C1C1E] flex items-center justify-center transition-colors">
+                              <ThumbsDown size={13} className="text-[#78716C] dark:text-[#A1A1AA]" />
+                            </button>
+                          </div>
                         )}
                       </div>
-                      {!isStreaming && (
-                        <div className="flex items-center gap-0.5 mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-150 pl-1">
-                          <button
-                            onClick={() => handleCopy(msg.content, i)}
-                            className="w-6 h-6 rounded-md flex items-center justify-center text-[#78716C] dark:text-[#A1A1AA] hover:text-[#1C1917] dark:hover:text-white hover:bg-[#F5F5F4] dark:hover:bg-[#1C1C1E] transition-all cursor-pointer"
-                            aria-label="Copy"
-                          >
-                            {copiedId === i ? <Check size={11} className="text-emerald-500" /> : <Copy size={11} />}
-                          </button>
-                          <button className="w-6 h-6 rounded-md flex items-center justify-center text-[#78716C] dark:text-[#A1A1AA] hover:text-emerald-500 hover:bg-[#F5F5F4] dark:hover:bg-[#1C1C1E] transition-all cursor-pointer" aria-label="Like">
-                            <ThumbsUp size={11} />
-                          </button>
-                          <button className="w-6 h-6 rounded-md flex items-center justify-center text-[#78716C] dark:text-[#A1A1AA] hover:text-red-500 hover:bg-[#F5F5F4] dark:hover:bg-[#1C1C1E] transition-all cursor-pointer" aria-label="Dislike">
-                            <ThumbsDown size={11} />
-                          </button>
+                    ) : (
+                      <div className="max-w-[80%]">
+                        <div className="px-4 py-2.5 rounded-2xl rounded-tr-none bg-emerald-500 dark:bg-emerald-600 text-white shadow-md">
+                          <p className="text-[14px] leading-relaxed">{msg.content}</p>
                         </div>
-                      )}
+                      </div>
+                    )}
+                  </motion.div>
+                );
+              })}
+
+              {/* Loading State */}
+              {loading && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="flex items-start gap-2.5"
+                >
+                  <div className="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-md shadow-emerald-500/20">
+                    <Bot size={14} className="text-white" />
+                  </div>
+                  <div className="px-4 py-3 rounded-2xl rounded-tl-none bg-white dark:bg-[#1e293b] shadow-sm border border-[#E7E5E4] dark:border-[#334155]">
+                    <div className="flex gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: '0ms' }} />
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: '150ms' }} />
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: '300ms' }} />
                     </div>
-                  ) : (
-                    <div className="px-4 py-2.5 bg-emerald-600 text-white rounded-xl rounded-br-sm max-w-[65%] shadow-sm">
-                      <p className="text-[15px] leading-[1.65]">{msg.content}</p>
-                    </div>
-                  )}
+                  </div>
                 </motion.div>
-              );
-            })}
+              )}
+            </div>
           </div>
 
-          {loading && (
-            <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} className="flex gap-2.5 mt-2">
-              <div className="w-7 h-7 rounded-lg bg-emerald-600 flex items-center justify-center flex-shrink-0 mt-0.5 shadow-sm">
-                <MessageCircle size={13} className="text-white" />
-              </div>
-              <div className="px-4 py-3 rounded-xl rounded-bl-sm bg-white dark:bg-[#161616] shadow-sm border border-[#E7E5E4] dark:border-[#27272A]">
-                <div className="flex gap-1.5">
-                  <span className="w-1.5 h-1.5 bg-emerald-500/60 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                  <span className="w-1.5 h-1.5 bg-emerald-500/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                  <span className="w-1.5 h-1.5 bg-emerald-500/60 rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-                </div>
-              </div>
-            </motion.div>
-          )}
+          {/* Composer - WhatsApp Style */}
+          <div className="flex-shrink-0 bg-[#f5f7f8] dark:bg-[#0f172a] px-4 sm:px-6 py-3 border-t border-[#E7E5E4] dark:border-[#1e293b]">
+            <div className="max-w-3xl mx-auto">
+              <div className="flex items-center gap-2 bg-white dark:bg-[#1e293b] rounded-full shadow-sm border border-[#E7E5E4] dark:border-[#334155] px-2 py-1 focus-within:border-emerald-500 focus-within:shadow-md transition-all duration-200">
+                <button className="flex-shrink-0 w-9 h-9 rounded-full hover:bg-[#F5F5F4] dark:hover:bg-[#334155] flex items-center justify-center transition-colors">
+                  <Paperclip size={18} className="text-[#78716C] dark:text-[#A1A1AA]" />
+                </button>
 
-        </div>
-      </div>
+                <textarea
+                  ref={textRef}
+                  value={input}
+                  onChange={(e) => {
+                    setInput(e.target.value);
+                    autoResize();
+                  }}
+                  onKeyDown={handleKeyDown}
+                  rows={1}
+                  placeholder="Ask anything..."
+                  className="flex-1 bg-transparent outline-none resize-none px-1 py-2 text-[14px] text-[#1C1917] dark:text-white placeholder-[#A8A29E] dark:placeholder-[#64748B] min-h-[40px] max-h-[100px]"
+                  style={{ fontFamily: 'Inter' }}
+                />
 
-      <div className="bg-gradient-to-t from-[#FAFAF9] via-[#FAFAF9]/90 to-transparent dark:from-[#0B0B0C] dark:via-[#0B0B0C]/90 dark:to-transparent pt-3 pb-2">
-        <div className="max-w-[1100px] mx-auto px-4">
-          <div className="flex items-center min-h-[56px] bg-white/80 dark:bg-[#161616]/80 backdrop-blur-xl rounded-xl border border-[#E7E5E4]/80 dark:border-[#27272A]/80 shadow-sm px-2">
-            <button className="w-7 h-7 rounded-lg flex items-center justify-center text-[#78716C] dark:text-[#A1A1AA] hover:text-[#1C1917] dark:hover:text-white hover:bg-[#F5F5F4] dark:hover:bg-[#1C1C1E] transition-all cursor-pointer flex-shrink-0" aria-label="Attach file">
-              <Paperclip size={15} />
-            </button>
-            <textarea
-              ref={textRef}
-              value={input}
-              onChange={(e) => { setInput(e.target.value); autoResize(); }}
-              onKeyDown={handleKeyDown}
-              placeholder="Ask about farming, crops, or soil..."
-              rows={1}
-              className="flex-1 bg-transparent text-sm text-[#1C1917] dark:text-white placeholder-[#78716C] dark:placeholder-[#A1A1AA] outline-none resize-none py-2.5 px-1.5 max-h-[120px] leading-[1.4]"
-            />
-            <button
-              onClick={handleSend}
-              disabled={!input.trim() || loading}
-              className="w-9 h-9 rounded-lg bg-emerald-600 flex items-center justify-center hover:bg-emerald-700 disabled:opacity-25 disabled:hover:bg-emerald-600 transition-all cursor-pointer flex-shrink-0 shadow-sm"
-              aria-label="Send"
-            >
-              <Send size={14} className="text-white" />
-            </button>
+                <motion.button
+                  onClick={handleSend}
+                  disabled={!input.trim() || loading}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className={`flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 ${
+                    input.trim() && !loading
+                      ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-md shadow-emerald-500/30'
+                      : 'bg-[#F5F5F4] dark:bg-[#334155] text-[#A8A29E] dark:text-[#64748B] cursor-not-allowed'
+                  }`}
+                >
+                  <Send size={16} />
+                </motion.button>
+              </div>
+            </div>
           </div>
-          <p className="text-center text-[10px] text-[#78716C]/50 dark:text-[#A1A1AA]/50 mt-1.5">
-            AI responses are for guidance. Verify with local agricultural experts.
-          </p>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 }
