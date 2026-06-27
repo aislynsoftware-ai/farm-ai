@@ -29,6 +29,11 @@ const titleEndpoint = {
   'rose': '/flowers/rose',
   'marigold': '/flowers/marigold',
   'chrysanthemum': '/flowers/chrysanthemums',
+  'potted plant': '/potted_plant',
+  'potted plant identification': '/potted_plant',
+  'plant identification': '/plant_idetification',
+  'food identification': '/food_identification',
+  'vegetable spinach identification': '/vegetable-spinach-identification',
   'potted plant diagnosis': '/potted_plant_diagnosis',
   'food gradings': '/food_gradings',
   'food grain grading': '/food_grain_grading',
@@ -572,7 +577,7 @@ export default function CropDetail() {
               <PredictionProgress startTime={predictStartTime} />
             )}
           </div>
-        ) : (
+        ) : matchedEndpoint ? (
           <div className="rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 p-5">
             <div
               onClick={() => fileRef.current?.click()}
@@ -942,6 +947,14 @@ export default function CropDetail() {
                 )}
               </div>
             )}
+          </div>
+        ) : (
+          <div className="rounded-2xl bg-white dark:bg-gray-800 border-2 border-amber-200 dark:border-amber-700 p-8 text-center">
+            <div className="w-14 h-14 rounded-2xl bg-amber-50 dark:bg-amber-950/30 flex items-center justify-center mx-auto mb-3">
+              <svg className="w-6 h-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" /></svg>
+            </div>
+            <p className="text-sm font-medium text-amber-700 dark:text-amber-400">AI analysis not available for this crop</p>
+            <p className="text-xs text-amber-500 dark:text-amber-500 mt-1">No prediction model configured for this crop type</p>
           </div>
         )}
       </div>
