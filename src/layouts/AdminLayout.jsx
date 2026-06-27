@@ -9,6 +9,7 @@ const SIDEBAR = [
   { path: '/admin/users', label: 'Users', icon: Users },
   { path: '/admin/shops', label: 'Shops', icon: Store },
   { path: '/admin/plans', label: 'Plans', icon: Crown },
+  { path: '/admin/api-plans', label: 'API Plans', icon: DollarSign },
   { path: '/admin/agri-titles', label: 'Agri Titles', icon: Leaf },
   { path: '/admin/crops', label: 'Crops', icon: Sprout },
   { path: '/admin/sub-crops', label: 'Sub Crops', icon: Sprout },
