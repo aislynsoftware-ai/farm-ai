@@ -354,6 +354,7 @@ const api = {
       if (data.content) fd.append('content', data.content);
       if (data.voice) fd.append('voice', data.voice);
       if (data.video) fd.append('video', data.video);
+      if (data.parent_id) fd.append('parent_id', data.parent_id);
       return request(`/community/posts/${postId}/reply`, { method: 'POST', body: fd, headers: {} });
     },
     deleteReply: (replyId, userId) => request(`/community/replies/${replyId}?user_id=${encodeURIComponent(userId)}`, { method: 'DELETE' }),

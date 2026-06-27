@@ -84,7 +84,7 @@ export default function CropDetail() {
   const [bluetoothDevice, setBluetoothDevice] = useState(null);
   const [bluetoothConnecting, setBluetoothConnecting] = useState(false);
 
-  const cropKey = crop?.title?.toLowerCase().trim();
+  const cropKey = crop?.title?.toLowerCase().trim().replace(/\s+/g, ' ');
   const matchedEndpoint = titleEndpoint[cropKey];
   const isSoilInput = matchedEndpoint && soilEndpoints.has(matchedEndpoint);
   const isRealtime = isSoilInput && matchedEndpoint?.includes('real-time');
@@ -220,7 +220,8 @@ export default function CropDetail() {
       setError('Please upload an image');
       return;
     }
-    const endpoint = matchedEndpoint || '/plant_idetification';
+    const endpoint = matchedEndpoint;
+    if (!endpoint) { setError('No prediction endpoint for this crop'); return; }
     const fullUrl = `${BASE_URL}${endpoint}`;
     // console.group(`[PREDICT] ${endpoint}`);
     // console.log('[PREDICT] Full URL:', fullUrl);
@@ -324,7 +325,7 @@ export default function CropDetail() {
       };
       const groups = {};
       filtered.forEach((sub) => {
-        const key = sub.title.toLowerCase().trim();
+        const key = sub.title.toLowerCase().trim().replace(/\s+/g, ' ');
         const endpoint = titleEndpoint[key];
         if (!endpoint) return;
         const seg = endpoint.split('/')[1];
