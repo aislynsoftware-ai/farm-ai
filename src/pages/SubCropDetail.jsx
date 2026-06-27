@@ -6,6 +6,7 @@ import api from '../services/api';
 import Skeleton from '../components/common/Skeleton';
 import PredictionProgress from '../components/common/PredictionProgress';
 import SEO from '../components/common/SEO';
+import NearbyShops from '../components/common/NearbyShops';
 
 
 // {hllo}
@@ -667,6 +668,7 @@ export default function SubCropDetail() {
                 </div>
               </motion.div>
               )}
+            <NearbyShops />
             </div>
           )}
         </div>

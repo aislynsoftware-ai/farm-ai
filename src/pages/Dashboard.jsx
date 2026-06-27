@@ -6,6 +6,7 @@ import SEO from '../components/common/SEO';
 import Sidebar from '../components/dashboard/Sidebar';
 import api from '../services/api';
 import Skeleton, { DashboardWelcomeSkeleton, GridCardSkeleton } from '../components/common/Skeleton';
+import NearbyShops from '../components/common/NearbyShops';
 
 function TipCard({ tip, isOpen, onToggle }) {
   return (
@@ -366,6 +367,7 @@ export default function Dashboard() {
               </div>
             </motion.div>
           )}
+          <NearbyShops />
           </>
           )}
         </div>
