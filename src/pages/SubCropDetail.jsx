@@ -54,6 +54,7 @@ const titleEndpoint = {
   'marigold': '/flowers/marigold',
   'chrysanthemum': '/flowers/chrysanthemums',
   'potted plant diagnosis': '/potted_plant_diagnosis',
+  'food gradings': '/food_gradings',
   'food grain grading': '/food_grain_grading',
   'fruit grain grading': '/fruit_grain_grading',
   'offline crop prediction using soil data': '/offline_crop_prediction_using_soil_data',
