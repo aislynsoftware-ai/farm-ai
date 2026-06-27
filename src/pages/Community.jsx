@@ -98,6 +98,7 @@ function PostCard({ post, currentUser, onDelete, onReplyAdded }) {
   const [voiceRecorder, setVoiceRecorder] = useState(null);
   const [videoRecorder, setVideoRecorder] = useState(null);
   const [sending, setSending] = useState(false);
+  const [replyTo, setReplyTo] = useState(null);
 
   const loadReplies = async () => {
     try { setReplies(await api.community.replies(post.id)); } catch {}
@@ -108,8 +109,9 @@ function PostCard({ post, currentUser, onDelete, onReplyAdded }) {
     if (!replyText.trim() && !replyVoice && !replyVideo) return;
     setSending(true);
     try {
-      await api.community.addReply(post.id, currentUser.user_id, { content: replyText, voice: replyVoice, video: replyVideo });
+      await api.community.addReply(post.id, currentUser.user_id, { content: replyText, voice: replyVoice, video: replyVideo, parent_id: replyTo?.id || null });
       setReplyText(''); setReplyVoice(null); setReplyVideo(null);
+      setReplyTo(null);
       if (voiceRecorder) voiceRecorder.reset();
       if (videoRecorder) videoRecorder.reset();
       await loadReplies();
@@ -124,6 +126,57 @@ function PostCard({ post, currentUser, onDelete, onReplyAdded }) {
     try { await api.community.deleteReply(replyId, currentUser.user_id); loadReplies(); }
     catch (e) { alert(e.message); }
   };
+
+  const buildTree = (flat) => {
+    const map = {};
+    const roots = [];
+    flat.forEach(r => { map[r.id] = { ...r, children: [] }; });
+    flat.forEach(r => {
+      if (r.parent_id && map[r.parent_id]) {
+        map[r.parent_id].children.push(map[r.id]);
+      } else {
+        roots.push(map[r.id]);
+      }
+    });
+    return roots;
+  };
+
+  const renderReply = (reply, depth = 0) => (
+    <div key={reply.id}>
+      <div className="flex gap-2" style={depth > 0 ? { marginLeft: `${Math.min(depth, 4) * 20}px` } : {}}>
+        <div className="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-900/50 overflow-hidden flex-shrink-0 mt-0.5">
+          {reply.user_profile_pic ? <img src={reply.user_profile_pic} alt="" className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-emerald-600 dark:text-emerald-400 text-[9px] font-bold">{(reply.user_name || '?')[0]}</div>}
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-semibold text-gray-900 dark:text-white">{reply.user_name || 'Unknown'}</span>
+            <span className="text-[10px] text-gray-500">{reply.created_at}</span>
+          </div>
+          <div className="text-xs text-gray-600 dark:text-gray-300 mt-0.5">
+            {reply.reply_to_user_name && (
+              <span className="font-medium text-emerald-600 dark:text-emerald-400">@{reply.reply_to_user_name} </span>
+            )}
+            {reply.content}
+          </div>
+          {reply.video_url && <video src={reply.video_url} controls className="w-full max-h-40 rounded-lg mt-1 bg-black" />}
+          {reply.voice_url && <audio src={reply.voice_url} controls className="w-full mt-1" />}
+          <div className="flex items-center gap-3 mt-1">
+            {currentUser && (
+              <button onClick={() => { setReplyTo({ id: reply.id, userName: reply.user_name }); document.getElementById(`reply-input-${post.id}`)?.focus(); }} className="text-[10px] text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 cursor-pointer">Reply</button>
+            )}
+            {currentUser && reply.user_id === currentUser.user_id && (
+              <button onClick={() => handleDeleteReply(reply.id)} className="text-[10px] text-red-400 hover:text-red-600 cursor-pointer">Delete</button>
+            )}
+          </div>
+        </div>
+      </div>
+      {reply.children.length > 0 && (
+        <div className="mt-1 space-y-1">
+          {reply.children.map(child => renderReply(child, depth + 1))}
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <div className="rounded-xl bg-white dark:bg-gray-800 border border-emerald-200 dark:border-emerald-700 p-4">
@@ -161,33 +214,23 @@ function PostCard({ post, currentUser, onDelete, onReplyAdded }) {
 
       {/* Replies */}
       {showReplies && (
-        <div className="mt-3 pt-3 border-t border-emerald-100 dark:border-emerald-700 space-y-3">
-          {replies.map(r => (
-            <div key={r.id} className="flex gap-2">
-              <div className="w-6 h-6 rounded-full bg-emerald-100 dark:bg-emerald-900/50 overflow-hidden flex-shrink-0">
-                {r.user_profile_pic ? <img src={r.user_profile_pic} alt="" className="w-full h-full object-cover" /> : <div className="w-full h-full flex items-center justify-center text-emerald-600 dark:text-emerald-400 text-[9px] font-bold">{(r.user_name || '?')[0]}</div>}
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  <span className="text-xs font-semibold text-gray-900 dark:text-white">{r.user_name || 'Unknown'}</span>
-                  <span className="text-[10px] text-gray-500">{r.created_at}</span>
-                  {currentUser && r.user_id === currentUser.user_id && (
-                    <button onClick={() => handleDeleteReply(r.id)} className="ml-auto text-gray-400 hover:text-red-500 cursor-pointer"><X size={12} /></button>
-                  )}
-                </div>
-                {r.content && <p className="text-xs text-gray-600 dark:text-gray-300 mt-0.5">{r.content}</p>}
-                {r.video_url && <video src={r.video_url} controls className="w-full max-h-40 rounded-lg mt-1 bg-black" />}
-                {r.voice_url && <audio src={r.voice_url} controls className="w-full mt-1" />}
-              </div>
-            </div>
-          ))}
+        <div className="mt-3 pt-3 border-t border-emerald-100 dark:border-emerald-700">
+          <div className="space-y-2">
+            {buildTree(replies).map(r => renderReply(r))}
+          </div>
 
           {/* Reply Input */}
-          <div className="flex gap-2 items-start">
+          <div className="flex gap-2 items-start mt-3 pt-3 border-t border-emerald-100 dark:border-emerald-700">
             {currentUser ? (
               <>
                 <div className="flex-1 space-y-2">
-                  <input value={replyText} onChange={e => setReplyText(e.target.value)} placeholder="Write a reply..." className="w-full px-3 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none text-gray-900 dark:text-white placeholder-gray-400 text-xs" />
+                  {replyTo && (
+                    <div className="text-[10px] text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
+                      <span>Replying to <span className="font-semibold">@{replyTo.userName}</span></span>
+                      <button onClick={() => setReplyTo(null)} className="text-gray-400 hover:text-red-500 cursor-pointer"><X size={12} /></button>
+                    </div>
+                  )}
+                  <input id={`reply-input-${post.id}`} value={replyText} onChange={e => setReplyText(e.target.value)} placeholder={replyTo ? `Reply to @${replyTo.userName}...` : "Write a reply..."} className="w-full px-3 py-2 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none text-gray-900 dark:text-white placeholder-gray-400 text-xs" />
                   <div className="flex gap-2">
                     <ReplyRecorder type="voice" onBlob={(b) => setReplyVoice(b)} recorderRef={setVoiceRecorder} />
                     <ReplyRecorder type="video" onBlob={(b) => setReplyVideo(b)} recorderRef={setVideoRecorder} />

@@ -36,7 +36,6 @@ const titleEndpoint = {
   'food identification': '/food_identification',
   'potted plant diagnosis': '/potted_plant_diagnosis',
   'food gradings': '/food_gradings',
-  'food grain grading': '/food_grain_grading',
   'fruit grain grading': '/fruit_grain_grading',
   'offline crop prediction using soil data': '/offline_crop_prediction_using_soil_data',
   'offline fertilizer recommendation using soil data': '/offline_fertilizer_recommendation_using_soil_data',
@@ -102,7 +101,7 @@ export default function Predict() {
           const g = groups[crop.agri_id];
           if (!g) return;
           allSubs.filter((s) => Number(s.crop_id) === Number(crop.id)).forEach((sub) => {
-            const key = sub.title.toLowerCase().trim();
+            const key = sub.title.toLowerCase().trim().replace(/\s+/g, ' ');
             const endpoint = titleEndpoint[key];
             if (!endpoint) return;
             const seg = endpoint.split('/')[1];
@@ -238,7 +237,8 @@ export default function Predict() {
       const fd = new FormData();
       if (userId) fd.append('user_id', userId);
       fd.append('image', file);
-      const endpoint = item?.endpoint || '/plant_idetification';
+      const endpoint = item?.endpoint;
+      if (!endpoint) { setError('Please select a detection type first'); return; }
       const token = localStorage.getItem('token');
       const res = await fetch(`${BASE_URL}${endpoint}`, {
         method: 'POST',

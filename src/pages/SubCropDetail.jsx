@@ -130,7 +130,7 @@ export default function SubCropDetail() {
 
   const getEndpoint = () => {
     if (!sub) return null;
-    const key = sub.title.toLowerCase().trim();
+    const key = sub.title.toLowerCase().trim().replace(/\s+/g, ' ');
     return titleEndpoint[key] || null;
   };
 
