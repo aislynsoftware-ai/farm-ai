@@ -151,6 +151,14 @@ const api = {
       adminRequest(`/admin/api-plans/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
     deleteApiPlan: (id) =>
       adminRequest(`/admin/api-plans/${id}`, { method: 'DELETE' }),
+    getSoilPredictions: () =>
+      adminRequest('/admin/soil-predictions'),
+    getSoilDownloadUrl: () =>
+      `${BASE_URL}/admin/soil-predictions/download`,
+    getFertilizerPredictions: () =>
+      adminRequest('/admin/fertilizer-predictions'),
+    getFertilizerDownloadUrl: () =>
+      `${BASE_URL}/admin/fertilizer-predictions/download`,
     getPredictionsTree: () =>
       adminRequest('/admin/predictions/tree'),
     getDownloadUrl: (crop, disease, type = 'all') => {

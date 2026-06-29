@@ -91,11 +91,15 @@ export default function CropDetail() {
   });
   const [bluetoothDevice, setBluetoothDevice] = useState(null);
   const [bluetoothConnecting, setBluetoothConnecting] = useState(false);
+  const [fertilizerCatalog, setFertilizerCatalog] = useState(null);
+  const [selectedCrop, setSelectedCrop] = useState('');
+  const [selectedSoil, setSelectedSoil] = useState('');
 
   const cropKey = crop?.title?.toLowerCase().trim().replace(/\s+/g, ' ');
   const matchedEndpoint = titleEndpoint[cropKey];
   const isSoilInput = matchedEndpoint && soilEndpoints.has(matchedEndpoint);
   const isRealtime = isSoilInput && matchedEndpoint?.includes('real-time');
+  const isFertilizer = matchedEndpoint === '/offline_fertilizer_recommendation_using_soil_data';
 
   const handleSoilInputChange = (key, value) => {
     // console.log('[SOIL INPUT]', key, '=', value);
@@ -221,7 +225,10 @@ export default function CropDetail() {
 
   const handlePredict = async () => {
     if (isSoilInput) {
-      const missing = soilInputFields.find((f) => !soilInputs[f.key]);
+      if (isFertilizer) {
+        if (!selectedCrop || !selectedSoil) { setError('Please select a crop and soil type'); return; }
+      }
+      const missing = soilInputFields.find((f) => !soilInputs[f.key] && !(isFertilizer && (f.key === 'humidity' || f.key === 'rainfall')));
       if (missing) { /* console.warn('[VALIDATION] Missing field:', missing.label); */ setError(`Please enter ${missing.label}`); return; }
     } else if (!file) {
       // console.warn('[VALIDATION] No image file selected');
@@ -247,6 +254,7 @@ export default function CropDetail() {
       if (isSoilInput) {
         headers['Content-Type'] = 'application/json';
         const payload = { ...soilInputs, user_id: getUserId() };
+        if (isFertilizer) { payload.crop_name = selectedCrop; payload.soil_type = selectedSoil; }
         // console.log('[PREDICT] Request body (JSON):', payload);
         body = JSON.stringify(payload);
       } else {
@@ -351,7 +359,19 @@ export default function CropDetail() {
     fetchData();
   }, [agriId, cropId]);
 
+  useEffect(() => {
+    if (matchedEndpoint === '/offline_fertilizer_recommendation_using_soil_data') {
+      const base = import.meta.env.VITE_API_BASE_URL || '';
+      fetch(`${base}/fertilizer_catalog`)
+        .then(r => r.json())
+        .then(d => setFertilizerCatalog(d))
+        .catch(() => {});
+    }
+  }, [matchedEndpoint]);
+
   const isCropRecommendation = result?.best_crop != null;
+  const isFertilizerResult = result?.recommended_fertilizer != null;
+  const isDefaultResult = !isCropRecommendation && !isFertilizerResult;
   const resultLabel = isCropRecommendation ? result.best_crop : (result?.food_name || result?.identified_plant || result?.disease || result?.prediction || result?.prediction_result);
   const isHealthy = !result?.disease || result?.disease?.toLowerCase().includes('healthy');
   const diseaseFound = result?.disease && !result?.disease?.toLowerCase().includes('healthy');
@@ -693,13 +713,13 @@ export default function CropDetail() {
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                           {Object.entries(result.soil_analysis).filter(([k]) => k !== '_summary').map(([key, val]) => {
-                            const levelColors = { Low: 'text-amber-600', Ideal: 'text-emerald-600', High: 'text-red-600', 'Strongly Acidic': 'text-red-600', 'Slightly Acidic': 'text-amber-600', 'Slightly Alkaline': 'text-amber-600', Alkaline: 'text-red-600', 'Ideal Range': 'text-emerald-600' };
+                            const levelColors = { Low: 'text-amber-600 border-amber-300 dark:text-amber-400 dark:border-amber-700', Ideal: 'text-emerald-600 border-emerald-300 dark:text-emerald-400 dark:border-emerald-700', High: 'text-red-600 border-red-300 dark:text-red-400 dark:border-red-700', 'Strongly Acidic': 'text-red-600 border-red-300 dark:text-red-400 dark:border-red-700', 'Slightly Acidic': 'text-amber-600 border-amber-300 dark:text-amber-400 dark:border-amber-700', 'Slightly Alkaline': 'text-amber-600 border-amber-300 dark:text-amber-400 dark:border-amber-700', Alkaline: 'text-red-600 border-red-300 dark:text-red-400 dark:border-red-700', 'Ideal Range': 'text-emerald-600 border-emerald-300 dark:text-emerald-400 dark:border-emerald-700' };
                             const bgColors = { Low: 'bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800', Ideal: 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800', High: 'bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800', 'Strongly Acidic': 'bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800', 'Slightly Acidic': 'bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800', 'Slightly Alkaline': 'bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800', Alkaline: 'bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800', 'Ideal Range': 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800' };
                             return (
                               <div key={key} className={`rounded-xl p-3.5 ${bgColors[val.level] || 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700'} border-2`}>
                                 <div className="flex items-center justify-between mb-1.5">
                                   <p className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase">{key}</p>
-                                  <p className={`text-[10px] font-bold ${levelColors[val.level] || 'text-gray-500'}`}>{val.level}</p>
+                                  <p className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${levelColors[val.level] || 'text-gray-500 border-gray-300 dark:text-gray-400 dark:border-gray-600'}`}>{val.level}</p>
                                 </div>
                                 <p className="text-base font-bold text-gray-900 dark:text-white mb-1">{val.value}</p>
                                 <p className="text-[11px] text-gray-600 dark:text-gray-300 leading-relaxed">{val.description}</p>
@@ -742,6 +762,46 @@ export default function CropDetail() {
                                 </div>
                                 <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 w-10 text-right">{c.confidence}%</span>
                               </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </motion.div>
+                ) : isFertilizerResult ? (
+                  <motion.div
+                    className="rounded-2xl bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-950/30 dark:to-green-950/30 border border-emerald-200 dark:border-emerald-800 p-5"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    <div className="flex items-center gap-2 mb-3">
+                      <Sprout size={18} className="text-emerald-500" />
+                      <span className="text-xs font-bold text-gray-900 dark:text-white">Fertilizer Recommendation</span>
+                    </div>
+                    <div className="p-4 rounded-xl bg-white/60 dark:bg-gray-800/60 border border-emerald-100 dark:border-emerald-900/50">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-950/40 flex items-center justify-center">
+                          <Sprout size={24} className="text-emerald-500" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-lg font-bold text-gray-900 dark:text-white">{result.recommended_fertilizer}</p>
+                          {result.crop && (
+                            <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">For: {result.crop} | Soil: {result.soil_type}</p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    {result.input_summary && (
+                      <div className="mt-4">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Shield size={14} className="text-emerald-500" />
+                          <span className="text-[11px] font-bold text-gray-900 dark:text-white">Input Parameters</span>
+                        </div>
+                        <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-7 gap-2">
+                          {Object.entries(result.input_summary).map(([key, val]) => (
+                            <div key={key} className="rounded-xl p-2.5 text-center bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                              <p className="text-[10px] font-medium text-gray-500 dark:text-gray-400">{key}</p>
+                              <p className="text-xs font-bold text-gray-900 dark:text-white mt-0.5">{val}</p>
                             </div>
                           ))}
                         </div>
