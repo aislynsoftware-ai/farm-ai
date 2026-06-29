@@ -562,6 +562,33 @@ export default function CropDetail() {
               ))}
             </div>
 
+            {isFertilizer && fertilizerCatalog && (
+              <div className="grid sm:grid-cols-2 gap-3 mt-4">
+                <div>
+                  <label className="block text-[11px] font-medium text-emerald-700 dark:text-emerald-400 mb-1">Crop Type</label>
+                  <div className="relative">
+                    <select value={selectedCrop} onChange={(e) => setSelectedCrop(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500 transition-colors appearance-none cursor-pointer">
+                      <option value="" className="text-gray-400">Select crop...</option>
+                      {fertilizerCatalog.crops?.map((c) => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                    <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-500 pointer-events-none" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-[11px] font-medium text-emerald-700 dark:text-emerald-400 mb-1">Soil Type</label>
+                  <div className="relative">
+                    <select value={selectedSoil} onChange={(e) => setSelectedSoil(e.target.value)}
+                      className="w-full px-3 py-2 rounded-xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 text-sm text-gray-900 dark:text-white focus:outline-none focus:border-emerald-500 transition-colors appearance-none cursor-pointer">
+                      <option value="" className="text-gray-400">Select soil type...</option>
+                      {fertilizerCatalog.soil_types?.map((s) => <option key={s} value={s}>{s}</option>)}
+                    </select>
+                    <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-emerald-500 pointer-events-none" />
+                  </div>
+                </div>
+              </div>
+            )}
+
             {isRealtime && (
               <div className="mt-4">
                 {bluetoothDevice?.gatt?.connected ? (
