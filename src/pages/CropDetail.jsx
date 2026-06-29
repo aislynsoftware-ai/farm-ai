@@ -58,6 +58,8 @@ const soilInputFields = [
   { key: 'phosphorus', label: 'Phosphorus (P)', unit: 'mg/kg', min: 0, max: 200, step: 1 },
   { key: 'potassium', label: 'Potassium (K)', unit: 'mg/kg', min: 0, max: 200, step: 1 },
   { key: 'temperature', label: 'Temperature', unit: '°C', min: 0, max: 50, step: 0.1 },
+  { key: 'moisture', label: 'Moisture', unit: '%', min: 0, max: 100, step: 0.1 },
+  { key: 'ec', label: 'EC (Conductivity)', unit: 'mS/cm', min: 0, max: 5, step: 0.01 },
   { key: 'humidity', label: 'Humidity', unit: '%', min: 0, max: 100, step: 0.1 },
   { key: 'ph', label: 'pH Level', unit: '', min: 0, max: 14, step: 0.1 },
   { key: 'rainfall', label: 'Rainfall', unit: 'mm', min: 0, max: 500, step: 0.1 },
@@ -84,7 +86,8 @@ export default function CropDetail() {
   const [expandedSections, setExpandedSections] = useState({});
   const [soilInputs, setSoilInputs] = useState({
     nitrogen: '', phosphorus: '', potassium: '',
-    temperature: '', humidity: '', ph: '', rainfall: '',
+    temperature: '', moisture: '', ec: '',
+    humidity: '', ph: '', rainfall: '',
   });
   const [bluetoothDevice, setBluetoothDevice] = useState(null);
   const [bluetoothConnecting, setBluetoothConnecting] = useState(false);
@@ -348,11 +351,13 @@ export default function CropDetail() {
     fetchData();
   }, [agriId, cropId]);
 
-  const resultLabel = result?.food_name || result?.identified_plant || result?.disease || result?.prediction || result?.prediction_result;
+  const isCropRecommendation = result?.best_crop != null;
+  const resultLabel = isCropRecommendation ? result.best_crop : (result?.food_name || result?.identified_plant || result?.disease || result?.prediction || result?.prediction_result);
   const isHealthy = !result?.disease || result?.disease?.toLowerCase().includes('healthy');
   const diseaseFound = result?.disease && !result?.disease?.toLowerCase().includes('healthy');
 
   const getConfidence = () => {
+    if (isCropRecommendation) return result.best_confidence;
     if (result?.confidence != null) {
       const c = Number(result.confidence);
       return c < 1 ? (c * 100).toFixed(1) : c.toFixed(1);
@@ -635,44 +640,147 @@ export default function CropDetail() {
               <PredictionProgress startTime={predictStartTime} />
             )}
 
-            {result && (
+
+          </div>
+        ) : (
+          <div className="rounded-2xl bg-white dark:bg-gray-800 border-2 border-amber-200 dark:border-amber-700 p-8 text-center">
+            <div className="w-14 h-14 rounded-2xl bg-amber-50 dark:bg-amber-950/30 flex items-center justify-center mx-auto mb-3">
+              <svg className="w-6 h-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" /></svg>
+            </div>
+            <p className="text-sm font-medium text-amber-700 dark:text-amber-400">AI analysis not available for this crop</p>
+            <p className="text-xs text-amber-500 dark:text-amber-500 mt-1">No prediction model configured for this crop type</p>
+          </div>
+        )}
+
+                    {result && (
               <div className="mt-6 space-y-5">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-1 h-5 rounded-full bg-emerald-500" />
                   <h3 className="text-sm font-bold text-gray-900 dark:text-white">AI Analysis Results</h3>
                 </div>
 
-                <motion.div
-                  className="rounded-2xl bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-950/30 dark:to-green-950/30 border border-emerald-200 dark:border-emerald-800 p-5"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <Shield size={18} className="text-emerald-500" />
-                      <span className="text-xs font-bold text-gray-900 dark:text-white">Prediction Summary</span>
+                {isCropRecommendation ? (
+                  <motion.div
+                    className="rounded-2xl bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-950/30 dark:to-green-950/30 border border-emerald-200 dark:border-emerald-800 p-5"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    <div className="flex items-center gap-2 mb-3">
+                      <Sprout size={18} className="text-emerald-500" />
+                      <span className="text-xs font-bold text-gray-900 dark:text-white">Crop Recommendation</span>
                     </div>
-                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${diseaseFound ? 'bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400' : 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400'}`}>
-                      {diseaseFound ? 'Disease Detected' : isHealthy ? 'Healthy' : 'Identified'}
-                    </span>
-                  </div>
-                  <div className="p-4 rounded-xl bg-white/60 dark:bg-gray-800/60 border border-emerald-100 dark:border-emerald-900/50">
-                    <div className="flex items-center gap-3">
-                      <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${diseaseFound ? 'bg-red-100 dark:bg-red-950/40' : 'bg-emerald-100 dark:bg-emerald-950/40'}`}>
-                        {diseaseFound ? <Bug size={24} className="text-red-500" /> : <CheckCircle size={24} className="text-emerald-500" />}
+                    <div className="p-4 rounded-xl bg-white/60 dark:bg-gray-800/60 border border-emerald-100 dark:border-emerald-900/50 mb-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-950/40 flex items-center justify-center">
+                          <Sprout size={24} className="text-emerald-500" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-lg font-bold text-gray-900 dark:text-white">{resultLabel}</p>
+                          {displayConfidence && (
+                            <div className="flex items-center gap-1.5 mt-1">
+                              <Target size={12} className="text-emerald-500" />
+                              <span className="text-xs text-emerald-600 dark:text-emerald-400">AI Confidence: <strong>{displayConfidence}%</strong></span>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <div className="flex-1">
-                        <p className="text-lg font-bold text-gray-900 dark:text-white">{resultLabel || 'Analysis Complete'}</p>
-                        {displayConfidence && (
-                          <div className="flex items-center gap-1.5 mt-1">
-                            <Target size={12} className="text-emerald-500" />
-                            <span className="text-xs text-emerald-600 dark:text-emerald-400">AI Accuracy: <strong>{displayConfidence}%</strong></span>
+                    </div>
+                    {result.soil_analysis && (
+                      <div className="mb-4">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Shield size={14} className="text-emerald-500" />
+                          <span className="text-[11px] font-bold text-gray-900 dark:text-white">Soil Analysis</span>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                          {Object.entries(result.soil_analysis).filter(([k]) => k !== '_summary').map(([key, val]) => {
+                            const levelColors = { Low: 'text-amber-600', Ideal: 'text-emerald-600', High: 'text-red-600', 'Strongly Acidic': 'text-red-600', 'Slightly Acidic': 'text-amber-600', 'Slightly Alkaline': 'text-amber-600', Alkaline: 'text-red-600', 'Ideal Range': 'text-emerald-600' };
+                            const bgColors = { Low: 'bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800', Ideal: 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800', High: 'bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800', 'Strongly Acidic': 'bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800', 'Slightly Acidic': 'bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800', 'Slightly Alkaline': 'bg-amber-50 dark:bg-amber-950/30 border-amber-200 dark:border-amber-800', Alkaline: 'bg-red-50 dark:bg-red-950/30 border-red-200 dark:border-red-800', 'Ideal Range': 'bg-emerald-50 dark:bg-emerald-950/30 border-emerald-200 dark:border-emerald-800' };
+                            return (
+                              <div key={key} className={`rounded-xl p-3.5 ${bgColors[val.level] || 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700'} border-2`}>
+                                <div className="flex items-center justify-between mb-1.5">
+                                  <p className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase">{key}</p>
+                                  <p className={`text-[10px] font-bold ${levelColors[val.level] || 'text-gray-500'}`}>{val.level}</p>
+                                </div>
+                                <p className="text-base font-bold text-gray-900 dark:text-white mb-1">{val.value}</p>
+                                <p className="text-[11px] text-gray-600 dark:text-gray-300 leading-relaxed">{val.description}</p>
+                                {val.suggestion && (
+                                  <div className="mt-2 pt-2 border-t border-dashed border-gray-200 dark:border-gray-700">
+                                    <p className="text-[10px] text-emerald-600 dark:text-emerald-400 leading-relaxed">{val.suggestion}</p>
+                                  </div>
+                                )}
+                              </div>
+                            );
+                          })}
+                        </div>
+                        {result.soil_analysis._summary && (
+                          <div className="mt-3 p-3.5 rounded-xl bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-950/30 dark:to-green-950/30 border border-emerald-200 dark:border-emerald-800">
+                            <div className="flex items-start gap-2">
+                              <Sprout size={14} className="text-emerald-500 mt-0.5 flex-shrink-0" />
+                              <div>
+                                <p className="text-[11px] font-bold text-gray-900 dark:text-white mb-1">Soil Health Summary</p>
+                                <p className="text-[11px] text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-line">{result.soil_analysis._summary}</p>
+                              </div>
+                            </div>
                           </div>
                         )}
                       </div>
+                    )}
+                    {result.recommended_crops && (
+                      <div>
+                        <div className="flex items-center gap-2 mb-2">
+                          <Sprout size={14} className="text-emerald-500" />
+                          <span className="text-[11px] font-bold text-gray-900 dark:text-white">Top 10 Recommended Crops</span>
+                        </div>
+                        <div className="space-y-1.5">
+                          {result.recommended_crops.map((c) => (
+                            <div key={c.rank} className="flex items-center gap-3 p-2.5 rounded-xl bg-white/60 dark:bg-gray-800/60 border border-emerald-100 dark:border-emerald-900/50">
+                              <span className="w-5 h-5 rounded-lg bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center text-[10px] font-bold text-emerald-700 dark:text-emerald-300 flex-shrink-0">{c.rank}</span>
+                              <span className="text-xs font-medium text-gray-900 dark:text-white flex-1">{c.crop}</span>
+                              <div className="flex items-center gap-2">
+                                <div className="w-20 h-1.5 rounded-full bg-emerald-100 dark:bg-emerald-900/50 overflow-hidden">
+                                  <div className="h-full rounded-full bg-emerald-500" style={{ width: `${c.confidence}%` }} />
+                                </div>
+                                <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 w-10 text-right">{c.confidence}%</span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    className="rounded-2xl bg-gradient-to-br from-emerald-50 to-green-50 dark:from-emerald-950/30 dark:to-green-950/30 border border-emerald-200 dark:border-emerald-800 p-5"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                  >
+                    <div className="flex items-center justify-between mb-3">
+                      <div className="flex items-center gap-2">
+                        <Shield size={18} className="text-emerald-500" />
+                        <span className="text-xs font-bold text-gray-900 dark:text-white">Prediction Summary</span>
+                      </div>
+                      <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold ${diseaseFound ? 'bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400' : 'bg-emerald-100 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400'}`}>
+                        {diseaseFound ? 'Disease Detected' : isHealthy ? 'Healthy' : 'Identified'}
+                      </span>
                     </div>
-                  </div>
-                </motion.div>
+                    <div className="p-4 rounded-xl bg-white/60 dark:bg-gray-800/60 border border-emerald-100 dark:border-emerald-900/50">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${diseaseFound ? 'bg-red-100 dark:bg-red-950/40' : 'bg-emerald-100 dark:bg-emerald-950/40'}`}>
+                          {diseaseFound ? <Bug size={24} className="text-red-500" /> : <CheckCircle size={24} className="text-emerald-500" />}
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-lg font-bold text-gray-900 dark:text-white">{resultLabel || 'Analysis Complete'}</p>
+                          {displayConfidence && (
+                            <div className="flex items-center gap-1.5 mt-1">
+                              <Target size={12} className="text-emerald-500" />
+                              <span className="text-xs text-emerald-600 dark:text-emerald-400">AI Accuracy: <strong>{displayConfidence}%</strong></span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
 
                 {(result.original_image || result.predicted_image || preview) && (
                   <motion.div
@@ -947,16 +1055,6 @@ export default function CropDetail() {
                 )}
               </div>
             )}
-          </div>
-        ) : (
-          <div className="rounded-2xl bg-white dark:bg-gray-800 border-2 border-amber-200 dark:border-amber-700 p-8 text-center">
-            <div className="w-14 h-14 rounded-2xl bg-amber-50 dark:bg-amber-950/30 flex items-center justify-center mx-auto mb-3">
-              <svg className="w-6 h-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" /></svg>
-            </div>
-            <p className="text-sm font-medium text-amber-700 dark:text-amber-400">AI analysis not available for this crop</p>
-            <p className="text-xs text-amber-500 dark:text-amber-500 mt-1">No prediction model configured for this crop type</p>
-          </div>
-        )}
       </div>
 
       {lightboxImg && (
