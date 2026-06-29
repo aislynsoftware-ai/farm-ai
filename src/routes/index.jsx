@@ -46,6 +46,8 @@ import AdminSubCropsPage from '../pages/AdminSubCropsPage';
 import AdminProductsPage from '../pages/AdminProductsPage';
 import AdminOrdersPage from '../pages/AdminOrdersPage';
 import AdminPredictionsPage from '../pages/AdminPredictionsPage';
+import AdminSoilPredictionsPage from '../pages/AdminSoilPredictionsPage';
+import AdminFertilizerPredictionsPage from '../pages/AdminFertilizerPredictionsPage';
 import AdminPlansPage from '../pages/AdminPlansPage';
 import AdminApiPlansPage from '../pages/AdminApiPlansPage';
 import AdminDownloadsPage from '../pages/AdminDownloadsPage';
@@ -160,6 +162,7 @@ export default function createAppRouter(isDark, toggleTheme) {
         { path: 'products', element: <AdminProductsPage /> },
         { path: 'orders', element: <AdminOrdersPage /> },
         { path: 'predictions', element: <AdminPredictionsPage /> },
+        { path: 'soil-predictions', element: <AdminSoilPredictionsPage /> },
         { path: 'plans', element: <AdminPlansPage /> },
         { path: 'api-plans', element: <AdminApiPlansPage /> },
         { path: 'downloads', element: <AdminDownloadsPage /> },
