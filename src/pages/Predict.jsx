@@ -120,6 +120,8 @@ export default function Predict() {
           { label: 'Potted Plant', icon: Bug, subs: { 'General': { label: 'General', icon: Bug, items: [{ label: 'Potted Plant', endpoint: '/potted_plant' }] } } },
           { label: 'Plant Identification', icon: Leaf, subs: { 'General': { label: 'General', icon: Leaf, items: [{ label: 'Identify Plant', endpoint: '/plant_idetification' }] } } },
           { label: 'Food Identification', icon: Apple, subs: { 'General': { label: 'General', icon: Apple, items: [{ label: 'Identify Food', endpoint: '/food_identification' }] } } },
+          { label: 'Food Gradings', icon: Apple, subs: { 'General': { label: 'General', icon: Apple, items: [{ label: 'Food Grading', endpoint: '/food_gradings' }] } } },
+          { label: 'Fruit Grain Grading', icon: Apple, subs: { 'General': { label: 'General', icon: Apple, items: [{ label: 'Fruit Grain Grading', endpoint: '/fruit_grain_grading' }] } } },
         );
         setCategories(built);
       } finally { setLoadingCats(false); }

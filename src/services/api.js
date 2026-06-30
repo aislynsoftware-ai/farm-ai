@@ -252,7 +252,7 @@ const api = {
     spinachId: (file) => { const fd = new FormData(); fd.append('image', file); return request('/vegetable-spinach-identification', { method: 'POST', body: fd, headers: {} }); },
     pottedPlantDiagnosis: (file) => { const fd = new FormData(); fd.append('image', file); return request('/potted_plant_diagnosis', { method: 'POST', body: fd, headers: {} }); },
     foodGrainGrading: (file) => { const fd = new FormData(); fd.append('image', file); return request('/food_grain_grading', { method: 'POST', body: fd, headers: {} }); },
-    fruitGrainGrading: (file) => { const fd = new FormData(); fd.append('image', file); return request('/fruit_grain_grading', { method: 'POST', body: fd, headers: {} }); },
+    fruitGrainGrading: (userId, file) => { const fd = new FormData(); fd.append('user_id', userId); fd.append('image', file); return request('/fruit_grain_grading', { method: 'POST', body: fd, headers: {} }); },
     foodGradings: (userId, file) => { const fd = new FormData(); fd.append('user_id', userId); fd.append('image', file); return request('/food_gradings', { method: 'POST', body: fd, headers: {} }); },
     offlineCropPrediction: (data) => request('/offline_crop_prediction_using_soil_data', { method: 'POST', body: JSON.stringify(data) }),
     offlineFertilizerRec: (data) => request('/offline_fertilizer_recommendation_using_soil_data', { method: 'POST', body: JSON.stringify(data) }),
