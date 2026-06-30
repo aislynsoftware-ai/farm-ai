@@ -37,6 +37,8 @@ const titleEndpoint = {
   'potted plant diagnosis': '/potted_plant_diagnosis',
   'food gradings': '/food_gradings',
   'food grain grading': '/food_grain_grading',
+  'fruit grading': '/fruit_grain_grading',
+  'fruit gradings': '/fruit_grain_grading',
   'fruit grain grading': '/fruit_grain_grading',
   'offline crop prediction using soil data': '/offline_crop_prediction_using_soil_data',
   'offline fertilizer recommendation using soil data': '/offline_fertilizer_recommendation_using_soil_data',
