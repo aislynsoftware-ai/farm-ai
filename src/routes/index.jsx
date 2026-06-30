@@ -163,6 +163,7 @@ export default function createAppRouter(isDark, toggleTheme) {
         { path: 'orders', element: <AdminOrdersPage /> },
         { path: 'predictions', element: <AdminPredictionsPage /> },
         { path: 'soil-predictions', element: <AdminSoilPredictionsPage /> },
+        { path: 'fertilizer-predictions', element: <AdminFertilizerPredictionsPage /> },
         { path: 'plans', element: <AdminPlansPage /> },
         { path: 'api-plans', element: <AdminApiPlansPage /> },
         { path: 'downloads', element: <AdminDownloadsPage /> },
