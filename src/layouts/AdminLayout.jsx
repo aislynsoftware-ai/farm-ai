@@ -19,6 +19,7 @@ const SIDEBAR = [
   { path: '/admin/orders', label: 'Orders', icon: CreditCard },
   { path: '/admin/predictions', label: 'Predictions', icon: Brain },
   { path: '/admin/soil-predictions', label: 'Soil Pred.', icon: Sprout },
+  { path: '/admin/fertilizer-predictions', label: 'Fert. Pred.', icon: Sprout },
   { path: '/admin/downloads', label: 'Downloads', icon: Download },
  
 ];
