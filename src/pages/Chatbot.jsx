@@ -5,7 +5,7 @@ import remarkGfm from 'remark-gfm';
 import {
   Send, Leaf, Sun, CloudRain, Bug, Sprout,
   Copy, Check, ThumbsUp, ThumbsDown, Bot,
-  ChevronDown, Minimize2, Maximize2, Mic, MicOff, Globe, ChevronUp
+  ChevronDown, Minimize2, Maximize2, Mic, MicOff, Globe, ChevronUp, Volume2, MessageSquareText
 } from 'lucide-react';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
@@ -31,6 +31,11 @@ const LANGUAGES = [
   { code: 'es', label: 'Spanish', native: 'Español' },
   { code: 'ar', label: 'Arabic', native: 'العربية' },
   { code: 'zh', label: 'Chinese', native: '中文' },
+];
+
+const MODES = [
+  { key: 'voice', icon: Mic, label: 'Voice Mode', desc: 'Speak your questions & hear responses' },
+  { key: 'text', icon: MessageSquareText, label: 'Text Mode', desc: 'Type your questions & read responses' },
 ];
 
 const suggestions = [
@@ -106,6 +111,7 @@ function StreamText({ text, streaming, done }) {
 }
 
 export default function Chatbot() {
+  const [mode, setMode] = useState(null);
   const [messages, setMessages] = useState([{
     role: 'assistant',
     content: "Hello! I'm your AI farming assistant. Ask me anything about crops, soil, pests, or sustainable farming practices.",
@@ -115,7 +121,6 @@ export default function Chatbot() {
   const [loading, setLoading] = useState(false);
   const [streamingId, setStreamingId] = useState(null);
   const [copiedId, setCopiedId] = useState(null);
-  const [suggestionClicked, setSuggestionClicked] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
   const [lang, setLang] = useState('en');
   const [langOpen, setLangOpen] = useState(false);
@@ -135,10 +140,18 @@ export default function Chatbot() {
     if (el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 100) + 'px'; }
   }, []);
 
+  const speakText = useCallback((text) => {
+    if (mode !== 'voice') return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = lang === 'en' ? 'en-US' : `${lang}-IN`;
+    utterance.rate = 0.95;
+    window.speechSynthesis.speak(utterance);
+  }, [mode, lang]);
+
   const addMessage = useCallback(async (text) => {
     if (!text.trim() || loading) return;
     setInput('');
-    setSuggestionClicked(true);
     setMessages((prev) => [...prev, { role: 'user', content: text, lang }]);
     setLoading(true);
 
@@ -156,12 +169,14 @@ export default function Chatbot() {
         setTimeout(() => setStreamingId(idx), 10);
         return [...prev, { role: 'assistant', content: reply, lang: 'en' }];
       });
+
+      setTimeout(() => speakText(reply), 300);
     } catch {
       setMessages((prev) => [...prev, { role: 'assistant', content: "Sorry, I'm having trouble connecting. Please try again.", lang: 'en' }]);
     } finally {
       setLoading(false);
     }
-  }, [loading, lang]);
+  }, [loading, lang, speakText]);
 
   const handleSend = useCallback(() => addMessage(input), [input, addMessage]);
   const handleKeyDown = useCallback((e) => {
@@ -234,6 +249,13 @@ export default function Chatbot() {
           </div>
 
           <div className="flex items-center gap-1">
+            {mode && (
+              <button onClick={() => { setMode(null); setMessages([{ role: 'assistant', content: "Hello! I'm your AI farming assistant. Ask me anything about crops, soil, pests, or sustainable farming practices.", lang: 'en' }]); window.speechSynthesis.cancel(); }}
+                className="flex items-center gap-1.5 h-9 px-2.5 rounded-xl hover:bg-white/10 transition-colors text-white/80 hover:text-white text-[12px] font-medium">
+                {mode === 'voice' ? <Mic size={14} /> : <MessageSquareText size={14} />}
+                <span>{mode === 'voice' ? 'Voice' : 'Text'}</span>
+              </button>
+            )}
             <div className="relative">
               <button onClick={() => setLangOpen(!langOpen)}
                 className="flex items-center gap-1.5 h-9 px-2.5 rounded-xl hover:bg-white/10 transition-colors text-white/80 hover:text-white">
@@ -264,7 +286,7 @@ export default function Chatbot() {
       {!isMinimized && (
         <>
           <div ref={scrollRef} className="flex-1 overflow-y-auto min-h-0 scroll-smooth py-4 px-4 sm:px-6">
-            {messages.length === 1 && !suggestionClicked && !loading && (
+            {!mode && !loading && (
               <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
                 className="flex flex-col items-center justify-center min-h-[65vh] text-center max-w-2xl mx-auto">
                 <motion.div initial={{ scale: 0.8 }} animate={{ scale: 1 }} transition={{ delay: 0.1, type: "spring", stiffness: 300 }} className="mb-6">
@@ -272,14 +294,47 @@ export default function Chatbot() {
                     <Leaf size={36} className="text-white" />
                   </div>
                 </motion.div>
+                <h2 className="text-2xl font-bold text-[#1C1917] dark:text-white mb-1">🌱 Farmlyt AI</h2>
+                <p className="text-[15px] text-[#78716C] dark:text-[#A1A1AA] mb-8">Choose your interaction mode</p>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-lg">
+                  {MODES.map((m, i) => {
+                    const Icon = m.icon;
+                    return (
+                      <motion.button key={m.key} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
+                        whileHover={{ scale: 1.03, transition: { type: "spring", stiffness: 400, damping: 25 } }} whileTap={{ scale: 0.97 }}
+                        onClick={() => {
+                          setMode(m.key);
+                          if (m.key === 'voice') setTimeout(() => toggleVoice(), 500);
+                        }}
+                        className="flex flex-col items-center gap-3 p-6 rounded-2xl bg-transparent hover:bg-emerald-50/50 dark:hover:bg-emerald-900/10 transition-all duration-200 border-2 border-emerald-200 dark:border-emerald-800 hover:border-emerald-400 dark:hover:border-emerald-600">
+                        <div className="w-14 h-14 rounded-2xl bg-emerald-100 dark:bg-emerald-800/40 flex items-center justify-center">
+                          <Icon size={28} className="text-emerald-600 dark:text-emerald-400" />
+                        </div>
+                        <span className="text-[15px] font-semibold text-[#1C1917] dark:text-white">{m.label}</span>
+                        <span className="text-[12px] text-[#78716C] dark:text-[#A1A1AA]">{m.desc}</span>
+                      </motion.button>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            )}
+
+            {mode && messages.length === 1 && !loading && (
+              <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}
+                className="flex flex-col items-center justify-center min-h-[65vh] text-center max-w-2xl mx-auto px-4">
+                <motion.div initial={{ scale: 0.8 }} animate={{ scale: 1 }} transition={{ delay: 0.1, type: "spring", stiffness: 300 }} className="mb-6">
+                  <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-2xl shadow-emerald-500/30">
+                    <Leaf size={36} className="text-white" />
+                  </div>
+                </motion.div>
                 <h2 className="text-2xl font-bold text-[#1C1917] dark:text-white mb-2">🌱 Farmlyt AI</h2>
                 <p className="text-[15px] text-[#78716C] dark:text-[#A1A1AA] mb-8">How can I help your farm today?</p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
                   {suggestions.map((s, i) => (
                     <motion.button key={i} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}
                       whileHover={{ scale: 1.02, transition: { type: "spring", stiffness: 400, damping: 25 } }} whileTap={{ scale: 0.97 }}
                       onClick={() => addMessage(s.label)}
-                      className="flex items-center gap-3 p-4 rounded-2xl bg-white dark:bg-[#1e293b] shadow-sm hover:shadow-md transition-all duration-200 text-left border border-[#E7E5E4] dark:border-[#334155] hover:border-emerald-400/50 dark:hover:border-emerald-500/30">
+                      className="flex items-center gap-3 p-4 rounded-2xl bg-transparent hover:bg-emerald-50/50 dark:hover:bg-emerald-900/10 transition-all duration-200 text-left border-2 border-emerald-200 dark:border-emerald-800 hover:border-emerald-400 dark:hover:border-emerald-600">
                       <span className="text-2xl">{s.emoji}</span>
                       <span className="text-[14px] font-medium text-[#1C1917] dark:text-white">{s.label}</span>
                     </motion.button>
@@ -290,6 +345,7 @@ export default function Chatbot() {
 
             <div className="flex flex-col gap-4 max-w-3xl mx-auto">
               {messages.map((msg, i) => {
+                if (mode && i === 0 && messages.length === 1) return null;
                 const isAssistant = msg.role === 'assistant';
                 const isStreaming = streamingId === i;
                 return (
