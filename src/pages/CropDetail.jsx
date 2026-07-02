@@ -43,6 +43,8 @@ const titleEndpoint = {
   'offline crop prediction using soil data': '/offline_crop_prediction_using_soil_data',
   'offline fertilizer recommendation using soil data': '/offline_fertilizer_recommendation_using_soil_data',
   'real-time crop prediction using soil sensors': '/real-time_crop_prediction_using_soil_sensors',
+  'real time crop prediction using soil sensors': '/real-time_crop_prediction_using_soil_sensors',
+  'soil test and data visualization': '/fertilizer-recommendation-based-soil-data-real-time-sensors',
   'fertilizer recommendation based soil data real time sensors': '/fertilizer-recommendation-based-soil-data-real-time-sensors',
   'image based soil analysis': '/image_based_soil_analysis',
 };
@@ -656,7 +658,9 @@ export default function CropDetail() {
               </motion.div>
             ))}
           </div>
-        ) : isSoilInput ? (
+        ) : null}
+
+        {isSoilInput ? (
           <div className="rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 p-5">
             <div className="flex items-center gap-2 mb-4">
               <Thermometer size={16} className="text-emerald-500" />
@@ -790,7 +794,7 @@ export default function CropDetail() {
               <PredictionProgress startTime={predictStartTime} />
             )}
           </div>
-        ) : matchedEndpoint ? (
+        ) : !Object.keys(groupedSubs).length && !subs.length && matchedEndpoint ? (
           <div className="rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 p-5">
             <div
               onClick={() => fileRef.current?.click()}
@@ -850,7 +854,7 @@ export default function CropDetail() {
 
 
           </div>
-        ) : (
+        ) : !Object.keys(groupedSubs).length && !subs.length ? (
           <div className="rounded-2xl bg-white dark:bg-gray-800 border-2 border-amber-200 dark:border-amber-700 p-8 text-center">
             <div className="w-14 h-14 rounded-2xl bg-amber-50 dark:bg-amber-950/30 flex items-center justify-center mx-auto mb-3">
               <svg className="w-6 h-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M12 2a10 10 0 100 20 10 10 0 000-20z" /></svg>
@@ -858,7 +862,7 @@ export default function CropDetail() {
             <p className="text-sm font-medium text-amber-700 dark:text-amber-400">AI analysis not available for this crop</p>
             <p className="text-xs text-amber-500 dark:text-amber-500 mt-1">No prediction model configured for this crop type</p>
           </div>
-        )}
+        ) : null}
 
                     {result && (
               <div className="mt-6 space-y-5">
