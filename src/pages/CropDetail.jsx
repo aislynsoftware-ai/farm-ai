@@ -77,6 +77,12 @@ export default function CropDetail() {
   const [preview, setPreview] = useState(null);
   const [predictLoading, setPredictLoading] = useState(false);
   const [predictStartTime, setPredictStartTime] = useState(null);
+  const bluetoothServerRef = useRef(null);
+  const bluetoothCharRefs = useRef({ read: null, write: null });
+  const [bluetoothSending, setBluetoothSending] = useState(false);
+  const [bluetoothDataReceived, setBluetoothDataReceived] = useState(false);
+  const [hasWriteChar, setHasWriteChar] = useState(false);
+  const [bluetoothSupported, setBluetoothSupported] = useState(null);
   const [result, setResult] = useState(null);
   const [error, setError] = useState('');
   const fileRef = useRef(null);
@@ -109,45 +115,149 @@ export default function CropDetail() {
     setError('');
   };
 
+  const parseSensorData = (dataView) => {
+    try {
+      const text = new TextDecoder('utf-8').decode(dataView);
+      const keyMap = { n: 'nitrogen', p: 'phosphorus', k: 'potassium', temp: 'temperature', temperature: 'temperature', moisture: 'moisture', ec: 'ec', ph: 'ph' };
+      const keys = ['nitrogen', 'phosphorus', 'potassium', 'temperature', 'moisture', 'ec', 'ph'];
+
+      try {
+        const json = JSON.parse(text);
+        const result = {};
+        for (const [k, v] of Object.entries(json)) {
+          const mapped = keyMap[k.toLowerCase().trim()];
+          if (mapped && keys.includes(mapped) && !isNaN(v)) result[mapped] = String(v);
+        }
+        if (keys.filter(k => result[k]).length >= 4) return result;
+      } catch {}
+
+      if (text.includes(',')) {
+        const parts = text.split(',').map(s => s.trim());
+        if (parts.length >= 7) {
+          const result = {};
+          parts.slice(0, 7).forEach((v, i) => { if (!isNaN(v)) result[keys[i]] = v; });
+          if (keys.filter(k => result[k]).length >= 4) return result;
+        }
+      }
+
+      if (dataView.byteLength >= 28) {
+        const result = {};
+        keys.forEach((k, i) => {
+          const val = dataView.getFloat32(i * 4, true);
+          if (!isNaN(val) && isFinite(val)) result[k] = val.toFixed(1);
+        });
+        if (keys.filter(k => result[k]).length >= 4) return result;
+      }
+    } catch {}
+    return null;
+  };
+
+  useEffect(() => {
+    if (navigator.bluetooth && navigator.bluetooth.getAvailability) {
+      navigator.bluetooth.getAvailability().then(setBluetoothSupported).catch(() => setBluetoothSupported(false));
+    } else {
+      queueMicrotask(() => setBluetoothSupported(!!navigator.bluetooth));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (bluetoothSupported === false) queueMicrotask(() => setError('Bluetooth not available — no adapter detected or browser unsupported'));
+  }, [bluetoothSupported]);
+
   const connectBluetooth = async () => {
     if (!navigator.bluetooth) {
-      // console.warn('[BLUETOOTH] Not supported in this browser');
-      setError('Bluetooth not supported in this browser');
+      setError('Bluetooth Web API not supported. Use Chrome or Edge with Bluetooth enabled.');
       return;
     }
-    // console.log('[BLUETOOTH] Requesting device...');
     setBluetoothConnecting(true);
     setError('');
+    setBluetoothDataReceived(false);
     try {
       const device = await navigator.bluetooth.requestDevice({
         acceptAllDevices: true,
         optionalServices: ['0000180a-0000-1000-8000-00805f9b34fb'],
       });
-      // console.log('[BLUETOOTH] Device selected:', device.name || 'Unknown');
       setBluetoothDevice(device);
-      // console.log('[BLUETOOTH] Connecting to GATT server...');
       const server = await device.gatt.connect();
-      // console.log('[BLUETOOTH] GATT connected, auto-populating sensor data');
-      setSoilInputs((prev) => ({ ...prev, temperature: '28.5', humidity: '65', ph: '6.8' }));
+      bluetoothServerRef.current = server;
+
+      const services = await server.getPrimaryServices();
+      for (const service of services) {
+        const chars = await service.getCharacteristics();
+        for (const char of chars) {
+          if (char.properties.read && !bluetoothCharRefs.current.read) {
+            try {
+              const value = await char.readValue();
+              const parsed = parseSensorData(value);
+              if (parsed) {
+                setSoilInputs(prev => ({ ...prev, ...parsed }));
+                setBluetoothDataReceived(true);
+                bluetoothCharRefs.current.read = char;
+              }
+            } catch {}
+          }
+          if (char.properties.write && !bluetoothCharRefs.current.write) {
+            bluetoothCharRefs.current.write = char;
+            setHasWriteChar(true);
+          }
+          if (char.properties.writeWithoutResponse && !bluetoothCharRefs.current.write) {
+            bluetoothCharRefs.current.write = char;
+            setHasWriteChar(true);
+          }
+        }
+      }
+
       device.addEventListener('gattserverdisconnected', () => {
-        // console.log('[BLUETOOTH] Device disconnected');
         setBluetoothDevice(null);
+        bluetoothServerRef.current = null;
+        bluetoothCharRefs.current = { read: null, write: null };
+        setBluetoothDataReceived(false);
+        setHasWriteChar(false);
       });
     } catch (err) {
-      // console.error('[BLUETOOTH] Error:', err.name, err.message);
-      if (err.name !== 'NotFoundError') setError(err.message);
+      if (err.name === 'NotFoundError') {
+        // user cancelled
+      } else if (err.name === 'NetworkError') {
+        setError('Bluetooth adapter not found — turn on Bluetooth in Windows settings');
+      } else if (err.name === 'SecurityError') {
+        setError('Bluetooth blocked — use HTTPS or localhost');
+      } else if (err.name === 'NotSupportedError') {
+        setError('Bluetooth LE not supported on this device');
+      } else if (err.name === 'InvalidStateError') {
+        setError('Bluetooth adapter error — try restarting Bluetooth');
+      } else {
+        setError(err.message || 'Unknown Bluetooth error');
+      }
     } finally {
       setBluetoothConnecting(false);
-      // console.log('[BLUETOOTH] Connection attempt complete');
     }
   };
 
   const disconnectBluetooth = () => {
-    // console.log('[BLUETOOTH] Disconnecting:', bluetoothDevice?.name || 'Unknown');
     if (bluetoothDevice && bluetoothDevice.gatt.connected) {
       bluetoothDevice.gatt.disconnect();
     }
     setBluetoothDevice(null);
+    bluetoothServerRef.current = null;
+    bluetoothCharRefs.current = { read: null, write: null };
+    setBluetoothDataReceived(false);
+    setHasWriteChar(false);
+  };
+
+  const sendToBluetooth = async (data) => {
+    if (!bluetoothDevice?.gatt?.connected || !bluetoothCharRefs.current.write) {
+      setError('Bluetooth not connected or no writable characteristic found');
+      return;
+    }
+    setBluetoothSending(true);
+    try {
+      const encoder = new TextEncoder();
+      await bluetoothCharRefs.current.writeValue(encoder.encode(JSON.stringify(data)));
+    } catch (err) {
+      setError('Failed to send: ' + err.message);
+    } finally {
+      setBluetoothSending(false);
+    }
   };
 
   const isLoggedIn = () => {
@@ -535,33 +645,50 @@ export default function CropDetail() {
           <div className="rounded-2xl bg-white dark:bg-gray-800 border-2 border-emerald-200 dark:border-emerald-700 p-5">
             <div className="flex items-center gap-2 mb-4">
               <Thermometer size={16} className="text-emerald-500" />
-              <h3 className="text-sm font-bold text-gray-900 dark:text-white">Soil Parameters</h3>
+              <h3 className="text-sm font-bold text-gray-900 dark:text-white">{isRealtime ? 'Real-Time Sensor Data' : 'Soil Parameters'}</h3>
             </div>
 
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              {soilInputFields.map((field) => (
-                <div key={field.key}>
-                  <label className="block text-[11px] font-medium text-emerald-700 dark:text-emerald-400 mb-1">
-                    {field.label}
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="number"
-                      value={soilInputs[field.key]}
-                      onChange={(e) => handleSoilInputChange(field.key, e.target.value)}
-                      placeholder={`0 ${field.unit}`}
-                      min={field.min}
-                      max={field.max}
-                      step={field.step}
-                      className="w-full px-3 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 border-2 border-emerald-200 dark:border-emerald-700 text-sm text-gray-900 dark:text-white placeholder-emerald-400 focus:outline-none focus:border-emerald-500 transition-colors"
-                    />
-                    {field.unit && (
-                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-emerald-500">{field.unit}</span>
-                    )}
+            {isRealtime && bluetoothDevice?.gatt?.connected && bluetoothDataReceived ? (
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {soilInputFields.filter(f => f.key !== 'humidity' && f.key !== 'rainfall').map((field) => (
+                  <div key={field.key} className="rounded-xl bg-emerald-50 dark:bg-emerald-900/30 border-2 border-emerald-200 dark:border-emerald-700 p-3">
+                    <label className="block text-[10px] font-medium text-emerald-600 dark:text-emerald-400 mb-1">{field.label}</label>
+                    <p className="text-sm font-bold text-gray-900 dark:text-white">{soilInputs[field.key] || '—'}</p>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            ) : isRealtime ? (
+              <div className="p-6 text-center rounded-xl bg-amber-50 dark:bg-amber-950/30 border-2 border-amber-200 dark:border-amber-700">
+                <Bluetooth size={32} className="mx-auto mb-2 text-amber-500" />
+                <p className="text-sm font-medium text-amber-700 dark:text-amber-400">Connect a Bluetooth sensor to get real-time data</p>
+                <p className="text-xs text-amber-500 dark:text-amber-500 mt-1">The 7 soil parameters will auto-populate from the sensor</p>
+              </div>
+            ) : (
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {soilInputFields.map((field) => (
+                  <div key={field.key}>
+                    <label className="block text-[11px] font-medium text-emerald-700 dark:text-emerald-400 mb-1">
+                      {field.label}
+                    </label>
+                    <div className="relative">
+                      <input
+                        type="number"
+                        value={soilInputs[field.key]}
+                        onChange={(e) => handleSoilInputChange(field.key, e.target.value)}
+                        placeholder={`0 ${field.unit}`}
+                        min={field.min}
+                        max={field.max}
+                        step={field.step}
+                        className="w-full px-3 py-2 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 border-2 border-emerald-200 dark:border-emerald-700 text-sm text-gray-900 dark:text-white placeholder-emerald-400 focus:outline-none focus:border-emerald-500 transition-colors"
+                      />
+                      {field.unit && (
+                        <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[11px] text-emerald-500">{field.unit}</span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
 
             {isFertilizer && fertilizerCatalog && (
               <div className="grid sm:grid-cols-2 gap-3 mt-4">
@@ -590,21 +717,39 @@ export default function CropDetail() {
               </div>
             )}
 
-            {isRealtime && (
+            {isSoilInput && (
               <div className="mt-4">
+                <div className="flex items-center gap-2 mb-2">
+                  <Bluetooth size={14} className="text-emerald-500" />
+                  <span className="text-[11px] font-semibold text-gray-900 dark:text-white">Bluetooth Sensor</span>
+                </div>
                 {bluetoothDevice?.gatt?.connected ? (
-                  <div className="flex items-center gap-3 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 border-2 border-emerald-200 dark:border-emerald-700">
-                    <Bluetooth size={18} className="text-emerald-600 dark:text-emerald-400" />
-                    <div className="flex-1">
-                      <p className="text-xs font-medium text-emerald-700 dark:text-emerald-300">Connected: {bluetoothDevice.name || 'Sensor'}</p>
-                      <p className="text-[10px] text-emerald-500">Auto-populated from sensor</p>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-3 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 border-2 border-emerald-200 dark:border-emerald-700">
+                      <Bluetooth size={18} className="text-emerald-600 dark:text-emerald-400" />
+                      <div className="flex-1">
+                        <p className="text-xs font-medium text-emerald-700 dark:text-emerald-300">Connected: {bluetoothDevice.name || 'Sensor'}</p>
+                        {bluetoothDataReceived ? (
+                          <p className="text-[10px] text-emerald-500">7 sensor params received</p>
+                        ) : (
+                          <p className="text-[10px] text-amber-500">No data received — device may not support auto-read</p>
+                        )}
+                      </div>
+                      <button onClick={disconnectBluetooth} className="px-3 py-1 rounded-lg bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400 text-[11px] font-medium hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors cursor-pointer">Disconnect</button>
                     </div>
-                    <button onClick={disconnectBluetooth} className="px-3 py-1 rounded-lg bg-red-100 dark:bg-red-950/40 text-red-600 dark:text-red-400 text-[11px] font-medium hover:bg-red-200 dark:hover:bg-red-900/50 transition-colors cursor-pointer">Disconnect</button>
+                    {hasWriteChar && (
+                      <p className="text-[10px] text-emerald-500 text-center">Writable characteristic found — can send results</p>
+                    )}
+                  </div>
+                ) : bluetoothSupported === false ? (
+                  <div className="p-3 rounded-xl bg-red-50 dark:bg-red-950/30 border-2 border-red-200 dark:border-red-800 text-center">
+                    <p className="text-xs font-medium text-red-600 dark:text-red-400">Bluetooth not available</p>
+                    <p className="text-[10px] text-red-500 mt-0.5">Turn on Bluetooth or use Chrome/Edge with adapter</p>
                   </div>
                 ) : (
-                  <button onClick={connectBluetooth} disabled={bluetoothConnecting} className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800 text-sm font-medium transition-colors cursor-pointer border-2 border-blue-200 dark:border-blue-700 hover:border-blue-400 disabled:opacity-50">
-                    {bluetoothConnecting ? <Loader size={16} className="animate-spin" /> : <Bluetooth size={16} />}
-                    {bluetoothConnecting ? 'Connecting...' : 'Connect Bluetooth Sensor'}
+                  <button onClick={connectBluetooth} disabled={bluetoothConnecting || bluetoothSupported === null} className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-800 text-sm font-medium transition-colors cursor-pointer border-2 border-blue-200 dark:border-blue-700 hover:border-blue-400 disabled:opacity-50">
+                    {bluetoothConnecting ? <Loader size={16} className="animate-spin" /> : bluetoothSupported === null ? <Loader size={16} className="animate-spin" /> : <Bluetooth size={16} />}
+                    {bluetoothConnecting ? 'Scanning...' : bluetoothSupported === null ? 'Checking Bluetooth...' : 'Scan for Bluetooth Device'}
                   </button>
                 )}
               </div>
@@ -1139,6 +1284,35 @@ export default function CropDetail() {
                         </ul>
                       </div>
                     </div>
+                  </motion.div>
+                )}
+
+                {isSoilInput && bluetoothDevice?.gatt?.connected && hasWriteChar && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/30 dark:to-indigo-950/30 border border-blue-200 dark:border-blue-800 p-5"
+                  >
+                    <div className="flex items-center gap-2 mb-3">
+                      <Bluetooth size={16} className="text-blue-500" />
+                      <span className="text-xs font-bold text-gray-900 dark:text-white">Send to Device</span>
+                    </div>
+                    <p className="text-[11px] text-gray-500 dark:text-gray-400 mb-3">Send the AI analysis results to your connected Bluetooth device.</p>
+                    <button
+                      onClick={() => {
+                        const payload = {
+                          soil_inputs: soilInputs,
+                          result: result,
+                          timestamp: new Date().toISOString(),
+                        };
+                        sendToBluetooth(payload);
+                      }}
+                      disabled={bluetoothSending}
+                      className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 dark:disabled:bg-blue-800 text-white text-sm font-medium transition-colors cursor-pointer disabled:cursor-not-allowed"
+                    >
+                      {bluetoothSending ? <Loader size={16} className="animate-spin" /> : <Bluetooth size={16} />}
+                      {bluetoothSending ? 'Sending...' : 'Send Results to Device'}
+                    </button>
                   </motion.div>
                 )}
               </div>

@@ -415,7 +415,7 @@ const api = {
     },
   },
   weather: {
-    alert: (lat, lng) => request(`/weather-alert?lat=${lat}&lng=${lng}`),
+    alert: (lat, lng, address = '') => request(`/weather-alert?lat=${lat}&lng=${lng}&address=${encodeURIComponent(address)}`),
   },
   plantRecs: {
     list: (category) => request(`/plant-recommendations${category ? `?category=${encodeURIComponent(category)}` : ''}`),
