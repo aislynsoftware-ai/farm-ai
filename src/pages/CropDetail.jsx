@@ -63,7 +63,6 @@ const soilInputFields = [
   { key: 'ec', label: 'EC (Conductivity)', unit: 'mS/cm', min: 0, max: 5, step: 0.01 },
   { key: 'humidity', label: 'Humidity', unit: '%', min: 0, max: 100, step: 0.1 },
   { key: 'ph', label: 'pH Level', unit: '', min: 0, max: 14, step: 0.1 },
-  { key: 'rainfall', label: 'Rainfall', unit: 'mm', min: 0, max: 500, step: 0.1 },
 ];
 
 export default function CropDetail() {
@@ -94,7 +93,7 @@ export default function CropDetail() {
   const [soilInputs, setSoilInputs] = useState({
     nitrogen: '', phosphorus: '', potassium: '',
     temperature: '', moisture: '', ec: '',
-    humidity: '', ph: '', rainfall: '',
+    humidity: '', ph: '',
   });
   const [bluetoothDevice, setBluetoothDevice] = useState(null);
   const [bluetoothConnecting, setBluetoothConnecting] = useState(false);
@@ -166,7 +165,12 @@ export default function CropDetail() {
 
   const connectBluetooth = async () => {
     if (!navigator.bluetooth) {
-      setError('Bluetooth Web API not supported. Use Chrome or Edge with Bluetooth enabled.');
+      setError('Web Bluetooth is not supported. Please use Chrome or Edge.');
+      return;
+    }
+    const available = await navigator.bluetooth.getAvailability();
+    if (!available) {
+      setError('Please turn on Bluetooth and try again.');
       return;
     }
     setBluetoothConnecting(true);
@@ -174,9 +178,9 @@ export default function CropDetail() {
     setBluetoothDataReceived(false);
     try {
       const device = await navigator.bluetooth.requestDevice({
-        acceptAllDevices: true,
-        optionalServices: ['0000180a-0000-1000-8000-00805f9b34fb'],
-      });
+  acceptAllDevices: true,
+  optionalServices: ['0000180a-0000-1000-8000-00805f9b34fb'],
+});
       setBluetoothDevice(device);
       const server = await device.gatt.connect();
       bluetoothServerRef.current = server;
@@ -194,6 +198,14 @@ export default function CropDetail() {
                 setBluetoothDataReceived(true);
                 bluetoothCharRefs.current.read = char;
               }
+              await char.startNotifications();
+              char.addEventListener('characteristicvaluechanged', (event) => {
+                const val = parseSensorData(event.target.value);
+                if (val) {
+                  setSoilInputs(prev => ({ ...prev, ...val }));
+                  setBluetoothDataReceived(true);
+                }
+              });
             } catch {}
           }
           if (char.properties.write && !bluetoothCharRefs.current.write) {
@@ -235,6 +247,9 @@ export default function CropDetail() {
 
   const disconnectBluetooth = () => {
     if (bluetoothDevice && bluetoothDevice.gatt.connected) {
+      if (bluetoothCharRefs.current.read) {
+        try { bluetoothCharRefs.current.read.stopNotifications(); } catch {}
+      }
       bluetoothDevice.gatt.disconnect();
     }
     setBluetoothDevice(null);
@@ -339,7 +354,7 @@ export default function CropDetail() {
       if (isFertilizer) {
         if (!selectedCrop || !selectedSoil) { setError('Please select a crop and soil type'); return; }
       }
-      const missing = soilInputFields.find((f) => !soilInputs[f.key] && !(isFertilizer && (f.key === 'humidity' || f.key === 'rainfall')));
+      const missing = soilInputFields.find((f) => !soilInputs[f.key] && !(isFertilizer && f.key === 'humidity'));
       if (missing) { /* console.warn('[VALIDATION] Missing field:', missing.label); */ setError(`Please enter ${missing.label}`); return; }
     } else if (!file) {
       // console.warn('[VALIDATION] No image file selected');
@@ -650,7 +665,7 @@ export default function CropDetail() {
 
             {isRealtime && bluetoothDevice?.gatt?.connected && bluetoothDataReceived ? (
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                {soilInputFields.filter(f => f.key !== 'humidity' && f.key !== 'rainfall').map((field) => (
+                {soilInputFields.filter(f => f.key !== 'humidity').map((field) => (
                   <div key={field.key} className="rounded-xl bg-emerald-50 dark:bg-emerald-900/30 border-2 border-emerald-200 dark:border-emerald-700 p-3">
                     <label className="block text-[10px] font-medium text-emerald-600 dark:text-emerald-400 mb-1">{field.label}</label>
                     <p className="text-sm font-bold text-gray-900 dark:text-white">{soilInputs[field.key] || '—'}</p>
@@ -717,7 +732,7 @@ export default function CropDetail() {
               </div>
             )}
 
-            {isSoilInput && (
+            {isRealtime && (
               <div className="mt-4">
                 <div className="flex items-center gap-2 mb-2">
                   <Bluetooth size={14} className="text-emerald-500" />
