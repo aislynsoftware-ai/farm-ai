@@ -50,11 +50,11 @@ export default function Notifications() {
       .finally(() => setTipsLoading(false));
   }, [tab, tipCategory]);
 
-  const fetchWeather = (lat, lng) => {
+  const fetchWeather = (lat, lng, address = '') => {
     setWeatherLoading(true);
     setWeatherError('');
     setWeather(null);
-    api.weather.alert(lat, lng)
+    api.weather.alert(lat, lng, address)
       .then(setWeather)
       .catch(() => setWeatherError('Failed to fetch weather'))
       .finally(() => setWeatherLoading(false));
@@ -62,7 +62,7 @@ export default function Notifications() {
 
   useEffect(() => {
     if (tab === 'weather' && userLocation) {
-      fetchWeather(userLocation.lat, userLocation.lng);
+      fetchWeather(userLocation.lat, userLocation.lng, userLocation.address);
     }
   }, [tab, userLocation]);
 

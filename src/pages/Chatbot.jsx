@@ -248,7 +248,7 @@ export default function Chatbot() {
             </div>
           </div>
 
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1 mb-4">
             {mode && (
               <button onClick={() => { setMode(null); setMessages([{ role: 'assistant', content: "Hello! I'm your AI farming assistant. Ask me anything about crops, soil, pests, or sustainable farming practices.", lang: 'en' }]); window.speechSynthesis.cancel(); }}
                 className="flex items-center gap-1.5 h-9 px-2.5 rounded-xl hover:bg-white/10 transition-colors text-white/80 hover:text-white text-[12px] font-medium">
@@ -343,7 +343,7 @@ export default function Chatbot() {
               </motion.div>
             )}
 
-            <div className="flex flex-col gap-4 max-w-3xl mx-auto">
+            <div className="flex flex-col gap-4 max-w-3xl mx-auto mt-4 mb-4">
               {messages.map((msg, i) => {
                 if (mode && i === 0 && messages.length === 1) return null;
                 const isAssistant = msg.role === 'assistant';
