@@ -41,9 +41,16 @@ async function request(endpoint, options = {}) {
     headers,
   });
 
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || data.detail || data.error || 'Request failed');
-  return data;
+  let data;
+  const contentType = res.headers.get('content-type') || '';
+  if (contentType.includes('application/json')) {
+    data = await res.json();
+    if (!res.ok) throw new Error(data.message || data.detail || data.error || 'Request failed');
+    return data;
+  }
+  const text = await res.text();
+  if (!res.ok) throw new Error(text.slice(0, 200) || 'Request failed');
+  try { return JSON.parse(text); } catch { throw new Error('Invalid response from server'); }
 }
 
 async function adminRequest(endpoint, options = {}) {
@@ -55,9 +62,16 @@ async function adminRequest(endpoint, options = {}) {
     ...options.headers,
   };
   const res = await fetch(`${BASE_URL}${endpoint}`, { ...options, headers });
-  const data = await res.json();
-  if (!res.ok) throw new Error(data.message || data.detail || data.error || 'Request failed');
-  return data;
+  let data;
+  const contentType = res.headers.get('content-type') || '';
+  if (contentType.includes('application/json')) {
+    data = await res.json();
+    if (!res.ok) throw new Error(data.message || data.detail || data.error || 'Request failed');
+    return data;
+  }
+  const text = await res.text();
+  if (!res.ok) throw new Error(text.slice(0, 200) || 'Request failed');
+  try { return JSON.parse(text); } catch { throw new Error('Invalid response from server'); }
 }
 
 function extractOtp(res) {
