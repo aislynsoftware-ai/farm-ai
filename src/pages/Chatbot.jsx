@@ -167,12 +167,12 @@ export default function Chatbot() {
       setMessages((prev) => {
         const idx = prev.length;
         setTimeout(() => setStreamingId(idx), 10);
-        return [...prev, { role: 'assistant', content: reply, lang }];
+        return [...prev, { role: 'assistant', content: reply, lang: 'en' }];
       });
 
       setTimeout(() => speakText(reply), 300);
     } catch {
-      setMessages((prev) => [...prev, { role: 'assistant', content: "Sorry, I'm having trouble connecting. Please try again.", lang }]);
+      setMessages((prev) => [...prev, { role: 'assistant', content: "Sorry, I'm having trouble connecting. Please try again.", lang: 'en' }]);
     } finally {
       setLoading(false);
     }
