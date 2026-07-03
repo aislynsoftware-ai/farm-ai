@@ -56,7 +56,11 @@ export default function Register() {
           longitude: form.longitude,
         }));
       }
-      navigate(`${ROUTES.VERIFY}?email=${encodeURIComponent(form.email)}`);
+      const type = tab === 'email' ? 'email' : 'phone';
+      const param = type === 'email'
+        ? `type=email&email=${encodeURIComponent(form.email)}`
+        : `type=phone&phone=${encodeURIComponent(form.phone)}`;
+      navigate(`${ROUTES.VERIFY}?${param}`);
     } catch (err) {
       setApiError(err.message);
     } finally {

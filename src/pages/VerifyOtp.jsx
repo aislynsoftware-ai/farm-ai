@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Shield, ArrowLeft, AlertCircle, CheckCircle, Sprout, Loader } from 'lucide-react';
+import { Shield, ArrowLeft, AlertCircle, CheckCircle, Sprout, Loader, Mail, Phone } from 'lucide-react';
 import Button from '../components/common/Button';
 import SEO from '../components/common/SEO';
 import { APP_NAME, ROUTES } from '../constants';
@@ -10,8 +10,11 @@ import api from '../services/api';
 export default function VerifyOtp() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const otpType = searchParams.get('type') || 'email';
   const emailFromParams = searchParams.get('email') || '';
+  const phoneFromParams = searchParams.get('phone') || '';
   const [email] = useState(emailFromParams);
+  const [phone] = useState(phoneFromParams);
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -26,8 +29,6 @@ export default function VerifyOtp() {
       return () => clearInterval(interval);
     }
   }, [timer]);
-
-
 
   const handleOtpChange = (index, value) => {
     if (value && !/^\d$/.test(value)) return;
@@ -51,20 +52,30 @@ export default function VerifyOtp() {
     e.preventDefault();
     const code = otpRef.current || otp.join('');
     if (code.length !== 6) { setError('Please enter all 6 digits'); return; }
-    if (!email.trim()) { setError('Email is required'); return; }
 
     setLoading(true);
     setError('');
     try {
-      const uid = sessionStorage.getItem('pending_user_id');
-      if (!uid) { setError('Session expired, please login again'); setLoading(false); return; }
-      const res = await api.auth.verifyOtp(uid, code);
-      const pendingUser = sessionStorage.getItem('pending_user');
-      let userData = pendingUser ? JSON.parse(pendingUser) : {};
-      if (!userData.user_id) userData.user_id = uid;
-      if (res.user_id) userData.user_id = res.user_id;
-      localStorage.setItem('user', JSON.stringify(userData));
-      if (res.token) localStorage.setItem('token', res.token);
+      if (otpType === 'email') {
+        const uid = sessionStorage.getItem('pending_user_id');
+        if (!uid) { setError('Session expired, please login again'); setLoading(false); return; }
+        const res = await api.auth.verifyOtp(uid, code);
+        const pendingUser = sessionStorage.getItem('pending_user');
+        let userData = pendingUser ? JSON.parse(pendingUser) : {};
+        if (!userData.user_id) userData.user_id = uid;
+        if (res.user_id) userData.user_id = res.user_id;
+        localStorage.setItem('user', JSON.stringify(userData));
+        if (res.token) localStorage.setItem('token', res.token);
+      } else {
+        if (!phone) { setError('Phone number missing'); setLoading(false); return; }
+        const res = await api.auth.verifySmsOtp(phone, code);
+        const pendingUser = sessionStorage.getItem('pending_user');
+        let userData = pendingUser ? JSON.parse(pendingUser) : {};
+        if (!userData.user_id) userData.user_id = res.user_id || sessionStorage.getItem('pending_user_id');
+        if (res.user_id) userData.user_id = res.user_id;
+        localStorage.setItem('user', JSON.stringify(userData));
+        if (res.token) localStorage.setItem('token', res.token);
+      }
       setSuccess(true);
       setTimeout(() => navigate(ROUTES.DASHBOARD), 1000);
     } catch (err) {
@@ -78,24 +89,22 @@ export default function VerifyOtp() {
     if (timer > 0 || resending) return;
     setResending(true);
     try {
-      const res = await api.auth.login(email);
-      if (res?.user_id) sessionStorage.setItem('pending_user_id', res.user_id);
-      if (res?.name || res?.email) {
-        sessionStorage.setItem('pending_user', JSON.stringify({
-          user_id: res.user_id,
-          name: res.name || '',
-          email: res.email || '',
-          profile_image: res.profile_image || '',
-          address: res.address || '',
-          latitude: res.latitude || '',
-          longitude: res.longitude || '',
-        }));
+      if (otpType === 'email') {
+        const res = await api.auth.login(email);
+        if (res?.user_id) sessionStorage.setItem('pending_user_id', res.user_id);
+      } else {
+        const res = await api.auth.sendSmsOtp(phone);
+        if (res?.user_id) sessionStorage.setItem('pending_user_id', res.user_id);
       }
       setTimer(30);
     } catch {} finally {
       setResending(false);
     }
   };
+
+  const displayValue = otpType === 'email' ? email : phone;
+  const displayLabel = otpType === 'email' ? 'email' : 'mobile number';
+  const IconComponent = otpType === 'email' ? Mail : Phone;
 
   return (
     <main className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4 py-12">
@@ -106,16 +115,17 @@ export default function VerifyOtp() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-      
         <div className="glass rounded-2xl mt-10 p-6 lg:p-8">
-            <div className="text-center mb-8">
-          <h1 className="sr-only">Verify OTP</h1>
-          <div className="w-14 h-14 rounded-2xl gradient-bg flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-500/20">
-            <Sprout className="w-7 h-7 text-white" />
+          <div className="text-center mb-8">
+            <h1 className="sr-only">Verify OTP</h1>
+            <div className="w-14 h-14 rounded-2xl gradient-bg flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-500/20">
+              <Sprout className="w-7 h-7 text-white" />
+            </div>
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{APP_NAME}</h2>
+            <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">
+              Verify your {displayLabel}
+            </p>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{APP_NAME}</h2>
-          <p className="text-sm text-gray-600 dark:text-gray-300 mt-1">Verify your email address</p>
-        </div>
 
           {success ? (
             <div className="text-center py-4">
@@ -126,11 +136,11 @@ export default function VerifyOtp() {
           ) : (
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="text-center">
-                <Shield className="w-10 h-10 text-emerald-500 mx-auto mb-2" />
+                <IconComponent className="w-10 h-10 text-emerald-500 mx-auto mb-2" />
                 <p className="text-sm text-gray-600 dark:text-gray-300">
-                  Enter the 6-digit code sent to
+                  Enter the 6-digit code sent to your {displayLabel}
                 </p>
-                <p className="text-sm font-semibold text-gray-900 dark:text-white">{email || 'your email'}</p>
+                <p className="text-sm font-semibold text-gray-900 dark:text-white">{displayValue}</p>
               </div>
 
               <div>

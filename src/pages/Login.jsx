@@ -45,7 +45,11 @@ export default function Login() {
           longitude: res.longitude || '',
         }));
       }
-      navigate(`${ROUTES.VERIFY}?email=${encodeURIComponent(res.email || email)}`);
+      const type = tab === 'email' ? 'email' : 'phone';
+      const param = type === 'email'
+        ? `type=email&email=${encodeURIComponent(res.email || email)}`
+        : `type=phone&phone=${encodeURIComponent(phone)}`;
+      navigate(`${ROUTES.VERIFY}?${param}`);
     } catch (err) {
       setApiError(err.message);
     } finally {
