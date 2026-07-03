@@ -107,6 +107,20 @@ const api = {
         headers: {},
       });
     },
+    sendSmsOtp: async (phone) => {
+      const res = await request('/auth/send-sms-otp', {
+        method: 'POST',
+        body: JSON.stringify({ phone }),
+      });
+      return res;
+    },
+    verifySmsOtp: async (phone, otp) => {
+      const res = await request('/auth/verify-sms-otp', {
+        method: 'POST',
+        body: JSON.stringify({ phone, otp }),
+      });
+      return res;
+    },
   },
   admin: {
     login: (email, password) =>
