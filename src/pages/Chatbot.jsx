@@ -5,7 +5,7 @@ import remarkGfm from 'remark-gfm';
 import {
   Send, Leaf, Sun, CloudRain, Bug, Sprout,
   Copy, Check, ThumbsUp, ThumbsDown, Bot,
-  ChevronDown, Minimize2, Maximize2, Mic, MicOff, Globe, ChevronUp, Volume2, MessageSquareText
+  ChevronDown, Minimize2, Maximize2, Mic, MicOff, Globe, ChevronUp, Volume2, MessageSquareText, Square
 } from 'lucide-react';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
@@ -125,6 +125,7 @@ export default function Chatbot() {
   const [lang, setLang] = useState('en');
   const [langOpen, setLangOpen] = useState(false);
   const [listening, setListening] = useState(false);
+  const [speaking, setSpeaking] = useState(false);
   const textRef = useRef(null);
   const scrollRef = useRef(null);
   const recognitionRef = useRef(null);
@@ -140,12 +141,24 @@ export default function Chatbot() {
     if (el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 100) + 'px'; }
   }, []);
 
+  const stopSpeaking = useCallback(() => {
+    window.speechSynthesis.cancel();
+    setSpeaking(false);
+  }, []);
+
   const speakText = useCallback((text) => {
     if (mode !== 'voice') return;
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = lang === 'en' ? 'en-US' : `${lang}-IN`;
+    const voices = window.speechSynthesis.getVoices();
+    const targetLang = lang === 'en' ? 'en-US' : `${lang}-IN`;
+    const voice = voices.find(v => v.lang.startsWith(lang === 'en' ? 'en-US' : lang));
+    if (voice) utterance.voice = voice;
+    utterance.lang = targetLang;
     utterance.rate = 0.95;
+    utterance.onstart = () => setSpeaking(true);
+    utterance.onend = () => setSpeaking(false);
+    utterance.onerror = () => setSpeaking(false);
     window.speechSynthesis.speak(utterance);
   }, [mode, lang]);
 
@@ -221,6 +234,13 @@ export default function Chatbot() {
 
   useEffect(() => {
     return () => { if (recognitionRef.current) recognitionRef.current.stop(); };
+  }, []);
+
+  useEffect(() => {
+    window.speechSynthesis.getVoices();
+    window.speechSynthesis.onvoiceschanged = () => {
+      window.speechSynthesis.getVoices();
+    };
   }, []);
 
   const currentLang = LANGUAGES.find(l => l.code === lang);
@@ -414,10 +434,17 @@ export default function Chatbot() {
           <div className="flex-shrink-0 bg-[#f5f7f8] dark:bg-[#0f172a] px-4 sm:px-6 py-3 border-t border-[#E7E5E4] dark:border-[#1e293b]">
             <div className="max-w-3xl mx-auto">
               <div className="flex items-center gap-2 bg-white dark:bg-[#1e293b] rounded-full shadow-sm border border-[#E7E5E4] dark:border-[#334155] px-2 py-1 focus-within:border-emerald-500 focus-within:shadow-md transition-all duration-200">
-                <button onClick={toggleVoice}
-                  className={`flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-colors ${listening ? 'bg-red-500 text-white animate-pulse' : 'hover:bg-[#F5F5F4] dark:hover:bg-[#334155] text-[#78716C] dark:text-[#A1A1AA]'}`}>
-                  {listening ? <MicOff size={16} /> : <Mic size={16} />}
-                </button>
+                {speaking ? (
+                  <button onClick={stopSpeaking}
+                    className="flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center bg-red-500 text-white hover:bg-red-600 transition-colors">
+                    <Square size={16} />
+                  </button>
+                ) : (
+                  <button onClick={toggleVoice}
+                    className={`flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-colors ${listening ? 'bg-red-500 text-white animate-pulse' : 'hover:bg-[#F5F5F4] dark:hover:bg-[#334155] text-[#78716C] dark:text-[#A1A1AA]'}`}>
+                    {listening ? <MicOff size={16} /> : <Mic size={16} />}
+                  </button>
+                )}
 
                 <textarea ref={textRef} value={input} onChange={(e) => { setInput(e.target.value); autoResize(); }} onKeyDown={handleKeyDown}
                   rows={1} placeholder={lang === 'en' ? 'Ask anything...' : `${currentLang?.native} में पूछें...`}
