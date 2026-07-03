@@ -358,7 +358,7 @@ export default function Chatbot() {
                     )}
                     {isAssistant ? (
                       <div className="group max-w-[85%]">
-                        <div className="px-4 py-3 rounded-2xl rounded-tl-none bg-white dark:bg-[#1e293b] shadow-sm border border-[#E7E5E4] dark:border-[#334155]">
+                        <div className="px-4 py-3 rounded-2xl rounded-tl-none bg-white dark:bg-[#27272a] shadow-sm border border-[#E7E5E4] dark:border-[#3f3f46]">
                           {msg.lang && msg.lang !== 'en' && (
                             <span className="text-[9px] font-medium text-emerald-500 bg-emerald-50 dark:bg-emerald-900/30 px-1.5 py-0.5 rounded-md mb-1 inline-block">{LANGUAGES.find(l => l.code === msg.lang)?.native}</span>
                           )}
@@ -399,7 +399,7 @@ export default function Chatbot() {
                   <div className="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-md shadow-emerald-500/20">
                     <Bot size={14} className="text-white" />
                   </div>
-                  <div className="px-4 py-3 rounded-2xl rounded-tl-none bg-white dark:bg-[#1e293b] shadow-sm border border-[#E7E5E4] dark:border-[#334155]">
+                  <div className="px-4 py-3 rounded-2xl rounded-tl-none bg-white dark:bg-[#27272a] shadow-sm border border-[#E7E5E4] dark:border-[#3f3f46]">
                     <div className="flex gap-1.5">
                       <span className="w-2 h-2 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: '0ms' }} />
                       <span className="w-2 h-2 rounded-full bg-emerald-500 animate-bounce" style={{ animationDelay: '150ms' }} />
