@@ -114,7 +114,7 @@ export default function Chatbot() {
   const [mode, setMode] = useState(null);
   const [messages, setMessages] = useState([{
     role: 'assistant',
-    content: "Hello! I'm your AI farming assistant. Ask me anything about crops, soil, pests, or sustainable farming practices.",
+    content: "Hello!",
     lang: 'en',
   }]);
   const [input, setInput] = useState('');
