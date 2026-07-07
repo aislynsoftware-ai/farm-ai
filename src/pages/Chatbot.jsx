@@ -54,7 +54,7 @@ const md = {
   em: ({ children }) => <em className="italic text-[#1C1917] dark:text-white/90">{children}</em>,
   ul: ({ children }) => <ul className="list-disc pl-4 mb-2.5 space-y-0.5 last:mb-0">{children}</ul>,
   ol: ({ children }) => <ol className="list-decimal pl-4 mb-2.5 space-y-0.5 last:mb-0">{children}</ol>,
-  li: ({ children }) => <li className="text-[14px] leading-[1.6] text-[#78716C] dark:text-[#A1A1AA]">{children}</li>,
+  li: ({ children }) => <li className="text-[14px] leading-[1.6] text-[#1C1917] dark:text-white/80">{children}</li>,
   code: ({ inline, className, children, ...props }) =>
     inline ? (
       <code className="px-1.5 py-0.5 rounded bg-[#F5F5F4] dark:bg-[#1C1C1E] text-emerald-600 dark:text-emerald-400 text-[12px] font-mono">{children}</code>
@@ -69,7 +69,7 @@ const md = {
   tbody: ({ children }) => <tbody>{children}</tbody>,
   tr: ({ children }) => <tr className="border-b border-[#E7E5E4] dark:border-[#27272A]">{children}</tr>,
   th: ({ children }) => <th className="px-2.5 py-1.5 text-left text-[12px] font-semibold text-[#1C1917] dark:text-white">{children}</th>,
-  td: ({ children }) => <td className="px-2.5 py-1.5 text-[13px] text-[#78716C] dark:text-[#A1A1AA]">{children}</td>,
+  td: ({ children }) => <td className="px-2.5 py-1.5 text-[13px] text-[#1C1917] dark:text-white/80">{children}</td>,
   a: ({ href, children }) => (
     <a href={href} target="_blank" rel="noopener noreferrer"
       className="text-emerald-600 dark:text-emerald-400 underline decoration-emerald-600/30 dark:decoration-emerald-400/30 hover:decoration-emerald-600 dark:hover:decoration-emerald-400 transition-all">
@@ -79,7 +79,7 @@ const md = {
   img: ({ src, alt }) => <img src={src} alt={alt} className="max-w-full rounded-lg my-2" />,
   hr: () => <hr className="my-2.5 border-[#E7E5E4] dark:border-[#27272A]" />,
   blockquote: ({ children }) => (
-    <blockquote className="border-l-3 border-emerald-500/40 pl-3 italic text-[#78716C] dark:text-[#A1A1AA] mb-2.5 last:mb-0">{children}</blockquote>
+    <blockquote className="border-l-3 border-emerald-500/40 pl-3 italic text-[#1C1917] dark:text-white/80 mb-2.5 last:mb-0">{children}</blockquote>
   ),
 };
 
@@ -246,7 +246,7 @@ export default function Chatbot() {
   const currentLang = LANGUAGES.find(l => l.code === lang);
 
   return (
-    <div className="h-dvh flex flex-col bg-[#f5f7f8] dark:bg-[#0f172a] font-['Inter']">
+    <div className="h-dvh flex flex-col bg-white dark:bg-[#0f172a] font-['Inter']">
       <header className="flex-shrink-0 bg-gradient-to-r from-emerald-600 to-emerald-500 dark:from-emerald-700 dark:to-emerald-600 shadow-lg">
         <div className="px-4 sm:px-6 h-[72px] flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -289,7 +289,7 @@ export default function Chatbot() {
                     <button key={l.code} onClick={() => { setLang(l.code); setLangOpen(false); }}
                       className={`w-full text-left px-3 py-2 text-[13px] transition-colors hover:bg-emerald-50 dark:hover:bg-emerald-900/20 flex items-center gap-2 ${lang === l.code ? 'text-emerald-600 dark:text-emerald-400 font-semibold' : 'text-[#1C1917] dark:text-white'}`}>
                       <span>{l.native}</span>
-                      <span className="text-[10px] text-[#78716C] dark:text-[#A1A1AA] ml-auto">{l.label}</span>
+                      <span className="text-[10px] text-[#1C1917] dark:text-white/80 ml-auto">{l.label}</span>
                     </button>
                   ))}
                 </div>
@@ -315,7 +315,7 @@ export default function Chatbot() {
                   </div>
                 </motion.div>
                 <h2 className="text-2xl font-bold text-[#1C1917] dark:text-white mb-1">🌱 Farmlyt AI</h2>
-                <p className="text-[15px] text-[#78716C] dark:text-[#A1A1AA] mb-8">Choose your interaction mode</p>
+                <p className="text-[15px] text-[#1C1917] dark:text-white/80 mb-8">Choose your interaction mode</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full max-w-lg">
                   {MODES.map((m, i) => {
                     const Icon = m.icon;
@@ -331,7 +331,7 @@ export default function Chatbot() {
                           <Icon size={28} className="text-emerald-600 dark:text-emerald-400" />
                         </div>
                         <span className="text-[15px] font-semibold text-[#1C1917] dark:text-white">{m.label}</span>
-                        <span className="text-[12px] text-[#78716C] dark:text-[#A1A1AA]">{m.desc}</span>
+                        <span className="text-[12px] text-[#1C1917] dark:text-white/80">{m.desc}</span>
                       </motion.button>
                     );
                   })}
@@ -348,7 +348,7 @@ export default function Chatbot() {
                   </div>
                 </motion.div>
                 <h2 className="text-2xl font-bold text-[#1C1917] dark:text-white mb-2">🌱 Farmlyt AI</h2>
-                <p className="text-[15px] text-[#78716C] dark:text-[#A1A1AA] mb-8">How can I help your farm today?</p>
+                <p className="text-[15px] text-[#1C1917] dark:text-white/80 mb-8">How can I help your farm today?</p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
                   {suggestions.map((s, i) => (
                     <motion.button key={i} initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}
@@ -372,8 +372,10 @@ export default function Chatbot() {
                   <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ type: "spring", stiffness: 350, damping: 30 }}
                     className={`flex items-start gap-2.5 ${!isAssistant ? 'justify-end' : ''}`}>
                     {isAssistant && (
-                      <div className="flex-shrink-0 w-8 h-8 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-md shadow-emerald-500/20">
-                        <Bot size={14} className="text-white" />
+                      <div className="flex-shrink-0 pr-2.5 border-r-2 border-emerald-300 dark:border-emerald-600">
+                        <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-md shadow-emerald-500/20">
+                          <Bot size={14} className="text-white" />
+                        </div>
                       </div>
                     )}
                     {isAssistant ? (
@@ -392,13 +394,13 @@ export default function Chatbot() {
                           <div className="flex gap-0.5 mt-1 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
                             <button onClick={() => handleCopy(msg.content, i)}
                               className="w-7 h-7 rounded-lg hover:bg-[#F5F5F4] dark:hover:bg-[#1C1C1E] flex items-center justify-center transition-colors">
-                              {copiedId === i ? <Check size={13} className="text-emerald-500" /> : <Copy size={13} className="text-[#78716C] dark:text-[#A1A1AA]" />}
+                              {copiedId === i ? <Check size={13} className="text-emerald-500" /> : <Copy size={13} className="text-[#1C1917] dark:text-white/80" />}
                             </button>
                             <button className="w-7 h-7 rounded-lg hover:bg-[#F5F5F4] dark:hover:bg-[#1C1C1E] flex items-center justify-center transition-colors">
-                              <ThumbsUp size={13} className="text-[#78716C] dark:text-[#A1A1AA]" />
+                              <ThumbsUp size={13} className="text-[#1C1917] dark:text-white/80" />
                             </button>
                             <button className="w-7 h-7 rounded-lg hover:bg-[#F5F5F4] dark:hover:bg-[#1C1C1E] flex items-center justify-center transition-colors">
-                              <ThumbsDown size={13} className="text-[#78716C] dark:text-[#A1A1AA]" />
+                              <ThumbsDown size={13} className="text-[#1C1917] dark:text-white/80" />
                             </button>
                           </div>
                         )}
@@ -431,7 +433,7 @@ export default function Chatbot() {
             </div>
           </div>
 
-          <div className="flex-shrink-0 bg-[#f5f7f8] dark:bg-[#0f172a] px-4 sm:px-6 py-3 border-t border-[#E7E5E4] dark:border-[#1e293b]">
+          <div className="flex-shrink-0 bg-white dark:bg-[#0f172a] px-4 sm:px-6 py-3 border-t border-[#E7E5E4] dark:border-[#1e293b]">
             <div className="max-w-3xl mx-auto">
               <div className="flex items-center gap-2 bg-white dark:bg-[#1e293b] rounded-full shadow-sm border border-[#E7E5E4] dark:border-[#334155] px-2 py-1 focus-within:border-emerald-500 focus-within:shadow-md transition-all duration-200">
                 {speaking ? (
@@ -441,14 +443,14 @@ export default function Chatbot() {
                   </button>
                 ) : (
                   <button onClick={toggleVoice}
-                    className={`flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-colors ${listening ? 'bg-red-500 text-white animate-pulse' : 'hover:bg-[#F5F5F4] dark:hover:bg-[#334155] text-[#78716C] dark:text-[#A1A1AA]'}`}>
+                    className={`flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-colors ${listening ? 'bg-red-500 text-white animate-pulse' : 'hover:bg-[#F5F5F4] dark:hover:bg-[#334155] text-[#1C1917] dark:text-white/80'}`}>
                     {listening ? <MicOff size={16} /> : <Mic size={16} />}
                   </button>
                 )}
 
                 <textarea ref={textRef} value={input} onChange={(e) => { setInput(e.target.value); autoResize(); }} onKeyDown={handleKeyDown}
                   rows={1} placeholder={lang === 'en' ? 'Ask anything...' : `${currentLang?.native} में पूछें...`}
-                  className="flex-1 bg-transparent outline-none resize-none px-1 py-2 text-[14px] text-[#1C1917] dark:text-white placeholder-[#A8A29E] dark:placeholder-[#64748B] min-h-[40px] max-h-[100px]"
+                  className="flex-1 bg-transparent outline-none resize-none px-1 py-2 text-[14px] text-[#1C1917] dark:text-white placeholder-[#1C1917]/40 dark:placeholder-white/40 min-h-[40px] max-h-[100px]"
                   style={{ fontFamily: 'Inter' }} />
 
                 {lang !== 'en' && (
@@ -457,7 +459,7 @@ export default function Chatbot() {
 
                 <motion.button onClick={handleSend} disabled={!input.trim() || loading}
                   whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-                  className={`flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 ${input.trim() && !loading ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-md shadow-emerald-500/30' : 'bg-[#F5F5F4] dark:bg-[#334155] text-[#A8A29E] dark:text-[#64748B] cursor-not-allowed'}`}>
+                  className={`flex-shrink-0 w-9 h-9 rounded-full flex items-center justify-center transition-all duration-200 ${input.trim() && !loading ? 'bg-emerald-500 hover:bg-emerald-600 text-white shadow-md shadow-emerald-500/30' : 'bg-[#F5F5F4] dark:bg-[#334155] text-[#1C1917]/40 dark:text-white/40 cursor-not-allowed'}`}>
                   <Send size={16} />
                 </motion.button>
               </div>
