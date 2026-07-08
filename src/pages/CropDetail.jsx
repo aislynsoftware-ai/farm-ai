@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { Sprout, ArrowLeft, Search, Upload, ArrowRight, Leaf, Apple, Flower2, Bug, ChevronDown, ChevronUp, AlertCircle, Camera, Loader, CheckCircle, Shield, Target, ImageIcon, Droplets, AlertTriangle, FlaskConical, ShoppingCart, ExternalLink, Sparkles, Thermometer, Bluetooth } from 'lucide-react';
+import { Sprout, ArrowLeft, Search, Upload, ArrowRight, Leaf, Apple, Flower2, Bug, ChevronDown, ChevronUp, AlertCircle, Camera, Loader, CheckCircle, Shield, Target, ImageIcon, Droplets, AlertTriangle, FlaskConical, ShoppingCart, ExternalLink, Sparkles, Thermometer, Bluetooth, Clock, Ruler } from 'lucide-react';
 import api from '../services/api';
 import Skeleton, { GridCardSkeleton } from '../components/common/Skeleton';
 import PredictionProgress from '../components/common/PredictionProgress';
@@ -983,6 +983,57 @@ export default function CropDetail() {
                         </div>
                       </div>
                     </div>
+                    {result.fertilizer_info && (
+                      <div className="mt-4 space-y-3">
+                        <div className="flex items-center gap-2 mb-2">
+                          <FlaskConical size={14} className="text-emerald-500" />
+                          <span className="text-[11px] font-bold text-gray-900 dark:text-white">Application Guide</span>
+                        </div>
+                        <div className="grid sm:grid-cols-2 gap-3">
+                          <div className="rounded-xl p-3.5 bg-white/60 dark:bg-gray-800/60 border border-emerald-100 dark:border-emerald-900/50">
+                            <div className="flex items-center gap-2 mb-1.5">
+                              <Ruler size={13} className="text-emerald-500" />
+                              <span className="text-[10px] font-semibold text-gray-500 uppercase">Per Acre</span>
+                            </div>
+                            <p className="text-sm font-bold text-gray-900 dark:text-white">{result.fertilizer_info.per_acre}</p>
+                          </div>
+                          <div className="rounded-xl p-3.5 bg-white/60 dark:bg-gray-800/60 border border-emerald-100 dark:border-emerald-900/50">
+                            <div className="flex items-center gap-2 mb-1.5">
+                              <Ruler size={13} className="text-emerald-500" />
+                              <span className="text-[10px] font-semibold text-gray-500 uppercase">Per Sq Ft</span>
+                            </div>
+                            <p className="text-sm font-bold text-gray-900 dark:text-white">{result.fertilizer_info.per_sqft}</p>
+                          </div>
+                        </div>
+                        {result.fertilizer_info.description && (
+                          <div className="rounded-xl p-3.5 bg-white/60 dark:bg-gray-800/60 border border-emerald-100 dark:border-emerald-900/50">
+                            <div className="flex items-center gap-2 mb-1.5">
+                              <Shield size={13} className="text-emerald-500" />
+                              <span className="text-[10px] font-semibold text-gray-500 uppercase">Description</span>
+                            </div>
+                            <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">{result.fertilizer_info.description}</p>
+                          </div>
+                        )}
+                        {result.fertilizer_info.timing && (
+                          <div className="rounded-xl p-3.5 bg-white/60 dark:bg-gray-800/60 border border-emerald-100 dark:border-emerald-900/50">
+                            <div className="flex items-center gap-2 mb-1.5">
+                              <Clock size={13} className="text-emerald-500" />
+                              <span className="text-[10px] font-semibold text-gray-500 uppercase">Best Time to Apply</span>
+                            </div>
+                            <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">{result.fertilizer_info.timing}</p>
+                          </div>
+                        )}
+                        {result.fertilizer_info.precautions && (
+                          <div className="rounded-xl p-3.5 bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-800/50">
+                            <div className="flex items-center gap-2 mb-1.5">
+                              <AlertTriangle size={13} className="text-amber-500" />
+                              <span className="text-[10px] font-semibold text-amber-700 dark:text-amber-400 uppercase">Precautions</span>
+                            </div>
+                            <p className="text-xs text-amber-700 dark:text-amber-300 leading-relaxed">{result.fertilizer_info.precautions}</p>
+                          </div>
+                        )}
+                      </div>
+                    )}
                     {result.input_summary && (
                       <div className="mt-4">
                         <div className="flex items-center gap-2 mb-2">
@@ -997,6 +1048,69 @@ export default function CropDetail() {
                             </div>
                           ))}
                         </div>
+                      </div>
+                    )}
+                    {result.soil_analysis && (
+                      <div className="mt-4">
+                        <div className="flex items-center gap-2 mb-3">
+                          <Shield size={14} className="text-emerald-500" />
+                          <span className="text-[11px] font-bold text-gray-900 dark:text-white">Soil Analysis</span>
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                          {Object.entries(result.soil_analysis)
+                            .filter(([k]) => k !== '_summary')
+                            .map(([key, val]) => {
+                              const levelColors = {
+                                Low: 'text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/40',
+                                Ideal: 'text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/40',
+                                Ideal_Range: 'text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-950/40',
+                                High: 'text-red-600 dark:text-red-400 border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/40',
+                                Strongly_Acidic: 'text-red-600 dark:text-red-400 border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/40',
+                                Slightly_Acidic: 'text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/40',
+                                Slightly_Alkaline: 'text-amber-600 dark:text-amber-400 border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/40',
+                                Alkaline: 'text-red-600 dark:text-red-400 border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/40',
+                              };
+                              const bgColors = {
+                                Low: 'bg-amber-50 dark:bg-amber-950/20 border-amber-100 dark:border-amber-900/50',
+                                Ideal: 'bg-emerald-50 dark:bg-emerald-950/20 border-emerald-100 dark:border-emerald-900/50',
+                                Ideal_Range: 'bg-emerald-50 dark:bg-emerald-950/20 border-emerald-100 dark:border-emerald-900/50',
+                                High: 'bg-red-50 dark:bg-red-950/20 border-red-100 dark:border-red-900/50',
+                                Strongly_Acidic: 'bg-red-50 dark:bg-red-950/20 border-red-100 dark:border-red-900/50',
+                                Slightly_Acidic: 'bg-amber-50 dark:bg-amber-950/20 border-amber-100 dark:border-amber-900/50',
+                                Slightly_Alkaline: 'bg-amber-50 dark:bg-amber-950/20 border-amber-100 dark:border-amber-900/50',
+                                Alkaline: 'bg-red-50 dark:bg-red-950/20 border-red-100 dark:border-red-900/50',
+                              };
+                              const levelKey = val.level?.replace(/ /g, '_') || 'Ideal';
+                              return (
+                                <div key={key} className={`rounded-xl p-3.5 ${bgColors[levelKey] || 'bg-gray-50 dark:bg-gray-800/50 border-gray-100 dark:border-gray-700'} border-2`}>
+                                  <div className="flex items-center justify-between mb-1.5">
+                                    <p className="text-[10px] font-semibold text-gray-500 dark:text-gray-400 uppercase">{key.replace(/_/g, ' ')}</p>
+                                    <p className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${levelColors[levelKey] || 'text-gray-600 border-gray-200 bg-gray-50'}`}>
+                                      {val.level}
+                                    </p>
+                                  </div>
+                                  <p className="text-base font-bold text-gray-900 dark:text-white mb-1">{val.value}</p>
+                                  <p className="text-[11px] text-gray-600 dark:text-gray-400 leading-relaxed">{val.description}</p>
+                                  {val.suggestion && (
+                                    <div className="mt-2 pt-2 border-t border-dashed border-gray-200 dark:border-gray-700">
+                                      <p className="text-[10px] text-emerald-600 dark:text-emerald-400 leading-relaxed">{val.suggestion}</p>
+                                    </div>
+                                  )}
+                                </div>
+                              );
+                            })}
+                        </div>
+                        {result.soil_analysis._summary && (
+                          <div className="mt-3 p-3.5 rounded-xl bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-950/30 dark:to-green-950/30 border border-emerald-200 dark:border-emerald-800">
+                            <div className="flex items-start gap-2">
+                              <Sprout size={14} className="text-emerald-500 mt-0.5 flex-shrink-0" />
+                              <div>
+                                <p className="text-[11px] font-bold text-gray-900 dark:text-white">Soil Health Summary</p>
+                                <p className="text-[11px] text-gray-600 dark:text-gray-400 leading-relaxed whitespace-pre-line mt-1">{result.soil_analysis._summary}</p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     )}
                   </motion.div>
