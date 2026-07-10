@@ -103,7 +103,7 @@ export default function CropDetail() {
   const [selectedCrop, setSelectedCrop] = useState('');
   const [selectedSoil, setSelectedSoil] = useState('');
 
-  const cropKey = crop?.title?.toLowerCase().trim().replace(/[-_]+/g, ' ').replace(/\s+/g, ' ');
+  const cropKey = crop?.title?.toLowerCase().trim().replace(/[-_&]+/g, ' ').replace(/\s+/g, ' ');
   const matchedEndpoint = titleEndpoint[cropKey];
   const isSoilInput = matchedEndpoint && soilEndpoints.has(matchedEndpoint);
   const isRealtime = isSoilInput && matchedEndpoint?.includes('real-time');
@@ -469,7 +469,7 @@ export default function CropDetail() {
       };
       const groups = {};
       filtered.forEach((sub) => {
-        const key = sub.title.toLowerCase().trim().replace(/[-_]+/g, ' ').replace(/\s+/g, ' ');
+        const key = sub.title.toLowerCase().trim().replace(/[-_&]+/g, ' ').replace(/\s+/g, ' ');
         const endpoint = titleEndpoint[key];
         if (!endpoint) return;
         const seg = endpoint.split('/')[1];

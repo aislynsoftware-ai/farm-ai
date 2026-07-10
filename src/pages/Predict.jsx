@@ -105,7 +105,7 @@ export default function Predict() {
           const g = groups[crop.agri_id];
           if (!g) return;
           allSubs.filter((s) => Number(s.crop_id) === Number(crop.id)).forEach((sub) => {
-            const key = sub.title.toLowerCase().trim().replace(/[-_]+/g, ' ').replace(/\s+/g, ' ');
+            const key = sub.title.toLowerCase().trim().replace(/[-_&]+/g, ' ').replace(/\s+/g, ' ');
             const endpoint = titleEndpoint[key];
             if (!endpoint) return;
             const seg = endpoint.split('/')[1];
