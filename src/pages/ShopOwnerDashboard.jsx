@@ -122,12 +122,11 @@ export default function ShopOwnerDashboard() {
 
   return (
     <div className="flex min-h-screen bg-emerald-50/30 dark:bg-emerald-950">
-      <aside className="w-16 lg:w-20 flex flex-col items-center gap-4 py-6 bg-white dark:bg-gray-900 border-r border-gray-100 dark:border-gray-700/50 shrink-0">
+      <aside className="w-16 lg:w-20 flex flex-col items-center gap-1 py-3 bg-white dark:bg-gray-900 border-r border-gray-100 dark:border-gray-700/50 shrink-0">
         <Link to="/" className="flex flex-col items-center gap-1 p-2 rounded-xl text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 transition-colors" title="Home">
           <Home size={22} />
           <span className="text-[10px] font-medium">Home</span>
         </Link>
-        <div className="flex-1" />
         <button onClick={handleLogout} className="flex flex-col items-center gap-1 p-2 rounded-xl text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors cursor-pointer" title="Logout">
           <LogOut size={22} />
           <span className="text-[10px] font-medium">Logout</span>
