@@ -422,8 +422,8 @@ const api = {
       if (data.latitude) fd.append('latitude', data.latitude);
       if (data.longitude) fd.append('longitude', data.longitude);
       if (data.shop_phone) fd.append('shop_phone', data.shop_phone);
+      if (data.existing_photos) fd.append('existing_photos', data.existing_photos);
       (data.photos || []).forEach((p) => fd.append('photos', p));
-      if (!data.photos?.length && data.photo) fd.append('photo', data.photo);
       return request('/my-shop/update', { method: 'POST', body: fd, headers: {} });
     },
     admin: {
