@@ -43,6 +43,7 @@ export default function Login() {
           address: res.address || '',
           latitude: res.latitude || '',
           longitude: res.longitude || '',
+          role: res.role || 'user',
         }));
       }
       const type = tab === 'email' ? 'email' : 'phone';

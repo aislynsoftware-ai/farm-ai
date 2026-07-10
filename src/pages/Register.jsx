@@ -54,6 +54,7 @@ export default function Register() {
           address: form.address,
           latitude: form.latitude,
           longitude: form.longitude,
+          role: 'user',
         }));
       }
       const type = tab === 'email' ? 'email' : 'phone';

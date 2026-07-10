@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Menu, Sprout, FileText, Leaf, Apple, Bug, Search, Coins, User, ChevronRight, ArrowRight, ChevronDown, ChevronUp } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import SEO from '../components/common/SEO';
 import Sidebar from '../components/dashboard/Sidebar';
 import api from '../services/api';
@@ -207,6 +207,7 @@ function PlantWateringWidget({ userId }) {
 }
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [farmingTips, setFarmingTips] = useState([]);
@@ -221,6 +222,7 @@ export default function Dashboard() {
       try {
         const u = JSON.parse(stored);
         setUser(u);
+        if (u.role === 'shop_owner') { navigate('/my-shop', { replace: true }); return; }
         api.farming.wallet(u.user_id).then((r) => setCoins(r.coins)).catch(() => {});
       } catch {}
     }
