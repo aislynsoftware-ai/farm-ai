@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Menu, Store, MapPin, Phone, Image, Loader, CheckCircle, AlertCircle, ExternalLink, Home, LogOut, X } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../services/api';
@@ -16,6 +16,10 @@ export default function ShopOwnerDashboard() {
   const [existingUrls, setExistingUrls] = useState([]);
   const [newFiles, setNewFiles] = useState([]);
   const [newPreviews, setNewPreviews] = useState([]);
+  const existingUrlsRef = useRef(existingUrls);
+  const newFilesRef = useRef(newFiles);
+  existingUrlsRef.current = existingUrls;
+  newFilesRef.current = newFiles;
 
   useEffect(() => {
     const stored = localStorage.getItem('user');
@@ -65,8 +69,8 @@ export default function ShopOwnerDashboard() {
     try {
       await api.shops.update({
         ...form, user_id: user.user_id,
-        existing_photos: existingUrls.join(','),
-        photos: newFiles,
+        existing_photos: existingUrlsRef.current.join(','),
+        photos: newFilesRef.current,
       });
       const updated = await api.shops.myShop(user.user_id);
       setShop(updated);
