@@ -56,12 +56,13 @@ export default function VerifyOtp() {
     setLoading(true);
     setError('');
     try {
+      let userData = {};
       if (otpType === 'email') {
         const uid = sessionStorage.getItem('pending_user_id');
         if (!uid) { setError('Session expired, please login again'); setLoading(false); return; }
         const res = await api.auth.verifyOtp(uid, code);
         const pendingUser = sessionStorage.getItem('pending_user');
-        let userData = pendingUser ? JSON.parse(pendingUser) : {};
+        userData = pendingUser ? JSON.parse(pendingUser) : {};
         if (!userData.user_id) userData.user_id = uid;
         if (res.user_id) userData.user_id = res.user_id;
         localStorage.setItem('user', JSON.stringify(userData));
@@ -70,14 +71,14 @@ export default function VerifyOtp() {
         if (!phone) { setError('Phone number missing'); setLoading(false); return; }
         const res = await api.auth.verifySmsOtp(phone, code);
         const pendingUser = sessionStorage.getItem('pending_user');
-        let userData = pendingUser ? JSON.parse(pendingUser) : {};
+        userData = pendingUser ? JSON.parse(pendingUser) : {};
         if (!userData.user_id) userData.user_id = res.user_id || sessionStorage.getItem('pending_user_id');
         if (res.user_id) userData.user_id = res.user_id;
         localStorage.setItem('user', JSON.stringify(userData));
         if (res.token) localStorage.setItem('token', res.token);
       }
       setSuccess(true);
-      setTimeout(() => navigate(ROUTES.DASHBOARD), 1000);
+      setTimeout(() => navigate(userData.role === 'shop_owner' ? '/my-shop' : ROUTES.DASHBOARD), 1000);
     } catch (err) {
       setError(err.message);
     } finally {

@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
-import { Store, MapPin, Phone, Image, Loader, CheckCircle, AlertCircle, ExternalLink } from 'lucide-react';
+import { Menu, Store, MapPin, Phone, Image, Loader, CheckCircle, AlertCircle, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import Sidebar from '../components/dashboard/Sidebar';
 import api from '../services/api';
 
 export default function ShopOwnerDashboard() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [shop, setShop] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -69,16 +71,27 @@ export default function ShopOwnerDashboard() {
   );
 
   if (!shop && !loading) return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-gray-900 gap-4">
-      <Store size={48} className="text-emerald-400" />
-      <p className="text-sm text-gray-600 dark:text-gray-400">You haven't registered a shop yet</p>
-      <Link to="/register-shop" className="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm">Register Now</Link>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+      <Sidebar mobileOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <main className="flex-1 flex flex-col items-center justify-center gap-4 p-4">
+        <Store size={48} className="text-emerald-400" />
+        <p className="text-sm text-gray-600 dark:text-gray-400">You haven't registered a shop yet</p>
+        <Link to="/register-shop" className="px-4 py-2 rounded-lg bg-emerald-600 text-white text-sm">Register Now</Link>
+      </main>
     </div>
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8 px-4">
-      <div className="max-w-2xl mx-auto">
+    <div className="flex min-h-screen bg-emerald-50/30 dark:bg-emerald-950">
+      <Sidebar mobileOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+      <main className="flex-1 overflow-x-hidden">
+        <div className="sticky top-0 z-30 lg:hidden bg-white/80 dark:bg-emerald-950/80 backdrop-blur border-b border-emerald-100 dark:border-emerald-800 px-4 py-3 flex items-center gap-3">
+          <button onClick={() => setSidebarOpen(true)} className="p-1.5 rounded-lg text-emerald-700 dark:text-emerald-400 hover:bg-emerald-100 dark:hover:bg-emerald-900 cursor-pointer">
+            <Menu size={20} />
+          </button>
+          <span className="text-sm font-semibold text-gray-900 dark:text-white">My Shop</span>
+        </div>
+        <div className="p-4 lg:p-6 max-w-2xl mx-auto">
         {success && <div className="flex items-center gap-2 p-3 mb-4 rounded-xl bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800"><CheckCircle size={14} className="text-emerald-500" /><p className="text-xs text-emerald-700 dark:text-emerald-300">{success}</p></div>}
 
         <div className="bg-white dark:bg-gray-800 rounded-2xl border border-emerald-200 dark:border-emerald-700 overflow-hidden">
@@ -134,6 +147,7 @@ export default function ShopOwnerDashboard() {
           )}
         </div>
       </div>
-    </div>
+    </main>
+  </div>
   );
 }
