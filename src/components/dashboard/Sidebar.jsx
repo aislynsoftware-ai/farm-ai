@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   LayoutDashboard, Bug, Leaf, Apple, FileText, User, LogOut,
-  ChevronLeft, ChevronRight, Sprout, X, Camera, History, Coins, Key, Code, Droplets, MessageSquare, Bell, Flower2, Store, DollarSign
+  ChevronLeft, ChevronRight, Sprout, X, Camera, History, Coins, Key, Code, Droplets, MessageSquare, Bell, Flower2, Store, DollarSign, Upload, ArrowUpRight, Share2
 } from 'lucide-react';
 import { cn } from '../../utils/cn';
 import { ROUTES } from '../../constants';
@@ -13,6 +13,9 @@ const menuItems = [
   { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
   { label: 'Wallet', path: '/wallet', icon: Coins },
   { label: 'Earn', path: '/earn', icon: DollarSign },
+  { label: '  Upload Images', path: '/volunteer-upload', icon: Upload },
+  { label: '  Withdraw', path: '/volunteer-withdraw', icon: ArrowUpRight },
+  { label: '  Refer & Earn', path: '/volunteer-refer', icon: Share2 },
   { label: 'My Plants', path: '/my-plants', icon: Droplets },
   { label: 'Community', path: '/community', icon: MessageSquare },
   { label: 'Notifications', path: '/notifications', icon: Bell },

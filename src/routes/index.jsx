@@ -55,7 +55,6 @@ import AdminDailyTipsPage from '../pages/AdminDailyTipsPage';
 import PlantGuide from '../pages/PlantGuide';
 import AdminPlantRecommendationsPage from '../pages/AdminPlantRecommendationsPage';
 import EarnWithFarmlyt from '../pages/EarnWithFarmlyt';
-import VolunteerDashboard from '../pages/VolunteerDashboard';
 import VolunteerImageUpload from '../pages/VolunteerImageUpload';
 import VolunteerWithdraw from '../pages/VolunteerWithdraw';
 import VolunteerRefer from '../pages/VolunteerRefer';
@@ -108,7 +107,6 @@ export default function createAppRouter(isDark, toggleTheme) {
         { path: 'register-shop', element: <RegisterShop /> },
         { path: 'chatbot', element: <Chatbot /> },
         { path: 'earn', element: <EarnWithFarmlyt /> },
-        { path: 'volunteer-dashboard', element: <VolunteerDashboard /> },
         { path: 'volunteer-upload', element: <VolunteerImageUpload /> },
         { path: 'volunteer-withdraw', element: <VolunteerWithdraw /> },
         { path: 'volunteer-refer', element: <VolunteerRefer /> },
