@@ -45,6 +45,11 @@ export const ROUTES = {
   ADMIN_DOWNLOADS: '/admin/downloads',
   REGISTER_SHOP: '/register-shop',
   CHATBOT: '/chatbot',
+  EARN: '/earn',
+  VOLUNTEER_DASHBOARD: '/volunteer-dashboard',
+  VOLUNTEER_UPLOAD: '/volunteer-upload',
+  VOLUNTEER_WITHDRAW: '/volunteer-withdraw',
+  VOLUNTEER_REFER: '/volunteer-refer',
 };
 
 export const NAV_LINKS = [

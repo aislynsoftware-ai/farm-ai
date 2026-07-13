@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { Store, MapPin, Phone, Mail, Image, Loader, CheckCircle, X } from 'lucide-react';
 import api from '../services/api';
 
@@ -7,6 +7,8 @@ const OWM_KEY = '6914d2cb3f280b711105801779b3ca7f';
 
 export default function RegisterShop() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const refCode = searchParams.get('ref') || '';
   const [form, setForm] = useState({
     name: '', email: '', phone: '', shop_name: '', description: '',
     address: '', latitude: '', longitude: '', shop_phone: '', photos: [],
@@ -44,7 +46,7 @@ export default function RegisterShop() {
     if (!form.latitude || !form.longitude) { setError('Please select your address from suggestions or use GPS'); return; }
     setLoading(true); setError('');
     try {
-      const res = await api.shops.register(form);
+      const res = await api.shops.register({ ...form, referral_code: refCode });
       localStorage.setItem('token', res.token);
       localStorage.setItem('user', JSON.stringify({ user_id: res.user_id, name: form.name, role: 'shop_owner' }));
       setDone(true);
