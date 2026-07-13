@@ -54,6 +54,14 @@ import AdminDownloadsPage from '../pages/AdminDownloadsPage';
 import AdminDailyTipsPage from '../pages/AdminDailyTipsPage';
 import PlantGuide from '../pages/PlantGuide';
 import AdminPlantRecommendationsPage from '../pages/AdminPlantRecommendationsPage';
+import EarnWithFarmlyt from '../pages/EarnWithFarmlyt';
+import VolunteerDashboard from '../pages/VolunteerDashboard';
+import VolunteerImageUpload from '../pages/VolunteerImageUpload';
+import VolunteerWithdraw from '../pages/VolunteerWithdraw';
+import VolunteerRefer from '../pages/VolunteerRefer';
+import AdminVolunteersPage from '../pages/AdminVolunteersPage';
+import AdminVolunteerImagesPage from '../pages/AdminVolunteerImagesPage';
+import AdminWithdrawalsPage from '../pages/AdminWithdrawalsPage';
 
 function ErrorPage() {
   return (
@@ -99,6 +107,11 @@ export default function createAppRouter(isDark, toggleTheme) {
         { path: 'plan-checkout', element: <PlanCheckout /> },
         { path: 'register-shop', element: <RegisterShop /> },
         { path: 'chatbot', element: <Chatbot /> },
+        { path: 'earn', element: <EarnWithFarmlyt /> },
+        { path: 'volunteer-dashboard', element: <VolunteerDashboard /> },
+        { path: 'volunteer-upload', element: <VolunteerImageUpload /> },
+        { path: 'volunteer-withdraw', element: <VolunteerWithdraw /> },
+        { path: 'volunteer-refer', element: <VolunteerRefer /> },
       ],
     },
     {
@@ -170,6 +183,9 @@ export default function createAppRouter(isDark, toggleTheme) {
         { path: 'daily-tips', element: <AdminDailyTipsPage /> },
         { path: 'shops', element: <AdminShopsPage /> },
         { path: 'plant-recommendations', element: <AdminPlantRecommendationsPage /> },
+        { path: 'volunteers', element: <AdminVolunteersPage /> },
+        { path: 'volunteer-images', element: <AdminVolunteerImagesPage /> },
+        { path: 'withdrawals', element: <AdminWithdrawalsPage /> },
       ],
     },
   ]);

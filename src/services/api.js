@@ -407,6 +407,7 @@ const api = {
       if (data.latitude) fd.append('latitude', data.latitude);
       if (data.longitude) fd.append('longitude', data.longitude);
       if (data.shop_phone) fd.append('shop_phone', data.shop_phone);
+      if (data.referral_code) fd.append('referral_code', data.referral_code);
       (data.photos || []).forEach((p) => fd.append('photos', p));
       return request('/auth/register-shop', { method: 'POST', body: fd, headers: {} });
     },
@@ -444,6 +445,53 @@ const api = {
   },
   weather: {
     alert: (lat, lng, address = '') => request(`/weather-alert?lat=${lat}&lng=${lng}&address=${encodeURIComponent(address)}`),
+  },
+  volunteer: {
+    categories: () => request('/volunteer/categories'),
+    activate: (userId, referrerCode) =>
+      request('/volunteer/activate', {
+        method: 'POST',
+        body: JSON.stringify({ user_id: userId, referrer_code: referrerCode || '' }),
+      }),
+    profile: (userId) => request(`/volunteer/profile?user_id=${encodeURIComponent(userId)}`),
+    uploadImages: (userId, categoryId, files) => {
+      const fd = new FormData();
+      fd.append('user_id', userId);
+      fd.append('category_id', categoryId);
+      files.forEach((f) => fd.append('photos', f));
+      return request('/volunteer/upload-images', { method: 'POST', body: fd, headers: {} });
+    },
+    earnings: (userId) => request(`/volunteer/earnings?user_id=${encodeURIComponent(userId)}`),
+    images: (userId) => request(`/volunteer/images?user_id=${encodeURIComponent(userId)}`),
+    requestWithdrawal: (userId, amount, accountDetails, upiId) =>
+      request('/volunteer/request-withdrawal', {
+        method: 'POST',
+        body: JSON.stringify({ user_id: userId, amount, account_details: accountDetails, upi_id: upiId }),
+      }),
+    withdrawals: (userId) => request(`/volunteer/withdrawals?user_id=${encodeURIComponent(userId)}`),
+    referralStats: (userId) => request(`/volunteer/referral-stats?user_id=${encodeURIComponent(userId)}`),
+    recharge: (userId, amount) =>
+      request('/volunteer/recharge', {
+        method: 'POST',
+        body: JSON.stringify({ user_id: userId, amount }),
+      }),
+    admin: {
+      volunteers: () => adminRequest('/admin/volunteers'),
+      images: (status) => adminRequest(`/admin/volunteer-images${status ? `?status=${status}` : ''}`),
+      approveImage: (id) => adminRequest(`/admin/volunteer-images/${id}/approve`, { method: 'POST' }),
+      rejectImage: (id, note) =>
+        adminRequest(`/admin/volunteer-images/${id}/reject`, {
+          method: 'POST',
+          body: JSON.stringify({ note }),
+        }),
+      withdrawals: (status) => adminRequest(`/admin/withdrawal-requests${status ? `?status=${status}` : ''}`),
+      approveWithdrawal: (id) => adminRequest(`/admin/withdrawal-requests/${id}/approve`, { method: 'POST' }),
+      rejectWithdrawal: (id, note) =>
+        adminRequest(`/admin/withdrawal-requests/${id}/reject`, {
+          method: 'POST',
+          body: JSON.stringify({ note }),
+        }),
+    },
   },
   plantRecs: {
     list: (category) => request(`/plant-recommendations${category ? `?category=${encodeURIComponent(category)}` : ''}`),
