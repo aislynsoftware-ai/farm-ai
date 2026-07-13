@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Users, Leaf, Sprout, ShoppingBag, CreditCard, Menu, X, LogOut, Brain, Crown, Download, Sun, Moon, DollarSign, Store, Lightbulb, Flower2, Hand, Image, Wallet } from 'lucide-react';
+import { LayoutDashboard, Users, Leaf, Sprout, ShoppingBag, CreditCard, Menu, X, LogOut, Brain, Crown, Download, Sun, Moon, DollarSign, Store, Lightbulb, Flower2, Hand, Image, Wallet, List } from 'lucide-react';
 import ThemeToggle from '../components/common/ThemeToggle';
 import api from '../services/api';
 
@@ -22,6 +22,7 @@ const SIDEBAR = [
   { path: '/admin/fertilizer-predictions', label: 'Fert. Pred.', icon: Sprout },
   { path: '/admin/downloads', label: 'Downloads', icon: Download },
   { path: '/admin/volunteers', label: 'Volunteers', icon: Hand },
+  { path: '/admin/volunteer-categories', label: 'Vol. Categories', icon: List },
   { path: '/admin/volunteer-images', label: 'Vol. Images', icon: Image },
   { path: '/admin/withdrawals', label: 'Withdrawals', icon: Wallet },
 ];
