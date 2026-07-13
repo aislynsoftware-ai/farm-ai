@@ -7,6 +7,36 @@ import Button from '../components/common/Button';
 import { APP_NAME } from '../constants';
 import api from '../services/api';
 
+function ReferrerCodeInput({ user, onSuccess }) {
+  const [code, setCode] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [err, setErr] = useState('');
+  const [ok, setOk] = useState('');
+  const handleSubmit = async () => {
+    if (!code.trim()) return;
+    setSaving(true); setErr(''); setOk('');
+    try {
+      const res = await api.volunteer.setReferrer(user.user_id, code.trim());
+      setOk(res.message);
+      if (onSuccess) setTimeout(onSuccess, 1000);
+    } catch (e) { setErr(e.message); }
+    setSaving(false);
+  };
+  return (
+    <div>
+      <p className="text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">Have a referrer code? Enter it below:</p>
+      {err && <p className="text-[11px] text-red-500 mb-2">{err}</p>}
+      {ok && <p className="text-[11px] text-emerald-600 dark:text-emerald-400 mb-2">{ok}</p>}
+      <div className="flex gap-2">
+        <input value={code} onChange={(e) => setCode(e.target.value)} placeholder="Enter referrer code" className="flex-1 px-3 py-1.5 rounded-lg bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-600 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 outline-none text-sm text-gray-900 dark:text-white placeholder-gray-400" />
+        <button onClick={handleSubmit} disabled={saving} className="px-4 py-1.5 rounded-lg bg-emerald-600 text-white text-xs font-medium hover:bg-emerald-500 disabled:opacity-50 cursor-pointer">
+          {saving ? <Loader size={14} className="animate-spin" /> : 'Apply'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function EarnWithFarmlyt() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -83,7 +113,14 @@ export default function EarnWithFarmlyt() {
                   <p className="text-[10px] text-gray-500">Referrals</p>
                 </div>
               </div>
-              <Link to="/volunteer-dashboard" className="mt-4 inline-flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400 hover:underline font-medium">View Full Dashboard <ChevronRight size={12} /></Link>
+              {!volunteer.referrer_id && (
+                <div className="mt-4 pt-4 border-t border-gray-100 dark:border-gray-700">
+                  <ReferrerCodeInput user={user} onSuccess={() => {
+                    api.volunteer.profile(user.user_id).then(setVolunteer);
+                  }} />
+                </div>
+              )}
+              <Link to="/earn" className="mt-4 inline-flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400 hover:underline font-medium">View Full Dashboard <ChevronRight size={12} /></Link>
             </div>
 
             <div className="grid gap-4">

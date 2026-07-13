@@ -424,6 +424,7 @@ const api = {
       if (data.longitude) fd.append('longitude', data.longitude);
       if (data.shop_phone) fd.append('shop_phone', data.shop_phone);
       if (data.existing_photos) fd.append('existing_photos', data.existing_photos);
+      if (data.referral_code) fd.append('referral_code', data.referral_code);
       (data.photos || []).forEach((p) => fd.append('photos', p));
       return request('/my-shop/update', { method: 'POST', body: fd, headers: {} });
     },
@@ -474,6 +475,11 @@ const api = {
       request('/volunteer/recharge', {
         method: 'POST',
         body: JSON.stringify({ user_id: userId, amount }),
+      }),
+    setReferrer: (userId, referrerCode) =>
+      request('/volunteer/set-referrer', {
+        method: 'POST',
+        body: JSON.stringify({ user_id: userId, referrer_code: referrerCode }),
       }),
     admin: {
       volunteers: () => adminRequest('/admin/volunteers'),

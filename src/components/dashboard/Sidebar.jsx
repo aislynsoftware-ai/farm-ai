@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
@@ -8,7 +8,7 @@ import {
 import { cn } from '../../utils/cn';
 import { ROUTES } from '../../constants';
 
-const menuItems = [
+const baseMenuItems = [
   { label: 'Home', path: '/', icon: Sprout },
   { label: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
   { label: 'Wallet', path: '/wallet', icon: Coins },
@@ -20,7 +20,6 @@ const menuItems = [
   { label: 'Community', path: '/community', icon: MessageSquare },
   { label: 'Notifications', path: '/notifications', icon: Bell },
   { label: 'Plant Guide', path: '/plant-guide', icon: Flower2 },
-  { label: 'My Shop', path: '/my-shop', icon: Store },
   { label: 'Profile', path: '/profile', icon: User },
   { label: 'API Keys', path: '/dashboard/api-keys', icon: Key },
   { label: 'Developer', path: '/dashboard/developer', icon: Code },
@@ -30,6 +29,18 @@ export default function Sidebar({ mobileOpen, onClose }) {
   const [collapsed, setCollapsed] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+
+  const user = useMemo(() => {
+    try { return JSON.parse(localStorage.getItem('user')); } catch { return null; }
+  }, []);
+
+  const menuItems = useMemo(() => {
+    const items = [...baseMenuItems];
+    if (user?.role === 'shop_owner') {
+      items.splice(items.findIndex(i => i.label === 'Profile'), 0, { label: 'My Shop', path: '/my-shop', icon: Store });
+    }
+    return items;
+  }, [user?.role]);
 
   const isActive = (path) => {
     const [p, qs] = path.split('?');

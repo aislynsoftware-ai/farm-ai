@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link, useSearchParams } from 'react-router-dom';
-import { Store, MapPin, Phone, Mail, Image, Loader, CheckCircle, X } from 'lucide-react';
+import { Store, MapPin, Phone, Mail, Image, Loader, CheckCircle, X, Gift } from 'lucide-react';
 import api from '../services/api';
 
 const OWM_KEY = '6914d2cb3f280b711105801779b3ca7f';
@@ -12,6 +12,7 @@ export default function RegisterShop() {
   const [form, setForm] = useState({
     name: '', email: '', phone: '', shop_name: '', description: '',
     address: '', latitude: '', longitude: '', shop_phone: '', photos: [],
+    referral_code: refCode,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -46,7 +47,7 @@ export default function RegisterShop() {
     if (!form.latitude || !form.longitude) { setError('Please select your address from suggestions or use GPS'); return; }
     setLoading(true); setError('');
     try {
-      const res = await api.shops.register({ ...form, referral_code: refCode });
+      const res = await api.shops.register(form);
       localStorage.setItem('token', res.token);
       localStorage.setItem('user', JSON.stringify({ user_id: res.user_id, name: form.name, role: 'shop_owner' }));
       setDone(true);
@@ -173,6 +174,11 @@ export default function RegisterShop() {
                 </label>
               )}
             </div>
+          </div>
+
+          <div>
+            <label className="block text-xs text-gray-600 dark:text-gray-400 mb-1"><Gift size={12} className="inline mr-1" />Referral Code <span className="text-gray-400 font-normal">(optional — enter code from referrer)</span></label>
+            <input value={form.referral_code} onChange={(e) => setForm((p) => ({ ...p, referral_code: e.target.value }))} placeholder="e.g. ABC123" className={inputClass} />
           </div>
 
           <button type="submit" disabled={loading} className="w-full py-2.5 rounded-xl bg-emerald-600 text-white text-sm font-medium hover:bg-emerald-500 disabled:opacity-50 flex items-center justify-center gap-2 cursor-pointer">
