@@ -59,6 +59,7 @@ import VolunteerImageUpload from '../pages/VolunteerImageUpload';
 import VolunteerWithdraw from '../pages/VolunteerWithdraw';
 import VolunteerRefer from '../pages/VolunteerRefer';
 import AdminVolunteersPage from '../pages/AdminVolunteersPage';
+import AdminVolunteerCategoriesPage from '../pages/AdminVolunteerCategoriesPage';
 import AdminVolunteerImagesPage from '../pages/AdminVolunteerImagesPage';
 import AdminWithdrawalsPage from '../pages/AdminWithdrawalsPage';
 
@@ -182,6 +183,7 @@ export default function createAppRouter(isDark, toggleTheme) {
         { path: 'shops', element: <AdminShopsPage /> },
         { path: 'plant-recommendations', element: <AdminPlantRecommendationsPage /> },
         { path: 'volunteers', element: <AdminVolunteersPage /> },
+        { path: 'volunteer-categories', element: <AdminVolunteerCategoriesPage /> },
         { path: 'volunteer-images', element: <AdminVolunteerImagesPage /> },
         { path: 'withdrawals', element: <AdminWithdrawalsPage /> },
       ],

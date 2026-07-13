@@ -483,6 +483,21 @@ const api = {
       }),
     admin: {
       volunteers: () => adminRequest('/admin/volunteers'),
+      categories: () => adminRequest('/admin/volunteer-categories'),
+      addCategory: (data) =>
+        adminRequest('/admin/volunteer-categories/add', {
+          method: 'POST',
+          body: JSON.stringify(data),
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      updateCategory: (id, data) =>
+        adminRequest(`/admin/volunteer-categories/${id}`, {
+          method: 'PUT',
+          body: JSON.stringify(data),
+          headers: { 'Content-Type': 'application/json' },
+        }),
+      deleteCategory: (id) =>
+        adminRequest(`/admin/volunteer-categories/${id}`, { method: 'DELETE' }),
       images: (status) => adminRequest(`/admin/volunteer-images${status ? `?status=${status}` : ''}`),
       approveImage: (id) => adminRequest(`/admin/volunteer-images/${id}/approve`, { method: 'POST' }),
       rejectImage: (id, note) =>
