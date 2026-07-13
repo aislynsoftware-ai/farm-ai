@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Menu, Store, MapPin, Phone, Image, Loader, CheckCircle, AlertCircle, ExternalLink, Home, LogOut, X } from 'lucide-react';
+import { Menu, Store, MapPin, Phone, Image, Loader, CheckCircle, AlertCircle, ExternalLink, Home, LogOut, X, Gift } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../services/api';
 
@@ -35,6 +35,7 @@ export default function ShopOwnerDashboard() {
       shop_name: shop.shop_name, description: shop.description || '',
       address: shop.address || '', latitude: shop.latitude, longitude: shop.longitude,
       shop_phone: shop.phone || '',
+      referral_code: '',
     });
     setExistingUrls(urls);
     setNewFiles([]);
@@ -218,6 +219,12 @@ export default function ShopOwnerDashboard() {
                 <label className="text-[11px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Phone</label>
                 <input value={form.shop_phone} onChange={(e) => setForm((p) => ({ ...p, shop_phone: e.target.value }))} placeholder="Shop phone number" className="w-full bg-transparent border-none outline-none text-sm text-gray-900 dark:text-white placeholder-gray-400 p-0" />
               </div>
+              {shop.status === 'pending' && !shop.referrer_id && (
+                <div className="rounded-xl border border-gray-200 dark:border-gray-600 p-4 space-y-1">
+                  <label className="text-[11px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Referral Code <span className="text-gray-400 font-normal normal-case">(optional)</span></label>
+                  <input value={form.referral_code} onChange={(e) => setForm((p) => ({ ...p, referral_code: e.target.value }))} placeholder="Enter referrer code" className="w-full bg-transparent border-none outline-none text-sm text-gray-900 dark:text-white placeholder-gray-400 p-0" />
+                </div>
+              )}
               <div className="rounded-xl border border-gray-200 dark:border-gray-600 p-4 space-y-2">
                 <label className="text-[11px] font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Photos (up to 4)</label>
                 <div className="flex flex-wrap gap-2">

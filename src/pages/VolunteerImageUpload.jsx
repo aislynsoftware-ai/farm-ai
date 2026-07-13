@@ -1,31 +1,19 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { Camera, Image, Loader, CheckCircle, AlertCircle, X, ChevronRight } from 'lucide-react';
+import { Image, Loader, CheckCircle, AlertCircle, X } from 'lucide-react';
 import SEO from '../components/common/SEO';
 import Button from '../components/common/Button';
 import api from '../services/api';
 
-const CATEGORIES = [
-  { id: 1, name: 'Tomato' },
-  { id: 2, name: 'Potato' },
-  { id: 3, name: 'Brinjal' },
-  { id: 4, name: 'Chili' },
-  { id: 5, name: 'Cauliflower' },
-  { id: 6, name: 'Cucumber' },
-  { id: 7, name: 'Potted Plant' },
-  { id: 8, name: 'Rose' },
-  { id: 9, name: 'Marigold' },
-  { id: 10, name: 'Other' },
-];
-
 export default function VolunteerImageUpload() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [categories, setCategories] = useState([]);
   const [categoryId, setCategoryId] = useState('');
   const [files, setFiles] = useState([]);
   const [previews, setPreviews] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -34,12 +22,16 @@ export default function VolunteerImageUpload() {
     const stored = localStorage.getItem('user');
     if (!stored) { navigate('/login'); return; }
     setUser(JSON.parse(stored));
+    api.volunteer.categories()
+      .then(setCategories)
+      .catch(() => {})
+      .finally(() => setLoading(false));
   }, []);
 
   const handleFiles = (e) => {
     const selected = Array.from(e.target.files || []);
     setFiles((prev) => {
-      const combined = [...prev, ...selected].slice(0, 10);
+      const combined = [...prev, ...selected];
       setPreviews(combined.map((f) => URL.createObjectURL(f)));
       return combined;
     });
@@ -82,9 +74,11 @@ export default function VolunteerImageUpload() {
           <form onSubmit={handleSubmit} className="bg-white dark:bg-gray-800 rounded-2xl border border-gray-200 dark:border-gray-700 p-6 space-y-5">
             <div>
               <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">Select Category</label>
-              <div className="grid grid-cols-5 gap-2">
-                {CATEGORIES.map((c) => (
-                  <button type="button" key={c.id} onClick={() => setCategoryId(c.id)} className={`px-2 py-2 rounded-lg text-[11px] font-medium border transition-all cursor-pointer ${categoryId === c.id ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-gray-50 dark:bg-gray-900 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-600 hover:border-emerald-300'}`}>
+              <div className="flex flex-wrap gap-2 max-h-48 overflow-y-auto p-1">
+                {loading ? (
+                  <span className="text-xs text-gray-400">Loading categories...</span>
+                ) : categories.map((c) => (
+                  <button type="button" key={c.id || c.name} onClick={() => setCategoryId(c.id)} className={`px-3 py-1.5 rounded-lg text-[11px] font-medium border transition-all cursor-pointer whitespace-nowrap ${categoryId === c.id ? 'bg-emerald-600 text-white border-emerald-600' : 'bg-gray-50 dark:bg-gray-900 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-gray-600 hover:border-emerald-300'}`}>
                     {c.name}
                   </button>
                 ))}
@@ -92,7 +86,7 @@ export default function VolunteerImageUpload() {
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">Upload Images (up to 10)</label>
+              <label className="block text-xs font-medium text-gray-600 dark:text-gray-400 mb-2">Upload Images</label>
               <div className="flex flex-wrap gap-3">
                 {previews.map((url, i) => (
                   <div key={i} className="relative w-24 h-24 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-600">
@@ -100,13 +94,11 @@ export default function VolunteerImageUpload() {
                     <button type="button" onClick={() => removeFile(i)} className="absolute top-1 right-1 w-5 h-5 bg-red-500 text-white rounded-full flex items-center justify-center cursor-pointer"><X size={11} /></button>
                   </div>
                 ))}
-                {files.length < 10 && (
-                  <label className="w-24 h-24 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-600 flex flex-col items-center justify-center text-gray-400 hover:border-emerald-400 hover:text-emerald-500 cursor-pointer transition-colors">
-                    <Image size={24} />
-                    <span className="text-[10px] mt-1">Add</span>
-                    <input type="file" accept="image/*" multiple onChange={handleFiles} className="hidden" />
-                  </label>
-                )}
+                <label className="w-24 h-24 rounded-xl border-2 border-dashed border-gray-300 dark:border-gray-600 flex flex-col items-center justify-center text-gray-400 hover:border-emerald-400 hover:text-emerald-500 cursor-pointer transition-colors">
+                  <Image size={24} />
+                  <span className="text-[10px] mt-1">Add</span>
+                  <input type="file" accept="image/*" multiple onChange={handleFiles} className="hidden" />
+                </label>
               </div>
             </div>
 
