@@ -53,6 +53,7 @@ import AdminApiPlansPage from '../pages/AdminApiPlansPage';
 import AdminDownloadsPage from '../pages/AdminDownloadsPage';
 import AdminDailyTipsPage from '../pages/AdminDailyTipsPage';
 import PlantGuide from '../pages/PlantGuide';
+import Development from '../pages/Development';
 import AdminPlantRecommendationsPage from '../pages/AdminPlantRecommendationsPage';
 import EarnWithFarmlyt from '../pages/EarnWithFarmlyt';
 import VolunteerImageUpload from '../pages/VolunteerImageUpload';
@@ -111,6 +112,7 @@ export default function createAppRouter(isDark, toggleTheme) {
         { path: 'volunteer-upload', element: <VolunteerImageUpload /> },
         { path: 'volunteer-withdraw', element: <VolunteerWithdraw /> },
         { path: 'volunteer-refer', element: <VolunteerRefer /> },
+        { path: 'development', element: <Development /> },
       ],
     },
     {

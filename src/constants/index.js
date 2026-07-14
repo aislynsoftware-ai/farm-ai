@@ -46,6 +46,7 @@ export const ROUTES = {
   REGISTER_SHOP: '/register-shop',
   CHATBOT: '/chatbot',
   EARN: '/earn',
+  DEVELOPMENT: '/development',
   VOLUNTEER_DASHBOARD: '/volunteer-dashboard',
   VOLUNTEER_UPLOAD: '/volunteer-upload',
   VOLUNTEER_WITHDRAW: '/volunteer-withdraw',
@@ -73,6 +74,15 @@ export const NAV_LINKS = [
       { label: 'Enterprise', path: ROUTES.ENTERPRISE },
       { label: 'API Docs', path: ROUTES.API_DOCS },
       { label: 'Developers', path: ROUTES.DEVELOPERS },
+    ],
+  },
+  {
+    label: 'Development',
+    path: ROUTES.DEVELOPMENT,
+    children: [
+      { label: 'AI Development', path: '/development#ai' },
+      { label: 'Mobile App Development', path: '/development#mobile' },
+      { label: 'Web Development', path: '/development#web' },
     ],
   },
   {
