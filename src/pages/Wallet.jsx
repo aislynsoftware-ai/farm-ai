@@ -23,6 +23,7 @@ export default function Wallet() {
   const [recharging, setRecharging] = useState(false);
   const [buyingPlan, setBuyingPlan] = useState(null);
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
   useEffect(() => {
     const stored = localStorage.getItem('user');
@@ -65,7 +66,7 @@ export default function Wallet() {
       return;
     }
     setBuyingPlan(planId);
-    setError('');
+    setError(''); setSuccess('');
     try {
       if (typeof window.Razorpay === 'undefined') {
         await new Promise((resolve, reject) => {
@@ -96,6 +97,7 @@ export default function Wallet() {
             });
             await fetchCoins(userId);
             await fetchPlan(userId);
+            setSuccess(`${planId} plan activated!`);
           } catch { setError('Payment verification failed'); }
         },
         modal: { ondismiss: () => setBuyingPlan(null) },
@@ -116,7 +118,7 @@ export default function Wallet() {
     const userId = getUserId();
     if (!userId || rechargeAmount < 1) return;
     setRecharging(true);
-    setError('');
+    setError(''); setSuccess('');
     try {
       if (typeof window.Razorpay === 'undefined') {
         await new Promise((resolve, reject) => {
@@ -145,6 +147,7 @@ export default function Wallet() {
               amount: rechargeAmount,
             });
             fetchCoins(userId);
+            setSuccess(`₹${rechargeAmount} added successfully!`);
             setRechargeAmount(50);
           } catch { setError('Payment verification failed'); }
         },
@@ -273,6 +276,14 @@ export default function Wallet() {
             <div className="flex items-center gap-2 p-3 rounded-xl bg-red-50 dark:bg-gray-800 border border-red-200 dark:border-red-700">
               <AlertCircle size={14} className="text-red-500 flex-shrink-0" />
               <p className="text-xs text-red-600 dark:text-red-400">{error}</p>
+            </div>
+          )}
+
+          {/* Success */}
+          {success && (
+            <div className="flex items-center gap-2 p-3 rounded-xl bg-emerald-50 dark:bg-gray-800 border border-emerald-200 dark:border-emerald-700">
+              <Check size={14} className="text-emerald-500 flex-shrink-0" />
+              <p className="text-xs text-emerald-700 dark:text-emerald-300">{success}</p>
             </div>
           )}
 
