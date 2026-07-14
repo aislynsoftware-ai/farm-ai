@@ -57,8 +57,11 @@ export default function Navbar({ isDark, toggleTheme }) {
     return () => document.removeEventListener('mousedown', handleClick);
   }, [openDropdown]);
 
-  const isActive = (path) => location.pathname === path;
-  const isChildActive = (children) => children?.some((c) => location.pathname === c.path);
+  const isActive = (path) => {
+    const [base] = path.split('#');
+    return location.pathname === base;
+  };
+  const isChildActive = (children) => children?.some((c) => isActive(c.path));
 
   const renderDesktopLink = (link) => {
     if (link.path === ROUTES.CHATBOT) {
@@ -93,7 +96,7 @@ export default function Navbar({ isDark, toggleTheme }) {
           <button
             onClick={() => setOpenDropdown(openDropdown === link.label ? null : link.label)}
             className={cn(
-              'flex items-center gap-1 px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 group cursor-pointer',
+              'flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 group cursor-pointer',
               active
                 ? 'text-emerald-600 dark:text-emerald-400'
                 : 'text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300'
@@ -124,22 +127,34 @@ export default function Navbar({ isDark, toggleTheme }) {
                 transition={{ duration: 0.15 }}
                 className="absolute left-0 top-full mt-1 w-44 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-lg shadow-black/5 dark:shadow-black/20 z-[9999] overflow-hidden"
               >
-                {link.children.map((child) => (
-                  <Link
-                    key={child.label}
-                    to={child.path}
-                    onClick={() => setOpenDropdown(null)}
-                    className={cn(
-                      'flex items-center gap-2 px-3.5 py-2.5 text-xs transition-colors',
-                      isActive(child.path)
-                        ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40'
-                        : 'text-gray-600 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 hover:text-emerald-600 dark:hover:text-emerald-400'
-                    )}
-                  >
-                    <ChevronRight size={11} className="text-emerald-400" />
-                    {child.label}
-                  </Link>
-                ))}
+                {link.children.map((child) => {
+                  const hashPath = child.path.includes('#');
+                  const basePath = hashPath ? child.path.split('#')[0] : child.path;
+                  const hashVal = hashPath ? `#${child.path.split('#')[1]}` : '';
+                  return (
+                    <Link
+                      key={child.label}
+                      to={child.path}
+                      onClick={(e) => {
+                        setOpenDropdown(null);
+                        if (hashPath && location.pathname === basePath) {
+                          e.preventDefault();
+                          window.history.pushState(null, '', hashVal);
+                          window.dispatchEvent(new Event('hashchange'));
+                        }
+                      }}
+                      className={cn(
+                        'flex items-center gap-2 px-3.5 py-2.5 text-xs transition-colors',
+                        isActive(child.path)
+                          ? 'text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40'
+                          : 'text-gray-600 dark:text-gray-300 hover:bg-emerald-50 dark:hover:bg-emerald-950/40 hover:text-emerald-600 dark:hover:text-emerald-400'
+                      )}
+                    >
+                      <ChevronRight size={11} className="text-emerald-400" />
+                      {child.label}
+                    </Link>
+                  );
+                })}
               </motion.div>
             )}
           </AnimatePresence>
@@ -153,7 +168,7 @@ export default function Navbar({ isDark, toggleTheme }) {
         key={link.path}
         to={link.path}
         className={cn(
-          'relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 group',
+          'relative px-3 py-2 text-sm font-medium rounded-lg transition-all duration-200 group',
           active
             ? 'text-emerald-600 dark:text-emerald-400'
             : 'text-emerald-700 dark:text-emerald-400 hover:text-emerald-600 dark:hover:text-emerald-300'
@@ -227,6 +242,14 @@ export default function Navbar({ isDark, toggleTheme }) {
                     <Link
                       key={child.label}
                       to={child.path}
+                      onClick={(e) => {
+                        if (child.path.includes('#') && location.pathname === child.path.split('#')[0]) {
+                          e.preventDefault();
+                          const hash = `#${child.path.split('#')[1]}`;
+                          window.history.pushState(null, '', hash);
+                          window.dispatchEvent(new Event('hashchange'));
+                        }
+                      }}
                       className={cn(
                         'block px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
                         isActive(child.path)
@@ -278,7 +301,7 @@ export default function Navbar({ isDark, toggleTheme }) {
             </span>
           </Link>
 
-          <div className="hidden lg:flex items-center gap-1">
+          <div className="hidden lg:flex items-center gap-0.5">
             {NAV_LINKS.map(renderDesktopLink)}
           </div>
 
