@@ -119,7 +119,7 @@ export default function Predict() {
 
         const built = Object.values(groups).filter((g) => Object.keys(g.subs).length > 0);
         built.push(
-          { label: 'Potted Plant', icon: Bug, subs: { 'General': { label: 'General', icon: Bug, items: [{ label: 'Potted Plant', endpoint: '/potted_plant' }] } } },
+          { label: 'Potted Plant', icon: Bug, subs: { 'General': { label: 'General', icon: Bug, items: [{ label: 'Potted Plant', endpoint: '/potted_plant' }] }, 'Diagnosis': { label: 'Diagnosis', icon: Bug, items: [{ label: 'Potted Plant Diagnosis', endpoint: '/potted_plant_diagnosis' }] } } },
           { label: 'Plant Identification', icon: Leaf, subs: { 'General': { label: 'General', icon: Leaf, items: [{ label: 'Identify Plant', endpoint: '/plant_idetification' }] } } },
           { label: 'Food Identification', icon: Apple, subs: { 'General': { label: 'General', icon: Apple, items: [{ label: 'Identify Food', endpoint: '/food_identification' }] } } },
           { label: 'Food Gradings', icon: Apple, subs: { 'General': { label: 'General', icon: Apple, items: [{ label: 'Food Grading', endpoint: '/food_gradings' }] } } },
