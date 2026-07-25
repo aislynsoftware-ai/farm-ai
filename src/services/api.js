@@ -505,6 +505,22 @@ const api = {
           method: 'POST',
           body: JSON.stringify({ note }),
         }),
+      bulkApproveImages: (imageIds) =>
+        adminRequest('/admin/volunteer-images/bulk-approve', {
+          method: 'POST',
+          body: JSON.stringify({ image_ids: imageIds }),
+        }),
+      bulkRejectImages: (imageIds, note) =>
+        adminRequest('/admin/volunteer-images/bulk-reject', {
+          method: 'POST',
+          body: JSON.stringify({ image_ids: imageIds, note }),
+        }),
+      getImagesDownloadUrl: (categoryId, status = 'approved') => {
+        const params = new URLSearchParams();
+        if (categoryId) params.set('category_id', categoryId);
+        params.set('status', status);
+        return `${BASE_URL}/admin/volunteer-images/download?${params.toString()}`;
+      },
       withdrawals: (status) => adminRequest(`/admin/withdrawal-requests${status ? `?status=${status}` : ''}`),
       approveWithdrawal: (id) => adminRequest(`/admin/withdrawal-requests/${id}/approve`, { method: 'POST' }),
       rejectWithdrawal: (id, note) =>
