@@ -39,6 +39,11 @@ const sections = [
     content:
       'We may update this Privacy Policy periodically. Changes will be posted on this page with an updated effective date. Continued use of the platform constitutes acceptance of the revised policy.',
   },
+  {
+  title: 'Data Retention & Account Deletion',
+  content:
+    'Farmlyt AI retains user account information and related data only for as long as necessary to provide our services, comply with legal obligations, resolve disputes, and enforce our agreements. Users may request deletion of their account and associated personal data by contacting us at support@farmlytai.in. Upon verification, we will delete or anonymize your personal information unless we are legally required to retain certain data.',
+},
 ];
 
 export default function PrivacyPolicy() {
