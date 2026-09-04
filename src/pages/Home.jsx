@@ -19,7 +19,6 @@ export default function Home() {
       <HowItWorksSection />
       <FeaturesSection />
       <TestimonialsSection />
-      
       <ContactSection />
     </main>
   );
