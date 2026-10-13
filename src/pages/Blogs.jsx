@@ -10,6 +10,26 @@ import { SITE_URL } from '../constants';
 
 const PER_PAGE = 6;
 
+// Returns a windowed list of page numbers with '...' separators,
+// e.g. [1, '...', 38, 39, 40, 41, 42, '...', 60]
+function getPageNumbers(current, total, siblings = 1) {
+  const totalShown = siblings * 2 + 5; // first, last, current, 2 dots, siblings
+  if (total <= totalShown) {
+    return Array.from({ length: total }, (_, i) => i + 1);
+  }
+
+  const left = Math.max(current - siblings, 2);
+  const right = Math.min(current + siblings, total - 1);
+
+  const pages = [1];
+  if (left > 2) pages.push('...');
+  for (let i = left; i <= right; i++) pages.push(i);
+  if (right < total - 1) pages.push('...');
+  pages.push(total);
+
+  return pages;
+}
+
 export default function Blogs() {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -103,7 +123,7 @@ export default function Blogs() {
                 </motion.div>
 
                 {totalPages > 1 && (
-                  <div className="flex items-center justify-center gap-2 mt-10">
+                  <div className="flex items-center justify-center gap-2 mt-10 flex-wrap">
                     <button
                       onClick={() => setPage((p) => Math.max(1, p - 1))}
                       disabled={page === 1}
@@ -111,19 +131,30 @@ export default function Blogs() {
                     >
                       <ChevronLeft size={15} />
                     </button>
-                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-                      <button
-                        key={p}
-                        onClick={() => setPage(p)}
-                        className={`min-w-[36px] h-9 rounded-xl text-xs font-semibold transition-all ${
-                          p === page
-                            ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/25'
-                            : 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-emerald-300 dark:hover:border-emerald-700'
-                        }`}
-                      >
-                        {p}
-                      </button>
-                    ))}
+
+                    {getPageNumbers(page, totalPages).map((p, i) =>
+                      p === '...' ? (
+                        <span
+                          key={`dots-${i}`}
+                          className="w-9 h-9 flex items-center justify-center text-xs text-gray-400 select-none"
+                        >
+                          …
+                        </span>
+                      ) : (
+                        <button
+                          key={p}
+                          onClick={() => setPage(p)}
+                          className={`min-w-[36px] h-9 rounded-xl text-xs font-semibold transition-all ${
+                            p === page
+                              ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/25'
+                              : 'bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-300 hover:border-emerald-300 dark:hover:border-emerald-700'
+                          }`}
+                        >
+                          {p}
+                        </button>
+                      )
+                    )}
+
                     <button
                       onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
                       disabled={page === totalPages}
