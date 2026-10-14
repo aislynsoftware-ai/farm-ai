@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -23,71 +22,6 @@ import { DEFAULT_IMAGE } from '../constants';
 
 const SITE_URL = 'https://www.farmlytai.in';
 
-const GENERIC_DESCRIPTION =
-  'Explore Farmlyt AI for smart agriculture, agricultural technology, AI-powered farming insights and data-driven solutions.';
-
-/**
- * Convert a value into clean text for SEO metadata.
- */
-const cleanMetaText = (value) => {
-  if (typeof value !== 'string' && typeof value !== 'number') {
-    return '';
-  }
-
-  return String(value)
-    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
-    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/&nbsp;|&#160;/gi, ' ')
-    .replace(/&amp;/gi, '&')
-    .replace(/&quot;/gi, '"')
-    .replace(/&#39;|&apos;/gi, "'")
-    .replace(/&lt;/gi, '<')
-    .replace(/&gt;/gi, '>')
-    .replace(/\s+/g, ' ')
-    .trim();
-};
-
-/**
- * Create a short, readable description from blog content.
- */
-const createFallbackDescription = (blog, title) => {
-  const content = [
-    blog.contentone,
-    blog.contenttwo,
-    blog.contentthree,
-    blog.contentfour,
-    blog.contentfive,
-    blog.content,
-  ]
-    .map(cleanMetaText)
-    .filter(Boolean)
-    .join(' ');
-
-  const source =
-    cleanMetaText(
-      blog.excerpt ||
-      blog.summary ||
-      blog.description ||
-      content
-    );
-
-  if (source) {
-    const sentence = source
-      .replace(/\s+/g, ' ')
-      .trim();
-
-    return sentence.length > 155
-      ? `${sentence.slice(0, 152).trimEnd()}...`
-      : sentence;
-  }
-
-  return `Discover ${title} with Farmlyt AI. Explore smart agriculture, AI-powered farming technology and practical agricultural insights.`;
-};
-
-/**
- * Normalize images to absolute URLs.
- */
 const getAbsoluteUrl = (url) => {
   if (!url) return '';
 
@@ -107,6 +41,7 @@ export default function BlogDetails() {
   const [error, setError] = useState('');
   const [progress, setProgress] = useState(0);
 
+  // Fetch the selected blog and all blogs for navigation.
   const fetchBlog = useCallback(async () => {
     try {
       setLoading(true);
@@ -123,9 +58,7 @@ export default function BlogDetails() {
       }
 
       setBlog(blogData);
-      setAllBlogs(
-        Array.isArray(blogsData) ? blogsData : []
-      );
+      setAllBlogs(Array.isArray(blogsData) ? blogsData : []);
     } catch (e) {
       setError(e.message || 'Failed to load blog');
     } finally {
@@ -138,13 +71,12 @@ export default function BlogDetails() {
     window.scrollTo(0, 0);
   }, [fetchBlog]);
 
+  // Reading progress indicator.
   useEffect(() => {
     const onScroll = () => {
       const scrollTop = window.scrollY;
-
       const docHeight =
-        document.documentElement.scrollHeight -
-        window.innerHeight;
+        document.documentElement.scrollHeight - window.innerHeight;
 
       setProgress(
         docHeight > 0
@@ -153,13 +85,14 @@ export default function BlogDetails() {
       );
     };
 
-    window.addEventListener('scroll', onScroll);
+    window.addEventListener('scroll', onScroll, { passive: true });
 
     return () => {
       window.removeEventListener('scroll', onScroll);
     };
   }, []);
 
+  // Loading state.
   if (loading) {
     return (
       <main>
@@ -174,119 +107,86 @@ export default function BlogDetails() {
     );
   }
 
+  // Blog not found state.
   if (error || !blog) {
     return (
-      <>
-        <Helmet>
-          <title>Blog Not Found | Farmlyt AI</title>
-          <meta
-            name="robots"
-            content="noindex, follow"
-          />
-        </Helmet>
+      <main>
+        <PageHeader title="Blog Not Found" />
 
-        <main>
-          <PageHeader title="Blog Not Found" />
+        <section className="py-8 pb-16 bg-emerald-50/30 dark:bg-emerald-950/30">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <BookOpen
+              size={40}
+              className="mx-auto text-gray-300 dark:text-gray-600 mb-3"
+            />
 
-          <section className="py-8 pb-16 bg-emerald-50/30 dark:bg-emerald-950/30">
-            <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-              <BookOpen
-                size={40}
-                className="mx-auto text-gray-300 dark:text-gray-600 mb-3"
-              />
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
+              {error || 'The blog you are looking for does not exist.'}
+            </p>
 
-              <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
-                {error ||
-                  'The blog you are looking for does not exist.'}
-              </p>
-
-              <Link
-                to="/blogs"
-                className="inline-flex items-center gap-1 px-4 py-2 text-xs font-medium rounded-xl bg-emerald-500 text-white hover:bg-emerald-600 transition-colors"
-              >
-                <ArrowLeft size={14} />
-                Back to Blogs
-              </Link>
-            </div>
-          </section>
-        </main>
-      </>
+            <Link
+              to="/blogs"
+              className="inline-flex items-center gap-1 px-4 py-2 text-xs font-medium rounded-xl bg-emerald-500 text-white hover:bg-emerald-600 transition-colors"
+            >
+              <ArrowLeft size={14} />
+              Back to Blogs
+            </Link>
+          </div>
+        </section>
+      </main>
     );
   }
 
-  // SEO title: use the most specific field available.
+  // SEO title and description.
   const title =
-    cleanMetaText(blog.meta_title) ||
-    cleanMetaText(blog.seo_title) ||
-    cleanMetaText(blog.title) ||
+    blog.meta_title ||
+    blog.seo_title ||
+    blog.title ||
     'Farmlyt AI Blog';
 
-  // Support multiple possible API description fields.
-  const rawDescription =
+  const metaDesc =
     blog.meta_description ||
     blog.seo_description ||
     blog.meta_description_tag ||
     blog.description ||
     blog.excerpt ||
     blog.summary ||
-    '';
-
-  let metaDesc = cleanMetaText(rawDescription);
-
-  // Never use the generic homepage description for a blog.
-  if (
-    !metaDesc ||
-    metaDesc.toLowerCase() ===
-      GENERIC_DESCRIPTION.toLowerCase()
-  ) {
-    metaDesc = createFallbackDescription(blog, title);
-  }
-
-  // Keep descriptions suitable for search snippets.
-  if (metaDesc.length > 160) {
-    metaDesc = `${metaDesc.slice(0, 157).trimEnd()}...`;
-  }
+    `Read ${title} on Farmlyt AI for agricultural technology and farming insights.`;
 
   const image = getAbsoluteUrl(
     blog.featured_image ||
-    blog.image ||
-    blog.thumbnail ||
-    DEFAULT_IMAGE
+      blog.image ||
+      blog.thumbnail ||
+      DEFAULT_IMAGE
   );
 
-  const author =
-    cleanMetaText(blog.author || blog.author_name) ||
-    'Farmlyt AI';
+  const author = blog.author || blog.author_name || 'Farmlyt AI';
 
-  const date =
-    blog.published_at ||
-    blog.created_at ||
-    blog.date ||
-    '';
+  const date = blog.published_at || blog.created_at || blog.date || '';
 
-  const formattedDate =
-    date && !Number.isNaN(new Date(date).getTime())
-      ? new Date(date).toLocaleDateString('en-US', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-        })
-      : '';
+  const validDate =
+    date && !Number.isNaN(new Date(date).getTime());
 
-  // Use the current route slug to avoid mismatched canonicals.
-  const canonicalSlug = slug;
+  const formattedDate = validDate
+    ? new Date(date).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      })
+    : '';
 
-  const pageUrl =
-    `${SITE_URL}/blog/${encodeURIComponent(canonicalSlug)}`;
+  // One canonical URL for the current blog.
+  const canonicalSlug = String(blog.slug || slug || '').trim();
+
+  const pageUrl = `${SITE_URL}/blog/${encodeURIComponent(canonicalSlug)}`;
 
   const readingTime =
     blog.reading_time ||
     blog.read_time ||
-    Math.ceil(
-      (String(blog.content || '').length || 1000) / 1000
-    ) ||
+    Math.ceil((blog.content?.length || 1000) / 1000) ||
     3;
 
+  // Preserve the existing five blog content sections.
   const contentFields = [
     'contentone',
     'contenttwo',
@@ -298,9 +198,7 @@ export default function BlogDetails() {
   const contentSections = contentFields
     .map((key) => blog[key])
     .filter(
-      (value) =>
-        typeof value === 'string' &&
-        value.trim()
+      (value) => typeof value === 'string' && value.trim()
     )
     .map((text) => {
       const trimmed = text.trim();
@@ -318,26 +216,25 @@ export default function BlogDetails() {
       return { heading, body };
     });
 
+  // Previous and next blog navigation.
   const currentIndex = allBlogs.findIndex((item) => {
-    return String(item.slug) === String(slug);
+    const itemSlug =
+      item.slug ||
+      item.id ||
+      item.title?.toLowerCase().replace(/\s+/g, '-');
+
+    return String(itemSlug) === String(slug);
   });
 
   const prevBlog =
-    currentIndex > 0
-      ? allBlogs[currentIndex - 1]
-      : null;
+    currentIndex > 0 ? allBlogs[currentIndex - 1] : null;
 
   const nextBlog =
-    currentIndex >= 0 &&
-    currentIndex < allBlogs.length - 1
+    currentIndex >= 0 && currentIndex < allBlogs.length - 1
       ? allBlogs[currentIndex + 1]
       : null;
 
-  const getBlogSlug = (item) =>
-    item?.slug ||
-    item?.id ||
-    item?.title?.toLowerCase().replace(/\s+/g, '-');
-
+  // BlogPosting structured data.
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
@@ -361,11 +258,9 @@ export default function BlogDetails() {
         url: getAbsoluteUrl(DEFAULT_IMAGE),
       },
     },
-    ...(date ? { datePublished: date } : {}),
-    ...(blog.updated_at || date
-      ? {
-          dateModified: blog.updated_at || date,
-        }
+    ...(validDate ? { datePublished: date } : {}),
+    ...(blog.updated_at || (validDate && date)
+      ? { dateModified: blog.updated_at || date }
       : {}),
     ...(image ? { image: [image] } : {}),
   };
@@ -376,88 +271,58 @@ export default function BlogDetails() {
       itemType="https://schema.org/BlogPosting"
     >
       <Helmet>
+        {/* Unique SEO title and description for each blog. */}
         <title>{`${title} | Farmlyt AI Blog`}</title>
 
-        <meta
-          name="description"
-          content={metaDesc}
-        />
+        <meta name="description" content={metaDesc} />
+        <meta name="robots" content="index, follow" />
 
-        <meta
-          name="robots"
-          content="index, follow"
-        />
+        {/* Canonical URL: one URL for this blog page. */}
+        <link rel="canonical" href={pageUrl} />
 
-        <link
-          rel="canonical"
-          href={pageUrl}
-        />
-
+        {/* Open Graph metadata. */}
         <meta
           property="og:title"
           content={`${title} | Farmlyt AI`}
         />
-
-        <meta
-          property="og:description"
-          content={metaDesc}
-        />
-
-        <meta
-          property="og:url"
-          content={pageUrl}
-        />
-
-        <meta
-          property="og:type"
-          content="article"
-        />
-
-        <meta
-          property="og:site_name"
-          content="Farmlyt AI"
-        />
+        <meta property="og:description" content={metaDesc} />
+        <meta property="og:url" content={pageUrl} />
+        <meta property="og:type" content="article" />
+        <meta property="og:site_name" content="Farmlyt AI" />
 
         {image && (
-          <meta
-            property="og:image"
-            content={image}
-          />
+          <meta property="og:image" content={image} />
         )}
 
+        {/* Twitter metadata. */}
         <meta
           name="twitter:card"
           content="summary_large_image"
         />
-
         <meta
           name="twitter:title"
           content={`${title} | Farmlyt AI`}
         />
-
-        <meta
-          name="twitter:description"
-          content={metaDesc}
-        />
+        <meta name="twitter:description" content={metaDesc} />
 
         {image && (
-          <meta
-            name="twitter:image"
-            content={image}
-          />
+          <meta name="twitter:image" content={image} />
         )}
 
+        {/* Structured data for search engines. */}
         <script type="application/ld+json">
           {JSON.stringify(jsonLd)}
         </script>
       </Helmet>
 
+      {/* Reading progress bar. */}
       <div
         className="fixed top-0 left-0 h-1 bg-gradient-to-r from-emerald-500 to-green-500 z-[9999] transition-all duration-150"
         style={{ width: `${progress}%` }}
       />
 
       <main>
+        {/* Blog title and metadata. */}
         <section className="relative pt-28 pb-8 lg:pt-36 lg:pb-6 overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(16,185,129,0.08),transparent_60%)]" />
 
@@ -508,6 +373,7 @@ export default function BlogDetails() {
           </div>
         </section>
 
+        {/* Main blog content. */}
         <section className="pb-16 bg-emerald-50/30 dark:bg-emerald-950/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="lg:grid lg:grid-cols-[1fr_48px] lg:gap-8 relative">
@@ -528,7 +394,6 @@ export default function BlogDetails() {
                       className="w-full aspect-video object-cover"
                       itemProp="url"
                     />
-
                     <meta itemProp="width" content="1200" />
                     <meta itemProp="height" content="675" />
                   </motion.div>
@@ -573,29 +438,50 @@ export default function BlogDetails() {
                   ))}
                 </div>
 
+                {/* Previous and next blog navigation. */}
                 <div className="mt-8 pt-6 border-t-2 border-emerald-100 dark:border-emerald-900/50 flex items-center justify-between">
                   <div className="flex gap-3">
-                    {prevBlog && (
-                      <Link
-                        to={`/blog/${getBlogSlug(prevBlog)}`}
-                        rel="prev"
-                        className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border-2 border-emerald-100 dark:border-emerald-900/50 text-xs text-gray-600 dark:text-gray-300 hover:border-emerald-300 dark:hover:border-emerald-600 hover:text-emerald-600 transition-all"
-                      >
-                        <ChevronLeft size={13} />
-                        Previous
-                      </Link>
-                    )}
+                    {prevBlog &&
+                      (() => {
+                        const previousSlug =
+                          prevBlog.slug ||
+                          prevBlog.id ||
+                          prevBlog.title
+                            ?.toLowerCase()
+                            .replace(/\s+/g, '-');
 
-                    {nextBlog && (
-                      <Link
-                        to={`/blog/${getBlogSlug(nextBlog)}`}
-                        rel="next"
-                        className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border-2 border-emerald-100 dark:border-emerald-900/50 text-xs text-gray-600 dark:text-gray-300 hover:border-emerald-300 dark:hover:border-emerald-600 hover:text-emerald-600 transition-all"
-                      >
-                        Next
-                        <ChevronRight size={13} />
-                      </Link>
-                    )}
+                        return (
+                          <Link
+                            to={`/blog/${encodeURIComponent(previousSlug)}`}
+                            rel="prev"
+                            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border-2 border-emerald-100 dark:border-emerald-900/50 text-xs text-gray-600 dark:text-gray-300 hover:border-emerald-300 dark:hover:border-emerald-600 hover:text-emerald-600 transition-all"
+                          >
+                            <ChevronLeft size={13} />
+                            Previous
+                          </Link>
+                        );
+                      })()}
+
+                    {nextBlog &&
+                      (() => {
+                        const nextSlug =
+                          nextBlog.slug ||
+                          nextBlog.id ||
+                          nextBlog.title
+                            ?.toLowerCase()
+                            .replace(/\s+/g, '-');
+
+                        return (
+                          <Link
+                            to={`/blog/${encodeURIComponent(nextSlug)}`}
+                            rel="next"
+                            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white dark:bg-gray-800 border-2 border-emerald-100 dark:border-emerald-900/50 text-xs text-gray-600 dark:text-gray-300 hover:border-emerald-300 dark:hover:border-emerald-600 hover:text-emerald-600 transition-all"
+                          >
+                            Next
+                            <ChevronRight size={13} />
+                          </Link>
+                        );
+                      })()}
                   </div>
                 </div>
 
@@ -605,12 +491,10 @@ export default function BlogDetails() {
                 />
               </div>
 
+              {/* Desktop sharing controls. */}
               <aside className="hidden lg:block lg:col-start-2">
                 <div className="sticky top-24">
-                  <ShareButtons
-                    url={pageUrl}
-                    title={title}
-                  />
+                  <ShareButtons url={pageUrl} title={title} />
                 </div>
               </aside>
             </div>
@@ -618,11 +502,9 @@ export default function BlogDetails() {
         </section>
       </main>
 
+      {/* Mobile sharing controls. */}
       <div className="lg:hidden fixed bottom-6 right-6 z-50">
-        <ShareButtons
-          url={pageUrl}
-          title={title}
-        />
+        <ShareButtons url={pageUrl} title={title} />
       </div>
     </article>
   );
