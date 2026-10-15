@@ -3,6 +3,7 @@ const SITE_URL = 'https://www.farmlytai.in';
 
 export const config = {
   matcher: '/blog/:slug',
+  runtime: 'nodejs',
 };
 
 function escapeHtml(value) {
@@ -51,6 +52,14 @@ export default async function middleware(request) {
   let html;
   try {
     originRes = await fetchWithTimeout(request, undefined, 5000);
+
+    // 304/204/205/101/103 are "null body status" responses — the Response
+    // constructor throws if given a body alongside one of these, so just
+    // pass the origin response through untouched.
+    if ([101, 103, 204, 205, 304].includes(originRes.status)) {
+      return originRes;
+    }
+
     html = await originRes.text();
   } catch {
     return;
