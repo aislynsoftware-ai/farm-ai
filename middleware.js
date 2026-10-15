@@ -35,8 +35,14 @@ export default async function middleware(request) {
     return;
   }
 
-  const originRes = await fetch(request);
-  let html = await originRes.text();
+  let originRes;
+  let html;
+  try {
+    originRes = await fetch(request);
+    html = await originRes.text();
+  } catch {
+    return;
+  }
 
   const title = escapeHtml(
     blog.meta_title || blog.seo_title || blog.title || 'Farmlyt AI Blog'
@@ -64,11 +70,13 @@ export default async function middleware(request) {
     `    <meta name="description" content="${description}" />\n    <link rel="canonical" href="${canonical}" />\n  </head>`
   );
 
+  const headers = new Headers(originRes.headers);
+  headers.delete('content-encoding');
+  headers.delete('content-length');
+  headers.set('content-type', 'text/html; charset=utf-8');
+
   return new Response(html, {
     status: originRes.status,
-    headers: {
-      ...Object.fromEntries(originRes.headers),
-      'content-type': 'text/html; charset=utf-8',
-    },
+    headers,
   });
 }
