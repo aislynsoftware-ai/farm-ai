@@ -13,6 +13,14 @@ function escapeHtml(value) {
     .replace(/"/g, '&quot;');
 }
 
+function fetchWithTimeout(input, init, ms) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), ms);
+  return fetch(input, { ...init, signal: controller.signal }).finally(() =>
+    clearTimeout(timer)
+  );
+}
+
 export default async function middleware(request) {
   const url = new URL(request.url);
   const slug = decodeURIComponent(url.pathname.replace('/blog/', ''));
@@ -24,7 +32,11 @@ export default async function middleware(request) {
   let blog = null;
 
   try {
-    const apiRes = await fetch(`${API_URL}?slug=${encodeURIComponent(slug)}`);
+    const apiRes = await fetchWithTimeout(
+      `${API_URL}?slug=${encodeURIComponent(slug)}`,
+      undefined,
+      3000
+    );
     const data = await apiRes.json();
     blog = data?.blog || (Array.isArray(data) ? data[0] : null) || null;
   } catch {
@@ -38,7 +50,7 @@ export default async function middleware(request) {
   let originRes;
   let html;
   try {
-    originRes = await fetch(request);
+    originRes = await fetchWithTimeout(request, undefined, 5000);
     html = await originRes.text();
   } catch {
     return;
