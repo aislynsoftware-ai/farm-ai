@@ -22,7 +22,16 @@ function fetchWithTimeout(input, init, ms) {
   );
 }
 
+const LOOP_GUARD_HEADER = 'x-farmlyt-mw-passthrough';
+
 export default async function middleware(request) {
+  // This header is set on our own self-fetch below. If it's present, this
+  // invocation IS that self-fetch re-entering the matcher — bail out
+  // immediately instead of recursing again.
+  if (request.headers.get(LOOP_GUARD_HEADER)) {
+    return;
+  }
+
   const url = new URL(request.url);
   const slug = decodeURIComponent(url.pathname.replace('/blog/', ''));
 
@@ -48,10 +57,15 @@ export default async function middleware(request) {
     return;
   }
 
+  const originRequest = new Request(request, {
+    headers: new Headers(request.headers),
+  });
+  originRequest.headers.set(LOOP_GUARD_HEADER, '1');
+
   let originRes;
   let html;
   try {
-    originRes = await fetchWithTimeout(request, undefined, 5000);
+    originRes = await fetchWithTimeout(originRequest, undefined, 5000);
 
     // 304/204/205/101/103 are "null body status" responses — the Response
     // constructor throws if given a body alongside one of these, so just
